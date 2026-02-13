@@ -116,6 +116,24 @@ export const api = {
       }
       return response.blob();
     },
+    downloadResumeDocx: async (applicationId: number): Promise<Blob> => {
+      const response = await fetch(
+        `${API_BASE_URL}/api/resumes/${applicationId}/docx`,
+      );
+      if (!response.ok) {
+        throw new Error("Failed to download Resume Word document");
+      }
+      return response.blob();
+    },
+    downloadCoverLetterDocx: async (applicationId: number): Promise<Blob> => {
+      const response = await fetch(
+        `${API_BASE_URL}/api/resumes/${applicationId}/cover-letter/docx`,
+      );
+      if (!response.ok) {
+        throw new Error("Failed to download Cover Letter Word document");
+      }
+      return response.blob();
+    },
     getBaseResumeCount: async (): Promise<number> => {
       const response = await fetch(`${API_BASE_URL}/api/resumes/base/count`);
       if (!response.ok) throw new Error("Failed to check base resumes");

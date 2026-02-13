@@ -7,7 +7,6 @@ import {
   FileText,
   MapPin,
   Trash2,
-  Download,
   Briefcase,
   Hash,
   Copy,
@@ -27,6 +26,7 @@ import {
   type UserProfile,
 } from "../types/dtos";
 import { getFormattedFilename } from "../lib/utils";
+import { DownloadDropdown } from "../components/DownloadDropdown";
 
 export default function ApplicationDetail() {
   const { id } = useParams();
@@ -42,7 +42,7 @@ export default function ApplicationDetail() {
   >("resume");
   const [copied, setCopied] = useState(false);
 
-  // Editing state
+  // Local state for editing resume and cover letter
   const [editingResume, setEditingResume] = useState(false);
   const [editingCoverLetter, setEditingCoverLetter] = useState(false);
   const [resumeDraft, setResumeDraft] = useState("");
@@ -53,7 +53,7 @@ export default function ApplicationDetail() {
     text: string;
   } | null>(null);
 
-  // PDF Preview state
+  // State for PDF preview generation
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export default function ApplicationDetail() {
     }
   }, []);
 
-  // Cleanup blob URL on unmount
+  // Revoke object URL to avoid memory leaks
   useEffect(() => {
     return () => {
       if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
@@ -99,7 +99,6 @@ export default function ApplicationDetail() {
         setLoading(false);
       }
     };
-    fetchApp();
     fetchApp();
 
     // Fetch profile for filename generation
@@ -243,6 +242,7 @@ export default function ApplicationDetail() {
         application.jobId,
         application.company,
         "Cover_Letter",
+        "pdf",
       );
 
       a.download = filename;
@@ -253,6 +253,34 @@ export default function ApplicationDetail() {
     } catch (err) {
       console.error(err);
       alert("Failed to download PDF.");
+    }
+  };
+
+  const handleDownloadCoverLetterDocx = async () => {
+    if (!application) return;
+    try {
+      const blob = await api.resumes.downloadCoverLetterDocx(application.id);
+      if (blob.size === 0) {
+        alert("Word document generation failed.");
+        return;
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = getFormattedFilename(
+        userProfile?.fullName || "Candidate",
+        application.jobId,
+        application.company,
+        "Cover_Letter",
+        "docx",
+      );
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to download Word document.");
     }
   };
 
@@ -377,8 +405,11 @@ export default function ApplicationDetail() {
 
           <div className="flex gap-3 shrink-0">
             {application.hasGeneratedResume && (
-              <button onClick={handleDownloadPdf} className="btn btn-primary">
-                <Download size={16} />
+              <button
+                onClick={handleDownloadPdf}
+                className="btn btn-primary flex items-center gap-2"
+              >
+                <FileText size={16} />
                 Download PDF
               </button>
             )}
@@ -593,13 +624,13 @@ export default function ApplicationDetail() {
                           </>
                         ) : (
                           <>
-                            <button
-                              onClick={handleDownloadCoverLetterPdf}
-                              className="btn btn-ghost text-xs gap-1.5"
-                              title="Download PDF"
-                            >
-                              <Download size={14} /> PDF
-                            </button>
+                            <DownloadDropdown
+                              onDownloadPdf={handleDownloadCoverLetterPdf}
+                              onDownloadDocx={handleDownloadCoverLetterDocx}
+                              label="Download"
+                              size="sm"
+                              variant="ghost"
+                            />
                             <button
                               onClick={startEditCoverLetter}
                               className="btn btn-ghost text-xs gap-1.5"

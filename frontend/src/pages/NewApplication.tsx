@@ -6,7 +6,6 @@ import {
   CheckCircle,
   Loader2,
   Sparkles,
-  Download,
   RotateCcw,
   Settings,
   Mail,
@@ -19,10 +18,12 @@ import {
   Eye,
   Code,
   AlertTriangle,
+  Pencil,
 } from "lucide-react";
 import { api } from "../lib/api";
 import type { GenerateFromJdResponse } from "../lib/api";
 import { getFormattedFilename } from "../lib/utils";
+import { DownloadDropdown } from "../components/DownloadDropdown";
 import type { UserProfile } from "../types/dtos";
 
 export default function NewApplication() {
@@ -31,7 +32,7 @@ export default function NewApplication() {
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-  // Load saved state from local storage
+  // Load persisted state
   const [generated, setGenerated] = useState(() => {
     const saved = localStorage.getItem("newApp_generated");
     return saved ? JSON.parse(saved) : false;
@@ -52,7 +53,6 @@ export default function NewApplication() {
         };
   });
 
-  // Input State
   const [jobDescription, setJobDescription] = useState(() => {
     return localStorage.getItem("newApp_jobDescription") || "";
   });
@@ -61,7 +61,6 @@ export default function NewApplication() {
     return saved ? JSON.parse(saved) : false;
   });
 
-  // Result State
   const [result, setResult] = useState<GenerateFromJdResponse | null>(() => {
     const saved = localStorage.getItem("newApp_result");
     return saved ? JSON.parse(saved) : null;
@@ -70,6 +69,7 @@ export default function NewApplication() {
     "resume",
   );
   const [copied, setCopied] = useState(false);
+  const [editingCoverLetter, setEditingCoverLetter] = useState(false);
 
   // PDF Preview State
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
@@ -122,7 +122,7 @@ export default function NewApplication() {
     };
   }, [isDragging]);
 
-  // Compile PDF preview in background
+  // Generate PDF preview
   const compilePdfPreview = useCallback(async (applicationId: number) => {
     setPdfLoading(true);
     setPdfError(null);
@@ -146,14 +146,14 @@ export default function NewApplication() {
     }
   }, []);
 
-  // Cleanup hook to revoke blob URL when component unmounts
+  // Revoke object URL to avoid memory leaks
   useEffect(() => {
     return () => {
       if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
     };
   }, [pdfBlobUrl]);
 
-  // Persist form state to local storage
+  // Persist state
   useEffect(() => {
     localStorage.setItem("newApp_generated", JSON.stringify(generated));
     localStorage.setItem("newApp_isEditing", JSON.stringify(isEditing));
@@ -658,9 +658,7 @@ export default function NewApplication() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
-                onClick={async (e) => {
-                  const btn = e.currentTarget;
-                  btn.disabled = true;
+                onClick={async () => {
                   try {
                     const blob = await api.resumes.downloadPdf(
                       result.applicationId,
@@ -668,15 +666,13 @@ export default function NewApplication() {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement("a");
                     a.href = url;
-
-                    const filename = getFormattedFilename(
+                    a.download = getFormattedFilename(
                       userProfile?.fullName || "Candidate",
                       formData.jobId || result.jobId,
                       formData.company || result.company,
                       "Resume",
+                      "pdf",
                     );
-
-                    a.download = filename;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -686,13 +682,11 @@ export default function NewApplication() {
                     alert(
                       "Failed to download PDF. The LaTeX may have compilation errors.",
                     );
-                  } finally {
-                    btn.disabled = false;
                   }
                 }}
-                className="btn btn-primary"
+                className="btn btn-primary flex items-center gap-2"
               >
-                <Download size={16} />
+                <FileText size={16} />
                 Download PDF
               </button>
               <button
@@ -943,25 +937,116 @@ export default function NewApplication() {
                   Generated Cover Letter
                 </label>
                 {result.coverLetterContent && (
-                  <button
-                    onClick={() => handleCopy(result.coverLetterContent)}
-                    className="btn btn-ghost text-xs gap-1.5"
-                  >
-                    {copied ? (
-                      <Check size={14} className="text-emerald-500" />
-                    ) : (
-                      <Copy size={14} />
-                    )}
-                    {copied ? "Copied!" : "Copy"}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <DownloadDropdown
+                      onDownloadPdf={async () => {
+                        try {
+                          const blob = await api.resumes.downloadCoverLetterPdf(
+                            result.applicationId,
+                          );
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = getFormattedFilename(
+                            userProfile?.fullName || "Candidate",
+                            formData.jobId || result.jobId,
+                            formData.company || result.company,
+                            "Cover_Letter",
+                            "pdf",
+                          );
+                          document.body.appendChild(a);
+                          a.click();
+                          document.body.removeChild(a);
+                          URL.revokeObjectURL(url);
+                        } catch (error) {
+                          console.error("PDF download failed", error);
+                          alert("Failed to download cover letter PDF.");
+                        }
+                      }}
+                      onDownloadDocx={async () => {
+                        try {
+                          const blob =
+                            await api.resumes.downloadCoverLetterDocx(
+                              result.applicationId,
+                            );
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = getFormattedFilename(
+                            userProfile?.fullName || "Candidate",
+                            formData.jobId || result.jobId,
+                            formData.company || result.company,
+                            "Cover_Letter",
+                            "docx",
+                          );
+                          document.body.appendChild(a);
+                          a.click();
+                          document.body.removeChild(a);
+                          URL.revokeObjectURL(url);
+                        } catch (error) {
+                          console.error("Word download failed", error);
+                          alert(
+                            "Failed to download cover letter Word document.",
+                          );
+                        }
+                      }}
+                      label="Download"
+                      size="sm"
+                      variant="ghost"
+                    />
+                    <button
+                      onClick={() => setEditingCoverLetter(!editingCoverLetter)}
+                      className={`btn btn-ghost text-xs gap-1.5 ${editingCoverLetter ? "text-primary-600 bg-primary-50" : ""}`}
+                    >
+                      {editingCoverLetter ? (
+                        <>
+                          <Eye size={14} /> View
+                        </>
+                      ) : (
+                        <>
+                          <Pencil size={14} /> Edit
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => handleCopy(result.coverLetterContent)}
+                      className="btn btn-ghost text-xs gap-1.5"
+                    >
+                      {copied ? (
+                        <Check size={14} className="text-emerald-500" />
+                      ) : (
+                        <Copy size={14} />
+                      )}
+                      {copied ? "Copied!" : "Copy"}
+                    </button>
+                  </div>
                 )}
               </div>
               {result.coverLetterContent ? (
-                <div className="bg-white border border-border rounded-xl p-6">
-                  <pre className="whitespace-pre-wrap text-sm text-text-primary font-sans leading-relaxed">
-                    {result.coverLetterContent}
-                  </pre>
-                </div>
+                editingCoverLetter ? (
+                  <div className="relative">
+                    <span className="absolute top-2 right-3 text-[10px] font-normal bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full border border-blue-100 z-10 select-none">
+                      Editable
+                    </span>
+                    <textarea
+                      className="w-full px-4 py-3 bg-white border border-primary-300 rounded-xl text-sm text-text-primary font-sans leading-relaxed resize-none focus:ring-2 focus:ring-primary-200 transition-colors"
+                      style={{ minHeight: "500px" }}
+                      value={result.coverLetterContent}
+                      onChange={(e) =>
+                        setResult({
+                          ...result,
+                          coverLetterContent: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-white border border-border rounded-xl p-6">
+                    <pre className="whitespace-pre-wrap text-sm text-text-primary font-sans leading-relaxed">
+                      {result.coverLetterContent}
+                    </pre>
+                  </div>
+                )
               ) : (
                 <div className="bg-gray-50 border border-border rounded-xl p-8 text-center">
                   <Mail size={32} className="mx-auto text-text-muted mb-3" />

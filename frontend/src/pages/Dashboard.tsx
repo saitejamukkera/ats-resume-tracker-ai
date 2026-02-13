@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { type JobApplicationResponse, ApplicationStatus } from "../types/dtos";
+import type { UserProfile } from "../types/dtos";
+import { getFormattedFilename } from "../lib/utils";
 import {
   Plus,
-  FileText,
   ExternalLink,
   Trash2,
   Briefcase,
   TrendingUp,
   Clock,
   Award,
+  FileText,
   Search,
   Filter,
 } from "lucide-react";
@@ -23,9 +25,11 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     loadApplications();
+    api.profile.get().then(setUserProfile).catch(console.error);
   }, []);
 
   const loadApplications = async () => {
@@ -323,8 +327,6 @@ export default function Dashboard() {
                             <button
                               onClick={async (e) => {
                                 e.preventDefault();
-                                const btn = e.currentTarget;
-                                btn.disabled = true;
                                 try {
                                   const blob = await api.resumes.downloadPdf(
                                     app.id,
@@ -332,7 +334,13 @@ export default function Dashboard() {
                                   const url = URL.createObjectURL(blob);
                                   const a = document.createElement("a");
                                   a.href = url;
-                                  a.download = `resume_${app.company.replace(/\s+/g, "_")}_${app.position.replace(/\s+/g, "_")}.pdf`;
+                                  a.download = getFormattedFilename(
+                                    userProfile?.fullName || "Candidate",
+                                    app.jobId,
+                                    app.company,
+                                    "Resume",
+                                    "pdf",
+                                  );
                                   document.body.appendChild(a);
                                   a.click();
                                   document.body.removeChild(a);
@@ -342,8 +350,6 @@ export default function Dashboard() {
                                   alert(
                                     "Failed to download PDF. The LaTeX may have compilation errors.",
                                   );
-                                } finally {
-                                  btn.disabled = false;
                                 }
                               }}
                               className="btn btn-ghost p-2 rounded-lg"
