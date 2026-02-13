@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  # Database Service
+  postgres:
+    image: postgres:latest
+    container_name: ats-postgres-prod
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      # Persist data to a folder on the host machine
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - ats-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service
+  backend:
+    # This image name will be whatever you name it when pushing to GHCR/DockerHub
+    # Example: ghcr.io/yourusername/ats-backend:latest
+    image: ${BACKEND_IMAGE:-ats-backend:latest}
+    container_name: ats-backend-prod
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      # Expose backend on port 8080
+      - "8080:8080"
+    networks:
+      - ats-network
+
+networks:
+  ats-network:
+    driver: bridge

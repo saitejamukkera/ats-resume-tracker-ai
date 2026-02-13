@@ -1,0 +1,180 @@
+package com.fullstack.ATSJobTracker.controller;
+
+
+import com.fullstack.ATSJobTracker.dto.GenerateFromJdRequest;
+import com.fullstack.ATSJobTracker.dto.GenerateFromJdResponse;
+import com.fullstack.ATSJobTracker.dto.ResumeGenerationRequest;
+import com.fullstack.ATSJobTracker.dto.ResumeGenerationResponse;
+import com.fullstack.ATSJobTracker.dto.UpdateContentRequest;
+import com.fullstack.ATSJobTracker.model.ResumeBase;
+import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
+import com.fullstack.ATSJobTracker.service.JobApplicationService;
+import com.fullstack.ATSJobTracker.service.ResumeService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/resumes")
+@CrossOrigin(origins = "*")
+@Slf4j
+@RequiredArgsConstructor
+public class ResumeController {
+
+    private final ResumeService resumeService;
+    private final ResumeBaseRepository resumeBaseRepository;
+    private final JobApplicationService jobApplicationService;
+
+    // Base resume endpoints
+
+    @PostMapping("/base")
+    public ResumeBase uploadBaseResume(@RequestBody ResumeBase base) {
+        log.info("POST /api/resumes/base - name: {}", base.getName());
+        resumeBaseRepository.findByName(base.getName()).ifPresent(existing -> {
+            base.setId(existing.getId());
+        });
+        return resumeBaseRepository.save(base);
+    }
+
+    @GetMapping("/base")
+    public List<ResumeBase> getAllBaseResumes() {
+        log.info("GET /api/resumes/base");
+        return resumeBaseRepository.findAll();
+    }
+
+    @GetMapping("/base/count")
+    public long getBaseResumeCount() {
+        log.info("GET /api/resumes/base/count");
+        return resumeBaseRepository.count();
+    }
+
+    // Generate from job description
+
+    @PostMapping("/generate-from-jd")
+    public ResponseEntity<GenerateFromJdResponse> generateFromJd(@RequestBody GenerateFromJdRequest request) {
+        log.info("POST /api/resumes/generate-from-jd");
+        try {
+            GenerateFromJdResponse response = resumeService.generateFromJd(
+                    request.getJobDescription(), request.isUseIconResume());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error generating from JD: {}", e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Regenerate resume
+
+    @PostMapping("/generate/{applicationId}")
+    public ResponseEntity<ResumeGenerationResponse> generateResume(
+            @PathVariable Long applicationId,
+            @RequestBody ResumeGenerationRequest request) {
+        log.info("POST /api/resumes/generate/{}", applicationId);
+        try {
+            String[] result = resumeService.generateResumeAndCoverLetter(
+                    applicationId, request.getJobDescription());
+
+            ResumeGenerationResponse response = ResumeGenerationResponse.builder()
+                    .latexContent(result[0])
+                    .coverLetterContent(result[1])
+                    .build();
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error generating resume for application {}: {}", applicationId, e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Save edited content
+
+    @PutMapping("/{applicationId}/content")
+    public ResponseEntity<Void> updateContent(
+            @PathVariable Long applicationId,
+            @RequestBody UpdateContentRequest request) {
+        log.info("PUT /api/resumes/{}/content", applicationId);
+        return jobApplicationService.getApplication(applicationId)
+                .map(app -> {
+                    if (request.getResumeContent() != null) {
+                        app.setGeneratedResumeContent(request.getResumeContent());
+                    }
+                    if (request.getCoverLetterContent() != null) {
+                        app.setCoverLetterContent(request.getCoverLetterContent());
+                    }
+                    jobApplicationService.saveEntity(app);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // PDF & cover letter
+
+    @GetMapping("/{applicationId}/pdf")
+    public ResponseEntity<byte[]> getPdf(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/pdf", applicationId);
+        return jobApplicationService.getApplication(applicationId)
+                .map(app -> {
+                    String content = app.getGeneratedResumeContent();
+                    if (content == null || content.isEmpty()) {
+                        return new ResponseEntity<byte[]>(HttpStatus.NO_CONTENT);
+                    }
+                    byte[] pdfContent = resumeService.compilePdf(content);
+
+                    if (pdfContent == null || pdfContent.length == 0) {
+                        log.error("PDF compilation failed for application {}", applicationId);
+                        return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_PDF);
+                    headers.setContentDispositionFormData("attachment", "resume_" + applicationId + ".pdf");
+                    headers.setContentLength(pdfContent.length);
+
+                    return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{applicationId}/cover-letter/pdf")
+    public ResponseEntity<byte[]> getCoverLetterPdf(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/cover-letter/pdf", applicationId);
+        try {
+            byte[] pdfContent = resumeService.generateCoverLetterPdf(applicationId);
+
+            if (pdfContent == null || pdfContent.length == 0) {
+                log.error("Cover Letter PDF compilation failed for application {}", applicationId);
+                return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "cover_letter_" + applicationId + ".pdf");
+            headers.setContentLength(pdfContent.length);
+
+            return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error generating cover letter PDF: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/{applicationId}/cover-letter")
+    public ResponseEntity<String> getCoverLetter(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/cover-letter", applicationId);
+        return jobApplicationService.getApplication(applicationId)
+                .map(app -> {
+                    String content = app.getCoverLetterContent();
+                    if (content == null || content.isEmpty()) {
+                        return ResponseEntity.noContent().<String>build();
+                    }
+                    return ResponseEntity.ok(content);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

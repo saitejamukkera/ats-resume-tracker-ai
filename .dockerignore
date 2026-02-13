@@ -1,0 +1,25 @@
+# Secrets
+.env
+*.env
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build artifacts
+target/
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
