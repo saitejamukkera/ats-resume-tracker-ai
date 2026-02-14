@@ -39,6 +39,7 @@ export interface JobApplicationResponse {
 export interface ResumeGenerationRequest {
   jobDescription: string;
   baseResumeId?: number;
+  customPrompt?: string;
 }
 
 export interface ResumeGenerationResponse {

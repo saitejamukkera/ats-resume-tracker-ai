@@ -404,6 +404,17 @@ body {
   }
 }
 
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.35s ease-out forwards;
 }
@@ -412,6 +423,9 @@ body {
 }
 .animate-scale-in {
   animation: scale-in 0.25s ease-out forwards;
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.35s ease-out forwards;
 }
 .animate-pulse-soft {
   animation: pulse-soft 2s ease-in-out infinite;

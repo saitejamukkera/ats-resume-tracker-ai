@@ -141,6 +141,10 @@ public class ResumeService {
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null);
+    }
+
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt) {
         log.info("Re-generating resume for application id: {}", applicationId);
 
         Long userId = authService.getCurrentUserId();
@@ -165,7 +169,7 @@ public class ResumeService {
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
         }
 
-        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects);
+        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt);
         String generatedContent = geminiService.getCompletion(prompt);
 
         String resumeLatex = generatedContent;

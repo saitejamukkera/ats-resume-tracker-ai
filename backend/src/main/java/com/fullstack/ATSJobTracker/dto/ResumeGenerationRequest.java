@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class ResumeGenerationRequest {
     private String jobDescription;
     private Long baseResumeId;
+    private String customPrompt;
 }

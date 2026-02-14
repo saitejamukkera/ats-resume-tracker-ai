@@ -25,12 +25,14 @@ import type { GenerateFromJdResponse } from "../lib/api";
 import { getFormattedFilename } from "../lib/utils";
 import { DownloadDropdown } from "../components/DownloadDropdown";
 import type { UserProfile } from "../types/dtos";
+import { useToast } from "../context/ToastContext";
 
 export default function NewApplication() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const toast = useToast();
 
   // Load persisted state
   const [generated, setGenerated] = useState(() => {
@@ -83,6 +85,8 @@ export default function NewApplication() {
   const [splitRatio, setSplitRatio] = useState(0.5);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [customPrompt, setCustomPrompt] = useState("");
+  const [showPromptInput, setShowPromptInput] = useState(false);
 
   const handleDragStart = () => {
     setIsDragging(true);
@@ -216,7 +220,7 @@ export default function NewApplication() {
 
   const handleGenerate = async () => {
     if (!jobDescription.trim()) {
-      alert("Please paste a job description.");
+      toast.warning("Please paste a job description.");
       return;
     }
 
@@ -239,7 +243,7 @@ export default function NewApplication() {
       compilePdfPreview(response.applicationId);
     } catch (error) {
       console.error(error);
-      alert(
+      toast.error(
         "Failed to generate. Ensure base resumes are uploaded in Settings and the backend is running.",
       );
     } finally {
@@ -253,6 +257,7 @@ export default function NewApplication() {
     try {
       const response = await api.resumes.generate(result.applicationId, {
         jobDescription,
+        customPrompt: customPrompt.trim() || undefined,
       });
       setResult((prev) =>
         prev
@@ -265,9 +270,14 @@ export default function NewApplication() {
       );
       // Re-compile PDF preview after regeneration
       if (result) compilePdfPreview(result.applicationId);
+      if (customPrompt.trim()) {
+        toast.success("Resume regenerated with your instructions.");
+      }
+      setCustomPrompt("");
+      setShowPromptInput(false);
     } catch (error) {
       console.error(error);
-      alert("Failed to regenerate.");
+      toast.error("Failed to regenerate.");
     } finally {
       setLoading(false);
     }
@@ -299,7 +309,7 @@ export default function NewApplication() {
       clearStorage(); // Clear storage after successful save
     } catch (error) {
       console.error(error);
-      alert("Failed to save application.");
+      toast.error("Failed to save application.");
     } finally {
       setLoading(false);
     }
@@ -317,7 +327,7 @@ export default function NewApplication() {
       await compilePdfPreview(result.applicationId);
     } catch (error) {
       console.error(error);
-      alert("Failed to update preview.");
+      toast.error("Failed to update preview.");
     } finally {
       setPdfLoading(false);
     }
@@ -679,7 +689,7 @@ export default function NewApplication() {
                     URL.revokeObjectURL(url);
                   } catch (error) {
                     console.error("PDF download failed", error);
-                    alert(
+                    toast.error(
                       "Failed to download PDF. The LaTeX may have compilation errors.",
                     );
                   }
@@ -701,6 +711,18 @@ export default function NewApplication() {
                 )}
                 Regenerate
               </button>
+              <button
+                onClick={() => setShowPromptInput(!showPromptInput)}
+                className={`btn btn-ghost text-xs ${
+                  showPromptInput
+                    ? "text-primary-600 bg-primary-50"
+                    : "text-text-muted"
+                }`}
+                title="Add custom instructions for regeneration"
+              >
+                <Sparkles size={14} />
+                Prompt
+              </button>
             </div>
             <button
               onClick={() => {
@@ -713,6 +735,45 @@ export default function NewApplication() {
               Done
             </button>
           </div>
+
+          {/* Custom Prompt Input */}
+          {showPromptInput && (
+            <div className="bg-primary-50/50 border border-primary-200 rounded-xl p-4 space-y-3 animate-fade-in">
+              <div className="flex items-center gap-2">
+                <Sparkles size={14} className="text-primary-600" />
+                <label className="text-xs font-semibold text-primary-700 uppercase tracking-wider">
+                  Custom Instructions
+                </label>
+              </div>
+              <textarea
+                className="w-full px-3 py-2.5 bg-white border border-primary-200 rounded-lg text-sm text-text-primary placeholder:text-text-muted resize-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-colors"
+                rows={3}
+                placeholder="e.g. Focus more on leadership experience, add more Python projects, emphasize cloud skills..."
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+              />
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] text-text-muted">
+                  These instructions will be added to the regeneration prompt.
+                  Leave empty to regenerate normally.
+                </p>
+                <button
+                  onClick={handleRegenerate}
+                  disabled={loading}
+                  className="btn btn-primary text-xs gap-1.5 py-1.5 h-auto"
+                >
+                  {loading ? (
+                    <Loader2 size={12} className="animate-spin" />
+                  ) : (
+                    <RotateCcw size={12} />
+                  )}
+                  {customPrompt.trim()
+                    ? "Regenerate with Prompt"
+                    : "Regenerate"}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="flex gap-1 p-1 bg-gray-100 rounded-xl">
@@ -814,7 +875,7 @@ export default function NewApplication() {
               <div
                 ref={containerRef}
                 className={`flex ${resumeView === "split" ? "" : ""}`}
-                style={{ minHeight: "600px" }} // Increased height for better visibility
+                style={{ minHeight: "calc(100vh - 350px)" }} // Use viewport height for better visibility
               >
                 {/* LaTeX Panel */}
                 {(resumeView === "split" || resumeView === "latex") && (
@@ -912,7 +973,7 @@ export default function NewApplication() {
                           src={pdfBlobUrl}
                           title="Resume PDF Preview"
                           className="w-full h-full border-0"
-                          style={{ minHeight: "500px" }}
+                          style={{ minHeight: "calc(100vh - 400px)" }}
                         />
                       )}
                       {!pdfBlobUrl && !pdfLoading && !pdfError && (
@@ -960,7 +1021,7 @@ export default function NewApplication() {
                           URL.revokeObjectURL(url);
                         } catch (error) {
                           console.error("PDF download failed", error);
-                          alert("Failed to download cover letter PDF.");
+                          toast.error("Failed to download cover letter PDF.");
                         }
                       }}
                       onDownloadDocx={async () => {
@@ -985,7 +1046,7 @@ export default function NewApplication() {
                           URL.revokeObjectURL(url);
                         } catch (error) {
                           console.error("Word download failed", error);
-                          alert(
+                          toast.error(
                             "Failed to download cover letter Word document.",
                           );
                         }
@@ -1030,7 +1091,7 @@ export default function NewApplication() {
                     </span>
                     <textarea
                       className="w-full px-4 py-3 bg-white border border-primary-300 rounded-xl text-sm text-text-primary font-sans leading-relaxed resize-none focus:ring-2 focus:ring-primary-200 transition-colors"
-                      style={{ minHeight: "500px" }}
+                      style={{ minHeight: "calc(100vh - 400px)" }}
                       value={result.coverLetterContent}
                       onChange={(e) =>
                         setResult({

@@ -17,6 +17,8 @@ import {
   Filter,
 } from "lucide-react";
 import { StatusDropdown } from "../components/StatusDropdown";
+import { ConfirmModal } from "../components/ConfirmModal";
+import { useToast } from "../context/ToastContext";
 
 export default function Dashboard() {
   const [applications, setApplications] = useState<JobApplicationResponse[]>(
@@ -26,6 +28,8 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const toast = useToast();
 
   useEffect(() => {
     loadApplications();
@@ -44,12 +48,20 @@ export default function Dashboard() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this application?")) return;
+    setDeleteTarget(id);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteTarget === null) return;
     try {
-      await api.applications.delete(id);
-      setApplications(applications.filter((app) => app.id !== id));
+      await api.applications.delete(deleteTarget);
+      setApplications(applications.filter((app) => app.id !== deleteTarget));
+      toast.success("Application deleted successfully.");
     } catch (error) {
       console.error("Failed to delete application", error);
+      toast.error("Failed to delete application.");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -347,7 +359,7 @@ export default function Dashboard() {
                                   URL.revokeObjectURL(url);
                                 } catch (error) {
                                   console.error("PDF download failed", error);
-                                  alert(
+                                  toast.error(
                                     "Failed to download PDF. The LaTeX may have compilation errors.",
                                   );
                                 }
@@ -399,6 +411,19 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete Application"
+        message="Are you sure you want to delete this application? This action cannot be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        variant="danger"
+        icon="delete"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

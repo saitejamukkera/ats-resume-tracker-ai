@@ -211,4 +211,13 @@ public class PromptBuilder {
     public String buildPrompt(String baseResumeLatex, String jobDescription) {
         return buildPrompt(baseResumeLatex, jobDescription, null, null);
     }
+
+    public String buildPrompt(String baseResumeLatex, String jobDescription,
+                              String userInfo, String masterSubjects, String customPrompt) {
+        String base = buildPrompt(baseResumeLatex, jobDescription, userInfo, masterSubjects);
+        if (customPrompt != null && !customPrompt.isBlank()) {
+            return base + "Additional instructions from the user:\n" + customPrompt + "\n\n";
+        }
+        return base;
+    }
 }

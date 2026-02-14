@@ -74,7 +74,9 @@ export const api = {
     },
     logout: async (): Promise<void> => {
       tokenStorage.remove();
-      await apiFetch(`${API_BASE_URL}/api/auth/logout`, { method: "POST" }).catch(() => {});
+      await apiFetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+      }).catch(() => {});
     },
     me: async (): Promise<AuthResponse> => {
       const response = await apiFetch(`${API_BASE_URL}/api/auth/me`);
@@ -202,6 +204,23 @@ export const api = {
         throw new Error("Failed to download Cover Letter Word document");
       }
       return response.blob();
+    },
+    getBaseResumes: async (): Promise<{ name: string; content: string }[]> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/resumes/base`);
+      if (!response.ok) throw new Error("Failed to fetch base resumes");
+      return response.json();
+    },
+    uploadBaseResume: async (data: {
+      name: string;
+      content: string;
+      hasIcons: boolean;
+    }): Promise<void> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/resumes/base`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Failed to upload base resume");
     },
     getBaseResumeCount: async (): Promise<number> => {
       const response = await apiFetch(`${API_BASE_URL}/api/resumes/base/count`);

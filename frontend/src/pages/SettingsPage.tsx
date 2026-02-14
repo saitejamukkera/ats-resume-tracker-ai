@@ -13,8 +13,6 @@ import {
 import { api } from "../lib/api";
 import type { UserProfile } from "../types/dtos";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-
 export default function SettingsPage() {
   // Profile state
   const [profile, setProfile] = useState<UserProfile>({
@@ -53,13 +51,10 @@ export default function SettingsPage() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/resumes/base`);
-        if (response.ok) {
-          const resumes = await response.json();
-          for (const r of resumes) {
-            if (r.name === "Base Resume A") setResumeAContent(r.content || "");
-            if (r.name === "Base Resume B") setResumeBContent(r.content || "");
-          }
+        const resumes = await api.resumes.getBaseResumes();
+        for (const r of resumes) {
+          if (r.name === "Base Resume A") setResumeAContent(r.content || "");
+          if (r.name === "Base Resume B") setResumeBContent(r.content || "");
         }
       } catch {
         /* backend down */
@@ -83,26 +78,18 @@ export default function SettingsPage() {
       await api.profile.save(profile);
 
       // Save Resume A
-      await fetch(`${API_BASE_URL}/api/resumes/base`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: "Base Resume A",
-          content: resumeAContent,
-          hasIcons: false,
-        }),
+      await api.resumes.uploadBaseResume({
+        name: "Base Resume A",
+        content: resumeAContent,
+        hasIcons: false,
       });
 
       // Save Resume B (only if provided)
       if (resumeBContent.trim()) {
-        await fetch(`${API_BASE_URL}/api/resumes/base`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: "Base Resume B",
-            content: resumeBContent,
-            hasIcons: true,
-          }),
+        await api.resumes.uploadBaseResume({
+          name: "Base Resume B",
+          content: resumeBContent,
+          hasIcons: true,
         });
       }
 
@@ -170,25 +157,25 @@ export default function SettingsPage() {
               {
                 label: "Full Name",
                 field: "fullName" as const,
-                placeholder: "Sai Teja Mukkera",
+                placeholder: "John Doe",
                 type: "text",
               },
               {
                 label: "Address",
                 field: "address" as const,
-                placeholder: "Warrensburg, MO",
+                placeholder: "Mountain View, CA",
                 type: "text",
               },
               {
                 label: "Phone",
                 field: "phone" as const,
-                placeholder: "(913) 963-9317",
+                placeholder: "(xxx) xxx-xxxx",
                 type: "text",
               },
               {
                 label: "Email",
                 field: "email" as const,
-                placeholder: "saitejamukkera@gmail.com",
+                placeholder: "john.doe@example.com",
                 type: "email",
               },
               {

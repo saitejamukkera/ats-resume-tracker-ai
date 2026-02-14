@@ -19,6 +19,8 @@ import {
 import { useState } from "react";
 import { useTheme } from "./hooks/useTheme";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
+import { ConfirmModal } from "./components/ConfirmModal";
 import Dashboard from "./pages/Dashboard";
 import NewApplication from "./pages/NewApplication";
 import ApplicationDetail from "./pages/ApplicationDetail";
@@ -36,8 +38,18 @@ const NAV_ITEMS = [
 function AppLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { theme, toggle: toggleTheme } = useTheme();
   const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = async () => {
+    setShowLogoutConfirm(false);
+    await logout();
+  };
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -147,7 +159,7 @@ function AppLayout() {
                 {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
               </button>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                 title="Logout"
               >
@@ -179,8 +191,8 @@ function AppLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-5 lg:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 p-5 lg:p-6 overflow-y-auto">
+          <div className="mx-auto">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/new" element={<NewApplication />} />
@@ -190,6 +202,19 @@ function AppLayout() {
           </div>
         </main>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <ConfirmModal
+        open={showLogoutConfirm}
+        title="Sign Out"
+        message="Are you sure you want to sign out? You'll need to log in again to access your applications."
+        confirmLabel="Sign Out"
+        cancelLabel="Stay"
+        variant="danger"
+        icon="logout"
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </div>
   );
 }
@@ -229,7 +254,9 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
+        <ToastProvider>
+          <AppRoutes />
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   );

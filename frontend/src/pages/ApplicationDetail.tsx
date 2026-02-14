@@ -27,6 +27,8 @@ import {
 } from "../types/dtos";
 import { getFormattedFilename } from "../lib/utils";
 import { DownloadDropdown } from "../components/DownloadDropdown";
+import { ConfirmModal } from "../components/ConfirmModal";
+import { useToast } from "../context/ToastContext";
 
 export default function ApplicationDetail() {
   const { id } = useParams();
@@ -57,6 +59,8 @@ export default function ApplicationDetail() {
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const toast = useToast();
 
   const compilePdfPreview = useCallback(async (appId: number) => {
     setPdfLoading(true);
@@ -106,13 +110,19 @@ export default function ApplicationDetail() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (!id || !confirm("Are you sure you want to delete this application?"))
-      return;
+    if (!id) return;
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!id) return;
+    setShowDeleteConfirm(false);
     try {
       await api.applications.delete(Number(id));
+      toast.success("Application deleted successfully.");
       navigate("/");
     } catch (err) {
-      alert("Failed to delete application. Please try again.");
+      toast.error("Failed to delete application. Please try again.");
       console.error(err);
     }
   };
@@ -196,7 +206,7 @@ export default function ApplicationDetail() {
     try {
       const blob = await api.resumes.downloadPdf(application.id);
       if (blob.size === 0) {
-        alert("PDF compilation failed. The LaTeX may contain errors.");
+        toast.error("PDF compilation failed. The LaTeX may contain errors.");
         return;
       }
       const url = window.URL.createObjectURL(blob);
@@ -217,7 +227,7 @@ export default function ApplicationDetail() {
       document.body.removeChild(a);
     } catch (err) {
       console.error(err);
-      alert(
+      toast.error(
         err instanceof Error
           ? err.message
           : "Failed to download PDF. Please try again.",
@@ -230,7 +240,7 @@ export default function ApplicationDetail() {
     try {
       const blob = await api.resumes.downloadCoverLetterPdf(application.id);
       if (blob.size === 0) {
-        alert("PDF compilation failed.");
+        toast.error("PDF compilation failed.");
         return;
       }
       const url = window.URL.createObjectURL(blob);
@@ -252,7 +262,7 @@ export default function ApplicationDetail() {
       document.body.removeChild(a);
     } catch (err) {
       console.error(err);
-      alert("Failed to download PDF.");
+      toast.error("Failed to download PDF.");
     }
   };
 
@@ -261,7 +271,7 @@ export default function ApplicationDetail() {
     try {
       const blob = await api.resumes.downloadCoverLetterDocx(application.id);
       if (blob.size === 0) {
-        alert("Word document generation failed.");
+        toast.error("Word document generation failed.");
         return;
       }
       const url = window.URL.createObjectURL(blob);
@@ -280,7 +290,7 @@ export default function ApplicationDetail() {
       document.body.removeChild(a);
     } catch (err) {
       console.error(err);
-      alert("Failed to download Word document.");
+      toast.error("Failed to download Word document.");
     }
   };
 
@@ -352,7 +362,7 @@ export default function ApplicationDetail() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto animate-fade-in space-y-6">
+    <div className="animate-fade-in space-y-6">
       <Link
         to="/"
         className="inline-flex items-center gap-2 text-text-muted hover:text-primary-600 transition-colors text-sm font-medium"
@@ -442,7 +452,7 @@ export default function ApplicationDetail() {
 
         {/* Right Column: Preview */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="card p-5 min-h-[600px] flex flex-col">
+          <div className="card p-5 min-h-[calc(100vh-200px)] flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
                 <button
@@ -691,7 +701,7 @@ export default function ApplicationDetail() {
                 {application.hasGeneratedResume ? (
                   <div
                     className="flex-1 rounded-xl border border-border overflow-hidden bg-gray-100"
-                    style={{ minHeight: "600px" }}
+                    style={{ minHeight: "calc(100vh - 320px)" }}
                   >
                     {pdfLoading && (
                       <div className="h-full flex flex-col items-center justify-center gap-3 p-8">
@@ -721,7 +731,7 @@ export default function ApplicationDetail() {
                         src={pdfBlobUrl}
                         title="Resume PDF Preview"
                         className="w-full h-full border-0"
-                        style={{ minHeight: "600px" }}
+                        style={{ minHeight: "calc(100vh - 320px)" }}
                       />
                     )}
                     {!pdfBlobUrl && !pdfLoading && !pdfError && (
@@ -754,6 +764,19 @@ export default function ApplicationDetail() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        open={showDeleteConfirm}
+        title="Delete Application"
+        message="Are you sure you want to delete this application? This action cannot be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        variant="danger"
+        icon="delete"
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }
