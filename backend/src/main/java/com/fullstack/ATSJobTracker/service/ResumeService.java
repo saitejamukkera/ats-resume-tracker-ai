@@ -30,6 +30,7 @@ public class ResumeService {
     private final UserProfileRepository userProfileRepository;
     private final GeminiService geminiService;
     private final PromptBuilder promptBuilder;
+    private final AuthService authService;
 
     private static final String LATEX_API_URL = "https://latex.ytotech.com/builds/sync";
 
@@ -39,10 +40,12 @@ public class ResumeService {
     public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume) {
         log.info("Generating from JD, useIconResume={}", useIconResume);
 
+        Long userId = authService.getCurrentUserId();
+
         // Select the appropriate base resume template based on user preference
         String resumeName = useIconResume ? "Base Resume B" : "Base Resume A";
-        ResumeBase baseResume = resumeBaseRepository.findByName(resumeName)
-                .orElse(resumeBaseRepository.findAll().stream().findFirst().orElse(null));
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
+                .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
             log.error("No base resume found");
@@ -52,7 +55,7 @@ public class ResumeService {
         // Retrieve user profile data for context injection
         String userInfo = "";
         String masterSubjects = "";
-        var profileOpt = userProfileRepository.findAll().stream().findFirst();
+        var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
@@ -118,6 +121,7 @@ public class ResumeService {
         application.setCoverLetterContent(coverLetter);
         // Set initial status to DRAFT so it doesn't appear in dashboard until confirmed
         application.setOutcome(ApplicationStatus.DRAFT);
+        application.setUserId(userId);
         JobApplication saved = jobApplicationRepository.save(application);
         log.info("Application created with id: {}", saved.getId());
 
@@ -139,11 +143,13 @@ public class ResumeService {
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
         log.info("Re-generating resume for application id: {}", applicationId);
 
+        Long userId = authService.getCurrentUserId();
+
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        ResumeBase baseResume = resumeBaseRepository.findByName("Base Resume A")
-                .orElse(resumeBaseRepository.findAll().stream().findFirst().orElse(null));
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId("Base Resume A", userId)
+                .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
             log.error("No base resume found for re-generation");
@@ -152,7 +158,7 @@ public class ResumeService {
 
         String userInfo = "";
         String masterSubjects = "";
-        var profileOpt = userProfileRepository.findAll().stream().findFirst();
+        var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);

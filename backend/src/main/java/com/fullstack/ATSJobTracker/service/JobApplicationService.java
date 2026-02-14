@@ -19,10 +19,12 @@ import java.util.stream.Collectors;
 public class JobApplicationService {
 
     private final JobApplicationRepository repository;
+    private final AuthService authService;
 
     public List<JobApplicationResponse> getAllApplications() {
         log.info("Fetching all job applications");
-        return repository.findAllByOrderByAppliedOnDesc().stream()
+        Long userId = authService.getCurrentUserId();
+        return repository.findAllByUserIdOrderByAppliedOnDesc(userId).stream()
                 .filter(app -> app.getOutcome() != com.fullstack.ATSJobTracker.model.ApplicationStatus.DRAFT)
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -36,6 +38,7 @@ public class JobApplicationService {
         app.setCompany(request.getCompany());
         app.setLocation(request.getLocation());
         app.setJobDescription(request.getJobDescription());
+        app.setUserId(authService.getCurrentUserId());
 
         JobApplication saved = repository.save(app);
         log.info("Application saved with id: {}", saved.getId());

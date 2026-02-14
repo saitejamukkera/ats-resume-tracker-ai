@@ -8,6 +8,24 @@ import type {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
+export const tokenStorage = {
+  get: () => localStorage.getItem("jwt"),
+  set: (token: string) => localStorage.setItem("jwt", token),
+  remove: () => localStorage.removeItem("jwt"),
+};
+
+const apiFetch = (
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): Promise<Response> => {
+  const token = tokenStorage.get();
+  const headers = new Headers(init?.headers);
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  return fetch(input, { ...init, headers });
+};
+
 export interface GenerateFromJdResponse {
   applicationId: number;
   position: string;
@@ -18,17 +36,62 @@ export interface GenerateFromJdResponse {
   coverLetterContent: string;
 }
 
+export interface AuthResponse {
+  email: string;
+  fullName: string;
+  provider: string;
+  message?: string;
+  token?: string;
+}
+
 export const api = {
+  auth: {
+    login: async (email: string, password: string): Promise<AuthResponse> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Login failed");
+      if (data.token) tokenStorage.set(data.token);
+      return data;
+    },
+    register: async (
+      email: string,
+      password: string,
+      fullName: string,
+    ): Promise<AuthResponse> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Registration failed");
+      if (data.token) tokenStorage.set(data.token);
+      return data;
+    },
+    logout: async (): Promise<void> => {
+      tokenStorage.remove();
+      await apiFetch(`${API_BASE_URL}/api/auth/logout`, { method: "POST" }).catch(() => {});
+    },
+    me: async (): Promise<AuthResponse> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/auth/me`);
+      if (!response.ok) throw new Error("Not authenticated");
+      return response.json();
+    },
+  },
   applications: {
     getAll: async (): Promise<JobApplicationResponse[]> => {
-      const response = await fetch(`${API_BASE_URL}/api/applications`);
+      const response = await apiFetch(`${API_BASE_URL}/api/applications`);
       if (!response.ok) throw new Error("Failed to fetch applications");
       return response.json();
     },
     create: async (
       data: JobApplicationRequest,
     ): Promise<JobApplicationResponse> => {
-      const response = await fetch(`${API_BASE_URL}/api/applications`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/applications`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -40,23 +103,29 @@ export const api = {
       id: number,
       data: JobApplicationRequest,
     ): Promise<JobApplicationResponse> => {
-      const response = await fetch(`${API_BASE_URL}/api/applications/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/applications/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        },
+      );
       if (!response.ok) throw new Error("Failed to update application");
       return response.json();
     },
     getById: async (id: number): Promise<JobApplicationResponse> => {
-      const response = await fetch(`${API_BASE_URL}/api/applications/${id}`);
+      const response = await apiFetch(`${API_BASE_URL}/api/applications/${id}`);
       if (!response.ok) throw new Error("Failed to fetch application");
       return response.json();
     },
     delete: async (id: number): Promise<void> => {
-      const response = await fetch(`${API_BASE_URL}/api/applications/${id}`, {
-        method: "DELETE",
-      });
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/applications/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) throw new Error("Failed to delete application");
     },
   },
@@ -65,7 +134,7 @@ export const api = {
       jobDescription: string,
       useIconResume: boolean,
     ): Promise<GenerateFromJdResponse> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/generate-from-jd`,
         {
           method: "POST",
@@ -80,7 +149,7 @@ export const api = {
       applicationId: number,
       data: ResumeGenerationRequest,
     ): Promise<ResumeGenerationResponse> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/generate/${applicationId}`,
         {
           method: "POST",
@@ -94,7 +163,7 @@ export const api = {
     getPdfUrl: (applicationId: number) =>
       `${API_BASE_URL}/api/resumes/${applicationId}/pdf`,
     downloadPdf: async (applicationId: number): Promise<Blob> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/${applicationId}/pdf`,
       );
       if (!response.ok) {
@@ -108,7 +177,7 @@ export const api = {
       return response.blob();
     },
     downloadCoverLetterPdf: async (applicationId: number): Promise<Blob> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/${applicationId}/cover-letter/pdf`,
       );
       if (!response.ok) {
@@ -117,7 +186,7 @@ export const api = {
       return response.blob();
     },
     downloadResumeDocx: async (applicationId: number): Promise<Blob> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/${applicationId}/docx`,
       );
       if (!response.ok) {
@@ -126,7 +195,7 @@ export const api = {
       return response.blob();
     },
     downloadCoverLetterDocx: async (applicationId: number): Promise<Blob> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/${applicationId}/cover-letter/docx`,
       );
       if (!response.ok) {
@@ -135,7 +204,7 @@ export const api = {
       return response.blob();
     },
     getBaseResumeCount: async (): Promise<number> => {
-      const response = await fetch(`${API_BASE_URL}/api/resumes/base/count`);
+      const response = await apiFetch(`${API_BASE_URL}/api/resumes/base/count`);
       if (!response.ok) throw new Error("Failed to check base resumes");
       return response.json();
     },
@@ -144,7 +213,7 @@ export const api = {
       resumeContent: string | null,
       coverLetterContent: string | null,
     ): Promise<void> => {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/${applicationId}/content`,
         {
           method: "PUT",
@@ -157,13 +226,13 @@ export const api = {
   },
   profile: {
     get: async (): Promise<UserProfile | null> => {
-      const response = await fetch(`${API_BASE_URL}/api/profile`);
+      const response = await apiFetch(`${API_BASE_URL}/api/profile`);
       if (response.status === 204) return null;
       if (!response.ok) throw new Error("Failed to fetch profile");
       return response.json();
     },
     save: async (data: UserProfile): Promise<UserProfile> => {
-      const response = await fetch(`${API_BASE_URL}/api/profile`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

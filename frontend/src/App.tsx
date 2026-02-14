@@ -10,18 +10,21 @@ import {
   LayoutDashboard,
   FilePlus,
   Settings,
-  Sparkles,
   Menu,
   X,
   Sun,
   Moon,
+  LogOut,
 } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./hooks/useTheme";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import NewApplication from "./pages/NewApplication";
 import ApplicationDetail from "./pages/ApplicationDetail";
 import SettingsPage from "./pages/SettingsPage";
+import LoginPage from "./pages/LoginPage";
+import OAuthCallback from "./pages/OAuthCallback";
 import "./App.css";
 
 const NAV_ITEMS = [
@@ -34,6 +37,7 @@ function AppLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, toggle: toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -115,37 +119,41 @@ function AppLayout() {
         {/* Sidebar Footer */}
         <div className="px-4 py-4 border-t border-border/60 shrink-0">
           <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary-50 to-primary-100/50 flex items-center justify-center">
-                <Sparkles size={13} className="text-primary-500" />
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary-50 to-primary-100/50 flex items-center justify-center text-primary-600 font-semibold text-[11px] shrink-0">
+                {user?.fullName?.charAt(0)?.toUpperCase() ||
+                  user?.email?.charAt(0)?.toUpperCase() ||
+                  "?"}
               </div>
-              <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-text-secondary leading-tight">
-                  ATS Tracker
+              <div className="flex flex-col min-w-0">
+                <span className="text-[11px] font-semibold text-text-secondary leading-tight truncate">
+                  {user?.fullName || "User"}
                 </span>
-                <span className="text-[10px] text-text-muted font-medium">
-                  v1.0.0
+                <span className="text-[10px] text-text-muted font-medium truncate">
+                  {user?.email}
                 </span>
               </div>
             </div>
-            <button
-              onClick={toggleTheme}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-primary-700 hover:bg-primary-50 transition-all duration-200"
-              title={
-                theme === "dark"
-                  ? "Switch to light mode"
-                  : "Switch to dark mode"
-              }
-            >
-              {theme === "dark" ? (
-                <Sun
-                  size={16}
-                  className="transition-transform duration-300 rotate-0 hover:rotate-45"
-                />
-              ) : (
-                <Moon size={16} className="transition-transform duration-300" />
-              )}
-            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                onClick={toggleTheme}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-primary-700 hover:bg-primary-50 transition-all duration-200"
+                title={
+                  theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+                }
+              >
+                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+              <button
+                onClick={logout}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                title="Logout"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
           </div>
         </div>
       </aside>
@@ -186,10 +194,43 @@ function AppLayout() {
   );
 }
 
+function AppRoutes() {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (location.pathname === "/oauth2/callback") {
+    return (
+      <Routes>
+        <Route path="/oauth2/callback" element={<OAuthCallback />} />
+      </Routes>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="*" element={<LoginPage />} />
+      </Routes>
+    );
+  }
+
+  return <AppLayout />;
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <AppLayout />
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

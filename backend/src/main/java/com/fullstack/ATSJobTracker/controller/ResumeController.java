@@ -8,6 +8,7 @@ import com.fullstack.ATSJobTracker.dto.ResumeGenerationResponse;
 import com.fullstack.ATSJobTracker.dto.UpdateContentRequest;
 import com.fullstack.ATSJobTracker.model.ResumeBase;
 import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
+import com.fullstack.ATSJobTracker.service.AuthService;
 import com.fullstack.ATSJobTracker.service.JobApplicationService;
 import com.fullstack.ATSJobTracker.service.ResumeService;
 import com.fullstack.ATSJobTracker.service.WordDocumentService;
@@ -23,7 +24,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resumes")
-@CrossOrigin(origins = "*")
 @Slf4j
 @RequiredArgsConstructor
 public class ResumeController {
@@ -32,13 +32,16 @@ public class ResumeController {
     private final ResumeBaseRepository resumeBaseRepository;
     private final JobApplicationService jobApplicationService;
     private final WordDocumentService wordDocumentService;
+    private final AuthService authService;
 
     // Base resume endpoints
 
     @PostMapping("/base")
     public ResumeBase uploadBaseResume(@RequestBody ResumeBase base) {
         log.info("POST /api/resumes/base - name: {}", base.getName());
-        resumeBaseRepository.findByName(base.getName()).ifPresent(existing -> {
+        Long userId = authService.getCurrentUserId();
+        base.setUserId(userId);
+        resumeBaseRepository.findByNameAndUserId(base.getName(), userId).ifPresent(existing -> {
             base.setId(existing.getId());
         });
         return resumeBaseRepository.save(base);
@@ -47,13 +50,13 @@ public class ResumeController {
     @GetMapping("/base")
     public List<ResumeBase> getAllBaseResumes() {
         log.info("GET /api/resumes/base");
-        return resumeBaseRepository.findAll();
+        return resumeBaseRepository.findAllByUserId(authService.getCurrentUserId());
     }
 
     @GetMapping("/base/count")
     public long getBaseResumeCount() {
         log.info("GET /api/resumes/base/count");
-        return resumeBaseRepository.count();
+        return resumeBaseRepository.countByUserId(authService.getCurrentUserId());
     }
 
     // Generate from job description

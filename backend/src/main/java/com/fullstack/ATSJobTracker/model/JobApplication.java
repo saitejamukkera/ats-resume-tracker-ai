@@ -37,6 +37,9 @@ public class JobApplication {
     @Column(columnDefinition = "TEXT")
     private String coverLetterContent;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @PrePersist
     protected void onCreate() {
         if (appliedOn == null) appliedOn = LocalDateTime.now();
