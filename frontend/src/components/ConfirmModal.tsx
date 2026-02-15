@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useRef, useCallback } from "react";
 import { AlertTriangle, LogOut } from "lucide-react";
 
 interface ConfirmModalProps {
@@ -16,19 +18,19 @@ interface ConfirmModalProps {
 const VARIANT_STYLES = {
   danger: {
     button: "bg-red-600 hover:bg-red-700 focus:ring-red-300 text-white",
-    iconBg: "bg-red-100",
-    iconColor: "text-red-600",
+    iconBg: "bg-red-100 dark:bg-red-900/30",
+    iconColor: "text-red-600 dark:text-red-400",
   },
   warning: {
     button: "bg-amber-600 hover:bg-amber-700 focus:ring-amber-300 text-white",
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
+    iconBg: "bg-amber-100 dark:bg-amber-900/30",
+    iconColor: "text-amber-600 dark:text-amber-400",
   },
   default: {
     button:
       "bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 text-white",
-    iconBg: "bg-primary-100",
-    iconColor: "text-primary-600",
+    iconBg: "bg-primary-100 dark:bg-primary-900/30",
+    iconColor: "text-primary-600 dark:text-primary-400",
   },
 };
 
@@ -52,22 +54,34 @@ export function ConfirmModal({
   const styles = VARIANT_STYLES[variant];
   const Icon = ICONS[icon];
 
-  // Focus cancel button on open, handle Escape
+  // Stable reference to onCancel for the escape key handler
+  const onCancelRef = useRef(onCancel);
+  onCancelRef.current = onCancel;
+
+  // Focus cancel button on open, handle Escape, lock body scroll
   useEffect(() => {
     if (open) {
       cancelRef.current?.focus();
+
+      // Lock body scroll
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
       const handleKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onCancel();
+        if (e.key === "Escape") onCancelRef.current();
       };
       document.addEventListener("keydown", handleKey);
-      return () => document.removeEventListener("keydown", handleKey);
+      return () => {
+        document.removeEventListener("keydown", handleKey);
+        document.body.style.overflow = originalOverflow;
+      };
     }
-  }, [open, onCancel]);
+  }, [open]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9998] flex items-center justify-center">
+    <div className="fixed inset-0 z-9998 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fade-in"
@@ -75,7 +89,7 @@ export function ConfirmModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl border border-border/60 w-full max-w-[400px] mx-4 p-6 animate-scale-in">
+      <div className="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border/60 dark:border-gray-700 w-full max-w-100 mx-4 p-6 animate-scale-in">
         {/* Icon */}
         <div className="flex justify-center mb-4">
           <div
@@ -86,10 +100,10 @@ export function ConfirmModal({
         </div>
 
         {/* Content */}
-        <h3 className="text-lg font-bold text-text-primary text-center mb-2">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white text-center mb-2">
           {title}
         </h3>
-        <p className="text-sm text-text-secondary text-center leading-relaxed mb-6">
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center leading-relaxed mb-6">
           {message}
         </p>
 
@@ -98,7 +112,7 @@ export function ConfirmModal({
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-text-secondary bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
           >
             {cancelLabel}
           </button>

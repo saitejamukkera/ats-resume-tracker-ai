@@ -6,12 +6,32 @@ import type {
   UserProfile,
 } from "../types/dtos";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
+// Module-level token cache to avoid reading localStorage on every API call
+let cachedToken: string | null = null;
 
 export const tokenStorage = {
-  get: () => localStorage.getItem("jwt"),
-  set: (token: string) => localStorage.setItem("jwt", token),
-  remove: () => localStorage.removeItem("jwt"),
+  get: () => {
+    if (cachedToken !== null) return cachedToken;
+    if (typeof window !== "undefined") {
+      cachedToken = localStorage.getItem("jwt");
+      return cachedToken;
+    }
+    return null;
+  },
+  set: (token: string) => {
+    cachedToken = token;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jwt", token);
+    }
+  },
+  remove: () => {
+    cachedToken = null;
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("jwt");
+    }
+  },
 };
 
 const apiFetch = (
@@ -82,6 +102,67 @@ export const api = {
       const response = await apiFetch(`${API_BASE_URL}/api/auth/me`);
       if (!response.ok) throw new Error("Not authenticated");
       return response.json();
+    },
+    sendOtp: async (email: string): Promise<AuthResponse> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/auth/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to send OTP");
+      return data;
+    },
+    verifyOtpRegister: async (
+      email: string,
+      password: string,
+      fullName: string,
+      otp: string,
+    ): Promise<AuthResponse> => {
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/auth/verify-otp-register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fullName, email, password, otp }),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Verification failed");
+      if (data.token) tokenStorage.set(data.token);
+      return data;
+    },
+    forgotPassword: async (email: string): Promise<AuthResponse> => {
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.message || "Failed to send reset code");
+      return data;
+    },
+    resetPassword: async (
+      email: string,
+      otp: string,
+      newPassword: string,
+    ): Promise<AuthResponse> => {
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/auth/reset-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp, newPassword }),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.message || "Password reset failed");
+      return data;
     },
   },
   applications: {

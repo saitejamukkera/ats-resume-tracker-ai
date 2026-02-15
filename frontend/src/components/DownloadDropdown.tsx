@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import { Download, FileText, ChevronDown, Loader2 } from "lucide-react";
 
@@ -72,24 +74,27 @@ export function DownloadDropdown({
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-xl border border-border shadow-lg z-50 py-1 animate-fade-in">
+        <div className="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-zinc-900 rounded-xl border border-border dark:border-gray-700 shadow-lg z-50 py-1 animate-fade-in text-gray-900 dark:text-white">
           <button
             onClick={() => handleDownload("pdf")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
           >
-            <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-              <FileText size={16} className="text-red-500" />
+            <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center shrink-0">
+              <FileText size={16} className="text-red-500 dark:text-red-400" />
             </div>
             <div className="text-left">
               <p className="font-medium">PDF</p>
-              <p className="text-[10px] text-text-muted">Best for sharing</p>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                Best for sharing
+              </p>
             </div>
           </button>
           <button
             onClick={() => handleDownload("docx")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
           >
-            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
+              {/* Word Icon SVG */}
               <svg
                 width="16"
                 height="16"
@@ -127,7 +132,7 @@ export function DownloadDropdown({
             </div>
             <div className="text-left">
               <p className="font-medium">Word</p>
-              <p className="text-[10px] text-text-muted">
+              <p className="text-[10px] text-gray-500 dark:text-gray-400">
                 Best for ATS portals
               </p>
             </div>

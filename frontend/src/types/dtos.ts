@@ -45,6 +45,7 @@ export interface ResumeGenerationRequest {
 export interface ResumeGenerationResponse {
   latexContent: string;
   coverLetterContent: string;
+  generatedResumeContent?: string;
 }
 
 export interface UserProfile {

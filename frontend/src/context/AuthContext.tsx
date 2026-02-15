@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useContext,
@@ -34,9 +36,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
+    // In Next.js, we need to be careful about SSR.
+    // tokenStorage.get() checks for window, so it returns null on server.
     const token = tokenStorage.get();
     if (!token) {
       setUser(null);
+      setLoading(false);
       return;
     }
     try {
@@ -45,11 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       tokenStorage.remove();
       setUser(null);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    refreshUser().finally(() => setLoading(false));
+    refreshUser();
   }, [refreshUser]);
 
   const login = async (email: string, password: string) => {

@@ -25,7 +25,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final AuthUserRepository authUserRepository;
     private final JwtUtil jwtUtil;
 
-    @Value("${app.frontend-url:http://localhost:5173}")
+    @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
 
     @Override
@@ -69,15 +69,18 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         });
 
         String token = jwtUtil.generateToken(user.getEmail());
-        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+
+        boolean isLocalhost = frontendUrl.contains("localhost");
+        ResponseCookie.ResponseCookieBuilder cookieBuilder = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
                 .maxAge(86400)
-                .sameSite("Lax")
-                .secure(false)
-                .domain("localhost")
-                .build();
-        response.addHeader("Set-Cookie", cookie.toString());
+                .sameSite(isLocalhost ? "Lax" : "None")
+                .secure(!isLocalhost);
+        if (isLocalhost) {
+            cookieBuilder.domain("localhost");
+        }
+        response.addHeader("Set-Cookie", cookieBuilder.build().toString());
 
         getRedirectStrategy().sendRedirect(request, response, 
             frontendUrl + "/oauth2/callback?token=" + token);

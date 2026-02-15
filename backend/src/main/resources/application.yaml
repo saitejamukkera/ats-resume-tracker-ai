@@ -35,6 +35,22 @@ spring:
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
             scope: user:email, read:user
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  health:
+    mail:
+      enabled: false
 
 gemini:
   api-key: ${GEMINI_API_KEY}
@@ -44,4 +60,4 @@ jwt:
   expiration: 86400000
 
 app:
-  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}

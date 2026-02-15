@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useContext,
@@ -93,14 +95,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
 
       {/* Toast container */}
-      <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
+      <div className="fixed bottom-4 right-4 z-9999 flex flex-col gap-2 pointer-events-none">
         {toasts.map((t) => {
           const style = TOAST_STYLES[t.type];
           const Icon = style.icon;
           return (
             <div
               key={t.id}
-              className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg ${style.bg} ${style.border} animate-slide-in-right min-w-[280px] max-w-[420px]`}
+              className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg ${style.bg} ${style.border} animate-slide-in-right min-w-70 max-w-105`}
             >
               <Icon size={18} className={`${style.text} shrink-0`} />
               <p className={`text-sm font-medium ${style.text} flex-1`}>
