@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -55,12 +57,18 @@ export function StatusDropdown({
   onStatusChange,
 }: StatusDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [menuPosition, setMenuPosition] = useState({
     top: 0,
     left: 0,
     placement: "bottom",
   });
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   // Update position when opening
   const toggleDropdown = (e: React.MouseEvent) => {
@@ -83,10 +91,13 @@ export function StatusDropdown({
   useEffect(() => {
     if (!isOpen) return;
     const handleScroll = () => setIsOpen(false);
-    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("scroll", handleScroll, {
+      capture: true,
+      passive: true,
+    });
     window.addEventListener("resize", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("scroll", handleScroll, { capture: true });
       window.removeEventListener("resize", handleScroll);
     };
   }, [isOpen]);
@@ -109,7 +120,7 @@ export function StatusDropdown({
         <span
           className={`w-1.5 h-1.5 rounded-full ${currentConfig.dotClass}`}
         />
-        <span className="min-w-[80px] text-left">{currentConfig.label}</span>
+        <span className="min-w-20 text-left">{currentConfig.label}</span>
         <ChevronDown
           size={14}
           className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -117,9 +128,10 @@ export function StatusDropdown({
       </button>
 
       {isOpen &&
+        mounted &&
         createPortal(
           <div
-            className="fixed inset-0 z-[9999]"
+            className="fixed inset-0 z-9999"
             onClick={() => setIsOpen(false)}
           >
             <div
@@ -130,7 +142,7 @@ export function StatusDropdown({
               }}
             >
               <div
-                className="w-48 rounded-xl bg-white/95 backdrop-blur-md shadow-lg shadow-black/8 border border-gray-200/60 overflow-hidden animate-scale-in origin-top-left"
+                className="w-48 rounded-xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-lg shadow-black/8 border border-gray-200/60 dark:border-gray-700/60 overflow-hidden animate-scale-in origin-top-left"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="py-1">
@@ -148,13 +160,15 @@ export function StatusDropdown({
                         }}
                         className={`
                         w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors
-                        ${isSelected ? "bg-primary-50 text-primary-700" : "text-gray-700 hover:bg-gray-50"}
+                        ${isSelected ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}
                       `}
                       >
                         <Icon
                           size={16}
                           className={
-                            isSelected ? "text-primary-600" : "text-gray-400"
+                            isSelected
+                              ? "text-primary-600 dark:text-primary-400"
+                              : "text-gray-400 dark:text-gray-500"
                           }
                         />
                         <span className={isSelected ? "font-medium" : ""}>

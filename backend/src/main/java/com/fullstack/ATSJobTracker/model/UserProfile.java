@@ -30,4 +30,7 @@ public class UserProfile {
 
     private String mastersDegree;
     private String mastersGpa;
+
+    @Column(name = "user_id", unique = true)
+    private Long userId;
 }

@@ -24,4 +24,7 @@ public class ResumeBase {
     private String content;
 
     private boolean hasIcons;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

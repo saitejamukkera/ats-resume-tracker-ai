@@ -8,8 +8,10 @@ import com.fullstack.ATSJobTracker.dto.ResumeGenerationResponse;
 import com.fullstack.ATSJobTracker.dto.UpdateContentRequest;
 import com.fullstack.ATSJobTracker.model.ResumeBase;
 import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
+import com.fullstack.ATSJobTracker.service.AuthService;
 import com.fullstack.ATSJobTracker.service.JobApplicationService;
 import com.fullstack.ATSJobTracker.service.ResumeService;
+import com.fullstack.ATSJobTracker.service.WordDocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +24,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resumes")
-@CrossOrigin(origins = "*")
 @Slf4j
 @RequiredArgsConstructor
 public class ResumeController {
@@ -30,13 +31,17 @@ public class ResumeController {
     private final ResumeService resumeService;
     private final ResumeBaseRepository resumeBaseRepository;
     private final JobApplicationService jobApplicationService;
+    private final WordDocumentService wordDocumentService;
+    private final AuthService authService;
 
     // Base resume endpoints
 
     @PostMapping("/base")
     public ResumeBase uploadBaseResume(@RequestBody ResumeBase base) {
         log.info("POST /api/resumes/base - name: {}", base.getName());
-        resumeBaseRepository.findByName(base.getName()).ifPresent(existing -> {
+        Long userId = authService.getCurrentUserId();
+        base.setUserId(userId);
+        resumeBaseRepository.findByNameAndUserId(base.getName(), userId).ifPresent(existing -> {
             base.setId(existing.getId());
         });
         return resumeBaseRepository.save(base);
@@ -45,13 +50,13 @@ public class ResumeController {
     @GetMapping("/base")
     public List<ResumeBase> getAllBaseResumes() {
         log.info("GET /api/resumes/base");
-        return resumeBaseRepository.findAll();
+        return resumeBaseRepository.findAllByUserId(authService.getCurrentUserId());
     }
 
     @GetMapping("/base/count")
     public long getBaseResumeCount() {
         log.info("GET /api/resumes/base/count");
-        return resumeBaseRepository.count();
+        return resumeBaseRepository.countByUserId(authService.getCurrentUserId());
     }
 
     // Generate from job description
@@ -78,7 +83,7 @@ public class ResumeController {
         log.info("POST /api/resumes/generate/{}", applicationId);
         try {
             String[] result = resumeService.generateResumeAndCoverLetter(
-                    applicationId, request.getJobDescription());
+                    applicationId, request.getJobDescription(), request.getCustomPrompt());
 
             ResumeGenerationResponse response = ResumeGenerationResponse.builder()
                     .latexContent(result[0])
@@ -176,5 +181,53 @@ public class ResumeController {
                     return ResponseEntity.ok(content);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Word document endpoints
+
+    @GetMapping("/{applicationId}/docx")
+    public ResponseEntity<byte[]> getResumeDocx(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/docx", applicationId);
+        try {
+            byte[] docxContent = wordDocumentService.generateResumeDocx(applicationId);
+
+            if (docxContent == null || docxContent.length == 0) {
+                log.error("Resume DOCX generation failed for application {}", applicationId);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+            headers.setContentDispositionFormData("attachment", "resume_" + applicationId + ".docx");
+            headers.setContentLength(docxContent.length);
+
+            return new ResponseEntity<>(docxContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error generating resume DOCX: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/{applicationId}/cover-letter/docx")
+    public ResponseEntity<byte[]> getCoverLetterDocx(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/cover-letter/docx", applicationId);
+        try {
+            byte[] docxContent = wordDocumentService.generateCoverLetterDocx(applicationId);
+
+            if (docxContent == null || docxContent.length == 0) {
+                log.error("Cover Letter DOCX generation failed for application {}", applicationId);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+            headers.setContentDispositionFormData("attachment", "cover_letter_" + applicationId + ".docx");
+            headers.setContentLength(docxContent.length);
+
+            return new ResponseEntity<>(docxContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error generating cover letter DOCX: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

@@ -1,9 +1,7 @@
-version: "3.8"
-
 services:
-  # Database Service
+  # ── PostgreSQL ──────────────────────────────────────────────
   postgres:
-    image: postgres:latest
+    image: postgres:16-alpine
     container_name: ats-postgres-prod
     restart: always
     environment:
@@ -11,20 +9,17 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      # Persist data to a folder on the host machine
       - ./postgres-data:/var/lib/postgresql/data
     networks:
       - ats-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Backend Service
+  # ── Spring Boot Backend ─────────────────────────────────────
   backend:
-    # This image name will be whatever you name it when pushing to GHCR/DockerHub
-    # Example: ghcr.io/yourusername/ats-backend:latest
     image: ${BACKEND_IMAGE:-ats-backend:latest}
     container_name: ats-backend-prod
     restart: always
@@ -36,12 +31,40 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    expose:
+      - "8080"
+    networks:
+      - ats-network
+
+  # ── Caddy Reverse Proxy (auto HTTPS via Let's Encrypt) ─────
+  caddy:
+    image: caddy:2-alpine
+    container_name: ats-caddy-prod
+    restart: always
+    depends_on:
+      - backend
     ports:
-      # Expose backend on port 8080
-      - "8080:8080"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - ats-network
 
 networks:
   ats-network:
     driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

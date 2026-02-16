@@ -30,19 +30,22 @@ public class ResumeService {
     private final UserProfileRepository userProfileRepository;
     private final GeminiService geminiService;
     private final PromptBuilder promptBuilder;
+    private final AuthService authService;
 
     private static final String LATEX_API_URL = "https://latex.ytotech.com/builds/sync";
 
     /**
-     * This takes JD, extracts fields, generates resume + cover letter, creates application.
+     * Parses the JD, extracts key details, and generates a tailored resume and cover letter.
      */
     public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume) {
         log.info("Generating from JD, useIconResume={}", useIconResume);
 
+        Long userId = authService.getCurrentUserId();
+
         // Select the appropriate base resume template based on user preference
         String resumeName = useIconResume ? "Base Resume B" : "Base Resume A";
-        ResumeBase baseResume = resumeBaseRepository.findByName(resumeName)
-                .orElse(resumeBaseRepository.findAll().stream().findFirst().orElse(null));
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
+                .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
             log.error("No base resume found");
@@ -52,7 +55,7 @@ public class ResumeService {
         // Retrieve user profile data for context injection
         String userInfo = "";
         String masterSubjects = "";
-        var profileOpt = userProfileRepository.findAll().stream().findFirst();
+        var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
@@ -118,6 +121,7 @@ public class ResumeService {
         application.setCoverLetterContent(coverLetter);
         // Set initial status to DRAFT so it doesn't appear in dashboard until confirmed
         application.setOutcome(ApplicationStatus.DRAFT);
+        application.setUserId(userId);
         JobApplication saved = jobApplicationRepository.save(application);
         log.info("Application created with id: {}", saved.getId());
 
@@ -137,13 +141,19 @@ public class ResumeService {
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null);
+    }
+
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt) {
         log.info("Re-generating resume for application id: {}", applicationId);
+
+        Long userId = authService.getCurrentUserId();
 
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        ResumeBase baseResume = resumeBaseRepository.findByName("Base Resume A")
-                .orElse(resumeBaseRepository.findAll().stream().findFirst().orElse(null));
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId("Base Resume A", userId)
+                .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
             log.error("No base resume found for re-generation");
@@ -152,14 +162,14 @@ public class ResumeService {
 
         String userInfo = "";
         String masterSubjects = "";
-        var profileOpt = userProfileRepository.findAll().stream().findFirst();
+        var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
         }
 
-        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects);
+        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt);
         String generatedContent = geminiService.getCompletion(prompt);
 
         String resumeLatex = generatedContent;
@@ -276,80 +286,37 @@ public class ResumeService {
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        // Fetch user profile for header
-        String name = "";
-        String address = "";
-        String phone = "";
-        String email = "";
-        String linkedin = "";
-        String portfolio = "";
-        String github = "";
-
-        var profileOpt = userProfileRepository.findAll().stream().findFirst();
-        if (profileOpt.isPresent()) {
-            UserProfile p = profileOpt.get();
-            name = p.getFullName() != null ? p.getFullName() : "";
-            address = p.getAddress() != null ? p.getAddress() : "";
-            phone = p.getPhone() != null ? p.getPhone() : "";
-            email = p.getEmail() != null ? p.getEmail() : "";
-            linkedin = p.getLinkedinUrl() != null ? p.getLinkedinUrl() : "";
-            portfolio = p.getPortfolioUrl() != null ? p.getPortfolioUrl() : "";
-            github = p.getGithubUrl() != null ? p.getGithubUrl() : "";
-        }
-
         String content = application.getCoverLetterContent();
         if (content == null) content = "";
 
-        // Escape special LaTeX characters in the content
+        // Normalize line endings first
+        content = content.replace("\r\n", "\n").replace("\r", "\n");
+
+        // Escape special LaTeX characters FIRST
         content = escapeLatex(content);
-        // Convert newlines to double backslashes for LaTeX line breaks (or just paragraph breaks)
-        // A better approach for letters is to treat double newlines as paragraph breaks
-        content = content.replace("\n\n", "\\par\\vspace{1em} ");
-        content = content.replace("\n", " "); // Single newlines treat as space in LaTeX, or we can force breaks
-        // Actually, let's keep it simple: Paragraphs
-        content = content.replaceAll("(\r\n|\n\r|\r|\n)", "\n\n"); // Normalize newlines to double newlines
 
+        // Format paragraphs and line breaks for LaTeX
+        content = content.replace("\n\n", "\\par\\vspace{0.6em}\n");
+        content = content.replace("\n", " \\\\\n");
 
-        String latex = """
-                \\documentclass[11pt,a4paper]{article}
-                \\usepackage[utf8]{inputenc}
-                \\usepackage[margin=1in]{geometry}
-                \\usepackage{hyperref}
-                \\usepackage{enumitem}
-                \\usepackage{parskip}
-                \\pagestyle{empty}
-                
-                \\begin{document}
-                
-                \\begin{center}
-                    {\\Huge \\textbf{%s}} \\\\[5pt]
-                    %s $\\cdot$ %s $\\cdot$ %s \\\\
-                    %s %s %s
-                \\end{center}
-                
-                \\vspace{20pt}
-                
-                %s
-                
-                \\end{document}
-                """;
-        
-        // Build the links line carefully
-        String linksInfo = "";
-        if (!linkedin.isEmpty()) linksInfo += "\\href{" + linkedin + "}{LinkedIn} ";
-        if (!portfolio.isEmpty()) linksInfo += "$\\cdot$ \\href{" + portfolio + "}{Portfolio} ";
-        if (!github.isEmpty()) linksInfo += "$\\cdot$ \\href{" + github + "}{GitHub}";
+        StringBuilder latex = new StringBuilder();
+        latex.append("\\documentclass[11pt,a4paper]{article}\n");
+        latex.append("\\usepackage[utf8]{inputenc}\n");
+        latex.append("\\usepackage[margin=1in]{geometry}\n");
+        latex.append("\\usepackage{hyperref}\n");
+        latex.append("\\usepackage{parskip}\n");
+        latex.append("\\setlength{\\parindent}{0pt}\n");
+        latex.append("\\pagestyle{empty}\n");
+        latex.append("\\begin{document}\n\n");
 
-        String formattedLatex = String.format(latex, 
-            escapeLatex(name), 
-            escapeLatex(address), 
-            escapeLatex(phone), 
-            escapeLatex(email), 
-            "", "", linksInfo, // Hacky, just put linksInfo in one slot
-            content
-        );
+        // Directly append the cover letter content as the body —
+        // the cover letter text already contains the name/address/date header
+        // as generated by Gemini, so we don't need a separate LaTeX header.
+        latex.append(content).append("\n\n");
 
-        return compilePdf(formattedLatex);
+        latex.append("\\end{document}\n");
+
+        return compilePdf(latex.toString());
     }
 
     private String escapeLatex(String input) {

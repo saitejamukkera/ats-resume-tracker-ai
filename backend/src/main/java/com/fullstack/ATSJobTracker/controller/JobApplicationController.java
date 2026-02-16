@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
-@CrossOrigin(origins = "*")
 @Slf4j
 @RequiredArgsConstructor
 public class JobApplicationController {
