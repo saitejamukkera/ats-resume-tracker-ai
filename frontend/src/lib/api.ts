@@ -6,7 +6,8 @@ import type {
   UserProfile,
 } from "../types/dtos";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 // Module-level token cache to avoid reading localStorage on every API call
 let cachedToken: string | null = null;
