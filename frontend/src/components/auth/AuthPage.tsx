@@ -22,9 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
-import { api } from "@/lib/api";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+import { api, API_BASE_URL } from "@/lib/api";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },

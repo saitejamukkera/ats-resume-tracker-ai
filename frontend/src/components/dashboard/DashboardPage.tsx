@@ -138,7 +138,8 @@ export default function DashboardPage() {
     return applications.filter((app) => {
       const matchesSearch =
         app.position.toLowerCase().includes(query) ||
-        app.company.toLowerCase().includes(query);
+        app.company.toLowerCase().includes(query) ||
+        app.jobId?.toLowerCase().includes(query);
       const matchesStatus =
         statusFilter === "ALL" || app.outcome === statusFilter;
       return matchesSearch && matchesStatus;
@@ -256,7 +257,7 @@ export default function DashboardPage() {
           />
           <input
             type="text"
-            placeholder="Search by position or company..."
+            placeholder="Search by position or company or job ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-zinc-800/50 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all"
@@ -269,7 +270,7 @@ export default function DashboardPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="py-2.5 px-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-zinc-800/50 text-sm text-gray-700 dark:text-gray-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500"
           >
-            <option value="ALL">All Statuses</option>
+            <option value="ALL">Status</option>
             <option value="ACTIVE">Active</option>
             <option value="IN_PROCESS">In Process</option>
             <option value="REJECTED">Rejected</option>
