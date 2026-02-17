@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ats-resumetracker
+    name: trackhire-ai
   docker:
     compose:
       enabled: false

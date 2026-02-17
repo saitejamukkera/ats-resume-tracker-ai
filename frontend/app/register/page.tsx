@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import AuthPage from "../../src/components/auth/AuthPage";
 
 export const metadata: Metadata = {
-  title: "Sign Up - ATS Tracker",
+  title: "Sign Up - TrackHire AI",
   description: "Create a new account.",
 };
 

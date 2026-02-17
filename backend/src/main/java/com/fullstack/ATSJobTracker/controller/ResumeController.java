@@ -62,12 +62,18 @@ public class ResumeController {
     // Generate from job description
 
     @PostMapping("/generate-from-jd")
-    public ResponseEntity<GenerateFromJdResponse> generateFromJd(@RequestBody GenerateFromJdRequest request) {
+    public ResponseEntity<?> generateFromJd(@RequestBody GenerateFromJdRequest request) {
         log.info("POST /api/resumes/generate-from-jd");
         try {
             GenerateFromJdResponse response = resumeService.generateFromJd(
                     request.getJobDescription(), request.isUseIconResume());
             return ResponseEntity.ok(response);
+        } catch (com.fullstack.ATSJobTracker.exception.GeminiApiException e) {
+            log.warn("Gemini API busy/failed: {}", e.getMessage());
+            java.util.Map<String, String> errorResponse = new java.util.HashMap<>();
+            errorResponse.put("status", "retry");
+            errorResponse.put("message", "AI service temporarily busy. Please try again.");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
         } catch (Exception e) {
             log.error("Error generating from JD: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().build();
@@ -77,7 +83,7 @@ public class ResumeController {
     // Regenerate resume
 
     @PostMapping("/generate/{applicationId}")
-    public ResponseEntity<ResumeGenerationResponse> generateResume(
+    public ResponseEntity<?> generateResume(
             @PathVariable Long applicationId,
             @RequestBody ResumeGenerationRequest request) {
         log.info("POST /api/resumes/generate/{}", applicationId);
@@ -91,6 +97,12 @@ public class ResumeController {
                     .build();
 
             return ResponseEntity.ok(response);
+        } catch (com.fullstack.ATSJobTracker.exception.GeminiApiException e) {
+            log.warn("Gemini API busy/failed: {}", e.getMessage());
+            java.util.Map<String, String> errorResponse = new java.util.HashMap<>();
+            errorResponse.put("status", "retry");
+            errorResponse.put("message", "AI service temporarily busy. Please try again.");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
         } catch (Exception e) {
             log.error("Error generating resume for application {}: {}", applicationId, e.getMessage(), e);
             return ResponseEntity.badRequest().build();

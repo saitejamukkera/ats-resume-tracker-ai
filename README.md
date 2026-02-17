@@ -1,4 +1,4 @@
-# Job Application Tracking System (ATS)
+# TrackHire AI
 
 A full-stack application to track job applications and generate AI-tailored resumes using Google Gemini and LaTeX.
 
@@ -38,11 +38,13 @@ cd Job-Resume-Tracker
 Copy the example environment file:
 
 **Windows (CMD):**
+
 ```cmd
 copy .env.example .env
 ```
 
 **Linux/macOS:**
+
 ```bash
 cp .env.example .env
 ```
@@ -59,13 +61,13 @@ GEMINI_API_KEY=your_gemini_api_key_here
 SERVER_PORT=8080
 ```
 
-| Variable | Description |
-|----------|-------------|
-| `POSTGRES_USER` | PostgreSQL username |
-| `POSTGRES_PASSWORD` | PostgreSQL password |
-| `POSTGRES_DB` | Database name |
-| `GEMINI_API_KEY` | Your Google Gemini API key |
-| `SERVER_PORT` | Backend server port (default: 8080) |
+| Variable            | Description                         |
+| ------------------- | ----------------------------------- |
+| `POSTGRES_USER`     | PostgreSQL username                 |
+| `POSTGRES_PASSWORD` | PostgreSQL password                 |
+| `POSTGRES_DB`       | Database name                       |
+| `GEMINI_API_KEY`    | Your Google Gemini API key          |
+| `SERVER_PORT`       | Backend server port (default: 8080) |
 
 ### 4. Run with Docker Compose
 
@@ -74,6 +76,7 @@ docker-compose up --build
 ```
 
 This will start:
+
 - **PostgreSQL** database on port `5432`
 - **Backend API** on http://localhost:8080
 
@@ -100,12 +103,14 @@ If you prefer running services locally without Docker for the backend:
 Create a `.env` file in the `backend` folder:
 
 **Windows (CMD):**
+
 ```cmd
 cd backend
 copy .env.example .env
 ```
 
 **Linux/macOS:**
+
 ```bash
 cd backend
 cp .env.example .env
@@ -136,6 +141,7 @@ cd backend
 ```
 
 **Windows:**
+
 ```cmd
 cd backend
 mvnw.cmd spring-boot:run
@@ -157,11 +163,11 @@ Frontend will be available at http://localhost:5173
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/auth/signup` | Register a new user |
-| POST | `/auth/login` | Login user |
-| GET | `/oauth2/authorize/{provider}` | OAuth2 login |
+| Method | Endpoint                       | Description         |
+| ------ | ------------------------------ | ------------------- |
+| POST   | `/auth/signup`                 | Register a new user |
+| POST   | `/auth/login`                  | Login user          |
+| GET    | `/oauth2/authorize/{provider}` | OAuth2 login        |
 
 ---
 
@@ -188,19 +194,24 @@ Job-Resume-Tracker/
 ## Troubleshooting
 
 ### Port already in use
+
 If port 5432 or 8080 is already in use:
+
 ```bash
 docker-compose down
 docker-compose up --build
 ```
 
 ### Database connection issues
+
 Ensure Docker Desktop is running and the PostgreSQL container is healthy:
+
 ```bash
 docker ps
 ```
 
 ### Frontend can't connect to backend
+
 Make sure the backend is running and CORS is configured for `http://localhost:5173`.
 
 ---

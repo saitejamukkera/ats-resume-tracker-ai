@@ -130,7 +130,7 @@ export default function DashboardClientLayout({
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-                ATS Tracker
+                TrackHire AI
               </span>
               <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
                 Job Application Manager
@@ -245,7 +245,7 @@ export default function DashboardClientLayout({
               <Briefcase size={13} className="text-white" />
             </div>
             <span className="text-sm font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              ATS Tracker
+              TrackHire AI
             </span>
           </div>
         </header>

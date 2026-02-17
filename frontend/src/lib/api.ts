@@ -226,7 +226,10 @@ export const api = {
           body: JSON.stringify({ jobDescription, useIconResume }),
         },
       );
-      if (!response.ok) throw new Error("Failed to generate");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || "Failed to generate");
+      }
       return response.json();
     },
     generate: async (
@@ -241,7 +244,10 @@ export const api = {
           body: JSON.stringify(data),
         },
       );
-      if (!response.ok) throw new Error("Failed to generate resume");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || "Failed to generate resume");
+      }
       return response.json();
     },
     getPdfUrl: (applicationId: number) =>

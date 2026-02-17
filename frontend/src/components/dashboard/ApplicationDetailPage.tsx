@@ -479,7 +479,7 @@ export default function ApplicationDetailPage({
 
         {/* Right Column: Preview */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="p-5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5 min-h-[calc(100vh-200px)] flex flex-col">
+          <div className="p-5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5 h-[100vh] flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="flex gap-1 p-1 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full">
                 <button
@@ -730,8 +730,8 @@ export default function ApplicationDetailPage({
               <div className="flex-1 flex flex-col">
                 {application.hasGeneratedResume ? (
                   <div
-                    className="flex-1 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 overflow-hidden bg-gray-100 dark:bg-zinc-800 ring-1 ring-gray-900/5 dark:ring-white/5"
-                    style={{ minHeight: "calc(100vh - 320px)" }}
+                    className="flex-1 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 overflow-hidden bg-gray-100 dark:bg-zinc-800 ring-1 ring-gray-900/5 dark:ring-white/5 relative"
+                    style={{ height: "calc(100vh - 320px)" }}
                   >
                     {pdfLoading && (
                       <div className="h-full flex flex-col items-center justify-center gap-3 p-8">
@@ -760,8 +760,7 @@ export default function ApplicationDetailPage({
                       <iframe
                         src={pdfBlobUrl}
                         title="Resume PDF Preview"
-                        className="w-full h-full border-0"
-                        style={{ minHeight: "calc(100vh - 320px)" }}
+                        className="absolute inset-0 w-full h-full border-0"
                       />
                     )}
                     {!pdfBlobUrl && !pdfLoading && !pdfError && (

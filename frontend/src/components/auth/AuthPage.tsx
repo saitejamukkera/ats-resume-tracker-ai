@@ -301,7 +301,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
               <Briefcase className="text-white" size={20} />
             </div>
             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              ATS Tracker
+              TrackHire AI
             </span>
           </Link>
 
@@ -354,7 +354,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
                 >
                   {view === "login" ? "Welcome back" : "Get started"}{" "}
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-primary-600 to-blue-600">
-                    {view === "login" ? "to ATS Tracker" : "for free"}
+                    {view === "login" ? "to TrackHire AI" : "for free"}
                   </span>
                 </motion.h1>
 
@@ -934,7 +934,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
               </div>
 
               <p className="text-center text-[11px] text-gray-400 dark:text-gray-500 mt-4">
-                &copy; {new Date().getFullYear()} ATS Tracker. All rights
+                &copy; {new Date().getFullYear()} TrackHire AI. All rights
                 reserved.
               </p>
             </motion.div>

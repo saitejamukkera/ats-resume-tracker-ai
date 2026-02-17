@@ -22,13 +22,13 @@ public class EmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setTo(toEmail);
-            message.setSubject("ATS Tracker - Your Verification Code");
+            message.setSubject("TrackHire AI - Your Verification Code");
             message.setText(
                 "Your verification code for " + purpose + " is:\n\n"
                 + "    " + otp + "\n\n"
                 + "This code expires in 5 minutes.\n\n"
                 + "If you did not request this, please ignore this email.\n\n"
-                + "— ATS Tracker"
+                + "— TrackHire AI"
             );
             mailSender.send(message);
             log.info("OTP email sent to: {}", toEmail);
