@@ -62,7 +62,7 @@ export default function LandingPage() {
               <Briefcase className="text-white" size={20} />
             </div>
             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              ATS Tracker
+              TrackHire AI
             </span>
           </div>
 
@@ -342,7 +342,7 @@ export default function LandingPage() {
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
                 We understand that your resume and job history are sensitive.
-                That&apos;s why we built ATS Tracker with a security-first
+                That&apos;s why we built TrackHire AI with a security-first
                 architecture.
               </p>
 
@@ -406,11 +406,11 @@ export default function LandingPage() {
             <div className="flex items-center gap-2">
               <Briefcase className="text-primary-600" size={24} />
               <span className="font-bold text-gray-900 dark:text-white text-lg">
-                ATS Tracker
+                TrackHire AI
               </span>
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              &copy; {new Date().getFullYear()} ATS Tracker. All rights
+              &copy; {new Date().getFullYear()} TrackHire AI. All rights
               reserved.
             </div>
             <div className="flex gap-6">

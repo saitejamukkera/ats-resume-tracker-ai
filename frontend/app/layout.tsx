@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Providers } from "../src/components/Providers";
 
@@ -15,11 +16,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ATS Job Tracker - Smart Resume & Application Management",
+  title: "TrackHire AI - Smart Resume & Application Management",
   description:
     "Track your job applications, optimize your resume for ATS, and land your dream job faster with our privacy-focused, secure job tracking tool.",
   keywords:
-    "ATS, Resume Tracker, Job Application, Career Management, Privacy, Security",
+    "TrackHire AI, ATS, Resume Tracker, Job Application, Career Management, Privacy, Security",
 };
 
 export default function RootLayout({
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         <Providers>{children}</Providers>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
