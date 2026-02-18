@@ -23,8 +23,12 @@ C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\components\LandingPage.ts
 
 C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\components\dashboard\NewApplicationPage.tsx
    25:3  warning  'Edit3' is defined but never used                                                                                                                  @typescript-eslint/no-unused-vars
-   47:9  warning  'router' is assigned a value but never used                                                                                                        @typescript-eslint/no-unused-vars
-  173:6  warning  React Hook useEffect has missing dependencies: 'compilePdfPreview' and 'result.applicationId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+   27:3  warning  'GripVertical' is defined but never used                                                                                                           @typescript-eslint/no-unused-vars
+   50:9  warning  'router' is assigned a value but never used                                                                                                        @typescript-eslint/no-unused-vars
+  176:6  warning  React Hook useEffect has missing dependencies: 'compilePdfPreview' and 'result.applicationId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\components\ui\ResizableSplitView.tsx
+  51:6  warning  React Hook useEffect has a missing dependency: 'isDragging'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\context\ThemeContext.tsx
   33:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
@@ -44,5 +48,5 @@ C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\context\ThemeContext.tsx:
   35 |   }, []);
   36 |  react-hooks/set-state-in-effect
 
-✖ 7 problems (2 errors, 5 warnings)
+✖ 9 problems (2 errors, 7 warnings)
 

@@ -29,10 +29,10 @@ import {
   ApplicationStatus,
   type UserProfile,
 } from "../../types/dtos";
-import { getFormattedFilename } from "../../lib/utils";
 import { DownloadDropdown } from "../DownloadDropdown";
 import { ConfirmModal } from "../ConfirmModal";
 import { useToast } from "../../context/ToastContext";
+import { useDownloader } from "../../hooks/useDownloader";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -122,6 +122,12 @@ export default function ApplicationDetailPage({
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const toast = useToast();
+  const {
+    downloadResumePdf,
+    downloadResumeDocx,
+    downloadCoverLetterPdf,
+    downloadCoverLetterDocx,
+  } = useDownloader();
 
   const compilePdfPreview = useCallback(async (appId: number) => {
     setPdfLoading(true);
@@ -259,93 +265,6 @@ export default function ApplicationDetailPage({
     }
   };
 
-  const handleDownloadPdf = async () => {
-    if (!application) return;
-    try {
-      const blob = await api.resumes.downloadPdf(application.id);
-      if (blob.size === 0) {
-        toast.error("PDF compilation failed. The LaTeX may contain errors.");
-        return;
-      }
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = getFormattedFilename(
-        userProfile?.fullName || "Candidate",
-        application.jobId,
-        application.company,
-        "Resume",
-      );
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Failed to download PDF. Please try again.",
-      );
-    }
-  };
-
-  const handleDownloadCoverLetterPdf = async () => {
-    if (!application) return;
-    try {
-      const blob = await api.resumes.downloadCoverLetterPdf(application.id);
-      if (blob.size === 0) {
-        toast.error("PDF compilation failed.");
-        return;
-      }
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = getFormattedFilename(
-        userProfile?.fullName || "Candidate",
-        application.jobId,
-        application.company,
-        "Cover_Letter",
-        "pdf",
-      );
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to download PDF.");
-    }
-  };
-
-  const handleDownloadCoverLetterDocx = async () => {
-    if (!application) return;
-    try {
-      const blob = await api.resumes.downloadCoverLetterDocx(application.id);
-      if (blob.size === 0) {
-        toast.error("Word document generation failed.");
-        return;
-      }
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = getFormattedFilename(
-        userProfile?.fullName || "Candidate",
-        application.jobId,
-        application.company,
-        "Cover_Letter",
-        "docx",
-      );
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to download Word document.");
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
@@ -442,13 +361,25 @@ export default function ApplicationDetailPage({
 
           <div className="flex gap-3 shrink-0">
             {application.hasGeneratedResume && (
-              <button
-                onClick={handleDownloadPdf}
-                className="inline-flex items-center gap-2 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
-              >
-                <FileText size={16} />
-                Download PDF
-              </button>
+              <DownloadDropdown
+                label="Download Resume"
+                onDownloadPdf={() =>
+                  downloadResumePdf(
+                    application.id,
+                    application.jobId,
+                    application.company,
+                    userProfile?.fullName || "Candidate",
+                  )
+                }
+                onDownloadDocx={() =>
+                  downloadResumeDocx(
+                    application.id,
+                    application.jobId,
+                    application.company,
+                    userProfile?.fullName || "Candidate",
+                  )
+                }
+              />
             )}
             <button
               onClick={handleDelete}
@@ -662,8 +593,22 @@ export default function ApplicationDetailPage({
                         ) : (
                           <>
                             <DownloadDropdown
-                              onDownloadPdf={handleDownloadCoverLetterPdf}
-                              onDownloadDocx={handleDownloadCoverLetterDocx}
+                              onDownloadPdf={() =>
+                                downloadCoverLetterPdf(
+                                  application.id,
+                                  application.jobId,
+                                  application.company,
+                                  userProfile?.fullName || "Candidate",
+                                )
+                              }
+                              onDownloadDocx={() =>
+                                downloadCoverLetterDocx(
+                                  application.id,
+                                  application.jobId,
+                                  application.company,
+                                  userProfile?.fullName || "Candidate",
+                                )
+                              }
                               label="Download"
                               size="sm"
                               variant="ghost"
@@ -699,9 +644,9 @@ export default function ApplicationDetailPage({
                       />
                     ) : (
                       <div className="flex-1 bg-white/80 dark:bg-zinc-900/80 border border-gray-200/60 dark:border-gray-800/60 rounded-2xl p-6 overflow-y-auto">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-900 dark:text-white font-sans leading-relaxed">
+                        <div className="whitespace-pre-wrap text-sm text-gray-900 dark:text-white font-sans leading-relaxed break-words">
                           {application.coverLetterContent}
-                        </pre>
+                        </div>
                       </div>
                     )}
                   </>
