@@ -89,7 +89,7 @@ public class ResumeController {
         log.info("POST /api/resumes/generate/{}", applicationId);
         try {
             String[] result = resumeService.generateResumeAndCoverLetter(
-                    applicationId, request.getJobDescription(), request.getCustomPrompt());
+                    applicationId, request.getJobDescription(), request.getCustomPrompt(), request.getUseIconResume());
 
             ResumeGenerationResponse response = ResumeGenerationResponse.builder()
                     .latexContent(result[0])

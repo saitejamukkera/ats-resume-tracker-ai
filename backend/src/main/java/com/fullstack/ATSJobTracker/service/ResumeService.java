@@ -141,18 +141,23 @@ public class ResumeService {
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
-        return generateResumeAndCoverLetter(applicationId, jobDescription, null);
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null);
     }
 
-    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt) {
-        log.info("Re-generating resume for application id: {}", applicationId);
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt, Boolean useIconResume) {
+        log.info("Re-generating resume for application id: {}, useIconResume: {}", applicationId, useIconResume);
 
         Long userId = authService.getCurrentUserId();
 
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId("Base Resume A", userId)
+        // Determine which base resume to use
+        // If useIconResume is null, default to "Base Resume A" (backward compatibility)
+        // If true -> "Base Resume B", if false -> "Base Resume A"
+        String resumeName = (useIconResume != null && useIconResume) ? "Base Resume B" : "Base Resume A";
+
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
                 .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
@@ -302,7 +307,7 @@ public class ResumeService {
         StringBuilder latex = new StringBuilder();
         latex.append("\\documentclass[11pt,a4paper]{article}\n");
         latex.append("\\usepackage[utf8]{inputenc}\n");
-        latex.append("\\usepackage[margin=1in]{geometry}\n");
+        latex.append("\\usepackage[margin=0.75in]{geometry}\n");
         latex.append("\\usepackage{hyperref}\n");
         latex.append("\\usepackage{parskip}\n");
         latex.append("\\setlength{\\parindent}{0pt}\n");

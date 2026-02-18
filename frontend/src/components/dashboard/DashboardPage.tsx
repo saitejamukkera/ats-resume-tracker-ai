@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import useSWR, { mutate } from "swr";
 import { api } from "../../lib/api";
 import {
   type JobApplicationResponse,
   ApplicationStatus,
 } from "../../types/dtos";
-import type { UserProfile } from "../../types/dtos";
 import { getFormattedFilename } from "../../lib/utils";
 import {
   Plus,
@@ -46,31 +46,18 @@ const cardHover = {
 };
 
 export default function DashboardPage() {
-  const [applications, setApplications] = useState<JobApplicationResponse[]>(
-    [],
-  );
-  const [loading, setLoading] = useState(true);
+  const {
+    data: applications = [],
+    error,
+    isLoading,
+  } = useSWR("/api/applications", () => api.applications.getAll());
+
+  const { data: userProfile } = useSWR("/api/profile", () => api.profile.get());
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const toast = useToast();
-
-  const loadApplications = useCallback(async () => {
-    try {
-      const data = await api.applications.getAll();
-      setApplications(data);
-    } catch (error) {
-      console.error("Failed to load applications", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadApplications();
-    api.profile.get().then(setUserProfile).catch(console.error);
-  }, [loadApplications]);
 
   const handleDelete = async (id: number) => {
     setDeleteTarget(id);
@@ -80,11 +67,16 @@ export default function DashboardPage() {
     if (deleteTarget === null) return;
     try {
       await api.applications.delete(deleteTarget);
-      setApplications((prev) => prev.filter((app) => app.id !== deleteTarget));
+      mutate(
+        "/api/applications",
+        applications.filter((app) => app.id !== deleteTarget),
+        false,
+      );
       toast.success("Application deleted successfully.");
     } catch (error) {
       console.error("Failed to delete application", error);
       toast.error("Failed to delete application.");
+      mutate("/api/applications"); // Revalidate on error
     } finally {
       setDeleteTarget(null);
     }
@@ -94,11 +86,12 @@ export default function DashboardPage() {
     app: JobApplicationResponse,
     newStatus: string,
   ) => {
-    const previousApplications = [...applications];
     const updatedApplications = applications.map((a) =>
       a.id === app.id ? { ...a, outcome: newStatus as ApplicationStatus } : a,
     );
-    setApplications(updatedApplications);
+
+    // Optimistic update
+    mutate("/api/applications", updatedApplications, false);
 
     try {
       await api.applications.update(app.id, {
@@ -110,10 +103,11 @@ export default function DashboardPage() {
         outcome: newStatus as ApplicationStatus,
       });
       toast.success("Status updated successfully.");
+      mutate("/api/applications"); // Revalidate to ensure server consistency
     } catch (error) {
       console.error("Failed to update status", error);
-      setApplications(previousApplications);
       toast.error("Failed to update status.");
+      mutate("/api/applications"); // Revert/Revalidate on error
     }
   };
 
@@ -146,7 +140,7 @@ export default function DashboardPage() {
     });
   }, [applications, searchQuery, statusFilter]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4">
         <div className="w-10 h-10 border-2 border-primary-200 dark:border-primary-800 border-t-primary-600 rounded-full animate-spin" />

@@ -26,11 +26,10 @@ import {
 import Drawer from "../ui/Drawer";
 import ResizableSplitView from "../ui/ResizableSplitView";
 import { DownloadDropdown } from "../DownloadDropdown";
-import { useDownloader } from "../../hooks/useDownloader";
-import { api, type GenerateFromJdResponse } from "../../lib/api";
-import { getFormattedFilename } from "../../lib/utils";
-import type { UserProfile } from "../../types/dtos";
-import { useToast } from "../../context/ToastContext";
+import { useDownloader } from "@/hooks/useDownloader";
+import { api, type GenerateFromJdResponse } from "@/lib/api";
+import type { UserProfile } from "@/types/dtos";
+import { useToast } from "@/context/ToastContext";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -105,6 +104,8 @@ export default function NewApplicationPage() {
 
   const [customPrompt, setCustomPrompt] = useState("");
   const [showPromptInput, setShowPromptInput] = useState(false);
+  const [useIconResumeRegen, setUseIconResumeRegen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const compilePdfPreview = useCallback(async (applicationId: number) => {
     setPdfLoading(true);
@@ -251,6 +252,7 @@ export default function NewApplicationPage() {
       const response = await api.resumes.generate(result.applicationId, {
         jobDescription,
         customPrompt: customPrompt.trim() || undefined,
+        useIconResume: useIconResumeRegen,
       });
       setResult((prev) =>
         prev
@@ -277,7 +279,7 @@ export default function NewApplicationPage() {
 
   const handleSaveApp = async () => {
     if (!result) return;
-    setLoading(true);
+    setIsSaving(true);
     try {
       await api.resumes.updateContent(
         result.applicationId,
@@ -300,7 +302,7 @@ export default function NewApplicationPage() {
       console.error(error);
       toast.error("Failed to save application.");
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -551,10 +553,10 @@ export default function NewApplicationPage() {
                 {isEditing ? (
                   <button
                     onClick={handleSaveApp}
-                    disabled={loading}
+                    disabled={loading || isSaving}
                     className="inline-flex items-center gap-2 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
                   >
-                    {loading ? (
+                    {isSaving ? (
                       <Loader2 className="animate-spin" size={16} />
                     ) : (
                       <CheckCircle size={16} />
@@ -993,6 +995,29 @@ export default function NewApplicationPage() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Regeneration Options */}
+            {(showPromptInput || isDrawerOpen) && (
+              <div className="flex items-center gap-2 px-1">
+                <input
+                  type="checkbox"
+                  id="useIconResumeRegen"
+                  checked={useIconResumeRegen}
+                  onChange={(e) => setUseIconResumeRegen(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                />
+                <label
+                  htmlFor="useIconResumeRegen"
+                  className="text-xs cursor-pointer select-none text-gray-600 dark:text-gray-400"
+                >
+                  Use{" "}
+                  <span className="font-semibold text-gray-800 dark:text-gray-300">
+                    Resume B (Icons)
+                  </span>{" "}
+                  during regeneration
+                </label>
+              </div>
+            )}
 
             {/* Resizable Split View */}
             <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm overflow-hidden">

@@ -14,6 +14,7 @@ public class PromptConstants {
             - Emphasize experience that directly aligns with the JD.
             - De-emphasize (but do not remove) less relevant content.
             - The resume must NOT feel reusable across multiple roles.
+            - Try to fit entire resume into 1 page by adjusting space. Do not remove or reduce content to achieve this.
             
             HARD CONSTRAINTS (ABSOLUTE – DO NOT VIOLATE)
             - Preserve the exact structure.
