@@ -15,7 +15,7 @@ import { createPortal } from "react-dom";
 interface DropdownContextType {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  triggerRef: React.RefObject<HTMLButtonElement>;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
   menuPosition: { top: number; left: number; placement: "top" | "bottom" };
 }
 
