@@ -75,7 +75,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(frontendUrl, "http://localhost:3000", "http://localhost:5173"));
+        // Support both www and non-www variants of the frontend URL
+        String wwwFrontendUrl = frontendUrl.contains("://www.")
+            ? frontendUrl.replace("://www.", "://")
+            : frontendUrl.replace("://", "://www.");
+        config.setAllowedOrigins(List.of(
+            frontendUrl, wwwFrontendUrl,
+            "https://trackhireai.vercel.app",
+            "http://localhost:3000", "http://localhost:5173"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
