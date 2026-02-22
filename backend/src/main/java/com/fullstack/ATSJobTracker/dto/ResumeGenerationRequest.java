@@ -14,4 +14,5 @@ public class ResumeGenerationRequest {
     private String jobDescription;
     private Long baseResumeId;
     private String customPrompt;
+    private Boolean useIconResume;
 }

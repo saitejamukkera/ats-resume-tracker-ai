@@ -12,8 +12,8 @@ export function getFormattedFilename(
   userName: string,
   jobId: string,
   companyName: string,
-  type: "Resume" | "Cover_Letter",
-  extension: "pdf" | "docx" = "pdf",
+  type: "Resume" | "Cover_Letter" | "CoverLetter",
+  extension: "pdf" | "docx" | "txt" = "pdf",
 ): string {
   const safeUserName = (userName || "Candidate").replace(/[^a-zA-Z0-9]/g, "_");
   const safeJobId =

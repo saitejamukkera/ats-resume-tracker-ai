@@ -40,6 +40,7 @@ export interface ResumeGenerationRequest {
   jobDescription: string;
   baseResumeId?: number;
   customPrompt?: string;
+  useIconResume?: boolean;
 }
 
 export interface ResumeGenerationResponse {

@@ -42,7 +42,6 @@ public class ResumeService {
 
         Long userId = authService.getCurrentUserId();
 
-        // Select the appropriate base resume template based on user preference
         String resumeName = useIconResume ? "Base Resume B" : "Base Resume A";
         ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
                 .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
@@ -52,7 +51,6 @@ public class ResumeService {
             throw new RuntimeException("No base resume found. Please upload base resumes in Settings.");
         }
 
-        // Retrieve user profile data for context injection
         String userInfo = "";
         String masterSubjects = "";
         var profileOpt = userProfileRepository.findByUserId(userId);
@@ -62,12 +60,10 @@ public class ResumeService {
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
         }
 
-        // Generate content using the AI model
         String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects);
         log.info("Calling Gemini for JD generation...");
         String generatedContent = geminiService.getCompletion(prompt);
 
-        // Parse extracted metadata fields from the response
         String position = "Unknown Position";
         String company = "Unknown Company";
         String jobId = "";
@@ -94,7 +90,6 @@ public class ResumeService {
         }
         log.info("Extracted: position={}, company={}, jobId={}, location={}", position, company, jobId, location);
 
-        // Extract the generated resume LaTeX and cover letter content
         String resumeLatex = generatedContent;
         String coverLetter = "";
 
@@ -110,7 +105,6 @@ public class ResumeService {
             coverLetter = generatedContent.substring(clStart, clEnd).trim();
         }
 
-        // Create and persist the new job application record
         JobApplication application = new JobApplication();
         application.setPosition(position);
         application.setCompany(company);
@@ -119,13 +113,11 @@ public class ResumeService {
         application.setJobDescription(jobDescription);
         application.setGeneratedResumeContent(resumeLatex);
         application.setCoverLetterContent(coverLetter);
-        // Set initial status to DRAFT so it doesn't appear in dashboard until confirmed
         application.setOutcome(ApplicationStatus.DRAFT);
         application.setUserId(userId);
         JobApplication saved = jobApplicationRepository.save(application);
         log.info("Application created with id: {}", saved.getId());
 
-        // Construct the response object
         return GenerateFromJdResponse.builder()
                 .applicationId(saved.getId())
                 .position(position)
@@ -141,18 +133,20 @@ public class ResumeService {
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
-        return generateResumeAndCoverLetter(applicationId, jobDescription, null);
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null);
     }
 
-    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt) {
-        log.info("Re-generating resume for application id: {}", applicationId);
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt, Boolean useIconResume) {
+        log.info("Re-generating resume for application id: {}, useIconResume: {}", applicationId, useIconResume);
 
         Long userId = authService.getCurrentUserId();
 
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId("Base Resume A", userId)
+        String resumeName = (useIconResume != null && useIconResume) ? "Base Resume B" : "Base Resume A";
+
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
                 .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
 
         if (baseResume == null) {
@@ -302,7 +296,7 @@ public class ResumeService {
         StringBuilder latex = new StringBuilder();
         latex.append("\\documentclass[11pt,a4paper]{article}\n");
         latex.append("\\usepackage[utf8]{inputenc}\n");
-        latex.append("\\usepackage[margin=1in]{geometry}\n");
+        latex.append("\\usepackage[margin=0.75in]{geometry}\n");
         latex.append("\\usepackage{hyperref}\n");
         latex.append("\\usepackage{parskip}\n");
         latex.append("\\setlength{\\parindent}{0pt}\n");

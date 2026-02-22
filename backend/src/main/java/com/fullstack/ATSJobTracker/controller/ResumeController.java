@@ -34,7 +34,6 @@ public class ResumeController {
     private final WordDocumentService wordDocumentService;
     private final AuthService authService;
 
-    // Base resume endpoints
 
     @PostMapping("/base")
     public ResumeBase uploadBaseResume(@RequestBody ResumeBase base) {
@@ -59,7 +58,6 @@ public class ResumeController {
         return resumeBaseRepository.countByUserId(authService.getCurrentUserId());
     }
 
-    // Generate from job description
 
     @PostMapping("/generate-from-jd")
     public ResponseEntity<?> generateFromJd(@RequestBody GenerateFromJdRequest request) {
@@ -80,7 +78,6 @@ public class ResumeController {
         }
     }
 
-    // Regenerate resume
 
     @PostMapping("/generate/{applicationId}")
     public ResponseEntity<?> generateResume(
@@ -89,7 +86,7 @@ public class ResumeController {
         log.info("POST /api/resumes/generate/{}", applicationId);
         try {
             String[] result = resumeService.generateResumeAndCoverLetter(
-                    applicationId, request.getJobDescription(), request.getCustomPrompt());
+                    applicationId, request.getJobDescription(), request.getCustomPrompt(), request.getUseIconResume());
 
             ResumeGenerationResponse response = ResumeGenerationResponse.builder()
                     .latexContent(result[0])
@@ -109,7 +106,6 @@ public class ResumeController {
         }
     }
 
-    // Save edited content
 
     @PutMapping("/{applicationId}/content")
     public ResponseEntity<Void> updateContent(
@@ -130,7 +126,6 @@ public class ResumeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // PDF & cover letter
 
     @GetMapping("/{applicationId}/pdf")
     public ResponseEntity<byte[]> getPdf(@PathVariable Long applicationId) {
@@ -195,7 +190,6 @@ public class ResumeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Word document endpoints
 
     @GetMapping("/{applicationId}/docx")
     public ResponseEntity<byte[]> getResumeDocx(@PathVariable Long applicationId) {

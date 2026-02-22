@@ -22,9 +22,8 @@ C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\components\LandingPage.ts
   372:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
 C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\components\dashboard\NewApplicationPage.tsx
-   25:3  warning  'Edit3' is defined but never used                                                                                                                  @typescript-eslint/no-unused-vars
-   47:9  warning  'router' is assigned a value but never used                                                                                                        @typescript-eslint/no-unused-vars
-  173:6  warning  React Hook useEffect has missing dependencies: 'compilePdfPreview' and 'result.applicationId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+   48:9  warning  'router' is assigned a value but never used                                                                                                        @typescript-eslint/no-unused-vars
+  174:6  warning  React Hook useEffect has missing dependencies: 'compilePdfPreview' and 'result.applicationId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\context\ThemeContext.tsx
   33:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
@@ -44,5 +43,5 @@ C:\Users\mukke\Desktop\Job-Resume-Tracker\frontend\src\context\ThemeContext.tsx:
   35 |   }, []);
   36 |  react-hooks/set-state-in-effect
 
-✖ 7 problems (2 errors, 5 warnings)
+✖ 6 problems (2 errors, 4 warnings)
 
