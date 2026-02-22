@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AlertTriangle, RotateCcw, Eye, FileText } from "lucide-react";
 import { api } from "../../../lib/api";
 
@@ -23,14 +23,12 @@ export function PdfPreview({
     };
   }, [pdfBlobUrl]);
 
-  const compilePdfPreview = async () => {
+  const compilePdfPreview = useCallback(async () => {
     setPdfLoading(true);
     setPdfError(null);
-    if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
     setPdfBlobUrl(null);
 
     try {
-      // Assuming api.resumes.downloadPdf returns a Blob
       const blob = await api.resumes.downloadPdf(applicationId);
       const url = URL.createObjectURL(blob);
       setPdfBlobUrl(url);
@@ -39,7 +37,13 @@ export function PdfPreview({
     } finally {
       setPdfLoading(false);
     }
-  };
+  }, [applicationId]);
+
+  useEffect(() => {
+    if (hasGeneratedResume) {
+      compilePdfPreview();
+    }
+  }, [hasGeneratedResume, compilePdfPreview]);
 
   if (!hasGeneratedResume) {
     return (

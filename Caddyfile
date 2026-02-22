@@ -1,7 +1,5 @@
-# Replace api.yourdomain.com with your actual domain or subdomain
-
 # Caddy automatically provisions HTTPS via Let's Encrypt
 
-{$DOMAIN:api.yourdomain.com} {
-reverse_proxy backend:8080
+{$DOMAIN:api.trackhireai.com} {
+  reverse_proxy backend:8080
 }

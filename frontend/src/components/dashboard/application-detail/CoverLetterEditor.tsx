@@ -42,7 +42,6 @@ export function CoverLetterEditor({
     setSaving(true);
     setSaveMsg(null);
     try {
-      // Pass null for resumeContent to only update cover letter
       await api.resumes.updateContent(applicationId, null, draft);
       onContentUpdate(draft);
       setEditing(false);

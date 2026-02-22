@@ -37,7 +37,6 @@ export function ResumeEditor({
     setSaving(true);
     setSaveMsg(null);
     try {
-      // Pass null for coverLetterContent to only update resume
       await api.resumes.updateContent(applicationId, draft, null);
       onContentUpdate(draft);
       setEditing(false);
