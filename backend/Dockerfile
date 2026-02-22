@@ -8,6 +8,7 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 
 # Download dependencies (this layer will be cached unless pom.xml changes)
+RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline
 
 # Copy source code and build
