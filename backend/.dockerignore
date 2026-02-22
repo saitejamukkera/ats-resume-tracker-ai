@@ -1,0 +1,27 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+*.env
+
+# Database backups
+*.sql
+*.sql.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker
+docker-compose*.yml
+Dockerfile

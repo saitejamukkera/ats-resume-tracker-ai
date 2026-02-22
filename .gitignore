@@ -35,6 +35,10 @@ logs/
 
 DEPLOY.md
 
+# Database backups
+*.sql
+*.sql.gz
+
 # Skills
 .agent
 .agents
