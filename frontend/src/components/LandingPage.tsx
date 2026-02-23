@@ -14,6 +14,7 @@ import {
   X,
   Sun,
   Moon,
+  Github,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "../hooks/useTheme";
@@ -62,7 +63,7 @@ export default function LandingPage() {
               <Briefcase className="text-white" size={20} />
             </div>
             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              TrackHire AI
+              <a href="/">TrackHire AI</a>
             </span>
           </div>
 
@@ -97,6 +98,15 @@ export default function LandingPage() {
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
+            <a
+              href="https://github.com/saitejamukkera/ats-resume-tracker-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              title="View on GitHub — Open Source"
+            >
+              <Github size={18} />
+            </a>
             <Link
               href="/login"
               className="px-5 py-2.5 rounded-full bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
@@ -107,6 +117,15 @@ export default function LandingPage() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            <a
+              href="https://github.com/saitejamukkera/ats-resume-tracker-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              title="View on GitHub"
+            >
+              <Github size={18} />
+            </a>
             <button
               onClick={toggleTheme}
               className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -413,7 +432,16 @@ export default function LandingPage() {
               &copy; {new Date().getFullYear()} TrackHire AI. All rights
               reserved.
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-6 items-center">
+              <a
+                href="https://github.com/saitejamukkera/ats-resume-tracker-ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1.5"
+              >
+                <Github size={16} />
+                GitHub
+              </a>
               <a
                 href="#"
                 className="text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
