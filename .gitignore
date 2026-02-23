@@ -38,6 +38,7 @@ DEPLOY.md
 # Database backups
 *.sql
 *.sql.gz
+!**/db/migration/*.sql
 
 # Skills
 .agent
