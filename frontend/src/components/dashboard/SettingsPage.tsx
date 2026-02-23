@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Save,
-  CheckCircle,
-  AlertCircle,
   Loader2,
   User,
   GraduationCap,
@@ -15,6 +13,7 @@ import {
 } from "lucide-react";
 import { api } from "../../lib/api";
 import type { UserProfile } from "../../types/dtos";
+import { useToast } from "../../context/ToastContext";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -30,6 +29,7 @@ const staggerContainer = {
 };
 
 export default function SettingsPage() {
+  const toast = useToast();
   const [profile, setProfile] = useState<UserProfile>({
     fullName: "",
     address: "",
@@ -48,10 +48,6 @@ export default function SettingsPage() {
   const [activeResumeTab, setActiveResumeTab] = useState<"A" | "B">("A");
 
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState<"success" | "error">(
-    "success",
-  );
 
   useEffect(() => {
     const load = async () => {
@@ -77,13 +73,11 @@ export default function SettingsPage() {
 
   const handleSaveAll = async () => {
     if (!resumeAContent.trim()) {
-      setMessage("Base Resume A (No Icons) is required.");
-      setMessageType("error");
+      toast.error("Base Resume A (No Icons) is required.");
       return;
     }
 
     setSaving(true);
-    setMessage("");
 
     try {
       const savePromises: Promise<unknown>[] = [
@@ -107,11 +101,9 @@ export default function SettingsPage() {
 
       await Promise.all(savePromises);
 
-      setMessage("All configurations saved successfully!");
-      setMessageType("success");
+      toast.success("All configurations saved successfully!");
     } catch {
-      setMessage("Failed to save. Is the backend running?");
-      setMessageType("error");
+      toast.error("Failed to save. Is the backend running?");
     } finally {
       setSaving(false);
     }
@@ -138,25 +130,6 @@ export default function SettingsPage() {
           Configure your profile and resume templates
         </p>
       </motion.div>
-
-      {message && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium ${
-            messageType === "success"
-              ? "bg-emerald-50 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60"
-              : "bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400 border border-red-200/60 dark:border-red-800/60"
-          }`}
-        >
-          {messageType === "success" ? (
-            <CheckCircle size={16} />
-          ) : (
-            <AlertCircle size={16} />
-          )}
-          {message}
-        </motion.div>
-      )}
 
       <motion.div
         variants={fadeInUp}
