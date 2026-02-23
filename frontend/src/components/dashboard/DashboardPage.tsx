@@ -129,15 +129,35 @@ export default function DashboardPage() {
 
   const filteredApps = useMemo(() => {
     const query = searchQuery.toLowerCase();
-    return applications.filter((app) => {
-      const matchesSearch =
-        app.position.toLowerCase().includes(query) ||
-        app.company.toLowerCase().includes(query) ||
-        app.jobId?.toLowerCase().includes(query);
-      const matchesStatus =
-        statusFilter === "ALL" || app.outcome === statusFilter;
-      return matchesSearch && matchesStatus;
-    });
+
+    // Priority map: lower number = higher in the list
+    const statusPriority: Record<string, number> = {
+      [ApplicationStatus.IN_PROCESS]: 0,
+      [ApplicationStatus.OFFER_RECEIVED]: 0,
+      [ApplicationStatus.ACTIVE]: 1,
+      [ApplicationStatus.DRAFT]: 1,
+      [ApplicationStatus.REJECTED]: 2,
+    };
+
+    return applications
+      .filter((app) => {
+        const matchesSearch =
+          app.position.toLowerCase().includes(query) ||
+          app.company.toLowerCase().includes(query) ||
+          app.jobId?.toLowerCase().includes(query);
+        const matchesStatus =
+          statusFilter === "ALL" || app.outcome === statusFilter;
+        return matchesSearch && matchesStatus;
+      })
+      .sort((a, b) => {
+        const priorityA = statusPriority[a.outcome] ?? 1;
+        const priorityB = statusPriority[b.outcome] ?? 1;
+        if (priorityA !== priorityB) return priorityA - priorityB;
+        // Within the same priority group, show newest first
+        return (
+          new Date(b.appliedOn).getTime() - new Date(a.appliedOn).getTime()
+        );
+      });
   }, [applications, searchQuery, statusFilter]);
 
   if (isLoading) {
