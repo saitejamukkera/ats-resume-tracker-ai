@@ -5,7 +5,9 @@ import lombok.*;
 
 
 @Entity
-@Table(name = "resume_bases")
+@Table(name = "resume_bases", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name", "user_id"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class ResumeBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "TEXT", nullable = false)
