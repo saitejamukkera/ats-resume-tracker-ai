@@ -68,13 +68,14 @@ export default function DashboardClientLayout({
   // Clear pending path once navigation completes
   const activePath = isPending && pendingPath ? pendingPath : pathname;
 
-  // Basic protection
-  if (!loading && !user) {
-    router.replace("/login");
-    return null;
-  }
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [loading, user, router]);
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

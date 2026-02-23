@@ -63,11 +63,13 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
   const [countdown, setCountdown] = useState(0);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+  // If already logged in, redirect immediately
   useEffect(() => {
     if (user) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
     }
-  }, [user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (countdown <= 0) return;
@@ -130,6 +132,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
     setLoading(true);
     try {
       await login(email, password);
+      router.replace("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
@@ -165,6 +168,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
     try {
       await api.auth.verifyOtpRegister(email, password, fullName, otpValue);
       await login(email, password);
+      router.replace("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Verification failed");
     } finally {
