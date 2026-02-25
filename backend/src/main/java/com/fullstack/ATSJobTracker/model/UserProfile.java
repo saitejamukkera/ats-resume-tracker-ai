@@ -33,4 +33,10 @@ public class UserProfile {
 
     @Column(name = "user_id", unique = true)
     private Long userId;
+
+    @Transient
+    private String forwardingEmail;
+
+    @Transient
+    private boolean isForwardingVerified;
 }

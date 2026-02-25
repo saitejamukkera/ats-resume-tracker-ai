@@ -33,9 +33,17 @@ public class AuthUser {
 
     private LocalDateTime createdAt;
 
+    @Column(unique = true)
+    private String forwardingEmail;
+
+    private boolean isForwardingVerified = false;
+
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) createdAt = LocalDateTime.now();
         if (provider == null) provider = AuthProvider.LOCAL;
+        if (forwardingEmail == null) {
+            forwardingEmail = "track-" + java.util.UUID.randomUUID().toString().substring(0, 8) + "@inbound.atsjobtracker.com";
+        }
     }
 }

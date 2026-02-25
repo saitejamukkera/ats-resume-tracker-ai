@@ -61,4 +61,6 @@ export interface UserProfile {
   masterSubjects: string;
   mastersDegree: string;
   mastersGpa: string;
+  forwardingEmail?: string;
+  forwardingVerified?: boolean;
 }
