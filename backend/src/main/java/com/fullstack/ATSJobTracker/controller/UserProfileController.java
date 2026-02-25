@@ -26,7 +26,7 @@ public class UserProfileController {
         return repository.findByUserId(userId).map(profile -> {
             authUserRepository.findById(userId).ifPresent(user -> {
                 if (user.getForwardingEmail() == null) {
-                    user.setForwardingEmail("track-" + java.util.UUID.randomUUID().toString().substring(0, 8) + "@inbound.atsjobtracker.com");
+                    user.setForwardingEmail("track-" + java.util.UUID.randomUUID().toString().substring(0, 8) + "@inbound.postmarkapp.com");
                     authUserRepository.save(user);
                 }
                 profile.setForwardingEmail(user.getForwardingEmail());
@@ -38,7 +38,7 @@ public class UserProfileController {
             empty.setUserId(userId);
             authUserRepository.findById(userId).ifPresent(user -> {
                 if (user.getForwardingEmail() == null) {
-                    user.setForwardingEmail("track-" + java.util.UUID.randomUUID().toString().substring(0, 8) + "@inbound.atsjobtracker.com");
+                    user.setForwardingEmail("track-" + java.util.UUID.randomUUID().toString().substring(0, 8) + "@inbound.postmarkapp.com");
                     authUserRepository.save(user);
                 }
                 empty.setForwardingEmail(user.getForwardingEmail());

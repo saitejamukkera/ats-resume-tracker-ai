@@ -21,6 +21,7 @@ import {
   Moon,
   LogOut,
   ChevronRight,
+  Mail,
 } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../context/AuthContext";
@@ -29,6 +30,7 @@ import { ConfirmModal } from "../ConfirmModal";
 const NAV_ITEMS = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/new", label: "New Application", icon: FilePlus },
+  { path: "/integrations", label: "Auto-Tracking", icon: Mail },
   { path: "/settings", label: "Settings", icon: Settings },
 ];
 

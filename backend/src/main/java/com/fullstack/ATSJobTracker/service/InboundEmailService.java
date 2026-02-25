@@ -18,9 +18,9 @@ public class InboundEmailService {
     private final EmailParserService emailParserService;
 
     public void processInboundEmail(InboundEmailDto emailData) {
-        log.info("Received inbound email addressed to: {}", emailData.getTo());
+        log.info("Received inbound email from Postmark addressed to: {}", emailData.getOriginalRecipient());
         
-        String recipient = extractEmailAddress(emailData.getTo());
+        String recipient = extractEmailAddress(emailData.getOriginalRecipient());
         
         Optional<AuthUser> userOpt = userRepository.findByForwardingEmail(recipient);
         
