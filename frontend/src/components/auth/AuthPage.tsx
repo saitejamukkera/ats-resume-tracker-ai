@@ -135,7 +135,6 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
       router.replace("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
-    } finally {
       setLoading(false);
     }
   };
@@ -171,7 +170,6 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
       router.replace("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Verification failed");
-    } finally {
       setLoading(false);
     }
   };
