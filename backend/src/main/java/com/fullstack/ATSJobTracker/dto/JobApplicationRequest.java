@@ -18,4 +18,5 @@ public class JobApplicationRequest {
     private String location;
     private String jobDescription;
     private ApplicationStatus outcome;
+    private String note;
 }

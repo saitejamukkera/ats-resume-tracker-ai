@@ -38,6 +38,7 @@ public class JobApplicationService {
         app.setCompany(request.getCompany());
         app.setLocation(request.getLocation());
         app.setJobDescription(request.getJobDescription());
+        app.setNote(request.getNote());
         app.setUserId(authService.getCurrentUserId());
 
         JobApplication saved = repository.save(app);
@@ -54,6 +55,7 @@ public class JobApplicationService {
         app.setCompany(request.getCompany());
         app.setLocation(request.getLocation());
         app.setJobDescription(request.getJobDescription());
+        app.setNote(request.getNote());
         if (request.getOutcome() != null) {
             app.setOutcome(request.getOutcome());
         }
@@ -95,6 +97,7 @@ public class JobApplicationService {
                 .hasCoverLetter(app.getCoverLetterContent() != null && !app.getCoverLetterContent().isEmpty())
                 .generatedResumeContent(app.getGeneratedResumeContent())
                 .coverLetterContent(app.getCoverLetterContent())
+                .note(app.getNote())
                 .build();
     }
 }

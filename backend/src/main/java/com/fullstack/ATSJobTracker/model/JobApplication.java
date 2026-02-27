@@ -40,6 +40,9 @@ public class JobApplication {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(columnDefinition = "TEXT")
+    private String note;
+
     @PrePersist
     protected void onCreate() {
         if (appliedOn == null) appliedOn = LocalDateTime.now();

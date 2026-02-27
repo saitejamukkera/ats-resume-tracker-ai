@@ -22,9 +22,11 @@ import {
   Search,
   Filter,
   ArrowRight,
+  StickyNote,
 } from "lucide-react";
 import { StatusDropdown } from "../StatusDropdown";
 import { ConfirmModal } from "../ConfirmModal";
+import { NotePopover } from "../NoteModal";
 import { useToast } from "../../context/ToastContext";
 
 const fadeInUp = {
@@ -62,7 +64,6 @@ export default function DashboardPage() {
   const handleDelete = async (id: number) => {
     setDeleteTarget(id);
   };
-
   const confirmDelete = async () => {
     if (deleteTarget === null) return;
     try {
@@ -406,39 +407,52 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          {app.hasGeneratedResume && (
-                            <button
-                              onClick={async (e) => {
-                                e.preventDefault();
-                                try {
-                                  const blob = await api.resumes.downloadPdf(
-                                    app.id,
-                                  );
-                                  const url = URL.createObjectURL(blob);
-                                  const a = document.createElement("a");
-                                  a.href = url;
-                                  a.download = getFormattedFilename(
-                                    userProfile?.fullName || "Candidate",
-                                    app.jobId,
-                                    app.company,
-                                    "Resume",
-                                    "pdf",
-                                  );
-                                  document.body.appendChild(a);
-                                  a.click();
-                                  document.body.removeChild(a);
-                                  URL.revokeObjectURL(url);
-                                } catch (error) {
-                                  console.error("PDF download failed", error);
-                                  toast.error("Failed to download PDF.");
-                                }
-                              }}
-                              className="p-2 rounded-full text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:text-primary-400 dark:hover:bg-primary-900/20 transition-colors"
-                              title="Download Resume PDF"
-                            >
-                              <FileText size={16} />
-                            </button>
-                          )}
+                          <NotePopover
+                            application={app}
+                            onSave={async (noteContent) => {
+                              try {
+                                await api.applications.update(app.id, {
+                                  company: app.company,
+                                  position: app.position,
+                                  jobId: app.jobId,
+                                  jobDescription: app.jobDescription,
+                                  location: app.location,
+                                  outcome: app.outcome,
+                                  note: noteContent,
+                                });
+                                // Optimistically update the UI without waiting for refetch
+                                mutate(
+                                  "/api/applications",
+                                  (currentData: any) => {
+                                    if (!currentData) return currentData;
+                                    return currentData.map(
+                                      (item: JobApplicationResponse) =>
+                                        item.id === app.id
+                                          ? { ...item, note: noteContent }
+                                          : item,
+                                    );
+                                  },
+                                  false,
+                                );
+                                // Revalidate in background
+                                mutate("/api/applications");
+                              } catch (error) {
+                                console.error("Failed to save note", error);
+                                throw error;
+                              }
+                            }}
+                            triggerButton={
+                              <button
+                                className="p-2 rounded-full text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:text-primary-400 dark:hover:bg-primary-900/20 transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                                title="Notes"
+                              >
+                                <StickyNote size={16} />
+                                {app.note && (
+                                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary-500 rounded-full" />
+                                )}
+                              </button>
+                            }
+                          />
                           <Link
                             href={`/applications/${app.id}`}
                             className="p-2 rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors"

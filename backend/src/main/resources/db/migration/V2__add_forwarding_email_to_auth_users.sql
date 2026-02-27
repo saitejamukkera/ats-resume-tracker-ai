@@ -1,0 +1,3 @@
+ALTER TABLE auth_users
+ADD COLUMN forwarding_email VARCHAR(255) UNIQUE,
+ADD COLUMN is_forwarding_verified BOOLEAN NOT NULL DEFAULT FALSE;

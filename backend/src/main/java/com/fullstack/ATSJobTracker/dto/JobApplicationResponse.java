@@ -24,4 +24,5 @@ public class JobApplicationResponse {
     private boolean hasCoverLetter;
     private String generatedResumeContent;
     private String coverLetterContent;
+    private String note;
 }

@@ -19,6 +19,7 @@ export interface JobApplicationRequest {
   location: string;
   jobDescription: string;
   outcome?: ApplicationStatus;
+  note?: string;
 }
 
 export interface JobApplicationResponse {
@@ -34,6 +35,7 @@ export interface JobApplicationResponse {
   hasCoverLetter: boolean;
   generatedResumeContent?: string;
   coverLetterContent?: string;
+  note?: string;
 }
 
 export interface ResumeGenerationRequest {
