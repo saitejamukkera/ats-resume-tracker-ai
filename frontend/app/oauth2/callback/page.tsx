@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../../src/context/AuthContext";
 import { tokenStorage } from "../../../src/lib/api";
@@ -9,24 +9,22 @@ function OAuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refreshUser } = useAuth();
+  const handledRef = useRef(false);
 
   useEffect(() => {
+    if (handledRef.current) return;
     const token = searchParams.get("token");
 
-    // Immediately strip token from URL to prevent it from appearing in browser history/console
     if (typeof window !== "undefined" && token) {
       window.history.replaceState({}, "", "/oauth2/callback");
     }
 
     if (token) {
+      handledRef.current = true;
       tokenStorage.set(token);
-      refreshUser()
-        .then(() => {
-          router.replace("/dashboard");
-        })
-        .catch(() => {
-          router.replace("/login");
-        });
+      refreshUser().then((success) => {
+        router.replace(success ? "/dashboard" : "/login");
+      });
     } else {
       router.replace("/login");
     }

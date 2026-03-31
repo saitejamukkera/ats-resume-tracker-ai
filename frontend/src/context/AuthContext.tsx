@@ -6,9 +6,12 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
-import { api, tokenStorage } from "../lib/api";
+import { useRouter } from "next/navigation";
+import { api, tokenStorage, onSessionExpired } from "../lib/api";
+import { SessionExpiredModal } from "../components/SessionExpiredModal";
 
 export interface AuthUser {
   email: string;
@@ -26,7 +29,7 @@ interface AuthContextType {
     fullName: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,22 +37,33 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sessionExpired, setSessionExpired] = useState(false);
+  const router = useRouter();
+  const userRef = useRef<AuthUser | null>(null);
 
-  const refreshUser = useCallback(async () => {
-    // In Next.js, we need to be careful about SSR.
-    // tokenStorage.get() checks for window, so it returns null on server.
+  const refreshUser = useCallback(async (): Promise<boolean> => {
     const token = tokenStorage.get();
     if (!token) {
       setUser(null);
+      userRef.current = null;
       setLoading(false);
-      return;
+      return false;
     }
     try {
       const userData = await api.auth.me();
-      setUser(userData);
+      const authUser: AuthUser = {
+        email: userData.email,
+        fullName: userData.fullName,
+        provider: userData.provider,
+      };
+      setUser(authUser);
+      userRef.current = authUser;
+      return true;
     } catch {
       tokenStorage.remove();
       setUser(null);
+      userRef.current = null;
+      return false;
     } finally {
       setLoading(false);
     }
@@ -59,16 +73,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshUser();
   }, [refreshUser]);
 
+  useEffect(() => {
+    const unsubscribe = onSessionExpired(() => {
+      setUser(null);
+      userRef.current = null;
+      setSessionExpired(true);
+    });
+    return unsubscribe;
+  }, []);
+
   const login = async (email: string, password: string) => {
     const response = await api.auth.login(email, password);
     if (response.message && !response.email) {
       throw new Error(response.message);
     }
-    setUser({
+    setSessionExpired(false);
+    const authUser: AuthUser = {
       email: response.email,
       fullName: response.fullName,
       provider: response.provider,
-    });
+    };
+    setUser(authUser);
+    userRef.current = authUser;
   };
 
   const register = async (
@@ -80,16 +106,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (response.message && !response.email) {
       throw new Error(response.message);
     }
-    setUser({
+    setSessionExpired(false);
+    const authUser: AuthUser = {
       email: response.email,
       fullName: response.fullName,
       provider: response.provider,
-    });
+    };
+    setUser(authUser);
+    userRef.current = authUser;
   };
 
   const logout = async () => {
     await api.auth.logout();
     setUser(null);
+    userRef.current = null;
+  };
+
+  const handleSessionExpiredLogin = () => {
+    setSessionExpired(false);
+    tokenStorage.remove();
+    router.push("/login");
   };
 
   return (
@@ -97,6 +133,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{ user, loading, login, register, logout, refreshUser }}
     >
       {children}
+      <SessionExpiredModal
+        open={sessionExpired}
+        onLogin={handleSessionExpiredLogin}
+      />
     </AuthContext.Provider>
   );
 }

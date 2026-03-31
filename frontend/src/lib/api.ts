@@ -9,7 +9,8 @@ import type {
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-// Module-level token cache to avoid reading localStorage on every API call
+// ── Token storage (access token in memory + localStorage) ───────────
+
 let cachedToken: string | null = null;
 
 export const tokenStorage = {
@@ -35,17 +36,93 @@ export const tokenStorage = {
   },
 };
 
-const apiFetch = (
+// ── Session expired event bus ───────────────────────────────────────
+
+type SessionExpiredListener = () => void;
+const sessionExpiredListeners = new Set<SessionExpiredListener>();
+
+export const onSessionExpired = (listener: SessionExpiredListener) => {
+  sessionExpiredListeners.add(listener);
+  return () => {
+    sessionExpiredListeners.delete(listener);
+  };
+};
+
+function emitSessionExpired() {
+  sessionExpiredListeners.forEach((listener) => listener());
+}
+
+// ── Silent token refresh with request queuing ───────────────────────
+
+let isRefreshing = false;
+let refreshPromise: Promise<boolean> | null = null;
+
+async function silentRefresh(): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!response.ok) return false;
+    const data = await response.json();
+    if (data.token) {
+      tokenStorage.set(data.token);
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+async function attemptRefresh(): Promise<boolean> {
+  if (isRefreshing && refreshPromise) {
+    return refreshPromise;
+  }
+  isRefreshing = true;
+  refreshPromise = silentRefresh().finally(() => {
+    isRefreshing = false;
+    refreshPromise = null;
+  });
+  return refreshPromise;
+}
+
+// ── Core fetch wrapper with 401 interception ────────────────────────
+
+const apiFetch = async (
   input: RequestInfo | URL,
   init?: RequestInit,
+  _isRetry = false,
 ): Promise<Response> => {
   const token = tokenStorage.get();
   const headers = new Headers(init?.headers);
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  return fetch(input, { ...init, headers });
+
+  const response = await fetch(input, { ...init, headers });
+
+  if (response.status === 401 && !_isRetry) {
+    const url = typeof input === "string" ? input : input.toString();
+    const isAuthEndpoint =
+      url.includes("/api/auth/login") ||
+      url.includes("/api/auth/register") ||
+      url.includes("/api/auth/refresh");
+
+    if (!isAuthEndpoint) {
+      const refreshed = await attemptRefresh();
+      if (refreshed) {
+        return apiFetch(input, init, true);
+      }
+      tokenStorage.remove();
+      emitSessionExpired();
+    }
+  }
+
+  return response;
 };
+
+// ── Types ───────────────────────────────────────────────────────────
 
 export interface GenerateFromJdResponse {
   applicationId: number;
@@ -65,12 +142,15 @@ export interface AuthResponse {
   token?: string;
 }
 
+// ── API namespace ───────────────────────────────────────────────────
+
 export const api = {
   auth: {
     login: async (email: string, password: string): Promise<AuthResponse> => {
       const response = await apiFetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
@@ -86,6 +166,7 @@ export const api = {
       const response = await apiFetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ fullName, email, password }),
       });
       const data = await response.json();
@@ -94,9 +175,12 @@ export const api = {
       return data;
     },
     logout: async (): Promise<void> => {
+      const token = tokenStorage.get();
       tokenStorage.remove();
-      await apiFetch(`${API_BASE_URL}/api/auth/logout`, {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: "POST",
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       }).catch(() => {});
     },
     me: async (): Promise<AuthResponse> => {
@@ -125,6 +209,7 @@ export const api = {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ fullName, email, password, otp }),
         },
       );
