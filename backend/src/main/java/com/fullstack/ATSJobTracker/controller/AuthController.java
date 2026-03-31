@@ -9,13 +9,19 @@ import com.fullstack.ATSJobTracker.dto.SendOtpRequest;
 import com.fullstack.ATSJobTracker.dto.VerifyOtpRegisterRequest;
 import com.fullstack.ATSJobTracker.model.AuthProvider;
 import com.fullstack.ATSJobTracker.model.AuthUser;
+import com.fullstack.ATSJobTracker.model.RefreshToken;
 import com.fullstack.ATSJobTracker.repository.AuthUserRepository;
 import com.fullstack.ATSJobTracker.security.JwtUtil;
 import com.fullstack.ATSJobTracker.service.EmailService;
 import com.fullstack.ATSJobTracker.service.OtpService;
+import com.fullstack.ATSJobTracker.service.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -25,6 +31,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,9 +46,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final OtpService otpService;
     private final EmailService emailService;
+    private final RefreshTokenService refreshTokenService;
+
+    @Value("${jwt.refresh-expiration:604800000}")
+    private long refreshExpirationMs;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request,
+                                                  HttpServletResponse httpResponse) {
         log.info("POST /api/auth/register - email: {}", request.getEmail());
 
         if (authUserRepository.existsByEmail(request.getEmail())) {
@@ -57,22 +70,12 @@ public class AuthController {
         authUserRepository.save(user);
         log.info("User registered: {}", user.getEmail());
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        ResponseCookie cookie = createJwtCookie(token);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(AuthResponse.builder()
-                        .email(user.getEmail())
-                        .fullName(user.getFullName())
-                        .provider(user.getProvider().name())
-                        .token(token)
-                        .message("Registration successful")
-                        .build());
+        return buildAuthResponse(user, httpResponse, "Registration successful");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request,
+                                               HttpServletResponse httpResponse) {
         log.info("POST /api/auth/login - email: {}", request.getEmail());
         try {
             authenticationManager.authenticate(
@@ -86,32 +89,62 @@ public class AuthController {
         AuthUser user = authUserRepository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        ResponseCookie cookie = createJwtCookie(token);
-
         log.info("User logged in: {}", user.getEmail());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(AuthResponse.builder()
-                        .email(user.getEmail())
-                        .fullName(user.getFullName())
-                        .provider(user.getProvider().name())
-                        .token(token)
-                        .message("Login successful")
-                        .build());
+        return buildAuthResponse(user, httpResponse, "Login successful");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse httpResponse) {
+        String refreshTokenValue = extractRefreshTokenFromCookie(request);
+
+        if (refreshTokenValue == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "No refresh token provided"));
+        }
+
+        return refreshTokenService.findByToken(refreshTokenValue)
+                .filter(RefreshToken::isUsable)
+                .map(existingToken -> {
+                    AuthUser user = authUserRepository.findById(existingToken.getUserId()).orElse(null);
+                    if (user == null) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body((Object) Map.of("message", "User not found"));
+                    }
+
+                    RefreshToken newRefreshToken = refreshTokenService.rotateRefreshToken(existingToken);
+
+                    String accessToken = jwtUtil.generateToken(user.getEmail());
+                    addRefreshTokenCookie(httpResponse, newRefreshToken.getToken());
+
+                    return ResponseEntity.ok((Object) Map.of(
+                            "token", accessToken,
+                            "email", user.getEmail(),
+                            "fullName", user.getFullName() != null ? user.getFullName() : "",
+                            "provider", user.getProvider().name()
+                    ));
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Refresh token expired or revoked. Please login again.")));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse httpResponse,
+                                        Authentication authentication) {
         log.info("POST /api/auth/logout");
-        ResponseCookie cookie = ResponseCookie.from("jwt", "")
-                .httpOnly(true)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Lax")
-                .build();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            authUserRepository.findByEmail(authentication.getName())
+                    .ifPresent(user -> refreshTokenService.revokeAllForUser(user.getId()));
+        }
+
+        ResponseCookie jwtCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true).path("/").maxAge(0).sameSite("Lax").build();
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true).path("/api/auth/refresh").maxAge(0).sameSite("Lax").build();
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .build();
     }
 
@@ -149,7 +182,8 @@ public class AuthController {
     }
 
     @PostMapping("/verify-otp-register")
-    public ResponseEntity<AuthResponse> verifyOtpAndRegister(@RequestBody @Valid VerifyOtpRegisterRequest request) {
+    public ResponseEntity<AuthResponse> verifyOtpAndRegister(@RequestBody @Valid VerifyOtpRegisterRequest request,
+                                                              HttpServletResponse httpResponse) {
         log.info("POST /api/auth/verify-otp-register - email: {}", request.getEmail());
 
         if (authUserRepository.existsByEmail(request.getEmail())) {
@@ -171,28 +205,16 @@ public class AuthController {
         authUserRepository.save(user);
         log.info("User registered via OTP: {}", user.getEmail());
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        ResponseCookie cookie = createJwtCookie(token);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(AuthResponse.builder()
-                        .email(user.getEmail())
-                        .fullName(user.getFullName())
-                        .provider(user.getProvider().name())
-                        .token(token)
-                        .message("Registration successful")
-                        .build());
+        return buildAuthResponse(user, httpResponse, "Registration successful");
     }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<AuthResponse> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
         log.info("POST /api/auth/forgot-password - email: {}", request.getEmail());
 
-        // Always return success to avoid email enumeration
         authUserRepository.findByEmail(request.getEmail()).ifPresent(user -> {
             if (user.getProvider() != AuthProvider.LOCAL) {
-                return; // Don't send OTP for OAuth users
+                return;
             }
             String otp = otpService.generateOtp(request.getEmail());
             emailService.sendOtpEmail(request.getEmail(), otp, "password reset");
@@ -226,13 +248,58 @@ public class AuthController {
                 .message("Password reset successful. You can now sign in.").build());
     }
 
+    // ── Helpers ──────────────────────────────────────────────────────────
+
+    private ResponseEntity<AuthResponse> buildAuthResponse(AuthUser user,
+                                                            HttpServletResponse httpResponse,
+                                                            String message) {
+        refreshTokenService.revokeAllForUser(user.getId());
+
+        String accessToken = jwtUtil.generateToken(user.getEmail());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+
+        ResponseCookie jwtCookie = createJwtCookie(accessToken);
+        httpResponse.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+        addRefreshTokenCookie(httpResponse, refreshToken.getToken());
+
+        return ResponseEntity.ok(AuthResponse.builder()
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .provider(user.getProvider().name())
+                .token(accessToken)
+                .message(message)
+                .build());
+    }
+
     private ResponseCookie createJwtCookie(String token) {
         return ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(86400)
+                .maxAge(900)
                 .sameSite("Lax")
                 .secure(false)
                 .build();
+    }
+
+    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .path("/api/auth/refresh")
+                .maxAge(refreshExpirationMs / 1000)
+                .sameSite("Lax")
+                .secure(false)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    private String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
