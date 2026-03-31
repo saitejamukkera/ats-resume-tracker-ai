@@ -2,12 +2,15 @@ package com.fullstack.ATSJobTracker.security;
 
 import com.fullstack.ATSJobTracker.model.AuthProvider;
 import com.fullstack.ATSJobTracker.model.AuthUser;
+import com.fullstack.ATSJobTracker.model.RefreshToken;
 import com.fullstack.ATSJobTracker.repository.AuthUserRepository;
+import com.fullstack.ATSJobTracker.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -24,9 +27,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final AuthUserRepository authUserRepository;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
+
+    @Value("${jwt.refresh-expiration:604800000}")
+    private long refreshExpirationMs;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -68,21 +75,38 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             return authUserRepository.save(newUser);
         });
 
+        refreshTokenService.revokeAllForUser(user.getId());
+
         String token = jwtUtil.generateToken(user.getEmail());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         boolean isLocalhost = frontendUrl.contains("localhost");
-        ResponseCookie.ResponseCookieBuilder cookieBuilder = ResponseCookie.from("jwt", token)
+        String sameSite = isLocalhost ? "Lax" : "None";
+        boolean secure = !isLocalhost;
+
+        ResponseCookie.ResponseCookieBuilder jwtCookieBuilder = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(86400)
-                .sameSite(isLocalhost ? "Lax" : "None")
-                .secure(!isLocalhost);
+                .maxAge(900)
+                .sameSite(sameSite)
+                .secure(secure);
         if (isLocalhost) {
-            cookieBuilder.domain("localhost");
+            jwtCookieBuilder.domain("localhost");
         }
-        response.addHeader("Set-Cookie", cookieBuilder.build().toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookieBuilder.build().toString());
 
-        getRedirectStrategy().sendRedirect(request, response, 
+        ResponseCookie.ResponseCookieBuilder refreshCookieBuilder = ResponseCookie.from("refreshToken", refreshToken.getToken())
+                .httpOnly(true)
+                .path("/api/auth/refresh")
+                .maxAge(refreshExpirationMs / 1000)
+                .sameSite(sameSite)
+                .secure(secure);
+        if (isLocalhost) {
+            refreshCookieBuilder.domain("localhost");
+        }
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieBuilder.build().toString());
+
+        getRedirectStrategy().sendRedirect(request, response,
             frontendUrl + "/oauth2/callback?token=" + token);
     }
 }
