@@ -68,3 +68,6 @@ jwt:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
+
+resume-pipeline:
+  url: ${RESUME_PIPELINE_URL:http://localhost:3001}

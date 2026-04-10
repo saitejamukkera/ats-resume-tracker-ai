@@ -6,6 +6,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,7 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtUtil.isTokenValid(token)) {
             String email = jwtUtil.extractEmail(token);
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+            if (shouldReplaceAuthentication(currentAuth, email)) {
+                if (currentAuth != null && currentAuth.isAuthenticated()) {
+                    log.debug("Replacing stale {} principal with JWT identity for {}",
+                            currentAuth.getClass().getSimpleName(), email);
+                }
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -40,6 +48,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean shouldReplaceAuthentication(Authentication currentAuth, String email) {
+        if (currentAuth == null || !currentAuth.isAuthenticated()) {
+            return true;
+        }
+
+        Object principal = currentAuth.getPrincipal();
+        if (principal instanceof UserDetails userDetails) {
+            return !email.equalsIgnoreCase(userDetails.getUsername());
+        }
+
+        return true;
     }
 
     @Override

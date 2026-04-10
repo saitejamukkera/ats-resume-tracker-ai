@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -76,6 +77,29 @@ public class ResumeController {
             log.error("Error generating from JD: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("/generate-from-jd/stream")
+    public SseEmitter generateFromJdStream(@RequestBody GenerateFromJdRequest request) {
+        log.info("POST /api/resumes/generate-from-jd/stream (SSE)");
+        SseEmitter emitter = new SseEmitter(180_000L); // 3 min timeout
+        Long userId = authService.getCurrentUserId(); // capture on request thread
+
+        Thread.startVirtualThread(() -> {
+            try {
+                resumeService.generateFromJdStream(
+                        request.getJobDescription(), request.isUseIconResume(), emitter, userId);
+            } catch (Exception e) {
+                log.error("SSE stream thread error: {}", e.getMessage(), e);
+                try {
+                    emitter.send(SseEmitter.event().name("error")
+                            .data("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}"));
+                    emitter.complete();
+                } catch (Exception ignored) {}
+            }
+        });
+
+        return emitter;
     }
 
 

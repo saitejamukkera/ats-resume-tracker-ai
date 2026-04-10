@@ -52,6 +52,31 @@ function emitSessionExpired() {
   sessionExpiredListeners.forEach((listener) => listener());
 }
 
+// ── JWT expiry helpers ──────────────────────────────────────────────
+
+function tokenExpiresWithin(ms: number): boolean {
+  const token = tokenStorage.get();
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const expiresAt = payload.exp * 1000;
+    return expiresAt - Date.now() < ms;
+  } catch {
+    return true;
+  }
+}
+
+async function ensureFreshToken(): Promise<void> {
+  if (tokenExpiresWithin(3 * 60 * 1000)) {
+    const refreshed = await attemptRefresh();
+    if (!refreshed) {
+      tokenStorage.remove();
+      emitSessionExpired();
+      throw new Error("Session expired. Please log in again.");
+    }
+  }
+}
+
 // ── Silent token refresh with request queuing ───────────────────────
 
 let isRefreshing = false;
@@ -316,6 +341,63 @@ export const api = {
         throw new Error(errorData?.message || "Failed to generate");
       }
       return response.json();
+    },
+    generateFromJdStream: async (
+      jobDescription: string,
+      useIconResume: boolean,
+      onEvent: (eventType: string, data: Record<string, unknown>) => void,
+    ): Promise<void> => {
+      await ensureFreshToken();
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/resumes/generate-from-jd/stream`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ jobDescription, useIconResume }),
+        },
+      );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(
+          errorData?.message || "Failed to start generation stream",
+        );
+      }
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response stream available");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let currentEvent = "";
+      let dataLines: string[] = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("event:")) {
+            currentEvent = line.slice(6).trim();
+            dataLines = [];
+          } else if (line.startsWith("data:")) {
+            dataLines.push(line.slice(5));
+          } else if (line === "" && currentEvent && dataLines.length > 0) {
+            // Empty line = end of SSE event; parse accumulated data lines
+            try {
+              const data = JSON.parse(dataLines.join("\n").trim());
+              onEvent(currentEvent, data);
+            } catch {
+              // skip malformed JSON
+            }
+            currentEvent = "";
+            dataLines = [];
+          }
+        }
+      }
     },
     generate: async (
       applicationId: number,

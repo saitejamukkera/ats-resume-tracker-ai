@@ -1,0 +1,13 @@
+import pg from 'pg';
+const { Client } = pg;
+const client = new Client('postgresql://postgres:password@localhost:5433/ats_resume_db');
+await client.connect();
+const res = await client.query('SELECT generated_resume_content FROM job_applications ORDER BY id DESC LIMIT 1');
+const content = res.rows[0].generated_resume_content;
+if (content.includes('%')) console.log("FOUND %");
+if (content.includes('&')) console.log("FOUND &");
+if (content.includes('$')) console.log("FOUND $");
+if (content.includes('_')) console.log("FOUND _");
+const badChars = content.match(/[^\\A-Za-z0-9\s\{\}\[\]\(\)\-\+\.\,\:\;\=\/\"\'\*\@]/g);
+console.log("Unique strange chars:", [...new Set(badChars)].join(" "));
+await client.end();
