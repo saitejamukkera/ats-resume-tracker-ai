@@ -102,6 +102,15 @@ export interface RankAndTrimConstraints {
   minBulletsPerRole: number;
   maxBulletsPerRole: number;
   maxBulletsTotal: number;
+  /**
+   * Optional pre-computed per-role bullet quota. When provided, each
+   * role's kept-count is capped at `perRoleTargets[i]` instead of the
+   * flat `maxBulletsPerRole`. Typically produced by
+   * `allocateBulletQuotas` from role tenure so long-tenure roles get
+   * more space than short contracts. Must be the same length as the
+   * roles array passed into `rankAndTrim`.
+   */
+  perRoleTargets?: number[];
 }
 
 export interface RankAndTrimResult {
@@ -314,6 +323,113 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+// ── Tenure-weighted bullet quota allocation ────────────────────
+
+export interface RoleTenureInput {
+  /** How many bullets the LLM returned for this role after count preservation. */
+  originalCount: number;
+  /** Role length in months. null = unknown (fallback to the neutral default). */
+  months: number | null;
+}
+
+export interface QuotaAllocationInput {
+  roles: RoleTenureInput[];
+  minPerRole: number;
+  maxPerRole: number;
+  maxTotal: number;
+  /**
+   * Fallback tenure in months when a role's date range can't be parsed.
+   * Defaults to 12 (one year) — a neutral middle that doesn't
+   * artificially favor unknown roles.
+   */
+  fallbackMonths?: number;
+}
+
+export interface QuotaAllocation {
+  perRole: number[];
+  total: number;
+  weights: number[];
+  months: number[];
+}
+
+/**
+ * Allocate a bullet budget across roles proportional to tenure.
+ * sqrt(months) is used so that a 36-month role gets more space than
+ * a 6-month contract but not 6x more — matches how recruiters
+ * weight role significance against time served.
+ *
+ * Respects:
+ *   - minPerRole floor (or originalCount, whichever is smaller — we
+ *     never require more bullets than the role actually has).
+ *   - maxPerRole ceiling (and originalCount).
+ *   - maxTotal resume-wide cap.
+ *
+ * If the clamped allocation sums to more than maxTotal we shave from
+ * the role with the largest quota still above its floor. If it sums
+ * to less (because every role hit its ceiling) we distribute the
+ * remainder to the role with the highest "weight per kept bullet"
+ * until everyone hits their ceiling.
+ */
+export function allocateBulletQuotas(
+  input: QuotaAllocationInput,
+): QuotaAllocation {
+  const fallback = input.fallbackMonths ?? 12;
+  const months = input.roles.map((r) =>
+    r.months != null && r.months > 0 ? r.months : fallback,
+  );
+  const weights = months.map((m) => Math.sqrt(Math.max(m, 1) / 6));
+  const totalWeight = weights.reduce((s, w) => s + w, 0) || 1;
+
+  const floor = (i: number) =>
+    Math.min(input.minPerRole, input.roles[i].originalCount);
+  const ceiling = (i: number) =>
+    Math.min(input.maxPerRole, input.roles[i].originalCount);
+
+  const quotas: number[] = weights.map((w, i) => {
+    const raw = Math.round((input.maxTotal * w) / totalWeight);
+    return Math.max(floor(i), Math.min(ceiling(i), raw));
+  });
+
+  let sum = quotas.reduce((s, q) => s + q, 0);
+
+  // Shave if over budget. Pull from the largest-quota role that is
+  // still above its floor.
+  while (sum > input.maxTotal) {
+    let victim = -1;
+    let maxQ = -1;
+    for (let i = 0; i < quotas.length; i++) {
+      if (quotas[i] > floor(i) && quotas[i] > maxQ) {
+        maxQ = quotas[i];
+        victim = i;
+      }
+    }
+    if (victim === -1) break; // every role already at floor
+    quotas[victim]--;
+    sum--;
+  }
+
+  // Backfill if under budget (every role hit its ceiling or rounding
+  // lost a bullet). Give the next bullet to the role whose weight is
+  // most under-served per current quota.
+  while (sum < input.maxTotal) {
+    let beneficiary = -1;
+    let bestDensity = -Infinity;
+    for (let i = 0; i < quotas.length; i++) {
+      if (quotas[i] >= ceiling(i)) continue;
+      const density = weights[i] / (quotas[i] + 1);
+      if (density > bestDensity) {
+        bestDensity = density;
+        beneficiary = i;
+      }
+    }
+    if (beneficiary === -1) break; // everyone at ceiling
+    quotas[beneficiary]++;
+    sum++;
+  }
+
+  return { perRole: quotas, total: sum, weights, months };
+}
+
 // ── Per-role ranking + trimming ────────────────────────────────
 
 /**
@@ -348,14 +464,17 @@ export function rankAndTrimRole(
     return a.originalIndex - b.originalIndex;
   });
 
-  // Per-role cap: keep top maxBulletsPerRole, but never drop below
-  // minBulletsPerRole. If the role already has <= maxBulletsPerRole,
-  // nothing is dropped (just reordered).
+  // Per-role cap: keep top N, never dropping below minBulletsPerRole.
+  // If perRoleTargets[roleIndex] is supplied, it overrides the flat
+  // maxBulletsPerRole — enables tenure-weighted quotas so long-tenure
+  // roles get more bullets than short contracts.
   const total = sorted.length;
   const effectiveFloor = Math.min(constraints.minBulletsPerRole, total);
+  const perRoleTarget =
+    constraints.perRoleTargets?.[roleIndex] ?? constraints.maxBulletsPerRole;
   const keepCount = Math.max(
     effectiveFloor,
-    Math.min(total, constraints.maxBulletsPerRole),
+    Math.min(total, perRoleTarget),
   );
 
   const keptList: RankedBullet[] = sorted.slice(0, keepCount);
@@ -510,6 +629,10 @@ export interface BulletRankingTrace {
     originalBulletCount: number;
     keptBulletCount: number;
     droppedBulletCount: number;
+    /** Tenure in months used for the quota allocation (null if unknown). */
+    tenureMonths?: number | null;
+    /** Target bullet quota assigned to this role (from tenure weighting). */
+    quotaTarget?: number;
     kept: Array<{
       originalIndex: number;
       newIndex: number;
@@ -541,6 +664,7 @@ export interface BulletRankingTrace {
 export function buildRankingTrace(
   result: RankAndTrimResult,
   constraints: RankAndTrimConstraints,
+  allocation?: QuotaAllocation,
 ): BulletRankingTrace {
   const roles = result.rankings.map((r) => {
     const newIndexByOriginal = new Map<number, number>();
@@ -577,6 +701,8 @@ export function buildRankingTrace(
       originalBulletCount: r.bullets.length,
       keptBulletCount: kept.length,
       droppedBulletCount: dropped.length,
+      tenureMonths: allocation?.months[r.roleIndex] ?? null,
+      quotaTarget: allocation?.perRole[r.roleIndex],
       kept,
       dropped,
     };

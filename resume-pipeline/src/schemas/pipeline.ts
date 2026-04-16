@@ -24,9 +24,11 @@ export interface PipelineConfig {
     maxBulletsPerRole: number;
     /**
      * Resume-wide hard cap on total bullets across all experience
-     * roles. Enforced deterministically by the bullet-ranker stage
-     * after per-role trimming. Prevents long-tenure resumes from
-     * ballooning past recruiter scan tolerance. Default 22.
+     * roles. The bullet-ranker allocates this budget across roles
+     * proportional to each role's tenure (sqrt(months) weighting),
+     * then sorts within each role by JD relevance and drops the
+     * lowest-scoring overflow. A 3-year role ends up with more
+     * bullets than a 4-month contract. Default 22.
      */
     maxBulletsTotal: number;
     metricMinRatio: number;
@@ -73,7 +75,10 @@ export const DEFAULT_CONFIG: PipelineConfig = {
   modules: { ...DEFAULT_MODULES },
   constraints: {
     minBulletsPerRole: 5,
-    maxBulletsPerRole: 8,
+    // Hard ceiling for any single role even when tenure-weighted
+    // quota allocation would give it more. 10 is enough for a 3+ year
+    // role without ballooning page density.
+    maxBulletsPerRole: 10,
     maxBulletsTotal: 22,
     metricMinRatio: 0.6,
     metricMaxRatio: 0.85,

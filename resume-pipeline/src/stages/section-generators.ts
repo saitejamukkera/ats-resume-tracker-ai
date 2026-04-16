@@ -17,17 +17,11 @@ import {
 } from "../schemas/experience.js";
 import { callLLM } from "../observability/llm-wrapper.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
-import type {
-  ParsedRole,
-  GeneratedRole,
-} from "../schemas/pipeline.js";
+import type { ParsedRole, GeneratedRole } from "../schemas/pipeline.js";
 import type { SnapshotStore } from "../observability/debug.js";
 import type { CandidateProfile } from "./candidate-profile.js";
 import { inventionBands, extractDateRange } from "./candidate-profile.js";
-import {
-  categorizeJdSkills,
-  implicitOnly,
-} from "./implicit-skills.js";
+import { categorizeJdSkills, implicitOnly } from "./implicit-skills.js";
 import { buildRoleBriefs, type BulletBrief } from "./bullet-brief.js";
 import {
   buildPlans,
@@ -273,19 +267,14 @@ export async function generateSummary(
   // J2EE, REST API development, Mockito, servlet APIs, MVC). Naming
   // implicit skills is honest — recruiters expect them. Only the
   // "missing" bucket is off-limits for the summary.
-  const jdRequiredOrPreferred = [
-    ...jd.requiredSkills,
-    ...jd.preferredSkills,
-  ];
+  const jdRequiredOrPreferred = [...jd.requiredSkills, ...jd.preferredSkills];
   const buckets = categorizeJdSkills(
     jdRequiredOrPreferred,
     profile.technologiesUsed,
   );
   const implicitWithSources = buckets.implicit.map((s) => {
     const srcs = buckets.implicitSources[s];
-    return srcs && srcs.length > 0
-      ? `${s} (backed by ${srcs.join(" + ")})`
-      : s;
+    return srcs && srcs.length > 0 ? `${s} (backed by ${srcs.join(" + ")})` : s;
   });
 
   const prompt = `Rewrite this resume summary for a ${jd.position} role at ${jd.company}.
@@ -657,11 +646,10 @@ export async function generateExperience(
 }> {
   // Build briefs + plans up front (deterministic)
   const rolesBriefs = roles.map((role, ri) =>
-    buildRoleBriefs(
-      role.bullets,
-      ri,
-      [...jd.requiredSkills, ...jd.preferredSkills],
-    ),
+    buildRoleBriefs(role.bullets, ri, [
+      ...jd.requiredSkills,
+      ...jd.preferredSkills,
+    ]),
   );
 
   const plans = buildPlans({
@@ -787,11 +775,10 @@ export async function generateExperiencePerRole(
 
   // Plans built ONCE across all roles to keep verb assignment globally unique.
   const rolesBriefs = roles.map((role, ri) =>
-    buildRoleBriefs(
-      role.bullets,
-      ri,
-      [...jd.requiredSkills, ...jd.preferredSkills],
-    ),
+    buildRoleBriefs(role.bullets, ri, [
+      ...jd.requiredSkills,
+      ...jd.preferredSkills,
+    ]),
   );
   const plans = buildPlans({
     rolesBriefs,
@@ -936,7 +923,18 @@ export async function targetedBulletRewrite(
   profile: CandidateProfile,
   snapshotStore?: SnapshotStore,
 ): Promise<{
-  rewrites: Map<string, { text: string; invented: { metric: string | null; scope: string | null; context: string | null } | null; keywordsUsed: string[] }>;
+  rewrites: Map<
+    string,
+    {
+      text: string;
+      invented: {
+        metric: string | null;
+        scope: string | null;
+        context: string | null;
+      } | null;
+      keywordsUsed: string[];
+    }
+  >;
   inputTokens: number;
   outputTokens: number;
 }> {
@@ -991,7 +989,11 @@ Return { rewrites: [{ roleIndex, bulletIndex, text, keywordsUsed, invented }] }.
     string,
     {
       text: string;
-      invented: { metric: string | null; scope: string | null; context: string | null } | null;
+      invented: {
+        metric: string | null;
+        scope: string | null;
+        context: string | null;
+      } | null;
       keywordsUsed: string[];
     }
   >();
@@ -1015,7 +1017,10 @@ Return { rewrites: [{ roleIndex, bulletIndex, text, keywordsUsed, invented }] }.
 
 const BUZZWORD_REGEX = new RegExp(
   "\\b(" +
-    BUZZWORD_BAN.split(",").map((w) => w.trim()).filter(Boolean).join("|") +
+    BUZZWORD_BAN.split(",")
+      .map((w) => w.trim())
+      .filter(Boolean)
+      .join("|") +
     ")\\b",
   "i",
 );
@@ -1054,13 +1059,21 @@ export function detectDeviations(
       const words = b.text.split(/\s+/).length;
 
       // Length deviation (tolerance ±2)
-      if (words < plan.targetWordsMin - 2) reasons.push(`too short (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`);
-      if (words > plan.targetWordsMax + 2) reasons.push(`too long (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`);
+      if (words < plan.targetWordsMin - 2)
+        reasons.push(
+          `too short (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`,
+        );
+      if (words > plan.targetWordsMax + 2)
+        reasons.push(
+          `too long (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`,
+        );
 
       // Verb collision (same opening verb appears >2 times resume-wide)
       const firstVerb = (b.text.trim().split(/\s+/)[0] || "").toLowerCase();
       if ((verbCounts.get(firstVerb) || 0) > 2) {
-        reasons.push(`verb "${firstVerb}" collides (used ${verbCounts.get(firstVerb)}x resume-wide)`);
+        reasons.push(
+          `verb "${firstVerb}" collides (used ${verbCounts.get(firstVerb)}x resume-wide)`,
+        );
       }
 
       // Preserved tech lost
@@ -1072,7 +1085,10 @@ export function detectDeviations(
       }
 
       // Preserved metric lost
-      if (plan.preservedMetric && !b.text.toLowerCase().includes(plan.preservedMetric.toLowerCase())) {
+      if (
+        plan.preservedMetric &&
+        !b.text.toLowerCase().includes(plan.preservedMetric.toLowerCase())
+      ) {
         reasons.push(`lost preserved metric "${plan.preservedMetric}"`);
       }
 

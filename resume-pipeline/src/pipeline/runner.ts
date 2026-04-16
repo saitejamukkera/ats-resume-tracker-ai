@@ -38,8 +38,10 @@ import { buildPlans } from "../stages/bullet-plan.js";
 import {
   rankAndTrim,
   buildRankingTrace,
+  allocateBulletQuotas,
   type RankAndTrimConstraints,
 } from "../stages/bullet-ranker.js";
+import { extractDateRange } from "../stages/candidate-profile.js";
 import type { ExperienceBullet } from "../schemas/experience.js";
 import type {
   PipelineInput,
@@ -361,17 +363,42 @@ export async function runPipeline(
   }
 
   // ── Stage 3.6: Bullet Relevance Ranking + Trimming ────────────
-  // Deterministic, 0 LLM calls. Scores every rewritten bullet against
-  // the JD (required/preferred skills, key phrases, responsibilities,
-  // LLM-reported keywords, metric, IDS impact), reorders bullets
-  // WITHIN each role by descending relevance, and enforces per-role
-  // + resume-wide caps. Runs BEFORE gap repair / humanize so those
-  // stages only touch bullets we're actually keeping. Chronological
-  // order across roles is preserved — only in-role order changes.
+  // Deterministic, 0 LLM calls. Two-step design:
+  //
+  //  1. Tenure-weighted quota allocation: the resume-wide budget
+  //     (maxBulletsTotal) is split across roles proportional to each
+  //     role's tenure using sqrt(months) weighting. A 3-year role
+  //     gets materially more space than a 4-month contract while
+  //     short roles are still protected by minBulletsPerRole.
+  //  2. Within each role, every rewritten bullet is scored against
+  //     the JD (required/preferred skills, key phrases,
+  //     responsibilities, LLM-reported keywords, metric, IDS impact),
+  //     reordered by descending relevance, and trimmed down to the
+  //     role's quota.
+  //
+  // Runs BEFORE gap repair / humanize so those LLM stages only polish
+  // bullets we're actually keeping. Chronological order across roles
+  // is preserved — only in-role order changes.
   telemetry.startStage("bullet-ranking");
   const smallestRoleSize = Math.min(
     ...parsed.experience.map((r) => r.bullets.length),
   );
+  const roleTenureInputs = experienceResult.roles.map((r, i) => {
+    const range = extractDateRange(parsed.experience[i].heading);
+    const months = range
+      ? Math.max(1, Math.round((range.endYear - range.startYear) * 12))
+      : null;
+    return {
+      originalCount: r.bullets.length,
+      months,
+    };
+  });
+  const allocation = allocateBulletQuotas({
+    roles: roleTenureInputs,
+    minPerRole: Math.min(config.constraints.minBulletsPerRole, smallestRoleSize),
+    maxPerRole: config.constraints.maxBulletsPerRole,
+    maxTotal: config.constraints.maxBulletsTotal,
+  });
   const rankConstraints: RankAndTrimConstraints = {
     minBulletsPerRole: Math.min(
       config.constraints.minBulletsPerRole,
@@ -379,6 +406,7 @@ export async function runPipeline(
     ),
     maxBulletsPerRole: config.constraints.maxBulletsPerRole,
     maxBulletsTotal: config.constraints.maxBulletsTotal,
+    perRoleTargets: allocation.perRole,
   };
   const rankResult = rankAndTrim(
     experienceResult.roles,
@@ -386,7 +414,7 @@ export async function runPipeline(
     jd,
     rankConstraints,
   );
-  const rankingTrace = buildRankingTrace(rankResult, rankConstraints);
+  const rankingTrace = buildRankingTrace(rankResult, rankConstraints, allocation);
   telemetry.recordBulletRanking(rankingTrace);
   // Swap in the trimmed + reordered roles/structured bullets so that
   // ALL downstream stages — invented-metric collection, validator,
@@ -398,14 +426,15 @@ export async function runPipeline(
   experienceResult.bullets = rankResult.structuredBullets;
   telemetry.endStage("bullet-ranking");
 
-  const rankSummary = rankingTrace.roles
+  const allocSummary = rankingTrace.roles
     .map((r) => {
       const label = r.company || r.roleTitle || `role-${r.roleIndex}`;
-      return `${label}: ${r.originalBulletCount}→${r.keptBulletCount}`;
+      const tenure = r.tenureMonths != null ? `${r.tenureMonths}mo` : "?mo";
+      return `${label} [${tenure}, quota=${r.quotaTarget ?? "-"}]: ${r.originalBulletCount}→${r.keptBulletCount}`;
     })
     .join(", ");
   console.log(
-    `[pipeline] Bullet ranking: ${rankSummary} ` +
+    `[pipeline] Bullet ranking: ${allocSummary} ` +
       `(dropped by role-cap=${rankResult.droppedByRoleCap}, ` +
       `total-cap=${rankResult.droppedByTotalCap}, total=${rankingTrace.totals.keptBullets}/${rankingTrace.totals.originalBullets})`,
   );
