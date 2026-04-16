@@ -14,7 +14,7 @@ export async function generateCoverLetter(
   currentDate: string,
   snapshotStore?: SnapshotStore,
 ): Promise<{ coverLetter: string; inputTokens: number; outputTokens: number }> {
-  const prompt = `Generate a JD-specific cover letter for this application.
+  const prompt = `Write a cover letter for this application. It should sound like a real person wrote it, not ChatGPT.
 
 ROLE: ${jd.position} at ${jd.company}
 LOCATION: ${jd.location}
@@ -31,15 +31,26 @@ JD REQUIREMENTS:
 - Key Responsibilities: ${jd.keyResponsibilities.join("; ")}
 - Domain: ${jd.domainFocus}
 
-COVER LETTER RULES:
-- Personal, concise, recruiter-friendly
-- ONE page maximum
-- Reference the role's technical focus
-- Explain why this team/company is interesting
-- Map past experiences to JD requirements
-- No generic language or templates
-- Do NOT use bullet points — write in full, flowing paragraphs
-- If master's subjects provided, naturally incorporate 1-2 relevant subjects
+WRITING STYLE — READ THIS CAREFULLY:
+- Write like you're talking to a smart person, not a form letter
+- SHORT sentences mixed with longer ones. Not every sentence should be 25 words.
+- Be SPECIFIC. "I built a caching layer that cut page loads from 2.3s to 400ms" beats "I have extensive experience optimizing application performance"
+- Show personality. One sentence about WHY this company or team excites you, specifically.
+- Do NOT use the phrase "I am excited to apply" or "I am writing to express my interest" — find a better opener
+- Do NOT use "cross-functional", "stakeholders", "deliverables", "align", "synergy", or "leverage"
+- Do NOT use "I believe I would be a valuable asset" or any variation of it
+- Do NOT use em dashes (—) or en dashes (–) anywhere. Use commas, semicolons, or periods instead.
+- Do NOT use excessive hyphens (-) for parenthetical asides. Restructure the sentence instead.
+- Keep paragraphs to 3-4 sentences max. Recruiters skim.
+- ONE page maximum. 4 paragraphs is ideal.
+- No bullet points. Full, flowing paragraphs only.
+- If master's subjects provided, weave in 1-2 relevant ones naturally
+
+STRUCTURE:
+1. Opening (2-3 sentences): Hook with something specific about the role or company. Mention the position.
+2. Experience (4-6 sentences): Pick 2-3 past experiences that directly map to JD requirements. Use specific metrics.
+3. Technical fit (3-4 sentences): Show you know their stack. Reference their actual technologies from the JD.
+4. Close (2-3 sentences): Brief, confident, forward-looking. Not groveling.
 
 FORMAT (strict):
 [Full Name]
@@ -55,10 +66,7 @@ ${jd.company}
 Re: Application for ${jd.position}${jd.jobId ? ` (Job ID: ${jd.jobId})` : ""}
 
 Dear Hiring Manager,
-[Opening paragraph: Express interest, mention degree/GPA if provided, highlight years of experience and key technologies]
-[Middle paragraphs: Detail specific past experiences matching JD requirements with metrics]
-[Technical paragraph: Weave technical skills into a cohesive paragraph — NO bullet points]
-[Closing paragraph: Express enthusiasm for the company, confidence in contributing]
+[4 paragraphs as described above]
 
 Thank you for your time and consideration.
 
@@ -76,8 +84,15 @@ Return the full cover letter text.`;
     snapshotStore,
   });
 
+  // Post-processing: strip em/en dashes that LLMs love to insert despite instructions
+  let coverLetter = result.object.coverLetter;
+  coverLetter = coverLetter
+    .replace(/\s*—\s*/g, ", ")     // em dash → comma
+    .replace(/\s*–\s*/g, ", ")     // en dash → comma
+    .replace(/\s+-\s+/g, ", ");    // spaced hyphen used as dash → comma
+
   return {
-    coverLetter: result.object.coverLetter,
+    coverLetter,
     inputTokens: result.inputTokens,
     outputTokens: result.outputTokens,
   };
