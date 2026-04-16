@@ -59,6 +59,20 @@ public class ResumePipelineClient {
             String masterSubjects,
             String customPrompt
     ) {
+        return generate(baseResumeLatex, jobDescription, userInfo, masterSubjects, customPrompt, null);
+    }
+
+    /**
+     * Full-arg generate with manual YoE override for the candidate profile.
+     */
+    public PipelineResponse generate(
+            String baseResumeLatex,
+            String jobDescription,
+            String userInfo,
+            String masterSubjects,
+            String customPrompt,
+            Double yearsOfExperienceOverride
+    ) {
         try {
             Map<String, Object> body = new HashMap<>();
             body.put("baseResumeLatex", baseResumeLatex);
@@ -66,6 +80,9 @@ public class ResumePipelineClient {
             if (userInfo != null && !userInfo.isEmpty()) body.put("userInfo", userInfo);
             if (masterSubjects != null && !masterSubjects.isEmpty()) body.put("masterSubjects", masterSubjects);
             if (customPrompt != null && !customPrompt.isBlank()) body.put("customPrompt", customPrompt);
+            if (yearsOfExperienceOverride != null && yearsOfExperienceOverride >= 0) {
+                body.put("yearsOfExperienceOverride", yearsOfExperienceOverride);
+            }
 
             String jsonBody = objectMapper.writeValueAsString(body);
 
@@ -123,12 +140,26 @@ public class ResumePipelineClient {
             String masterSubjects,
             BiConsumer<String, String> onEvent
     ) {
+        generateStream(baseResumeLatex, jobDescription, userInfo, masterSubjects, null, onEvent);
+    }
+
+    public void generateStream(
+            String baseResumeLatex,
+            String jobDescription,
+            String userInfo,
+            String masterSubjects,
+            Double yearsOfExperienceOverride,
+            BiConsumer<String, String> onEvent
+    ) {
         try {
             Map<String, Object> body = new HashMap<>();
             body.put("baseResumeLatex", baseResumeLatex);
             body.put("jobDescription", jobDescription);
             if (userInfo != null && !userInfo.isEmpty()) body.put("userInfo", userInfo);
             if (masterSubjects != null && !masterSubjects.isEmpty()) body.put("masterSubjects", masterSubjects);
+            if (yearsOfExperienceOverride != null && yearsOfExperienceOverride >= 0) {
+                body.put("yearsOfExperienceOverride", yearsOfExperienceOverride);
+            }
 
             String jsonBody = objectMapper.writeValueAsString(body);
 

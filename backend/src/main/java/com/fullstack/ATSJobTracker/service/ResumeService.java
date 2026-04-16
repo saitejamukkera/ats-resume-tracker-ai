@@ -57,17 +57,19 @@ public class ResumeService {
 
         String userInfo = "";
         String masterSubjects = "";
+        Double yoeOverride = null;
         var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
+            yoeOverride = profile.getYearsOfExperienceOverride();
         }
 
         // Call the pipeline sidecar — returns structured, validated output
         log.info("Calling pipeline sidecar for JD generation...");
         ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
-                baseResume.getContent(), jobDescription, userInfo, masterSubjects);
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects, null, yoeOverride);
 
         String position = pipelineResult.getPosition() != null ? pipelineResult.getPosition() : "Unknown Position";
         String company = pipelineResult.getCompany() != null ? pipelineResult.getCompany() : "Unknown Company";
@@ -124,11 +126,13 @@ public class ResumeService {
 
         String userInfo = "";
         String masterSubjects = "";
+        Double yoeOverride = null;
         var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
+            yoeOverride = profile.getYearsOfExperienceOverride();
         }
 
         AtomicReference<Long> applicationIdRef = new AtomicReference<>();
@@ -136,7 +140,7 @@ public class ResumeService {
 
         try {
             resumePipelineClient.generateStream(
-                    baseResume.getContent(), jobDescription, userInfo, masterSubjects,
+                    baseResume.getContent(), jobDescription, userInfo, masterSubjects, yoeOverride,
                     (eventType, jsonData) -> {
                         try {
                             if ("resume-ready".equals(eventType)) {
@@ -234,16 +238,18 @@ public class ResumeService {
 
         String userInfo = "";
         String masterSubjects = "";
+        Double yoeOverride = null;
         var profileOpt = userProfileRepository.findByUserId(userId);
         if (profileOpt.isPresent()) {
             UserProfile profile = profileOpt.get();
             userInfo = buildUserInfo(profile);
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
+            yoeOverride = profile.getYearsOfExperienceOverride();
         }
 
         // Call the pipeline sidecar — passes custom prompt if provided
         ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
-                baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt);
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt, yoeOverride);
 
         String resumeLatex = pipelineResult.getLatex();
         String coverLetter = pipelineResult.getCoverLetter() != null ? pipelineResult.getCoverLetter() : "";

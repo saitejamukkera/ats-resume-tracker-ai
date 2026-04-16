@@ -31,6 +31,15 @@ public class UserProfile {
     private String mastersDegree;
     private String mastersGpa;
 
+    /**
+     * Optional manual override for total years of experience.
+     * When set (non-null and >= 0), it wins over date-range derivation in
+     * the resume pipeline's candidate profile. Useful when auto-derivation
+     * is wrong (gaps, internships, concurrent roles, contract work).
+     */
+    @Column(name = "years_of_experience_override")
+    private Double yearsOfExperienceOverride;
+
     @Column(name = "user_id", unique = true)
     private Long userId;
 }
