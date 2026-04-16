@@ -58,7 +58,8 @@ const SKILL_ADJACENCY: Record<string, string[]> = {
   kafka: [
     "messaging", "messaging and event systems", "message broker",
     "event systems", "event-driven", "event-driven architecture",
-    "pub/sub", "pubsub", "streaming",
+    "pub/sub", "pubsub", "streaming", "message queues",
+    "distributed messaging", "event streaming",
   ],
   rabbitmq: [
     "messaging", "event systems", "message broker", "pub/sub", "amqp",
@@ -193,8 +194,12 @@ const CO_OCCURRENCE_RULES: { when: string[]; add: string[] }[] = [
   { when: ["docker", "gitlab ci"], add: ["devops", "ci/cd"] },
   { when: ["docker", "circleci"], add: ["devops", "ci/cd"] },
   { when: ["docker", "kubernetes"], add: ["devops", "container orchestration"] },
-  { when: ["kafka", "spring boot"], add: ["event-driven architecture", "distributed systems"] },
-  { when: ["kafka", "java"], add: ["event-driven architecture", "distributed systems"] },
+  { when: ["kafka", "spring boot"], add: ["event-driven architecture", "distributed systems", "message queues"] },
+  { when: ["kafka", "java"], add: ["event-driven architecture", "distributed systems", "message queues"] },
+  { when: ["redis", "spring boot"], add: ["caching", "distributed caching"] },
+  { when: ["redis", "postgresql"], add: ["caching", "database optimization"] },
+  { when: ["spring boot", "docker", "kubernetes"], add: ["cloud-native", "container orchestration"] },
+  { when: ["spring security", "jwt"], add: ["oauth2", "api security", "token-based authentication"] },
 ];
 
 function normalize(s: string): string {

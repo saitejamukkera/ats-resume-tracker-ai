@@ -202,8 +202,18 @@ The checker requires EACH bullet to have at least TWO of these signals:
 3. CAUSALITY — explain HOW: "by implementing...", "using...", "through...", "via..."
 4. TECH MENTION — name specific technologies from the JD
 
-A bullet that just says "Worked on microservices" fails because it has no impact verb, no metric, and no causality.
-A fixed version: "Refactored 3 microservices using Spring Boot, reducing API response time by 40%" — has impact verb (Refactored), metric (3, 40%), causality (using), and tech (Spring Boot).
+OUTCOME-FIRST RULE (highest priority):
+Every repaired bullet MUST answer "what CHANGED because of this work?"
+Lead with the outcome whenever possible.
+  BAD:  "Configured Redis caching for volunteer endpoints."
+  GOOD: "Cut redundant database queries by 38% by configuring Redis caching for volunteer endpoints."
+  BAD:  "Built APIs using Java and Spring Boot."
+  GOOD: "Reduced API response time below 120ms by building optimized endpoints with Java and Spring Boot."
+
+FILLER REMOVAL (strip these before adding impact):
+Remove phrases like "using data structures and algorithms", "using system design principles",
+"in an agile environment", "adhering to best practices", "collaborated with cross-functional teams"
+(unless tied to a specific outcome). These are noise. Replace with specific tech or outcome.
 
 JD keywords to incorporate where natural: ${jdKeywords.slice(0, 15).join(", ")}
 
@@ -220,7 +230,7 @@ ${t.errors.map((e) => `  - ${e}`).join("\n")}
 
 LENGTH CONSTRAINT (NON-NEGOTIABLE):
 - Every repaired bullet must be under 35 words and 220 characters.
-- Front-load the most important keyword and metric in the first 15 words.
+- Front-load the outcome and metric in the first 15 words.
 - If the original bullet is too long, tighten it while preserving the key achievement.
 
 CRITICAL FORMATTING:

@@ -9,7 +9,7 @@ import { callLLM } from "../observability/llm-wrapper.js";
 import type { GeneratedSections, GeneratedRole } from "../schemas/pipeline.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { SnapshotStore } from "../observability/debug.js";
-import { analyzeBullet } from "../impact/detector.js";
+import { analyzeBullet, detectCategory, isLowValueCategory } from "../impact/detector.js";
 
 const KeywordGapRepairSchema = z.object({
   repairedBullets: z.array(
@@ -40,14 +40,20 @@ export async function repairKeywordGaps(
     return { sections, inputTokens: 0, outputTokens: 0, keywordsTargeted: 0 };
   }
 
-  // Build bullet map for the LLM
+  // Build bullet map for the LLM, annotating low-value bullets as
+  // prime candidates for keyword injection (the LLM should prefer
+  // rewriting these over high-value performance/scale bullets)
   const bulletMap = sections.experience
     .map((role, ri) => {
-      return role.bullets.map((b, bi) => `  [${ri}-${bi}] ${b}`).join("\n");
+      return role.bullets.map((b, bi) => {
+        const cat = detectCategory(b);
+        const tag = isLowValueCategory(cat) ? ` [LOW-VALUE: ${cat} — prefer rewriting this one]` : '';
+        return `  [${ri}-${bi}]${tag} ${b}`;
+      }).join("\n");
     })
     .join("\n");
 
-  const prompt = `You are an ATS optimization expert. The resume below is MISSING these keywords that appear in the job description. Your job is to weave them into existing experience bullets naturally.
+  const prompt = `You are an ATS optimization expert. The resume below is MISSING these keywords that appear in the job description. Your job is to weave them into existing experience bullets naturally, ALWAYS with demonstrated impact.
 
 MISSING REQUIRED SKILLS (highest priority):
 ${missingRequired.length > 0 ? missingRequired.map((k) => `- ${k}`).join("\n") : "(none)"}
@@ -69,19 +75,39 @@ JD CONTEXT:
 - Position: ${jd.position} at ${jd.company}
 - Domain: ${jd.domainFocus}
 
+KEYWORD INJECTION WITH IMPACT (critical rule):
+When adding a missing keyword (e.g. Kafka, Redis, Kubernetes), you MUST
+show what impact was made USING that technology. Never just name-drop.
+  BAD:  "...using Kafka for message processing."
+  GOOD: "...using Kafka event streams, reducing payment settlement lag from 5 minutes to under 30 seconds."
+  BAD:  "...with Redis caching."
+  GOOD: "...with Redis caching, cutting P95 response latency from 850ms to 500ms."
+The keyword must be tied to a measurable outcome or system-level improvement.
+
+TARGET SELECTION STRATEGY:
+Bullets marked [LOW-VALUE] are process/quality/team bullets that dilute the
+resume. PREFER rewriting these to incorporate the missing keyword with
+system-level impact. This simultaneously fixes two problems: it adds the
+missing keyword AND replaces a weak bullet with a stronger one.
+Example: A bullet about "PR review cycle time" is LOW-VALUE. Replace it
+entirely with a bullet about Kafka event processing if Kafka is missing.
+
 RULES:
 - ONLY modify experience bullets. Do NOT touch or return a summary.
-- Rewrite ONLY bullets where a missing keyword can be truthfully and naturally added
+- Rewrite ONLY bullets where a missing keyword can be truthfully and naturally added WITH IMPACT
 - Do NOT add keywords that don't fit the bullet's context — skip them if they can't be woven in honestly
 - Do NOT change the meaning or project details of any bullet
 - Preserve all existing metrics and achievements
+- OUTCOME-FIRST: when possible, restructure the bullet so the outcome leads
+  (e.g. "Reduced settlement lag by 90% by migrating batch jobs to Kafka event streams")
 - Keep bullet style consistent (action verb + tech + outcome)
 - DO NOT use raw LaTeX formatting (e.g. \\textbf{}, \\textit{})
 - Use symbols naturally (%, $, etc.) — they will be escaped automatically
 - DO NOT spell out symbols as words (write "30%" not "30 percent")
 - DO NOT use em dashes or en dashes. Use commas or semicolons.
 - Repaired bullets must stay under 35 words / 220 characters. If adding a keyword would make a bullet too long, rephrase to be tighter rather than appending.
-- If a keyword genuinely cannot be incorporated into any bullet, skip it
+- Remove filler phrases to make room: "using data structures", "using system design principles", "in an agile environment" add no value and can be replaced with the missing keyword + impact.
+- If a keyword genuinely cannot be incorporated with demonstrated impact, skip it
 
 Return:
 - repairedBullets: array of {roleIndex, bulletIndex, text} for ONLY the bullets you changed`;

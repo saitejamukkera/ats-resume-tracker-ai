@@ -14,10 +14,48 @@ export interface ImpactSignals {
   hasResultClause: boolean;
   hasTech: boolean;
   hasTimeframe: boolean;
+  hasOutcome: boolean;
+  isOutcomeFirst: boolean;
+  fillerPatternCount: number;
+  isDescriptionOnly: boolean;
+}
+
+// Filler patterns that add no value — "using data structures and algorithms",
+// "during sprint planning" (as padding), "using system design principles", etc.
+const FILLER_PATTERNS = [
+  /\busing (?:data structures(?: and algorithms)?|system design principles?|design patterns?|best practices|industry (?:best )?practices)\b/i,
+  /\bwith (?:system design principles?|best practices|industry standards)\b/i,
+  /\b(?:collaborated|partnered|worked) with (?:cross-functional |)(?:teams?|stakeholders|colleagues)\b/i,
+  /\bparticipated in (?:agile|scrum|daily standups?|ceremonies)\b/i,
+  /\badhering to (?:coding standards|best practices|team standards)\b/i,
+  /\bfollowing (?:agile|scrum) (?:methodology|practices|principles)\b/i,
+  /\bin an? (?:agile|scrum) environment\b/i,
+  /\bcontribut(?:ed|ing) to (?:team|project) (?:success|goals|objectives)\b/i,
+  /\bensur(?:ed|ing) (?:code quality|high quality|quality standards)\b/i,
+  /\b(?:various|multiple|different) (?:tasks|projects|responsibilities|aspects)\b/i,
+  /\bday-to-day (?:operations|tasks|activities)\b/i,
+];
+
+// Outcome patterns: the bullet communicates a measurable or clear result
+const OUTCOME_PATTERN = /\b(reduc|improv|increas|decreas|eliminat|cut|halv|doubl|sav|enabl|achiev|boost|lower|rais|accelerat|prevent|stabili|drop|shrink|trim|minimiz|maximiz)\w*\s+.{3,}?\b(by|from|to|across|per|within|under|below|above)\b/i;
+
+// Outcome-first: bullet STARTS with the outcome/impact
+const OUTCOME_FIRST_PATTERN = /^(reduced|improved|increased|decreased|eliminated|cut|halved|doubled|stabilized|lowered|raised|accelerated|prevented|minimized|maximized|dropped|trimmed|boosted|shortened|shrank|saved|achieved|delivered|brought)\b/i;
+
+// Description-only: action verb + tech/what, but NO outcome/result/impact
+const DESCRIPTION_ONLY_INDICATORS = [
+  /^(developed|built|created|designed|implemented|configured|set up|wrote|worked on|contributed to|maintained|managed|handled|supported|assisted)\b/i,
+];
+
+function isDescriptionOnly(text: string, signals: Omit<ImpactSignals, 'hasOutcome' | 'isOutcomeFirst' | 'fillerPatternCount' | 'isDescriptionOnly'>): boolean {
+  const startsWithDescription = DESCRIPTION_ONLY_INDICATORS.some(p => p.test(text.trim()));
+  if (!startsWithDescription) return false;
+  const hasAnyOutcome = signals.hasPercentage || signals.hasComparison || signals.hasResultClause || OUTCOME_PATTERN.test(text);
+  return !hasAnyOutcome;
 }
 
 export function detectSignals(text: string, jdKeywords: string[] = []): ImpactSignals {
-  return {
+  const baseSignals = {
     hasPercentage:     /\d+%|\d+x|\d+X/.test(text),
     hasNumber:         /\d/.test(text),
     hasComparison:     /from\s+\S+\s+to\s+\S+|by\s+\d|versus|compared to/i.test(text),
@@ -27,6 +65,17 @@ export function detectSignals(text: string, jdKeywords: string[] = []): ImpactSi
     hasResultClause:   /resulting in|leading to|which\s+(reduced|improved|enabled|saved|cut)|saving|enabling|achieving/i.test(text),
     hasTech:           detectTech(text, jdKeywords),
     hasTimeframe:      /\b(in\s+\d+\s+(days|weeks|months|sprints)|within\s+Q\d|over\s+\d+\s+months|per\s+(day|week|month|sprint))\b/i.test(text),
+  };
+
+  const fillerPatternCount = FILLER_PATTERNS.filter(p => p.test(text)).length;
+  const hasOutcome = OUTCOME_PATTERN.test(text) || baseSignals.hasComparison || baseSignals.hasResultClause;
+
+  return {
+    ...baseSignals,
+    hasOutcome,
+    isOutcomeFirst: OUTCOME_FIRST_PATTERN.test(text.trim()),
+    fillerPatternCount,
+    isDescriptionOnly: isDescriptionOnly(text, baseSignals),
   };
 }
 
@@ -68,7 +117,17 @@ export function scoreBulletImpact(signals: ImpactSignals): number {
   if (signals.hasTech)           score += 5;
   if (signals.hasTimeframe)      score += 5;
 
-  return Math.min(score, 100);
+  // Outcome-first bonus: bullets that LEAD with impact are Tier A material
+  if (signals.isOutcomeFirst)    score += 8;
+  else if (signals.hasOutcome)   score += 3;
+
+  // Filler penalty: each filler pattern dilutes the bullet's signal
+  score -= signals.fillerPatternCount * 8;
+
+  // Description-only penalty: action+tech but no outcome is Tier C
+  if (signals.isDescriptionOnly) score -= 15;
+
+  return Math.max(0, Math.min(score, 100));
 }
 
 export type ImpactStrength = 'strong' | 'medium' | 'weak' | 'none';
@@ -105,6 +164,44 @@ export function detectCategory(text: string): ImpactCategory {
     if (pattern.test(text)) return category;
   }
   return 'uncategorized';
+}
+
+// ── Category Value for Engineering Roles ────────────────────────
+// Not all impact categories are equal on a resume. A recruiter for a
+// backend/payments role cares about performance, scale, reliability,
+// and security. Process work (PR reviews, sprint ceremonies) and
+// generic quality bullets (defect counts, test coverage without
+// system-level framing) are low-value — they describe doing your job,
+// not improving the system.
+//
+// This multiplier is applied by the bullet ranker so that a "Cut PR
+// review cycle time by 27%" bullet (delivery, 0.5x) ranks below
+// "Dropped P95 latency from 850ms to 500ms" (performance, 1.2x)
+// even when the raw IDS + JD relevance scores are similar.
+
+const CATEGORY_VALUE: Record<ImpactCategory, number> = {
+  performance:    1.2,   // latency, throughput, cache — top-tier
+  scale:          1.2,   // users, requests, transactions — top-tier
+  reliability:    1.15,  // uptime, fault tolerance, incidents
+  security:       1.1,   // auth, encryption, compliance
+  cost:           1.05,  // savings, efficiency
+  automation:     0.9,   // CI/CD, pipelines — supporting
+  quality:        0.7,   // test coverage, defects — low value unless system-framed
+  delivery:       0.6,   // sprints, releases, PR cycle time — process work
+  team:           0.5,   // mentoring, collaboration — lowest value on eng resume
+  uncategorized:  0.8,
+};
+
+export function categoryValueMultiplier(category: ImpactCategory): number {
+  return CATEGORY_VALUE[category] ?? 0.8;
+}
+
+/**
+ * Returns true if the category is considered low-value for engineering
+ * resumes. Used by the validator to flag resume-wide category imbalance.
+ */
+export function isLowValueCategory(category: ImpactCategory): boolean {
+  return (CATEGORY_VALUE[category] ?? 0.8) < 0.75;
 }
 
 // ── Credibility Check ──────────────────────────────────────────
@@ -158,11 +255,23 @@ export function generateSuggestion(
     uncategorized: 'what was the measurable outcome of this work?',
   };
 
+  // Filler patterns are always worth calling out
+  if (signals.fillerPatternCount > 0) {
+    return 'Remove filler phrases ("using data structures", "in an agile environment", "collaborated with teams"). Replace with specific outcome or tech detail.';
+  }
+
+  // Description-only bullets need an outcome
+  if (signals.isDescriptionOnly) {
+    return `This bullet describes WHAT you did but not WHAT CHANGED. Lead with the outcome: "Reduced X by Y%" or "Cut Z from A to B". Then explain how. Tip: ${scaleQuestions[category]}`;
+  }
+
   if (strength === 'none') {
-    return `This bullet shows no impact. Tip: ${scaleQuestions[category]}`;
+    return `This bullet shows no impact. Rewrite as outcome-first: "Reduced/Improved/Cut [metric] by [amount] by [action]". Tip: ${scaleQuestions[category]}`;
   }
 
   if (strength === 'weak') {
+    if (!signals.hasOutcome)
+      return 'Add a clear outcome. Stop describing work, start proving results: "Reduced latency by 35%" not "Configured Redis caching".';
     if (!signals.hasImpactVerb)
       return 'Start with a strong impact verb: reduced, eliminated, automated, streamlined...';
     if (!signals.hasCausality)
@@ -170,7 +279,9 @@ export function generateSuggestion(
     return `Add scope: ${scaleQuestions[category]}`;
   }
 
-  // medium
+  // medium — push toward Tier A
+  if (!signals.isOutcomeFirst && signals.hasOutcome)
+    return 'Restructure to lead with outcome: "Reduced P95 latency from 850ms to 500ms by..." instead of "Configured Redis caching, reducing..."';
   if (!signals.hasCausality) return 'Add causality: "...by implementing X" or "...using Y"';
   if (!signals.hasComparison) return 'Add a before→after comparison: "from X to Y"';
   if (!signals.hasScaleIndicator) return `Add scale: ${scaleQuestions[category]}`;
@@ -244,9 +355,10 @@ export function profileRoleImpact(
 
   const total = bullets.length;
   const strongRatio = total > 0 ? distribution.strong / total : 0;
+  const descOnlyCount = analyzed.filter(b => b.signals.isDescriptionOnly).length;
 
   let health: RoleImpactProfile['health'];
-  if (distribution.none > 0)                                                health = 'poor';
+  if (distribution.none > 0 || descOnlyCount > total * 0.3)                health = 'poor';
   else if (credibilityFlags.length > 2)                                     health = 'needs-work';
   else if (strongRatio >= 0.4 && categoryCoverage.length >= 3)              health = 'excellent';
   else if (strongRatio >= 0.25)                                             health = 'good';

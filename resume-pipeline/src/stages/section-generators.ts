@@ -65,11 +65,137 @@ const StrictExperienceSchema = z.object({
 const BUZZWORD_BAN =
   "spearheaded, orchestrated, leveraged, leveraging, utilize, utilized, utilizing, facilitated, championed, pioneered, revolutionized, cutting-edge, best-in-class, world-class, robust, seamless, synergy, synergized, holistic, paradigm, state-of-the-art";
 
+const FILLER_PATTERN_BAN = `
+FILLER PATTERN BAN (these phrases add ZERO value — delete them, never generate them):
+- "using data structures and algorithms"
+- "using system design principles"
+- "using design patterns"
+- "using best practices" / "following best practices"
+- "in an agile/scrum environment"
+- "following agile methodology"
+- "adhering to coding standards"
+- "collaborated with cross-functional teams" (unless tied to a specific outcome)
+- "participated in agile ceremonies"
+- "contributed to team success/goals"
+- "ensuring code quality" / "ensuring high quality"
+- "various tasks/projects/responsibilities"
+- "day-to-day operations/tasks"
+- "during sprint planning" (when used as padding without specific content)
+These are resume noise. If a phrase could appear on ANY engineer's resume
+at ANY company, it's filler. Cut it.`;
+
+const OUTCOME_FIRST_RULES = `
+OUTCOME-FIRST WRITING (this is the #1 improvement that separates strong resumes):
+
+THE RULE: Every bullet must answer "what CHANGED because of your work?"
+Stop describing work. Start proving outcomes.
+
+TIER A BULLETS (aim for 80% of all bullets):
+  - Lead with a measurable outcome or clear result
+  - Include scale, performance, or system-level impact
+  - Have a before/after or percentage improvement
+  Examples:
+    "Reduced P95 latency from 850ms to 500ms by consolidating Redis caching across high-frequency query paths."
+    "Cut CI/CD pipeline runtime from 18 to 12 minutes by restructuring GitHub Actions with Docker layer caching."
+    "Halved defect escape rate to production by raising automated test coverage from 65% to 90% with JUnit 5."
+
+TIER B BULLETS (limit to ~20%):
+  - Have an action with some context but weaker impact signal
+  - Acceptable for supporting bullets, but push toward Tier A when possible
+  Examples:
+    "Established OpenTelemetry distributed tracing across microservices, cutting mean time to root-cause by about 29%."
+
+TIER C BULLETS (DELETE or rewrite — never generate these):
+  - Normal engineering work described without any outcome
+  - Process/collaboration bullets with no measurable result
+  - "Diagnosed 3-5 defects per sprint" — that's just doing your job
+  - "Collaborated with the team to deliver" — says nothing
+  - "Built APIs serving 3K users" — weak without impact
+
+STRUCTURE PREFERENCE (in order of strength):
+  1. OUTCOME-FIRST: "Reduced X by Y% by implementing Z" (STRONGEST)
+  2. ACTION-THEN-IMPACT: "Implemented Z, reducing X by Y%" (GOOD)
+  3. CONTEXT-THEN-OUTCOME: "During Q3 hardening, cut on-call pages by 43% by adding circuit breakers" (GOOD with context)
+  4. ACTION-ONLY: "Configured Redis caching for volunteer endpoints" (WEAK — always add "...cutting queries by 38%")
+
+THE 6-SECOND TEST: A recruiter skims your resume in 6 seconds.
+If they can't see concrete impact in the first 3-4 words of each
+bullet, you've lost them. Front-load the outcome.`;
+
+const CATEGORY_PRIORITY_RULES = `
+80/20 CATEGORY PRIORITIZATION (what a recruiter actually cares about):
+
+The resume must feel like: "this person improves high-scale systems."
+NOT like: "this person does general engineering work."
+
+HIGH-VALUE BULLETS (aim for 80% of all bullets — these get you interviews):
+  - Performance: latency cuts, throughput gains, cache optimization, P95/P99
+  - Scale: request volumes, transaction processing, user counts, data volume
+  - Reliability: fault tolerance, circuit breakers, uptime, incident response
+  - Security: auth hardening, JWT/OAuth, encryption, compliance
+  - Cost: infrastructure savings, efficiency gains
+
+LOW-VALUE BULLETS (limit to 20% MAX — these dilute your strongest story):
+  - Process: PR review cycle time, sprint metrics, review guidelines
+  - Quality (generic): defect counts per sprint, test coverage (unless framed as system impact)
+  - Team: mentoring, collaboration, documentation (unless tied to measurable outcome)
+  - Delivery: shipping features, release management (unless tied to velocity/scale)
+
+KILL LIST — never generate these patterns:
+  - "Diagnosed N defects per sprint" → doing your job, not improving a system
+  - "Cut PR review cycle time by N%" → process work, not engineering impact
+  - "Collaborated with the team" → says nothing about what you built
+  - "Presented at sprint demo" → ceremony attendance, not achievement
+  - "Built APIs serving 3K users" → weak without latency/throughput impact
+
+REFRAME LOW-VALUE INTO HIGH-VALUE:
+  Instead of: "Cut PR review cycle time by 27%"
+  Write:      (DELETE this bullet and replace with a performance/scale bullet)
+
+  Instead of: "Diagnosed 3-5 defects per sprint"
+  Write:      (DELETE — or reframe as: "Resolved 3 payment-flow regressions per sprint cycle, maintaining zero defect carryover across production releases")
+
+  Instead of: "Deployed test coverage suites"
+  Write:      "Halved defect escape rate to production by raising test coverage from 55% to 75% with JUnit 5" (frames quality as RELIABILITY impact)`;
+
+const KEYWORD_INTEGRATION_RULES = `
+MISSING JD KEYWORD INTEGRATION (weave missing tech WITH impact):
+
+When the JD requires a technology (e.g. Kafka, Redis, Kubernetes) that
+the candidate's base resume lists in skills but NOT in experience bullets,
+you MUST naturally weave it into the most relevant experience bullet
+WITH demonstrated impact. Never just name-drop.
+
+STRATEGY FOR WEAVING MISSING KEYWORDS:
+1. Find bullets where the technology would naturally appear:
+   - Kafka → payment processing, event-driven workflows, async pipelines
+   - Redis → caching, session management, rate limiting
+   - Kubernetes → deployment, scaling, container orchestration
+2. Replace a low-value bullet or filler phrase with the keyword + impact:
+   - Replace "using system design principles" with "using Kafka event streams"
+   - Replace "with efficient lookup algorithms" with "with Redis caching"
+3. Always pair the keyword with a measurable outcome:
+   BAD:  "...using Kafka for message processing."
+   GOOD: "...publishing payment events to Kafka topics, reducing settlement
+          lag from batch to near-real-time processing."
+   BAD:  "...with Redis caching."
+   GOOD: "...with Redis caching, cutting P95 response latency from 850ms to 500ms."
+
+PRIORITY: If you must choose between keeping a low-value process bullet
+and replacing it with a keyword+impact bullet, ALWAYS replace.`;
+
 const ANTI_AI_RULES = `
 ANTI-AI DETECTION RULES (violating these makes your output obviously AI-written):
 
-HIGHEST-PRIORITY RULE — PERSONAL CONTEXT MARKERS (this is what real
-engineering resumes look like; AI resumes skip it):
+${OUTCOME_FIRST_RULES}
+
+${CATEGORY_PRIORITY_RULES}
+
+${KEYWORD_INTEGRATION_RULES}
+
+${FILLER_PATTERN_BAN}
+
+PERSONAL CONTEXT MARKERS (this is what real engineering resumes look like):
 - AT LEAST 40% of bullets in EACH role must contain a personal context
   marker that grounds the work in a specific time, ceremony, or team.
 - Each role with 5+ bullets MUST include at least TWO quarter+year
@@ -127,16 +253,37 @@ OTHER ANTI-AI RULES:
   "Owned the CI pipeline. 400+ builds/month, 99.2% green."`;
 
 const FEWSHOT_EXAMPLES = `
-FEW-SHOT EXAMPLES (AI-sounding → humanized, plus framing for platform scale):
+FEW-SHOT EXAMPLES:
+
+=== OUTCOME-FIRST REWRITES (description → impact) ===
+
+BEFORE (Tier C — describes work, no outcome):
+  "Configured Redis caching and NoSQL query optimization using Cassandra for volunteer discovery endpoints."
+AFTER (Tier A — outcome first, then method):
+  "Cut redundant database queries by 38% and brought median API response time below 120ms by configuring Redis caching and Cassandra query optimization for volunteer discovery endpoints."
+
+BEFORE (Tier C — normal engineering work):
+  "Diagnosed 3 to 5 API defects per sprint by tracing request flows through Spring MVC controllers."
+AFTER (Tier A — prove the outcome, not the activity):
+  "Resolved API defects within sprint cycle by tracing request flows through Spring MVC controllers and PostgreSQL repositories, maintaining zero defect carryover across Q1 2026."
+
+BEFORE (Tier B — has metric but buries it):
+  "Addressed a slow CI/CD pipeline by restructuring GitHub Actions workflows with Docker layer caching."
+AFTER (Tier A — lead with the impact):
+  "Cut CI/CD pipeline runtime from 18 to 12 minutes by restructuring GitHub Actions workflows with Docker layer caching."
+
+=== FILLER PATTERN REMOVAL ===
+
+BEFORE: "Traced and enhanced backend API modules using system design principles within a microservices architecture."
+AFTER:  "Traced and enhanced backend API modules behind AWS API Gateway using Spring Boot, supporting 8K-12K daily requests across Truist's digital banking platform."
+
+BEFORE: "Trained on and enhanced RESTful APIs using Java, Spring Boot, and data structures principles."
+AFTER:  "Enhanced RESTful APIs for the member portal using Java and Spring Boot, supporting 5K+ daily API requests across healthcare portal services."
+
+=== AI → HUMAN REWRITES ===
 
 AI:  "Spearheaded the development of innovative software solutions to optimize efficiency."
 OK:  "Built a Python ETL that replaced 6 spreadsheets, cutting manual entry by 10 hours/week."
-
-AI:  "Driven leader with expertise in full-stack development, managing cross-functional teams."
-OK:  "Led 4 engineers on the payments team to ship the new checkout flow, lifting conversion 8%."
-
-AI:  "Strong analytical skills used to improve financial performance and drive strategic initiatives."
-OK:  "Reworked the Q2 forecasting model, closing a recurring $120K variance against plan."
 
 AI:  "Leveraged cutting-edge cloud technologies to build robust, scalable solutions."
 OK:  "Moved the job queue from RabbitMQ to SQS, halving infra cost and smoothing peak-hour spikes."
@@ -277,6 +424,20 @@ export async function generateSummary(
     return srcs && srcs.length > 0 ? `${s} (backed by ${srcs.join(" + ")})` : s;
   });
 
+  // Detect the JD's primary domain for positioning
+  const domainKeywords = {
+    payments: /\b(payment|transaction|fintech|billing|checkout|settlement|ACH|wire transfer)\b/i,
+    banking: /\b(banking|financial|bank|lending|credit|debit|mortgage)\b/i,
+    healthcare: /\b(health|medical|HIPAA|clinical|patient|EHR|pharmacy)\b/i,
+    ecommerce: /\b(ecommerce|e-commerce|retail|shopping|marketplace|cart)\b/i,
+    cloud: /\b(cloud|infrastructure|platform|SaaS|IaaS|PaaS)\b/i,
+  };
+  const jdText = `${jd.domainFocus} ${jd.keyResponsibilities.join(" ")} ${jd.keyPhrases.join(" ")}`;
+  const detectedDomains = Object.entries(domainKeywords)
+    .filter(([, pattern]) => pattern.test(jdText))
+    .map(([domain]) => domain);
+  const primaryDomain = detectedDomains[0] || jd.domainFocus || "distributed systems";
+
   const prompt = `Rewrite this resume summary for a ${jd.position} role at ${jd.company}.
 
 CURRENT SUMMARY:
@@ -310,15 +471,27 @@ TECH ALIGNMENT (ground truth — three buckets):
    Experience section):
    ${buckets.missing.length ? buckets.missing.join(", ") : "(none — full coverage)"}
 
+POSITIONING STRATEGY (critical — this is what makes the summary land):
+The summary must position the candidate as a SPECIALIST, not a generalist.
+- Primary domain detected from JD: "${primaryDomain}"
+- The candidate should read as: "backend engineer who improves ${primaryDomain} systems at scale"
+- NOT as: "general backend engineer who knows many things"
+- Lead with the domain and the candidate's strongest outcome area
+  (performance optimization, fault tolerance, high-availability systems, etc.)
+- The summary should make a hiring manager think: "this person has done
+  exactly what we need" within the first 6 seconds of reading.
+
 RULES:
 - 2-3 sentences MAXIMUM. Punchy and scannable — recruiters spend 6 seconds.
-- First sentence: who you are + years of experience + core domain.
+- First sentence: who you are + years of experience + SPECIFIC domain positioning
+  (e.g. "Backend Software Engineer with ${Math.floor(profile.yearsOfExperience)}+ years designing
+  high-throughput ${primaryDomain} systems" — NOT "Software Engineer with experience").
 - Second sentence: 3-5 most relevant technical skills chosen ONLY from
-  buckets 1 and 2 above. Prefer bucket 1 (explicit) — pull from bucket
-  2 (implicit) only when the explicit coverage doesn't carry the
-  JD-relevant signal on its own. NEVER name anything from bucket 3 —
-  that is resume fraud.
-- Optional third sentence: one standout achievement or differentiator.
+  buckets 1 and 2 above, framed around the JD's key responsibilities.
+  Prefer bucket 1 (explicit). NEVER name anything from bucket 3.
+- Optional third sentence: one standout achievement that proves domain expertise
+  (e.g. "Consistently delivers against high-availability SLAs across
+  AWS-hosted ${primaryDomain} infrastructure.").
 - Mirror JD language and priorities naturally. Do NOT paste long JD phrases.
 - Do NOT list every skill — that's what the Skills section is for.
 - Do NOT start with "Results-driven", "Highly motivated", "Dynamic", "Passionate about".

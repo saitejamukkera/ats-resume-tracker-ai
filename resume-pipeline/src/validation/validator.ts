@@ -5,7 +5,7 @@
 import type { GeneratedSections, GeneratedRole, ValidationError } from '../schemas/pipeline.js';
 import type { JDAnalysis } from '../schemas/jd-analysis.js';
 import type { PipelineConfig } from '../schemas/pipeline.js';
-import { analyzeBullet, type BulletImpactAnalysis } from '../impact/detector.js';
+import { analyzeBullet, isLowValueCategory, type BulletImpactAnalysis } from '../impact/detector.js';
 
 export interface ValidationResult {
   pass: boolean;
@@ -107,6 +107,29 @@ export function validateSections(
     }
   }
 
+  // ── 2.45. Category Balance Check ────────────────────────────
+  // Flag when >25% of kept bullets are in low-value categories
+  // (quality, delivery, team). These dilute the resume's positioning
+  // as a performance/scale/reliability engineer.
+  {
+    const allAnalyses = [...bulletAnalyses.values()].flat();
+    const totalBullets = allAnalyses.length;
+    const lowValueBullets = allAnalyses.filter(b => isLowValueCategory(b.category));
+
+    if (totalBullets > 0 && lowValueBullets.length / totalBullets > 0.25) {
+      for (const bullet of lowValueBullets) {
+        errors.push({
+          section: 'experience',
+          rule: 'low-value-category',
+          severity: 'warning',
+          message: `Low-value category "${bullet.category}" bullet dilutes positioning: "${bullet.text.substring(0, 80)}..."`,
+          offendingContent: bullet.text,
+          suggestion: `Rewrite to frame as performance/scale/reliability impact, or replace with a stronger bullet. Process work (PR reviews, defect counts, sprint metrics) ranks below system-level improvements.`,
+        });
+      }
+    }
+  }
+
   // ── 2.5. Bullet Length Check ─────────────────────────────────
   const BULLET_WARN_WORDS = 35;
   const BULLET_CRITICAL_WORDS = 45;
@@ -140,6 +163,35 @@ export function validateSections(
     }
   }
 
+  // ── 2.6. Description-Only Bullet Check ─────────────────────────
+  for (let i = 0; i < sections.experience.length; i++) {
+    const role = sections.experience[i];
+    const analyses = bulletAnalyses.get(i) || [];
+    for (let j = 0; j < analyses.length; j++) {
+      const bullet = analyses[j];
+      if (bullet.signals.isDescriptionOnly) {
+        errors.push({
+          section: 'experience',
+          rule: 'description-only',
+          severity: 'critical',
+          message: `Description-only bullet (no outcome): "${bullet.text.substring(0, 80)}..."`,
+          offendingContent: bullet.text,
+          suggestion: 'Lead with outcome: "Reduced/Improved/Cut [metric] by [amount] by [action]". What CHANGED because of this work?',
+        });
+      }
+      if (bullet.signals.fillerPatternCount > 0) {
+        errors.push({
+          section: 'experience',
+          rule: 'filler-pattern',
+          severity: 'critical',
+          message: `Contains filler pattern that adds no value: "${bullet.text.substring(0, 80)}..."`,
+          offendingContent: bullet.text,
+          suggestion: 'Remove filler phrases like "using data structures", "in an agile environment". Replace with specific tech or outcome.',
+        });
+      }
+    }
+  }
+
   // ── 3. Context-Aware Phrasing Check ───────────────────────────
   const phraseTiers: { pattern: RegExp; severity: 'critical' | 'warning'; reason: string }[] = [
     // TIER 1: CRITICAL — always lazy as opener
@@ -152,11 +204,17 @@ export function validateSections(
     // TIER 2: WARNING
     { pattern: /^(worked on|contributed to)/i,
       severity: 'warning', reason: 'Could be stronger — specify THE action' },
-    // TIER 3: ALWAYS BAD
+    // TIER 3: ALWAYS BAD — filler
     { pattern: /various (tasks|projects|responsibilities)/i,
       severity: 'critical', reason: 'Vague scope — name the actual tasks/projects' },
     { pattern: /day-to-day (operations|tasks|activities)/i,
       severity: 'critical', reason: 'Filler phrase — describe the actual work' },
+    { pattern: /\busing (?:data structures(?: and algorithms)?|system design principles?)\b/i,
+      severity: 'critical', reason: 'Resume filler — remove "using data structures/system design principles"' },
+    { pattern: /\bin an? (?:agile|scrum) environment\b/i,
+      severity: 'critical', reason: 'Filler — every company claims agile. Cut this.' },
+    { pattern: /\badhering to (?:coding standards|best practices)\b/i,
+      severity: 'critical', reason: 'Filler — this is expected, not impressive' },
   ];
 
   for (const role of sections.experience) {

@@ -28,7 +28,7 @@ import type {
   PipelineConfig,
 } from "../schemas/pipeline.js";
 import type { ExperienceBullet } from "../schemas/experience.js";
-import { detectSignals, scoreBulletImpact } from "../impact/detector.js";
+import { detectSignals, scoreBulletImpact, detectCategory, categoryValueMultiplier } from "../impact/detector.js";
 
 // ── Weights ────────────────────────────────────────────────────
 // Tuned so that a bullet with strong required-skill coverage beats
@@ -49,6 +49,10 @@ const WEIGHTS = {
   METRIC_BONUS: 5,
   IMPACT_DIVISOR: 10, // IDS score is 0-100; /10 → cap 10
   IMPACT_CAP: 10,
+  OUTCOME_FIRST_BONUS: 6,
+  OUTCOME_BONUS: 3,
+  DESCRIPTION_ONLY_PENALTY: -8,
+  FILLER_PENALTY_PER: -4,
 };
 
 // Very common words we never want to count as a "content word match".
@@ -290,14 +294,37 @@ export function scoreBulletRelevance(
   const impactRaw = scoreBulletImpact(signals) / WEIGHTS.IMPACT_DIVISOR;
   const impactScore = Math.min(impactRaw, WEIGHTS.IMPACT_CAP);
 
-  const total =
+  // Outcome-first bonus: reward bullets that lead with impact
+  const outcomeScore = signals.isOutcomeFirst
+    ? WEIGHTS.OUTCOME_FIRST_BONUS
+    : signals.hasOutcome
+      ? WEIGHTS.OUTCOME_BONUS
+      : 0;
+
+  // Description-only penalty: punish bullets that describe without proving
+  const descPenalty = signals.isDescriptionOnly ? WEIGHTS.DESCRIPTION_ONLY_PENALTY : 0;
+
+  // Filler penalty: each filler pattern found costs points
+  const fillerPenalty = signals.fillerPatternCount * WEIGHTS.FILLER_PENALTY_PER;
+
+  // Category-value multiplier: performance/scale/reliability bullets
+  // rank higher than process/team/quality bullets on engineering resumes.
+  const category = detectCategory(bulletText);
+  const categoryMultiplier = categoryValueMultiplier(category);
+
+  const rawTotal =
     requiredScore +
     preferredScore +
     keyPhraseScore +
     responsibilityScore +
     reportedScore +
     metricScore +
-    impactScore;
+    impactScore +
+    outcomeScore +
+    descPenalty +
+    fillerPenalty;
+
+  const total = rawTotal * categoryMultiplier;
 
   // Reference jd to keep future extensions linkable (e.g. domainFocus).
   void jd;
