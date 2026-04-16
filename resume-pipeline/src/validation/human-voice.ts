@@ -367,21 +367,55 @@ export async function humanizePass(
     })
     .join("\n");
 
-  // Build score-driven diagnostic — tell the LLM EXACTLY what to fix
+  // ── Always check for verb repetition (the #1 AI signal) ─────
+  // This runs regardless of verbDiversity score because AI detection
+  // flags it even when the overall score is high.
   const issues: string[] = [];
+  const allBullets = sections.experience.flatMap((r) => r.bullets);
+  const allVerbs = allBullets.map((b) => b.trim().split(/\s+/)[0].toLowerCase());
+  const verbCounts = new Map<string, number>();
+  allVerbs.forEach((v) => verbCounts.set(v, (verbCounts.get(v) || 0) + 1));
+  const repeatedVerbs = [...verbCounts.entries()].filter(([, c]) => c > 2);
 
-  if (voiceScore.verbDiversity < 0.6) {
-    // Find repeated verbs
-    const allBullets = sections.experience.flatMap((r) => r.bullets);
-    const verbs = allBullets.map((b) => b.trim().split(/\s+/)[0].toLowerCase());
-    const verbCounts = new Map<string, number>();
-    verbs.forEach((v) => verbCounts.set(v, (verbCounts.get(v) || 0) + 1));
+  if (repeatedVerbs.length > 0) {
+    // Find exact bullet positions for each repeated verb
+    const verbInstructions = repeatedVerbs
+      .map(([verb, count]) => {
+        // Find which bullets start with this verb
+        const positions: string[] = [];
+        let bulletIdx = 0;
+        for (let ri = 0; ri < sections.experience.length; ri++) {
+          for (let bi = 0; bi < sections.experience[ri].bullets.length; bi++) {
+            const bVerb = sections.experience[ri].bullets[bi].trim().split(/\s+/)[0].toLowerCase();
+            if (bVerb === verb) {
+              positions.push(`[${ri}-${bi}]`);
+            }
+            bulletIdx++;
+          }
+        }
+        return `"${verb}" appears ${count} times at bullets ${positions.join(", ")}. Keep it in at most 1 bullet. Change the opening verb in the others.`;
+      })
+      .join("\n   ");
+
+    // Build avoid list — verbs already used, so the LLM doesn't swap into another collision
+    const usedVerbs = [...verbCounts.keys()].filter((v) => verbCounts.get(v)! >= 1);
+    const suggestedVerbs = [
+      "tackled", "shipped", "debugged", "proposed", "configured",
+      "migrated", "automated", "resolved", "profiled", "streamlined",
+      "refactored", "consolidated", "integrated", "eliminated", "established",
+      "wrote", "owned", "architected", "introduced", "delivered",
+    ].filter((v) => !usedVerbs.includes(v));
+
+    issues.push(
+      `VERB REPETITION (CRITICAL — fix this first):\n   ${verbInstructions}\n   ALREADY USED verbs (do NOT use these): ${usedVerbs.join(", ")}\n   USE THESE INSTEAD: ${suggestedVerbs.slice(0, 10).join(", ")}\n   You MUST change the opening word of the specified bullets.`,
+    );
+  } else if (voiceScore.verbDiversity < 0.6) {
     const repeated = [...verbCounts.entries()]
       .filter(([, c]) => c > 1)
       .map(([v, c]) => `"${v}" (${c}x)`)
       .join(", ");
     issues.push(
-      `VERB REPETITION: These verbs are overused: ${repeated}. Replace repeated verbs with varied alternatives: tackled, shipped, debugged, proposed, configured, migrated, automated, resolved, profiled, etc.`,
+      `VERB REPETITION: These verbs are overused: ${repeated}. Replace repeated verbs with varied alternatives.`,
     );
   }
 
@@ -419,10 +453,13 @@ export async function humanizePass(
     );
   }
 
-  // Add AI detection signals
-  if (aiSignals.length > 0) {
+  // Add non-verb AI detection signals (verb issues already handled above with bullet indices)
+  const nonVerbSignals = aiSignals.filter(
+    (s) => !s.toLowerCase().includes("verb"),
+  );
+  if (nonVerbSignals.length > 0) {
     issues.push(
-      `AI DETECTION SIGNALS: ${aiSignals.join(". ")}`,
+      `AI DETECTION SIGNALS: ${nonVerbSignals.join(". ")}`,
     );
   }
 
