@@ -447,16 +447,22 @@ export async function runPipeline(
     );
   }
 
-  // ── Stage 4.9: Humanize Pass (reactive — only if score too low) ──
+  // ── Stage 4.9: Humanize Pass (reactive — score too low OR AI risk detected) ──
   const HUMANIZE_THRESHOLD = 60;
-  if (
+  const shouldHumanize =
     config.modules.useAntiAIDetection &&
     humanVoiceResult &&
-    humanVoiceResult.overall < HUMANIZE_THRESHOLD
-  ) {
+    (humanVoiceResult.overall < HUMANIZE_THRESHOLD ||
+      (aiDetectionResult && aiDetectionResult.risk !== "low"));
+
+  if (shouldHumanize && humanVoiceResult) {
+    const reason =
+      humanVoiceResult.overall < HUMANIZE_THRESHOLD
+        ? `Human Voice ${humanVoiceResult.overall} < ${HUMANIZE_THRESHOLD}`
+        : `AI Detection Risk: ${aiDetectionResult!.risk.toUpperCase()}`;
     try {
       console.log(
-        `[pipeline] Human Voice ${humanVoiceResult.overall} < ${HUMANIZE_THRESHOLD}, triggering humanize pass...`,
+        `[pipeline] ${reason}, triggering humanize pass...`,
       );
       telemetry.startStage("humanize-pass");
       const humanizeResult = await humanizePass(
@@ -488,14 +494,10 @@ export async function runPipeline(
       console.warn(`[pipeline] Humanize pass failed: ${msg}`);
       telemetry.failStage("humanize-pass", msg);
     }
-  } else if (
-    config.modules.useAntiAIDetection &&
-    humanVoiceResult &&
-    humanVoiceResult.overall >= HUMANIZE_THRESHOLD
-  ) {
+  } else if (config.modules.useAntiAIDetection && humanVoiceResult) {
     telemetry.skipStage(
       "humanize-pass",
-      `Human Voice score ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} threshold`,
+      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} and AI risk is low`,
     );
   }
 
