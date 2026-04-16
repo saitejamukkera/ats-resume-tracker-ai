@@ -10,6 +10,7 @@ import type {
   RepairResult,
   InventedMetricEntry,
 } from "../schemas/pipeline.js";
+import type { BulletRankingTrace } from "../stages/bullet-ranker.js";
 import { SnapshotStore } from "./debug.js";
 
 export class PipelineTelemetry {
@@ -25,6 +26,7 @@ export class PipelineTelemetry {
   private repairResults: RepairResult[] = [];
   private inventedMetrics: InventedMetricEntry[] = [];
   private candidateProfileSnapshot: GenerationTrace["candidateProfile"] | undefined;
+  private bulletRanking: BulletRankingTrace | undefined;
 
   readonly snapshotStore: SnapshotStore;
 
@@ -114,6 +116,10 @@ export class PipelineTelemetry {
     this.candidateProfileSnapshot = profile;
   }
 
+  recordBulletRanking(trace: BulletRankingTrace): void {
+    this.bulletRanking = trace;
+  }
+
   finalize(
     status: "success" | "partial" | "failed",
     scores: {
@@ -160,6 +166,7 @@ export class PipelineTelemetry {
       inventedMetrics:
         this.inventedMetrics.length > 0 ? this.inventedMetrics : undefined,
       candidateProfile: this.candidateProfileSnapshot,
+      bulletRanking: this.bulletRanking,
       status,
       errors: this.errors,
     };

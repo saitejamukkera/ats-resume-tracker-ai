@@ -2,6 +2,7 @@
 // Core pipeline types — input, output, config.
 
 import type { JDAnalysis } from "./jd-analysis.js";
+import type { BulletRankingTrace } from "../stages/bullet-ranker.js";
 
 // ── Optional Module Flags ───────────────────────────────────────
 export interface PipelineModules {
@@ -21,6 +22,13 @@ export interface PipelineConfig {
   constraints: {
     minBulletsPerRole: number;
     maxBulletsPerRole: number;
+    /**
+     * Resume-wide hard cap on total bullets across all experience
+     * roles. Enforced deterministically by the bullet-ranker stage
+     * after per-role trimming. Prevents long-tenure resumes from
+     * ballooning past recruiter scan tolerance. Default 22.
+     */
+    maxBulletsTotal: number;
     metricMinRatio: number;
     metricMaxRatio: number;
     jdRelevanceMinRatio: number;
@@ -64,8 +72,9 @@ export const DEFAULT_MODULES: PipelineModules = {
 export const DEFAULT_CONFIG: PipelineConfig = {
   modules: { ...DEFAULT_MODULES },
   constraints: {
-    minBulletsPerRole: 8,
-    maxBulletsPerRole: 12,
+    minBulletsPerRole: 5,
+    maxBulletsPerRole: 8,
+    maxBulletsTotal: 22,
     metricMinRatio: 0.6,
     metricMaxRatio: 0.85,
     jdRelevanceMinRatio: 0.5,
@@ -237,6 +246,13 @@ export interface GenerationTrace {
     technologiesUsed: string[];
     domainCategories: string[];
   };
+  /**
+   * Per-role bullet ranking + trimming breakdown from Stage 3.6.
+   * Exposes scores, matched JD skills, and drop reasons for every
+   * bullet so the UI (or an audit) can show WHY the final resume
+   * looks the way it does.
+   */
+  bulletRanking?: BulletRankingTrace;
   status: "success" | "partial" | "failed";
   errors: Array<{ stage: string; message: string }>;
 }

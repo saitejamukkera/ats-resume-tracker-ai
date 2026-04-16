@@ -22,6 +22,10 @@ export function validateSections(
   const bulletAnalyses = new Map<number, BulletImpactAnalysis[]>();
 
   // ── 1. Bullet count per role ──────────────────────────────────
+  // Note: the upper-bound check (maxBulletsPerRole) is enforced
+  // deterministically upstream by the bullet-ranker stage, which
+  // drops lowest-scoring bullets until each role fits the cap. We
+  // only validate the lower bound here.
   for (let i = 0; i < sections.experience.length; i++) {
     const role = sections.experience[i];
     if (role.bullets.length < config.constraints.minBulletsPerRole) {
@@ -30,14 +34,6 @@ export function validateSections(
         rule: 'min-bullets',
         severity: 'critical',
         message: `${role.roleTitle}: only ${role.bullets.length} bullets (min ${config.constraints.minBulletsPerRole})`,
-      });
-    }
-    if (role.bullets.length > config.constraints.maxBulletsPerRole) {
-      errors.push({
-        section: 'experience',
-        rule: 'max-bullets',
-        severity: 'warning',
-        message: `${role.roleTitle}: ${role.bullets.length} bullets (max ${config.constraints.maxBulletsPerRole})`,
       });
     }
   }

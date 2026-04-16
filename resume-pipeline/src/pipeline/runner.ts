@@ -35,6 +35,11 @@ import { buildCandidateProfile } from "../stages/candidate-profile.js";
 import { categorizeJdSkills } from "../stages/implicit-skills.js";
 import { buildRoleBriefs } from "../stages/bullet-brief.js";
 import { buildPlans } from "../stages/bullet-plan.js";
+import {
+  rankAndTrim,
+  buildRankingTrace,
+  type RankAndTrimConstraints,
+} from "../stages/bullet-ranker.js";
 import type { ExperienceBullet } from "../schemas/experience.js";
 import type {
   PipelineInput,
@@ -354,6 +359,56 @@ export async function runPipeline(
       }
     }
   }
+
+  // ── Stage 3.6: Bullet Relevance Ranking + Trimming ────────────
+  // Deterministic, 0 LLM calls. Scores every rewritten bullet against
+  // the JD (required/preferred skills, key phrases, responsibilities,
+  // LLM-reported keywords, metric, IDS impact), reorders bullets
+  // WITHIN each role by descending relevance, and enforces per-role
+  // + resume-wide caps. Runs BEFORE gap repair / humanize so those
+  // stages only touch bullets we're actually keeping. Chronological
+  // order across roles is preserved — only in-role order changes.
+  telemetry.startStage("bullet-ranking");
+  const smallestRoleSize = Math.min(
+    ...parsed.experience.map((r) => r.bullets.length),
+  );
+  const rankConstraints: RankAndTrimConstraints = {
+    minBulletsPerRole: Math.min(
+      config.constraints.minBulletsPerRole,
+      smallestRoleSize,
+    ),
+    maxBulletsPerRole: config.constraints.maxBulletsPerRole,
+    maxBulletsTotal: config.constraints.maxBulletsTotal,
+  };
+  const rankResult = rankAndTrim(
+    experienceResult.roles,
+    experienceResult.bullets,
+    jd,
+    rankConstraints,
+  );
+  const rankingTrace = buildRankingTrace(rankResult, rankConstraints);
+  telemetry.recordBulletRanking(rankingTrace);
+  // Swap in the trimmed + reordered roles/structured bullets so that
+  // ALL downstream stages — invented-metric collection, validator,
+  // ATS scorer, gap repair, humanize, assembler — operate on the
+  // final bullet set. Because the structured bullets are reordered
+  // in lockstep, inventedMetrics indexes collected below are already
+  // correct for the final resume (no remap needed).
+  experienceResult.roles = rankResult.roles;
+  experienceResult.bullets = rankResult.structuredBullets;
+  telemetry.endStage("bullet-ranking");
+
+  const rankSummary = rankingTrace.roles
+    .map((r) => {
+      const label = r.company || r.roleTitle || `role-${r.roleIndex}`;
+      return `${label}: ${r.originalBulletCount}→${r.keptBulletCount}`;
+    })
+    .join(", ");
+  console.log(
+    `[pipeline] Bullet ranking: ${rankSummary} ` +
+      `(dropped by role-cap=${rankResult.droppedByRoleCap}, ` +
+      `total-cap=${rankResult.droppedByTotalCap}, total=${rankingTrace.totals.keptBullets}/${rankingTrace.totals.originalBullets})`,
+  );
 
   // Deterministic: reorder skills by JD relevance
   const reorderedSkills = reorderSkills(parsed.skills, jd);
