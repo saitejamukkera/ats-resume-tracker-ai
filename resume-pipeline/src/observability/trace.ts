@@ -105,7 +105,12 @@ export class PipelineTelemetry {
 
   finalize(
     status: "success" | "partial" | "failed",
-    scores: { ats: number; impactScore: number },
+    scores: {
+      ats: number;
+      impactScore: number;
+      humanVoice?: number;
+      aiDetectionRisk?: "low" | "medium" | "high";
+    },
     validation: {
       totalChecks: number;
       passed: number;

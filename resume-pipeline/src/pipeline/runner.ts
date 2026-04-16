@@ -16,6 +16,14 @@ import { repairKeywordGaps } from "../stages/keyword-gap-repair.js";
 import { validateSections } from "../validation/validator.js";
 import { repairBullets } from "../validation/repair.js";
 import { calculateATSScore } from "../validation/ats-scorer.js";
+import {
+  scoreHumanVoice,
+  estimateAIDetectionRisk,
+} from "../validation/human-voice.js";
+import type {
+  HumanVoiceScore,
+  AIDetectionResult,
+} from "../validation/human-voice.js";
 import { profileRoleImpact } from "../impact/detector.js";
 import { PipelineTelemetry } from "../observability/trace.js";
 import { RateLimitError } from "../observability/llm-wrapper.js";
@@ -364,6 +372,52 @@ export async function runPipeline(
     telemetry.failStage("keyword-extractor", msg);
   }
 
+  // ── Stage 4.8: Human Voice + Anti-AI Scoring ──────────────────
+  let humanVoiceResult: HumanVoiceScore | undefined;
+  let aiDetectionResult: AIDetectionResult | undefined;
+
+  const allExperienceBullets = sections.experience.flatMap((r) => r.bullets);
+
+  if (config.modules.useHumanVoiceScoring) {
+    telemetry.startStage("human-voice");
+    humanVoiceResult = scoreHumanVoice(allExperienceBullets);
+    console.log(
+      `[pipeline] Human Voice Score: ${humanVoiceResult.overall}/100 ` +
+        `(verb=${humanVoiceResult.verbDiversity}, length=${humanVoiceResult.lengthVariance}, ` +
+        `metrics=${humanVoiceResult.metricsBalance}, buzzwords=${humanVoiceResult.buzzwordDensity}, ` +
+        `patterns=${humanVoiceResult.sentencePatterns})`,
+    );
+    telemetry.endStage("human-voice");
+  } else {
+    telemetry.skipStage(
+      "human-voice",
+      "Module disabled (useHumanVoiceScoring=false)",
+    );
+  }
+
+  if (config.modules.useAntiAIDetection) {
+    telemetry.startStage("anti-ai-detection");
+    aiDetectionResult = estimateAIDetectionRisk(allExperienceBullets);
+    console.log(
+      `[pipeline] AI Detection Risk: ${aiDetectionResult.risk.toUpperCase()}` +
+        (aiDetectionResult.signals.length > 0
+          ? ` — ${aiDetectionResult.signals.join("; ")}`
+          : ""),
+    );
+    if (aiDetectionResult.risk === "high") {
+      pipelineStatus = "partial";
+      console.warn(
+        "[pipeline] HIGH AI detection risk — resume may be flagged by recruiters",
+      );
+    }
+    telemetry.endStage("anti-ai-detection");
+  } else {
+    telemetry.skipStage(
+      "anti-ai-detection",
+      "Module disabled (useAntiAIDetection=false)",
+    );
+  }
+
   // ── Stage 5: LaTeX Assembly ───────────────────────────────────
   emit({ type: "stage-start", stage: "latex-assembler" });
   telemetry.startStage("latex-assembler");
@@ -486,7 +540,12 @@ export async function runPipeline(
   // ── Finalize Trace ────────────────────────────────────────────
   const trace = telemetry.finalize(
     pipelineStatus,
-    { ats: atsScore.overall, impactScore },
+    {
+      ats: atsScore.overall,
+      impactScore,
+      humanVoice: humanVoiceResult?.overall,
+      aiDetectionRisk: aiDetectionResult?.risk,
+    },
     {
       totalChecks: validationResult.errors.length,
       passed:
@@ -514,7 +573,10 @@ export async function runPipeline(
   );
 
   console.log(
-    `[pipeline] Complete in ${trace.durationMs}ms | Status: ${pipelineStatus} | ATS: ${atsScore.overall} | Impact: ${impactScore} | LLM calls: ${trace.cost.llmCalls}`,
+    `[pipeline] Complete in ${trace.durationMs}ms | Status: ${pipelineStatus} | ATS: ${atsScore.overall} | Impact: ${impactScore}` +
+      (humanVoiceResult ? ` | HumanVoice: ${humanVoiceResult.overall}` : "") +
+      (aiDetectionResult ? ` | AI-Risk: ${aiDetectionResult.risk}` : "") +
+      ` | LLM calls: ${trace.cost.llmCalls}`,
   );
 
   emit({

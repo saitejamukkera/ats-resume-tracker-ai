@@ -32,8 +32,8 @@ export interface PipelineConfig {
 
 export const DEFAULT_MODULES: PipelineModules = {
   usePlanner: false,
-  useHumanVoiceScoring: false,
-  useAntiAIDetection: false,
+  useHumanVoiceScoring: true,
+  useAntiAIDetection: true,
   useRecruiterScoring: false,
   useCareerVault: false,
   useRAG: false,
@@ -162,6 +162,8 @@ export interface GenerationTrace {
   scores: {
     ats: number;
     impactScore: number;
+    humanVoice?: number;
+    aiDetectionRisk?: "low" | "medium" | "high";
   };
   validation: {
     totalChecks: number;
