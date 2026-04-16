@@ -8,6 +8,7 @@ import type {
   PipelineConfig,
   FailedRule,
   RepairResult,
+  InventedMetricEntry,
 } from "../schemas/pipeline.js";
 import { SnapshotStore } from "./debug.js";
 
@@ -22,6 +23,8 @@ export class PipelineTelemetry {
   private errors: Array<{ stage: string; message: string }> = [];
   private failedRules: FailedRule[] = [];
   private repairResults: RepairResult[] = [];
+  private inventedMetrics: InventedMetricEntry[] = [];
+  private candidateProfileSnapshot: GenerationTrace["candidateProfile"] | undefined;
 
   readonly snapshotStore: SnapshotStore;
 
@@ -103,6 +106,14 @@ export class PipelineTelemetry {
     this.repairResults = results;
   }
 
+  recordInventedMetrics(entries: InventedMetricEntry[]): void {
+    this.inventedMetrics = entries;
+  }
+
+  recordCandidateProfile(profile: GenerationTrace["candidateProfile"]): void {
+    this.candidateProfileSnapshot = profile;
+  }
+
   finalize(
     status: "success" | "partial" | "failed",
     scores: {
@@ -146,6 +157,9 @@ export class PipelineTelemetry {
       failedRules: this.failedRules.length > 0 ? this.failedRules : undefined,
       repairResults:
         this.repairResults.length > 0 ? this.repairResults : undefined,
+      inventedMetrics:
+        this.inventedMetrics.length > 0 ? this.inventedMetrics : undefined,
+      candidateProfile: this.candidateProfileSnapshot,
       status,
       errors: this.errors,
     };

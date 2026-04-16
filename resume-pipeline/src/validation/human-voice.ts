@@ -87,6 +87,7 @@ export function scoreHumanVoice(bullets: string[]): HumanVoiceScore {
 
   // ── Buzzword Density (15% of score) ────────────────────────
   // Words that only ChatGPT uses. Real engineers don't talk like this.
+  // Research-report additions flag the most-seen AI phrases in resumes.
   const buzzwords = [
     "spearheaded",
     "orchestrated",
@@ -110,6 +111,15 @@ export function scoreHumanVoice(bullets: string[]): HumanVoiceScore {
     "facilitated",
     "champion",
     "championed",
+    // Research-report additions
+    "strong analytical skills",
+    "proven track record",
+    "results-driven",
+    "results-oriented",
+    "passionate about driving",
+    "exceptional",
+    "innovative solutions",
+    "thought leader",
   ];
   const totalBuzzwords = bullets.reduce((count, b) => {
     return (
@@ -243,7 +253,9 @@ export function estimateAIDetectionRisk(
     );
   }
 
-  // 3. AI-favorite buzzwords — >2 total is suspicious
+  // 3. AI-favorite buzzwords — >2 total is suspicious.
+  // Research-report additions: the phrases below are the most frequently
+  // observed tells in ChatGPT/Claude-drafted resumes and recruiter surveys.
   const aiWords = [
     "utilize",
     "leverage",
@@ -266,6 +278,20 @@ export function estimateAIDetectionRisk(
     "best-in-class",
     "world-class",
     "state-of-the-art",
+    // Research-report additions
+    "strong analytical skills",
+    "proven track record",
+    "results-driven",
+    "results driven",
+    "results-oriented",
+    "dynamic solutions",
+    "passionate about driving",
+    "passionate about delivering",
+    "exceptional",
+    "innovative solutions",
+    "thought leader",
+    "transformative",
+    "highly motivated",
   ];
   const aiWordCount = bullets.reduce(
     (c, b) =>

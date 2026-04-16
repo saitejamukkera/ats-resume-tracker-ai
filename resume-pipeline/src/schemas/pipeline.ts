@@ -27,6 +27,24 @@ export interface PipelineConfig {
     jdKeywordCoverage: number;
     maxRepairAttempts: number;
     atsScoreThreshold: number;
+    /**
+     * Minimum Human Voice composite score. When the scorer falls below
+     * this, a humanize pass is triggered. Default 70.
+     */
+    humanVoiceThreshold: number;
+    /**
+     * Minimum bullet-length standard deviation (in words) that must be
+     * present post-generation. Values below this trip a burstiness
+     * repair pass regardless of the Human Voice composite score.
+     * Default 4.
+     */
+    burstinessMinStdDev: number;
+    /**
+     * Whether the generator is allowed to invent metrics for bullets
+     * that lack them when the plan marks them "metric: REQUIRED".
+     * Global off-switch. Default true.
+     */
+    inventionEnabled: boolean;
   };
 }
 
@@ -38,7 +56,9 @@ export const DEFAULT_MODULES: PipelineModules = {
   useCareerVault: false,
   useRAG: false,
   useCoverLetter: true,
-  usePerRoleGeneration: false,
+  // Structured per-role generation is now the primary mode. The legacy
+  // batch generator still exists as the hybrid fallback.
+  usePerRoleGeneration: true,
 };
 
 export const DEFAULT_CONFIG: PipelineConfig = {
@@ -52,6 +72,9 @@ export const DEFAULT_CONFIG: PipelineConfig = {
     jdKeywordCoverage: 0.7,
     maxRepairAttempts: 2,
     atsScoreThreshold: 70,
+    humanVoiceThreshold: 70,
+    burstinessMinStdDev: 4,
+    inventionEnabled: true,
   },
 };
 
@@ -62,6 +85,13 @@ export interface PipelineInput {
   userInfo?: string;
   masterSubjects?: string;
   customPrompt?: string;
+  /**
+   * Optional manual YoE override. When set (non-negative number), this
+   * wins over date-range derivation in the candidate profile. Intended to
+   * be supplied from the user's Settings when auto-derivation is wrong
+   * (gaps, internships, concurrent roles, contract work).
+   */
+  yearsOfExperienceOverride?: number;
 }
 
 // ── Parsed Resume Sections (from LaTeX parser) ─────────────────
@@ -192,8 +222,31 @@ export interface GenerationTrace {
   configSnapshot?: PipelineConfig;
   failedRules?: FailedRule[];
   repairResults?: RepairResult[];
+  /**
+   * Numbers / team sizes / context added by the generator that were NOT
+   * in the original base resume. Populated from the per-bullet "invented"
+   * field. The frontend can render a "Review these invented numbers"
+   * banner from this list before the user submits.
+   */
+  inventedMetrics?: InventedMetricEntry[];
+  /** Derived candidate profile snapshot. Useful for UI + audit. */
+  candidateProfile?: {
+    yearsOfExperience: number;
+    yoeSource: "override" | "auto";
+    seniorityTier: "entry" | "mid" | "senior";
+    technologiesUsed: string[];
+    domainCategories: string[];
+  };
   status: "success" | "partial" | "failed";
   errors: Array<{ stage: string; message: string }>;
+}
+
+export interface InventedMetricEntry {
+  roleIndex: number;
+  bulletIndex: number;
+  field: "metric" | "scope" | "context";
+  value: string;
+  bullet: string;
 }
 
 export interface StageTiming {

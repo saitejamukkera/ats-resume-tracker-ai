@@ -7,6 +7,8 @@ import {
   generateSummary,
   generateExperience,
   generateExperiencePerRole,
+  targetedBulletRewrite,
+  detectDeviations,
 } from "../stages/section-generators.js";
 import { reorderSkills } from "../stages/skills-reorderer.js";
 import { generateCoverLetter } from "../stages/cover-letter.js";
@@ -29,6 +31,11 @@ import type {
 import { profileRoleImpact } from "../impact/detector.js";
 import { PipelineTelemetry } from "../observability/trace.js";
 import { RateLimitError } from "../observability/llm-wrapper.js";
+import { buildCandidateProfile } from "../stages/candidate-profile.js";
+import { categorizeJdSkills } from "../stages/implicit-skills.js";
+import { buildRoleBriefs } from "../stages/bullet-brief.js";
+import { buildPlans } from "../stages/bullet-plan.js";
+import type { ExperienceBullet } from "../schemas/experience.js";
 import type {
   PipelineInput,
   PipelineOutput,
@@ -36,7 +43,7 @@ import type {
   GeneratedSections,
   ValidatedSections,
   FailedRule,
-  DEFAULT_CONFIG,
+  InventedMetricEntry,
 } from "../schemas/pipeline.js";
 import { DEFAULT_CONFIG as defaultConfig } from "../schemas/pipeline.js";
 
@@ -122,6 +129,49 @@ export async function runPipeline(
     },
   });
 
+  // ── Stage 2.5: Candidate Profile (deterministic, 0 LLM calls) ──
+  const candidateProfile = buildCandidateProfile({
+    parsed,
+    yearsOfExperienceOverride: input.yearsOfExperienceOverride,
+  });
+  console.log(
+    `[pipeline] Candidate profile: YoE=${candidateProfile.yearsOfExperience.toFixed(1)} (${candidateProfile.yoeSource}), tier=${candidateProfile.seniorityTier}, tech=${candidateProfile.technologiesUsed.length}, domains=[${candidateProfile.domainCategories.join(", ")}]`,
+  );
+  telemetry.recordCandidateProfile({
+    yearsOfExperience: candidateProfile.yearsOfExperience,
+    yoeSource: candidateProfile.yoeSource,
+    seniorityTier: candidateProfile.seniorityTier,
+    technologiesUsed: candidateProfile.technologiesUsed,
+    domainCategories: candidateProfile.domainCategories,
+  });
+
+  // Bucket each JD skill into: explicit (in base resume literally),
+  // implicit (backed by an explicit skill via adjacency rules, e.g.
+  // Spring Boot → J2EE / REST API development / Mockito), or truly
+  // missing (would be fabrication to claim). The summary and experience
+  // generators treat implicit skills as honest — naming J2EE next to
+  // Spring Boot is NOT fabrication.
+  const jdSkillBuckets = categorizeJdSkills(
+    [...jd.requiredSkills, ...jd.preferredSkills],
+    candidateProfile.technologiesUsed,
+  );
+  if (jdSkillBuckets.implicit.length > 0) {
+    const withSources = jdSkillBuckets.implicit
+      .map(
+        (s) =>
+          `${s} (via ${jdSkillBuckets.implicitSources[s]?.join(" + ") || "inferred"})`,
+      )
+      .join(", ");
+    console.log(
+      `[pipeline] JD skills implicitly backed by base resume (safe to claim): ${withSources}`,
+    );
+  }
+  if (jdSkillBuckets.missing.length > 0) {
+    console.log(
+      `[pipeline] JD skills truly missing from base resume (will NOT be claimed to avoid fabrication): ${jdSkillBuckets.missing.join(", ")}`,
+    );
+  }
+
   // ── Stage 3: Section Generators (sequential to stay within rate limits) ──
   emit({ type: "stage-start", stage: "generators" });
   telemetry.startStage("generators");
@@ -129,7 +179,9 @@ export async function runPipeline(
   // Extract current summary text from parsed resume
   const currentSummary = extractSummaryText(parsed.summary);
 
-  // Run summary and experience generation in parallel
+  // Run summary and experience generation in parallel. Primary mode is
+  // per-role structured generation; the batch generator is the fallback
+  // used when usePerRoleGeneration=false (followed by a targeted rewrite).
   const experienceGenerator = config.modules.usePerRoleGeneration
     ? generateExperiencePerRole
     : generateExperience;
@@ -139,6 +191,7 @@ export async function runPipeline(
       currentSummary,
       jd,
       jd.experienceLevel,
+      candidateProfile,
       snapshotStore,
     ).catch((err) => {
       if (err instanceof RateLimitError) throw err; // propagate rate limit up
@@ -147,13 +200,18 @@ export async function runPipeline(
         err,
       );
       telemetry.recordError("summary-generator", err.message);
-      return { summary: currentSummary, inputTokens: 0, outputTokens: 0 };
+      return {
+        summary: currentSummary,
+        inputTokens: 0,
+        outputTokens: 0,
+        rewroteForBuzzwords: false,
+      };
     }),
     experienceGenerator(
       parsed.experience,
       jd,
       jd.experienceLevel,
-      input.userInfo,
+      candidateProfile,
       snapshotStore,
     ).catch((err) => {
       if (err instanceof RateLimitError) throw err; // propagate rate limit up
@@ -162,17 +220,112 @@ export async function runPipeline(
         err,
       );
       telemetry.recordError("experience-generator", err.message);
+      const fallbackBullets: ExperienceBullet[][] = parsed.experience.map(
+        (r) =>
+          r.bullets.map((t) => ({
+            text: t,
+            technologies: [],
+            keywordsUsed: [],
+            invented: null,
+          })),
+      );
       return {
         roles: parsed.experience.map((r) => ({
           roleTitle: "",
           company: "",
           bullets: r.bullets,
         })),
+        bullets: fallbackBullets,
         inputTokens: 0,
         outputTokens: 0,
       };
     }),
   ]);
+
+  // ── Stage 3.5: Hybrid Fallback — targeted rewrite of bad bullets ──
+  // Only runs when usePerRoleGeneration=false. Detects bullets that failed
+  // their plan (wrong length, missing verb, buzzword, lost tech...) and
+  // rewrites ONLY those in a single extra LLM call.
+  let hybridInputTokens = 0;
+  let hybridOutputTokens = 0;
+  let hybridRewriteCount = 0;
+  if (
+    !config.modules.usePerRoleGeneration &&
+    experienceResult.inputTokens > 0
+  ) {
+    try {
+      const rolesBriefs = parsed.experience.map((role, ri) =>
+        buildRoleBriefs(
+          role.bullets,
+          ri,
+          [...jd.requiredSkills, ...jd.preferredSkills],
+        ),
+      );
+      const plans = buildPlans({
+        rolesBriefs,
+        jobIdSeed: `${jd.company}|${jd.position}|${jd.jobId || "nojob"}`,
+      });
+      const targets = detectDeviations(
+        experienceResult.bullets,
+        rolesBriefs,
+        plans,
+        jd,
+      );
+      if (targets.length > 0) {
+        console.log(
+          `[pipeline] Hybrid fallback: ${targets.length} bullets failed their plan, triggering targeted rewrite`,
+        );
+        const enriched = targets.map((t) => ({
+          ...t,
+          plan: plans[t.roleIndex][t.bulletIndex],
+          brief: rolesBriefs[t.roleIndex][t.bulletIndex],
+        }));
+        telemetry.startStage("targeted-bullet-rewrite");
+        const rewriteResult = await targetedBulletRewrite(
+          enriched,
+          jd,
+          candidateProfile,
+          snapshotStore,
+        );
+        telemetry.endStage(
+          "targeted-bullet-rewrite",
+          1,
+          rewriteResult.inputTokens,
+          rewriteResult.outputTokens,
+        );
+        hybridInputTokens = rewriteResult.inputTokens;
+        hybridOutputTokens = rewriteResult.outputTokens;
+
+        for (const t of targets) {
+          const key = `${t.roleIndex}-${t.bulletIndex}`;
+          const fix = rewriteResult.rewrites.get(key);
+          if (!fix) continue;
+          experienceResult.roles[t.roleIndex].bullets[t.bulletIndex] = fix.text;
+          experienceResult.bullets[t.roleIndex][t.bulletIndex] = {
+            text: fix.text,
+            technologies:
+              experienceResult.bullets[t.roleIndex][t.bulletIndex]
+                ?.technologies || [],
+            keywordsUsed: fix.keywordsUsed,
+            invented: fix.invented,
+          };
+          hybridRewriteCount++;
+        }
+        console.log(
+          `[pipeline] Hybrid fallback: ${hybridRewriteCount} bullets rewritten`,
+        );
+      } else {
+        telemetry.skipStage(
+          "targeted-bullet-rewrite",
+          "no bullets deviated from plan",
+        );
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn(`[pipeline] Hybrid fallback failed: ${msg}`);
+      telemetry.failStage("targeted-bullet-rewrite", msg);
+    }
+  }
 
   // ── Bullet Count Preservation ─────────────────────────────────
   // Design §5.3: The LLM MUST return the same number of bullets per role.
@@ -206,12 +359,18 @@ export async function runPipeline(
   const reorderedSkills = reorderSkills(parsed.skills, jd);
 
   const totalGenTokensIn =
-    summaryResult.inputTokens + experienceResult.inputTokens;
+    summaryResult.inputTokens +
+    experienceResult.inputTokens +
+    hybridInputTokens;
   const totalGenTokensOut =
-    summaryResult.outputTokens + experienceResult.outputTokens;
+    summaryResult.outputTokens +
+    experienceResult.outputTokens +
+    hybridOutputTokens;
   const totalGenCalls =
     (summaryResult.inputTokens > 0 ? 1 : 0) +
-    (experienceResult.inputTokens > 0 ? 1 : 0);
+    (experienceResult.inputTokens > 0 ? 1 : 0) +
+    (hybridRewriteCount > 0 ? 1 : 0) +
+    (summaryResult.rewroteForBuzzwords ? 1 : 0);
 
   telemetry.endStage(
     "generators",
@@ -219,6 +378,52 @@ export async function runPipeline(
     totalGenTokensIn,
     totalGenTokensOut,
   );
+
+  // Collect invented metrics from the structured bullet output. These are
+  // surfaced in the trace so the frontend can render a "Review these
+  // invented numbers" banner. Populated regardless of generator mode.
+  const inventedMetrics: InventedMetricEntry[] = [];
+  for (let ri = 0; ri < experienceResult.bullets.length; ri++) {
+    const roleBullets = experienceResult.bullets[ri] || [];
+    for (let bi = 0; bi < roleBullets.length; bi++) {
+      const b = roleBullets[bi];
+      const inv = b?.invented;
+      if (!inv) continue;
+      if (inv.metric) {
+        inventedMetrics.push({
+          roleIndex: ri,
+          bulletIndex: bi,
+          field: "metric",
+          value: inv.metric,
+          bullet: b.text,
+        });
+      }
+      if (inv.scope) {
+        inventedMetrics.push({
+          roleIndex: ri,
+          bulletIndex: bi,
+          field: "scope",
+          value: inv.scope,
+          bullet: b.text,
+        });
+      }
+      if (inv.context) {
+        inventedMetrics.push({
+          roleIndex: ri,
+          bulletIndex: bi,
+          field: "context",
+          value: inv.context,
+          bullet: b.text,
+        });
+      }
+    }
+  }
+  telemetry.recordInventedMetrics(inventedMetrics);
+  if (inventedMetrics.length > 0) {
+    console.log(
+      `[pipeline] Invented ${inventedMetrics.length} items (${inventedMetrics.filter((i) => i.field === "metric").length} metrics, ${inventedMetrics.filter((i) => i.field === "scope").length} scopes, ${inventedMetrics.filter((i) => i.field === "context").length} contexts)`,
+    );
+  }
 
   // Build generated sections
   let sections: GeneratedSections = {
@@ -449,21 +654,37 @@ export async function runPipeline(
   }
 
   // ── Stage 4.9: Humanize Pass (reactive — score too low OR AI risk detected) ──
-  const HUMANIZE_THRESHOLD = 60;
+  // Threshold now config-driven. Default 70 (was 60). We also gate on an
+  // explicit burstiness hard-check: if bullet-length stdDev falls below
+  // burstinessMinStdDev (default 4), humanize runs regardless of the
+  // composite score — flat bullet lengths are the single strongest AI signal.
+  const HUMANIZE_THRESHOLD = config.constraints.humanVoiceThreshold;
   const MAX_HUMANIZE_PASSES = 2;
   const humanizeJdKeywords = [...jd.requiredSkills, ...jd.preferredSkills];
   let humanizePassCount = 0;
+
+  const lengthStdDev = (bs: string[]): number => {
+    if (bs.length === 0) return 0;
+    const words = bs.map((b) => b.split(/\s+/).length);
+    const mean = words.reduce((a, b) => a + b, 0) / words.length;
+    const variance =
+      words.reduce((a, c) => a + Math.pow(c - mean, 2), 0) / words.length;
+    return Math.sqrt(variance);
+  };
 
   for (let hPass = 1; hPass <= MAX_HUMANIZE_PASSES; hPass++) {
     const currentBullets = sections.experience.flatMap((r) => r.bullets);
     const currentVoice = hPass === 1 ? humanVoiceResult : scoreHumanVoice(currentBullets);
     const currentAI = hPass === 1 ? aiDetectionResult : estimateAIDetectionRisk(currentBullets);
+    const stdDev = lengthStdDev(currentBullets);
+    const burstinessFailed = stdDev < config.constraints.burstinessMinStdDev;
 
     const needsHumanize =
       currentVoice &&
       (
         (config.modules.useHumanVoiceScoring && currentVoice.overall < HUMANIZE_THRESHOLD) ||
-        (config.modules.useAntiAIDetection && currentAI && currentAI.risk !== "low")
+        (config.modules.useAntiAIDetection && currentAI && currentAI.risk !== "low") ||
+        burstinessFailed
       );
 
     if (!needsHumanize || !currentVoice) break;
@@ -471,7 +692,9 @@ export async function runPipeline(
     const reason =
       currentVoice.overall < HUMANIZE_THRESHOLD
         ? `Human Voice ${currentVoice.overall} < ${HUMANIZE_THRESHOLD}`
-        : `AI Detection Risk: ${currentAI!.risk.toUpperCase()}`;
+        : burstinessFailed
+          ? `Burstiness stdDev ${stdDev.toFixed(1)} < ${config.constraints.burstinessMinStdDev}`
+          : `AI Detection Risk: ${currentAI!.risk.toUpperCase()}`;
 
     try {
       console.log(
@@ -524,8 +747,12 @@ export async function runPipeline(
         }
       }
 
-      if (humanVoiceResult.overall >= HUMANIZE_THRESHOLD &&
-          (!aiDetectionResult || aiDetectionResult.risk === "low")) {
+      const postStdDev = lengthStdDev(updatedBullets);
+      if (
+        humanVoiceResult.overall >= HUMANIZE_THRESHOLD &&
+        (!aiDetectionResult || aiDetectionResult.risk === "low") &&
+        postStdDev >= config.constraints.burstinessMinStdDev
+      ) {
         break;
       }
     } catch (error) {
@@ -538,9 +765,12 @@ export async function runPipeline(
   }
 
   if (humanizePassCount === 0 && humanVoiceResult) {
+    const finalStdDev = lengthStdDev(
+      sections.experience.flatMap((r) => r.bullets),
+    );
     telemetry.skipStage(
       "humanize-pass",
-      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} and AI risk is ${aiDetectionResult?.risk ?? 'not checked'}`,
+      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD}, AI risk ${aiDetectionResult?.risk ?? "not checked"}, stdDev ${finalStdDev.toFixed(1)} >= ${config.constraints.burstinessMinStdDev}`,
     );
   }
 
