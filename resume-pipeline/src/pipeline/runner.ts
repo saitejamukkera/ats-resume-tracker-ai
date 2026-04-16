@@ -19,6 +19,7 @@ import { calculateATSScore } from "../validation/ats-scorer.js";
 import {
   scoreHumanVoice,
   estimateAIDetectionRisk,
+  humanizePass,
 } from "../validation/human-voice.js";
 import type {
   HumanVoiceScore,
@@ -415,6 +416,58 @@ export async function runPipeline(
     telemetry.skipStage(
       "anti-ai-detection",
       "Module disabled (useAntiAIDetection=false)",
+    );
+  }
+
+  // ── Stage 4.9: Humanize Pass (reactive — only if score too low) ──
+  const HUMANIZE_THRESHOLD = 60;
+  if (
+    config.modules.useAntiAIDetection &&
+    humanVoiceResult &&
+    humanVoiceResult.overall < HUMANIZE_THRESHOLD
+  ) {
+    try {
+      console.log(
+        `[pipeline] Human Voice ${humanVoiceResult.overall} < ${HUMANIZE_THRESHOLD}, triggering humanize pass...`,
+      );
+      telemetry.startStage("humanize-pass");
+      const humanizeResult = await humanizePass(
+        sections,
+        humanVoiceResult,
+        aiDetectionResult?.signals || [],
+        jd.experienceLevel,
+        snapshotStore,
+      );
+      sections = humanizeResult.sections;
+      telemetry.endStage(
+        "humanize-pass",
+        1,
+        humanizeResult.inputTokens,
+        humanizeResult.outputTokens,
+      );
+
+      // Re-score after humanize pass
+      const updatedBullets = sections.experience.flatMap((r) => r.bullets);
+      const prevScore = humanVoiceResult.overall;
+      humanVoiceResult = scoreHumanVoice(updatedBullets);
+      aiDetectionResult = estimateAIDetectionRisk(updatedBullets);
+      console.log(
+        `[pipeline] Human Voice after humanize: ${prevScore} → ${humanVoiceResult.overall}/100 | AI Risk: ${aiDetectionResult.risk}`,
+      );
+    } catch (error) {
+      // Non-critical — keep current bullets
+      const msg = error instanceof Error ? error.message : String(error);
+      console.warn(`[pipeline] Humanize pass failed: ${msg}`);
+      telemetry.failStage("humanize-pass", msg);
+    }
+  } else if (
+    config.modules.useAntiAIDetection &&
+    humanVoiceResult &&
+    humanVoiceResult.overall >= HUMANIZE_THRESHOLD
+  ) {
+    telemetry.skipStage(
+      "humanize-pass",
+      `Human Voice score ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} threshold`,
     );
   }
 

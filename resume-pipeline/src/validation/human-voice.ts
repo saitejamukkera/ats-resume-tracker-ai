@@ -1,6 +1,13 @@
 // src/validation/human-voice.ts
-// Stage 4.8: Human Voice Scorer + Anti-AI Detection — deterministic, 0 LLM calls.
-// Scores how "human" the generated bullets sound and flags AI-written patterns.
+// Stage 4.8: Human Voice Scorer + Anti-AI Detection + Humanize Repair Pass.
+// Scorer and risk estimator are deterministic (0 LLM calls).
+// Humanize pass is reactive (1 LLM call, only when Human Voice score < threshold).
+
+import { z } from "zod";
+import { models } from "../config/models.js";
+import { callLLM } from "../observability/llm-wrapper.js";
+import type { GeneratedSections } from "../schemas/pipeline.js";
+import type { SnapshotStore } from "../observability/debug.js";
 
 // ── Human Voice Score ──────────────────────────────────────────
 
@@ -320,4 +327,165 @@ export function estimateAIDetectionRisk(
         : "high";
 
   return { risk, signals };
+}
+
+// ── Humanize Repair Pass (LLM) ─────────────────────────────────
+
+const HumanizeRepairSchema = z.object({
+  repairedBullets: z.array(
+    z.object({
+      roleIndex: z.number(),
+      bulletIndex: z.number(),
+      text: z.string().min(10),
+    }),
+  ),
+});
+
+/**
+ * Rewrite bullets that sound too AI-generated.
+ * Uses the diagnostic data from scoreHumanVoice() and estimateAIDetectionRisk()
+ * to give the LLM SPECIFIC, targeted instructions on what to fix.
+ *
+ * Only called when Human Voice score < HUMANIZE_THRESHOLD (default: 60).
+ * Costs 1 LLM call.
+ */
+export async function humanizePass(
+  sections: GeneratedSections,
+  voiceScore: HumanVoiceScore,
+  aiSignals: string[],
+  experienceLevel: string,
+  snapshotStore?: SnapshotStore,
+): Promise<{
+  sections: GeneratedSections;
+  inputTokens: number;
+  outputTokens: number;
+}> {
+  // Build the bullet map for the LLM
+  const bulletMap = sections.experience
+    .map((role, ri) => {
+      return role.bullets.map((b, bi) => `  [${ri}-${bi}] ${b}`).join("\n");
+    })
+    .join("\n");
+
+  // Build score-driven diagnostic — tell the LLM EXACTLY what to fix
+  const issues: string[] = [];
+
+  if (voiceScore.verbDiversity < 0.6) {
+    // Find repeated verbs
+    const allBullets = sections.experience.flatMap((r) => r.bullets);
+    const verbs = allBullets.map((b) => b.trim().split(/\s+/)[0].toLowerCase());
+    const verbCounts = new Map<string, number>();
+    verbs.forEach((v) => verbCounts.set(v, (verbCounts.get(v) || 0) + 1));
+    const repeated = [...verbCounts.entries()]
+      .filter(([, c]) => c > 1)
+      .map(([v, c]) => `"${v}" (${c}x)`)
+      .join(", ");
+    issues.push(
+      `VERB REPETITION: These verbs are overused: ${repeated}. Replace repeated verbs with varied alternatives: tackled, shipped, debugged, proposed, configured, migrated, automated, resolved, profiled, etc.`,
+    );
+  }
+
+  if (voiceScore.lengthVariance < 0.3) {
+    issues.push(
+      `BULLET LENGTH UNIFORMITY: All bullets are roughly the same length. Rewrite 2-3 bullets to be SHORT and punchy (10-15 words). Example: "Owned the CI pipeline, 400+ builds/month, 99.2% green rate." Leave the rest at 25-35 words.`,
+    );
+  }
+
+  if (voiceScore.metricsBalance < 0.7 && voiceScore.metricsBalance > 0) {
+    const allBullets = sections.experience.flatMap((r) => r.bullets);
+    const metricCount = allBullets.filter((b) =>
+      /\d+%|\d+x|\$[\d,]+|\d+\s*(ms|seconds|hours|days|users|requests|records)/i.test(b),
+    ).length;
+    const ratio = metricCount / allBullets.length;
+    if (ratio > 0.85) {
+      issues.push(
+        `TOO MANY METRICS: ${Math.round(ratio * 100)}% of bullets have numbers — looks AI-generated. Convert 2-3 bullets to show QUALITATIVE impact instead: "Improved code review culture", "Became go-to person for K8s debugging", "Wrote internal docs after onboarding exposed gaps".`,
+      );
+    }
+  }
+
+  if (voiceScore.buzzwordDensity < 0.7) {
+    issues.push(
+      `BUZZWORD OVERLOAD: Replace corporate buzzwords with plain engineering language. "Spearheaded" → "Led" or "Built". "Orchestrated" → "Set up" or "Configured". "Leveraged" → "Used". "Cutting-edge" → just name the actual technology.`,
+    );
+  }
+
+  if (voiceScore.sentencePatterns < 0.5) {
+    issues.push(
+      `MONOTONOUS STRUCTURE: All bullets follow the same sentence pattern. Mix in these shapes:
+   - Problem-first: "Noticed recurring OOM errors, profiled JVM heap and..."
+   - Context-first: "As part of the payments team, implemented..."
+   - Short-declarative: "Owned the deploy pipeline. 400+ deploys/month."`,
+    );
+  }
+
+  // Add AI detection signals
+  if (aiSignals.length > 0) {
+    issues.push(
+      `AI DETECTION SIGNALS: ${aiSignals.join(". ")}`,
+    );
+  }
+
+  if (issues.length === 0) {
+    // Shouldn't happen (function only called when score < 60), but safety check
+    return { sections, inputTokens: 0, outputTokens: 0 };
+  }
+
+  const prompt = `You are a resume writing expert. The following resume bullets were scored ${voiceScore.overall}/100 on "human voice" quality, meaning they sound too AI-generated. Recruiters WILL flag these.
+
+CANDIDATE LEVEL: ${experienceLevel}
+
+CURRENT BULLETS:
+${bulletMap}
+
+SPECIFIC ISSUES TO FIX:
+${issues.map((issue, i) => `${i + 1}. ${issue}`).join("\n\n")}
+
+RULES:
+- ONLY rewrite bullets that have the identified issues. Do NOT touch bullets that are already good.
+- Do NOT change any facts, technologies, projects, or metrics — only rephrase
+- Do NOT add new metrics or make up technical details
+- Make it sound like a real ${experienceLevel} engineer wrote this, not ChatGPT
+- Keep the same meaning — just change the sentence structure, verb choice, and phrasing
+- DO NOT use raw LaTeX formatting (e.g. \\textbf{}, \\textit{})
+- Use symbols naturally (%, $, etc.) — they will be escaped automatically
+- DO NOT use em dashes or en dashes. Use commas or semicolons.
+
+Return ONLY the bullets you changed as {roleIndex, bulletIndex, text}.`;
+
+  const result = await callLLM({
+    model: models.repair,
+    schema: HumanizeRepairSchema,
+    prompt,
+    stage: "humanize-pass",
+    snapshotStore,
+  });
+
+  // Apply repairs — same immutable pattern as keyword-gap-repair
+  const repaired: GeneratedSections = {
+    ...sections,
+    experience: sections.experience.map((r) => ({
+      ...r,
+      bullets: [...r.bullets],
+    })),
+  };
+
+  let appliedCount = 0;
+  for (const fix of result.object.repairedBullets) {
+    const role = repaired.experience[fix.roleIndex];
+    if (role && fix.bulletIndex >= 0 && fix.bulletIndex < role.bullets.length) {
+      role.bullets[fix.bulletIndex] = fix.text;
+      appliedCount++;
+    }
+  }
+
+  console.log(
+    `[humanize-pass] Rewrote ${appliedCount} bullets to sound more human`,
+  );
+
+  return {
+    sections: repaired,
+    inputTokens: result.inputTokens,
+    outputTokens: result.outputTokens,
+  };
 }
