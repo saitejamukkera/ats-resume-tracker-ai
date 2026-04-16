@@ -9,6 +9,7 @@ import { callLLM } from "../observability/llm-wrapper.js";
 import type { GeneratedSections, GeneratedRole } from "../schemas/pipeline.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { SnapshotStore } from "../observability/debug.js";
+import { analyzeBullet } from "../impact/detector.js";
 
 const KeywordGapRepairSchema = z.object({
   repairedBullets: z.array(
@@ -92,7 +93,7 @@ Return:
     snapshotStore,
   });
 
-  // Apply repairs
+  // Apply repairs with IDS regression guard
   const repaired: GeneratedSections = {
     ...sections,
     experience: sections.experience.map((r) => ({
@@ -101,17 +102,41 @@ Return:
     })),
   };
 
+  const jdKeywordsList = [...jd.requiredSkills, ...jd.preferredSkills];
   let appliedCount = 0;
+  let rejectedCount = 0;
+
   for (const fix of result.object.repairedBullets) {
     const role = repaired.experience[fix.roleIndex];
     if (role && fix.bulletIndex >= 0 && fix.bulletIndex < role.bullets.length) {
-      role.bullets[fix.bulletIndex] = fix.text;
-      appliedCount++;
+      // Check IDS impact of original vs rewritten bullet
+      const originalBullet = role.bullets[fix.bulletIndex];
+      const originalAnalysis = analyzeBullet(originalBullet, jdKeywordsList, "mid");
+      const rewrittenAnalysis = analyzeBullet(fix.text, jdKeywordsList, "mid");
+
+      // Allow mild regression (strong→medium is fine for keyword coverage)
+      // Reject if new bullet drops to 'weak' or 'none' — not worth the keyword
+      const strengthOrder = { none: 0, weak: 1, medium: 2, strong: 3 };
+      const originalRank = strengthOrder[originalAnalysis.strength];
+      const rewrittenRank = strengthOrder[rewrittenAnalysis.strength];
+
+      if (rewrittenRank <= 1 && originalRank > 1) {
+        // Regression to weak/none — reject this rewrite, keep original
+        rejectedCount++;
+        console.log(
+          `[keyword-gap-repair] Rejected [${fix.roleIndex}-${fix.bulletIndex}]: ` +
+            `IDS dropped ${originalAnalysis.strength}→${rewrittenAnalysis.strength}`,
+        );
+      } else {
+        role.bullets[fix.bulletIndex] = fix.text;
+        appliedCount++;
+      }
     }
   }
 
   console.log(
-    `[keyword-gap-repair] Targeted ${targetKeywords.length} missing keywords, repaired ${appliedCount} bullets`,
+    `[keyword-gap-repair] Targeted ${targetKeywords.length} missing keywords, repaired ${appliedCount} bullets` +
+      (rejectedCount > 0 ? `, rejected ${rejectedCount} (IDS regression)` : ""),
   );
 
   return {

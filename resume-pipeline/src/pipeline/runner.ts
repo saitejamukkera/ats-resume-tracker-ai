@@ -231,6 +231,25 @@ export async function runPipeline(
   emit({ type: "stage-start", stage: "validator" });
   telemetry.startStage("validator");
 
+  // Cap minBulletsPerRole at the smallest original role count.
+  // We can't require the LLM to generate 8 bullets when the base resume
+  // only had 6 for a role — that would fabricate work experience.
+  const smallestOriginalRoleCount = Math.min(
+    ...parsed.experience.map((r) => r.bullets.length),
+  );
+  if (smallestOriginalRoleCount < config.constraints.minBulletsPerRole) {
+    console.log(
+      `[pipeline] Adjusting minBulletsPerRole: ${config.constraints.minBulletsPerRole} → ${smallestOriginalRoleCount} (capped at smallest original role)`,
+    );
+    config = {
+      ...config,
+      constraints: {
+        ...config.constraints,
+        minBulletsPerRole: smallestOriginalRoleCount,
+      },
+    };
+  }
+
   const validationResult = validateSections(sections, jd, config);
   let repairAttempts = 0;
   let repairTokensIn = 0;
@@ -265,9 +284,18 @@ export async function runPipeline(
       const postRepairResult = validateSections(sections, jd, config);
       if (!postRepairResult.pass) {
         pipelineStatus = "partial";
-        console.log(
-          `[pipeline] Post-repair validation: still ${postRepairResult.errors.filter((e) => e.severity === "critical").length} critical issues (using best attempt)`,
+        const criticals = postRepairResult.errors.filter(
+          (e) => e.severity === "critical",
         );
+        console.log(
+          `[pipeline] Post-repair validation: still ${criticals.length} critical issues (using best attempt)`,
+        );
+        // Log each remaining critical for diagnosis
+        for (const err of criticals) {
+          console.log(
+            `[pipeline]   ❌ ${err.rule}: ${err.message.substring(0, 120)}`,
+          );
+        }
       }
     } catch (error) {
       if (error instanceof RateLimitError) throw error; // propagate rate limit up
