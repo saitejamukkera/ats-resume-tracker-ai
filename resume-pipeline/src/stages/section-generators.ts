@@ -30,7 +30,7 @@ const StrictSummarySchema = z.object({
 });
 
 const StrictExperienceBulletSchema = z.object({
-  text: z.string().min(15, "Bullet too short").max(500, "Bullet too long"),
+  text: z.string().min(15, "Bullet too short").max(250, "Bullet too long (max 250 chars for scannability)"),
   technologies: z.array(z.string()),
 });
 
@@ -152,6 +152,7 @@ HARD CONSTRAINTS:
 - Use realistic metrics (10-50% improvements, not 10x claims)
 - Avoid generic phrasing: "Responsible for", "Worked on", "Helped with"
 
+
 WRITING STYLE — NON-NEGOTIABLE:
 1. VERB DIVERSITY: Use at least 6 different opening verbs across all bullets
    Good: Built, Tackled, Migrated, Reduced, Configured, Collaborated on, Debugged, Shipped
@@ -160,7 +161,12 @@ WRITING STYLE — NON-NEGOTIABLE:
    - Impact-first: "Reduced deploy time from 2hrs to 15min by..."
    - Context-first: "As part of the payments team, implemented..."
    - Problem-first: "Identified recurring OOM errors, profiled the JVM heap and..."
-3. BULLET LENGTH VARIATION: Mix short (10-15 words) and long (25-35 words) bullets
+3. BULLET LENGTH — HARD LIMIT (NON-NEGOTIABLE):
+   - SHORT bullets: 10-18 words. Punchy, single-clause. Use for minor wins. ~30% of bullets.
+   - MEDIUM bullets: 20-30 words. Action + tech + outcome in one sentence. ~60% of bullets.
+   - LONG bullets: 31-35 words MAXIMUM. Only for complex achievements. ~10% of bullets.
+   - NEVER exceed 35 words or 220 characters per bullet. If a bullet is longer, split the outcome into a tighter phrase.
+   - ATS parsers may truncate after ~200 characters. Front-load the keyword and metric.
 4. LEVEL-APPROPRIATE VOCABULARY:
    - Entry-level: built, fixed, wrote, configured, tested, debugged, shipped
    - Mid-level: designed, refactored, optimized, led, mentored, proposed, migrated
@@ -252,7 +258,12 @@ HARD CONSTRAINTS:
 WRITING STYLE — NON-NEGOTIABLE:
 1. VERB DIVERSITY: Use at least ${Math.min(6, role.bullets.length)} different opening verbs
 2. Mix sentence shapes: action-first, impact-first, context-first, problem-first
-3. BULLET LENGTH VARIATION: Mix short (10-15 words) and long (25-35 words) bullets
+3. BULLET LENGTH — HARD LIMIT (NON-NEGOTIABLE):
+   - SHORT bullets: 10-18 words. Punchy, single-clause. Use for minor wins. ~30% of bullets.
+   - MEDIUM bullets: 20-30 words. Action + tech + outcome in one sentence. ~60% of bullets.
+   - LONG bullets: 31-35 words MAXIMUM. Only for complex achievements. ~10% of bullets.
+   - NEVER exceed 35 words or 220 characters per bullet. If a bullet is longer, split the outcome into a tighter phrase.
+   - ATS parsers may truncate after ~200 characters. Front-load the keyword and metric.
 4. 60-80% should have metrics. The rest show qualitative impact.
 
 CRITICAL FORMATTING CONSTRAINTS:

@@ -111,6 +111,39 @@ export function validateSections(
     }
   }
 
+  // ── 2.5. Bullet Length Check ─────────────────────────────────
+  const BULLET_WARN_WORDS = 35;
+  const BULLET_CRITICAL_WORDS = 45;
+  const BULLET_WARN_CHARS = 220;
+  const BULLET_CRITICAL_CHARS = 280;
+
+  for (const role of sections.experience) {
+    for (const bullet of role.bullets) {
+      const wordCount = bullet.split(/\s+/).length;
+      const charCount = bullet.length;
+
+      if (wordCount > BULLET_CRITICAL_WORDS || charCount > BULLET_CRITICAL_CHARS) {
+        errors.push({
+          section: 'experience',
+          rule: 'bullet-too-long',
+          severity: 'critical',
+          message: `Bullet too long (${wordCount} words, ${charCount} chars): "${bullet.substring(0, 80)}..."`,
+          offendingContent: bullet,
+          suggestion: 'Tighten to under 35 words. Front-load the keyword and metric, cut filler.',
+        });
+      } else if (wordCount > BULLET_WARN_WORDS || charCount > BULLET_WARN_CHARS) {
+        errors.push({
+          section: 'experience',
+          rule: 'bullet-too-long',
+          severity: 'warning',
+          message: `Bullet approaching limit (${wordCount} words, ${charCount} chars): "${bullet.substring(0, 80)}..."`,
+          offendingContent: bullet,
+          suggestion: 'Consider tightening to improve scannability.',
+        });
+      }
+    }
+  }
+
   // ── 3. Context-Aware Phrasing Check ───────────────────────────
   const phraseTiers: { pattern: RegExp; severity: 'critical' | 'warning'; reason: string }[] = [
     // TIER 1: CRITICAL — always lazy as opener

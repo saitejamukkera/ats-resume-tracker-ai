@@ -218,6 +218,11 @@ ${t.errors.map((e) => `  - ${e}`).join("\n")}
   )
   .join("\n---\n")}
 
+LENGTH CONSTRAINT (NON-NEGOTIABLE):
+- Every repaired bullet must be under 35 words and 220 characters.
+- Front-load the most important keyword and metric in the first 15 words.
+- If the original bullet is too long, tighten it while preserving the key achievement.
+
 CRITICAL FORMATTING:
 - Do NOT start with "Responsible for", "Helped with", "Assisted in", "Involved in", "Worked on"
 - Do NOT use raw LaTeX (\\textbf{}, etc.) — symbols like %, $, & are escaped automatically

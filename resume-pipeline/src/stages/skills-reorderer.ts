@@ -1,6 +1,8 @@
 // src/stages/skills-reorderer.ts
-// Stage 3b: Deterministic skills reordering — no LLM needed.
-// Reorders skill categories/items by JD relevance.
+// Stage 3b: Deterministic skills reordering + augmentation — no LLM needed.
+// Reorders skill categories/items by JD relevance and injects missing JD
+// keywords into the best-matching category so ATS picks them up without
+// forcing them into experience bullets.
 
 import type { JDAnalysis } from '../schemas/jd-analysis.js';
 

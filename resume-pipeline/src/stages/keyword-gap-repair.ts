@@ -80,6 +80,7 @@ RULES:
 - Use symbols naturally (%, $, etc.) — they will be escaped automatically
 - DO NOT spell out symbols as words (write "30%" not "30 percent")
 - DO NOT use em dashes or en dashes. Use commas or semicolons.
+- Repaired bullets must stay under 35 words / 220 characters. If adding a keyword would make a bullet too long, rephrase to be tighter rather than appending.
 - If a keyword genuinely cannot be incorporated into any bullet, skip it
 
 Return:
@@ -109,19 +110,31 @@ Return:
   for (const fix of result.object.repairedBullets) {
     const role = repaired.experience[fix.roleIndex];
     if (role && fix.bulletIndex >= 0 && fix.bulletIndex < role.bullets.length) {
+      // Length guard
+      const wordCount = fix.text.split(/\s+/).length;
+      if (wordCount > 40) {
+        rejectedCount++;
+        console.log(
+          `[keyword-gap-repair] Rejected [${fix.roleIndex}-${fix.bulletIndex}]: ` +
+            `Too long after repair (${wordCount} words)`,
+        );
+        continue;
+      }
+
       // Check IDS impact of original vs rewritten bullet
       const originalBullet = role.bullets[fix.bulletIndex];
       const originalAnalysis = analyzeBullet(originalBullet, jdKeywordsList, "mid");
       const rewrittenAnalysis = analyzeBullet(fix.text, jdKeywordsList, "mid");
 
-      // Allow mild regression (strong→medium is fine for keyword coverage)
-      // Reject if new bullet drops to 'weak' or 'none' — not worth the keyword
+      // Only strong→medium is allowed (acceptable tradeoff for keyword coverage).
+      // All other downgrades are rejected:
+      //   - "none" is an absolute floor regardless of origin (fixes weak→none bug)
+      //   - medium→weak and strong→weak are too much damage for one keyword
       const strengthOrder = { none: 0, weak: 1, medium: 2, strong: 3 };
       const originalRank = strengthOrder[originalAnalysis.strength];
       const rewrittenRank = strengthOrder[rewrittenAnalysis.strength];
 
-      if (rewrittenRank <= 1 && originalRank > 1) {
-        // Regression to weak/none — reject this rewrite, keep original
+      if (rewrittenAnalysis.strength === 'none' || (rewrittenRank <= 1 && originalRank > 1)) {
         rejectedCount++;
         console.log(
           `[keyword-gap-repair] Rejected [${fix.roleIndex}-${fix.bulletIndex}]: ` +

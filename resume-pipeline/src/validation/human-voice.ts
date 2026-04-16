@@ -6,6 +6,7 @@
 import { z } from "zod";
 import { models } from "../config/models.js";
 import { callLLM } from "../observability/llm-wrapper.js";
+import { analyzeBullet } from "../impact/detector.js";
 import type { GeneratedSections } from "../schemas/pipeline.js";
 import type { SnapshotStore } from "../observability/debug.js";
 
@@ -230,13 +231,15 @@ export function estimateAIDetectionRisk(
     );
   }
 
-  // 2. Bullet length uniformity — all within ±4 words of average
+  // 2. Bullet length uniformity — stdDev-based (matches Human Voice scorer)
   const lengths = bullets.map((b) => b.split(/\s+/).length);
   const avgLen = lengths.reduce((a, b) => a + b, 0) / lengths.length;
-  const allSimilar = lengths.every((l) => Math.abs(l - avgLen) < 4);
-  if (allSimilar && bullets.length >= 4) {
+  const lenVariance = lengths.reduce((a, c) => a + Math.pow(c - avgLen, 2), 0) / lengths.length;
+  const lenStdDev = Math.sqrt(lenVariance);
+
+  if (lenStdDev < 3 && bullets.length >= 4) {
     signals.push(
-      `All ${bullets.length} bullets suspiciously similar length (avg ${Math.round(avgLen)} words) — mix short punchy lines with longer detailed ones`,
+      `All ${bullets.length} bullets suspiciously similar length (avg ${Math.round(avgLen)} words, stdDev ${lenStdDev.toFixed(1)}) — mix short punchy lines (10-15 words) with longer detailed ones (25-30 words)`,
     );
   }
 
@@ -354,6 +357,7 @@ export async function humanizePass(
   voiceScore: HumanVoiceScore,
   aiSignals: string[],
   experienceLevel: string,
+  jdKeywords: string[],
   snapshotStore?: SnapshotStore,
 ): Promise<{
   sections: GeneratedSections;
@@ -419,14 +423,41 @@ export async function humanizePass(
     );
   }
 
-  if (voiceScore.lengthVariance < 0.3) {
+  if (voiceScore.lengthVariance < 0.5) {
+    const wordCounts = allBullets.map((b, i) => ({ i, words: b.split(/\s+/).length }));
+    const avgWords = wordCounts.reduce((s, b) => s + b.words, 0) / wordCounts.length;
+
+    const nearAvg = wordCounts
+      .filter((b) => Math.abs(b.words - avgWords) < 3)
+      .sort((a, b) => Math.abs(a.words - avgWords) - Math.abs(b.words - avgWords));
+
+    const targetCount = Math.min(Math.ceil(allBullets.length * 0.25), 5);
+    const targets = nearAvg.slice(0, targetCount);
+
+    let flatIdx = 0;
+    const bulletPositions: string[] = [];
+    for (let ri = 0; ri < sections.experience.length; ri++) {
+      for (let bi = 0; bi < sections.experience[ri].bullets.length; bi++) {
+        if (targets.some((t) => t.i === flatIdx)) {
+          bulletPositions.push(`[${ri}-${bi}] (${allBullets[flatIdx].split(/\s+/).length} words)`);
+        }
+        flatIdx++;
+      }
+    }
+
+    const severity = voiceScore.lengthVariance < 0.3 ? "CRITICAL" : "IMPORTANT";
+
     issues.push(
-      `BULLET LENGTH UNIFORMITY: All bullets are roughly the same length. Rewrite 2-3 bullets to be SHORT and punchy (10-15 words). Example: "Owned the CI pipeline, 400+ builds/month, 99.2% green rate." Leave the rest at 25-35 words.`,
+      `${severity} — BULLET LENGTH UNIFORMITY: All bullets are ~${Math.round(avgWords)} words (stdDev only ${Math.round(voiceScore.lengthVariance * 8)} words). ` +
+        `This is the #1 sign of AI-generated text. ` +
+        `SHORTEN these specific bullets to 10-15 words (punchy, single-clause):\n` +
+        bulletPositions.map((p) => `   ${p}`).join("\n") + "\n" +
+        `   Examples of SHORT bullets: "Owned the CI pipeline, 400+ builds/month, 99.2% green rate." or "Fixed 12 flaky tests blocking the release branch."\n` +
+        `   Keep the remaining bullets at 22-30 words. The goal is a visible MIX of short and long.`,
     );
   }
 
   if (voiceScore.metricsBalance < 0.7 && voiceScore.metricsBalance > 0) {
-    const allBullets = sections.experience.flatMap((r) => r.bullets);
     const metricCount = allBullets.filter((b) =>
       /\d+%|\d+x|\$[\d,]+|\d+\s*(ms|seconds|hours|days|users|requests|records)/i.test(b),
     ).length;
@@ -434,6 +465,11 @@ export async function humanizePass(
     if (ratio > 0.85) {
       issues.push(
         `TOO MANY METRICS: ${Math.round(ratio * 100)}% of bullets have numbers — looks AI-generated. Convert 2-3 bullets to show QUALITATIVE impact instead: "Improved code review culture", "Became go-to person for K8s debugging", "Wrote internal docs after onboarding exposed gaps".`,
+      );
+    } else if (ratio < 0.5) {
+      issues.push(
+        `TOO FEW METRICS: Only ${Math.round(ratio * 100)}% of bullets have numbers. ` +
+        `Add concrete metrics to 2-3 more bullets. Example: "Reduced build time by 40%" or "Handled 5K+ daily API requests".`,
       );
     }
   }
@@ -453,6 +489,16 @@ export async function humanizePass(
     );
   }
 
+  // ── Bullet length bloat detection ─────────────────────────────
+  const longBullets = allBullets.filter((b) => b.split(/\s+/).length > 35);
+  if (longBullets.length > allBullets.length * 0.3) {
+    issues.push(
+      `BULLET LENGTH BLOAT: ${longBullets.length}/${allBullets.length} bullets exceed 35 words. ` +
+        `Tighten these to under 30 words. Cut filler phrases like "in order to", "as part of the effort to", ` +
+        `"which resulted in". Front-load the keyword and metric. A great bullet fits on one line of a resume.`,
+    );
+  }
+
   // Add non-verb AI detection signals (verb issues already handled above with bullet indices)
   const nonVerbSignals = aiSignals.filter(
     (s) => !s.toLowerCase().includes("verb"),
@@ -468,6 +514,8 @@ export async function humanizePass(
     return { sections, inputTokens: 0, outputTokens: 0 };
   }
 
+  const maxRewrites = Math.ceil(allBullets.length * 0.3);
+
   const prompt = `You are a resume writing expert. The following resume bullets were scored ${voiceScore.overall}/100 on "human voice" quality, meaning they sound too AI-generated. Recruiters WILL flag these.
 
 CANDIDATE LEVEL: ${experienceLevel}
@@ -479,11 +527,17 @@ SPECIFIC ISSUES TO FIX:
 ${issues.map((issue, i) => `${i + 1}. ${issue}`).join("\n\n")}
 
 RULES:
+- Rewrite AT MOST ${maxRewrites} bullets in this pass. Focus on the bullets with the worst issues first.
 - ONLY rewrite bullets that have the identified issues. Do NOT touch bullets that are already good.
+- VERB COLLISION PREVENTION: Before choosing a new opening verb, check that no other bullet (including ones you already rewrote in this response) starts with the same verb. Every opening verb must be unique across the entire resume.
+- PRESERVE IMPACT SIGNALS (NON-NEGOTIABLE): Do NOT rephrase or remove before→after comparisons (e.g. "from 850ms to 500ms", "from 65% to 90%"), explicit percentage improvements (e.g. "by 40%"), or before/after numbers. These are high-value ATS and impact signals. If a bullet contains one, you may only change the opening verb or surrounding context — keep the numbers and the "from X to Y" pattern word-for-word.
 - Do NOT change any facts, technologies, projects, or metrics — only rephrase
 - Do NOT add new metrics or make up technical details
 - Make it sound like a real ${experienceLevel} engineer wrote this, not ChatGPT
 - Keep the same meaning — just change the sentence structure, verb choice, and phrasing
+- PRESERVE these JD keywords in every bullet that currently contains them: ${jdKeywords.slice(0, 20).join(", ")}
+- Do NOT rephrase or remove technology names, framework names, or domain terms
+- Every rewritten bullet must be under 35 words and 220 characters
 - DO NOT use raw LaTeX formatting (e.g. \\textbf{}, \\textit{})
 - Use symbols naturally (%, $, etc.) — they will be escaped automatically
 - DO NOT use em dashes or en dashes. Use commas or semicolons.
@@ -507,22 +561,181 @@ Return ONLY the bullets you changed as {roleIndex, bulletIndex, text}.`;
     })),
   };
 
+  const candidateLevel: "entry" | "mid" | "senior" =
+    experienceLevel === "senior" ? "senior" : experienceLevel === "entry" ? "entry" : "mid";
+
   let appliedCount = 0;
+  let rejectedCount = 0;
   for (const fix of result.object.repairedBullets) {
     const role = repaired.experience[fix.roleIndex];
     if (role && fix.bulletIndex >= 0 && fix.bulletIndex < role.bullets.length) {
+      const wordCount = fix.text.split(/\s+/).length;
+      if (wordCount > 40) {
+        rejectedCount++;
+        console.log(
+          `[humanize-pass] Rejected [${fix.roleIndex}-${fix.bulletIndex}]: too long (${wordCount} words)`,
+        );
+        continue;
+      }
+
+      const originalBullet = role.bullets[fix.bulletIndex];
+      const originalAnalysis = analyzeBullet(originalBullet, jdKeywords, candidateLevel);
+      const rewrittenAnalysis = analyzeBullet(fix.text, jdKeywords, candidateLevel);
+      // Humanize is purely stylistic — it must never reduce IDS strength at all.
+      // Any downgrade (strong→medium, medium→weak, etc.) means the rewrite
+      // stripped a signal (comparison, percentage, impact verb) → reject it.
+      const strengthOrder = { none: 0, weak: 1, medium: 2, strong: 3 };
+      if (strengthOrder[rewrittenAnalysis.strength] < strengthOrder[originalAnalysis.strength]) {
+        rejectedCount++;
+        console.log(
+          `[humanize-pass] Rejected [${fix.roleIndex}-${fix.bulletIndex}]: ` +
+            `IDS dropped ${originalAnalysis.strength} -> ${rewrittenAnalysis.strength}`,
+        );
+        continue;
+      }
+
       role.bullets[fix.bulletIndex] = fix.text;
       appliedCount++;
     }
   }
 
   console.log(
-    `[humanize-pass] Rewrote ${appliedCount} bullets to sound more human`,
+    `[humanize-pass] Rewrote ${appliedCount} bullets to sound more human` +
+      (rejectedCount > 0 ? `, rejected ${rejectedCount}` : ""),
   );
 
   return {
     sections: repaired,
     inputTokens: result.inputTokens,
     outputTokens: result.outputTokens,
+  };
+}
+
+// ── Surgical Verb Dedup Pass (LLM) ─────────────────────────────
+
+const VerbDedupSchema = z.object({
+  repairedBullets: z.array(
+    z.object({
+      roleIndex: z.number(),
+      bulletIndex: z.number(),
+      text: z.string().min(10),
+    }),
+  ),
+});
+
+/**
+ * Find new verb collisions introduced by prior humanize passes
+ * and surgically fix ONLY the opening verb of those specific bullets.
+ * Costs 1 small LLM call (only colliding bullets are sent).
+ */
+export async function fixVerbCollisions(
+  sections: GeneratedSections,
+  jdKeywords: string[],
+  experienceLevel: string,
+  snapshotStore?: SnapshotStore,
+): Promise<{
+  sections: GeneratedSections;
+  inputTokens: number;
+  outputTokens: number;
+  fixed: number;
+}> {
+  const allBullets = sections.experience.flatMap((r) => r.bullets);
+  const verbs = allBullets.map((b) => b.trim().split(/\s+/)[0].toLowerCase());
+  const verbCounts = new Map<string, number>();
+  verbs.forEach((v) => verbCounts.set(v, (verbCounts.get(v) || 0) + 1));
+  const repeatedVerbs = [...verbCounts.entries()].filter(([, c]) => c > 2);
+
+  if (repeatedVerbs.length === 0) {
+    return { sections, inputTokens: 0, outputTokens: 0, fixed: 0 };
+  }
+
+  // Build list of bullets to fix (keep 1 instance of each repeated verb, fix the rest)
+  const bulletsToFix: { ri: number; bi: number; text: string; verb: string }[] = [];
+  const usedVerbs = new Set(verbCounts.keys());
+
+  for (const [verb, count] of repeatedVerbs) {
+    let kept = 0;
+    let flatIdx = 0;
+    for (let ri = 0; ri < sections.experience.length; ri++) {
+      for (let bi = 0; bi < sections.experience[ri].bullets.length; bi++) {
+        const bVerb = sections.experience[ri].bullets[bi].trim().split(/\s+/)[0].toLowerCase();
+        if (bVerb === verb) {
+          if (kept === 0) {
+            kept++;
+          } else {
+            bulletsToFix.push({ ri, bi, text: sections.experience[ri].bullets[bi], verb });
+          }
+        }
+        flatIdx++;
+      }
+    }
+  }
+
+  if (bulletsToFix.length === 0) {
+    return { sections, inputTokens: 0, outputTokens: 0, fixed: 0 };
+  }
+
+  const suggestedVerbs = [
+    "tackled", "shipped", "debugged", "proposed", "configured",
+    "migrated", "automated", "resolved", "profiled", "streamlined",
+    "refactored", "consolidated", "integrated", "eliminated", "established",
+    "wrote", "owned", "architected", "introduced", "delivered",
+    "diagnosed", "standardized", "replaced", "accelerated", "simplified",
+  ].filter((v) => !usedVerbs.has(v));
+
+  const bulletList = bulletsToFix
+    .map((b) => `[${b.ri}-${b.bi}] (starts with "${b.verb}"): "${b.text}"`)
+    .join("\n");
+
+  const prompt = `You are fixing verb repetition in a resume. These bullets start with the same verb as another bullet in the resume. Change ONLY the opening verb of each bullet below. Keep the rest of the sentence IDENTICAL.
+
+BULLETS TO FIX:
+${bulletList}
+
+VERBS ALREADY USED (do NOT use these): ${[...usedVerbs].join(", ")}
+USE ONE OF THESE INSTEAD: ${suggestedVerbs.slice(0, 15).join(", ")}
+
+RULES:
+- Change ONLY the first word (the opening verb). Keep everything else exactly the same.
+- Each replacement verb must be different from all other bullets in the resume.
+- PRESERVE all technologies, metrics, and JD keywords: ${jdKeywords.slice(0, 10).join(", ")}
+- DO NOT use em dashes or en dashes. Use commas or semicolons.
+
+Return the fixed bullets as {roleIndex, bulletIndex, text}.`;
+
+  const result = await callLLM({
+    model: models.repair,
+    schema: VerbDedupSchema,
+    prompt,
+    stage: "verb-dedup",
+    snapshotStore,
+  });
+
+  const repaired: GeneratedSections = {
+    ...sections,
+    experience: sections.experience.map((r) => ({
+      ...r,
+      bullets: [...r.bullets],
+    })),
+  };
+
+  let fixedCount = 0;
+  for (const fix of result.object.repairedBullets) {
+    const role = repaired.experience[fix.roleIndex];
+    if (role && fix.bulletIndex >= 0 && fix.bulletIndex < role.bullets.length) {
+      role.bullets[fix.bulletIndex] = fix.text;
+      fixedCount++;
+    }
+  }
+
+  console.log(
+    `[verb-dedup] Fixed ${fixedCount} verb collisions (${repeatedVerbs.map(([v, c]) => `"${v}" x${c}`).join(", ")})`,
+  );
+
+  return {
+    sections: repaired,
+    inputTokens: result.inputTokens,
+    outputTokens: result.outputTokens,
+    fixed: fixedCount,
   };
 }

@@ -20,6 +20,7 @@ import {
   scoreHumanVoice,
   estimateAIDetectionRisk,
   humanizePass,
+  fixVerbCollisions,
 } from "../validation/human-voice.js";
 import type {
   HumanVoiceScore,
@@ -449,32 +450,46 @@ export async function runPipeline(
 
   // ── Stage 4.9: Humanize Pass (reactive — score too low OR AI risk detected) ──
   const HUMANIZE_THRESHOLD = 60;
-  const shouldHumanize =
-    config.modules.useAntiAIDetection &&
-    humanVoiceResult &&
-    (humanVoiceResult.overall < HUMANIZE_THRESHOLD ||
-      (aiDetectionResult && aiDetectionResult.risk !== "low"));
+  const MAX_HUMANIZE_PASSES = 2;
+  const humanizeJdKeywords = [...jd.requiredSkills, ...jd.preferredSkills];
+  let humanizePassCount = 0;
 
-  if (shouldHumanize && humanVoiceResult) {
+  for (let hPass = 1; hPass <= MAX_HUMANIZE_PASSES; hPass++) {
+    const currentBullets = sections.experience.flatMap((r) => r.bullets);
+    const currentVoice = hPass === 1 ? humanVoiceResult : scoreHumanVoice(currentBullets);
+    const currentAI = hPass === 1 ? aiDetectionResult : estimateAIDetectionRisk(currentBullets);
+
+    const needsHumanize =
+      currentVoice &&
+      (
+        (config.modules.useHumanVoiceScoring && currentVoice.overall < HUMANIZE_THRESHOLD) ||
+        (config.modules.useAntiAIDetection && currentAI && currentAI.risk !== "low")
+      );
+
+    if (!needsHumanize || !currentVoice) break;
+
     const reason =
-      humanVoiceResult.overall < HUMANIZE_THRESHOLD
-        ? `Human Voice ${humanVoiceResult.overall} < ${HUMANIZE_THRESHOLD}`
-        : `AI Detection Risk: ${aiDetectionResult!.risk.toUpperCase()}`;
+      currentVoice.overall < HUMANIZE_THRESHOLD
+        ? `Human Voice ${currentVoice.overall} < ${HUMANIZE_THRESHOLD}`
+        : `AI Detection Risk: ${currentAI!.risk.toUpperCase()}`;
+
     try {
       console.log(
-        `[pipeline] ${reason}, triggering humanize pass...`,
+        `[pipeline] ${reason}, triggering humanize pass ${hPass}/${MAX_HUMANIZE_PASSES}...`,
       );
-      telemetry.startStage("humanize-pass");
+      telemetry.startStage(`humanize-pass-${hPass}`);
       const humanizeResult = await humanizePass(
         sections,
-        humanVoiceResult,
-        aiDetectionResult?.signals || [],
+        currentVoice,
+        currentAI?.signals || [],
         jd.experienceLevel,
+        humanizeJdKeywords,
         snapshotStore,
       );
       sections = humanizeResult.sections;
+      humanizePassCount++;
       telemetry.endStage(
-        "humanize-pass",
+        `humanize-pass-${hPass}`,
         1,
         humanizeResult.inputTokens,
         humanizeResult.outputTokens,
@@ -482,24 +497,97 @@ export async function runPipeline(
 
       // Re-score after humanize pass
       const updatedBullets = sections.experience.flatMap((r) => r.bullets);
-      const prevScore = humanVoiceResult.overall;
+      const prevScore = currentVoice.overall;
       humanVoiceResult = scoreHumanVoice(updatedBullets);
       aiDetectionResult = estimateAIDetectionRisk(updatedBullets);
       console.log(
-        `[pipeline] Human Voice after humanize: ${prevScore} → ${humanVoiceResult.overall}/100 | AI Risk: ${aiDetectionResult.risk}`,
+        `[pipeline] Human Voice after humanize pass ${hPass}: ${prevScore} → ${humanVoiceResult.overall}/100 | AI Risk: ${aiDetectionResult.risk}`,
       );
+
+      // Re-check ATS score after humanize — guard against keyword loss
+      const preHumanizeAts = atsScore.overall;
+      atsScore = calculateATSScore(sections, jd);
+      if (atsScore.overall < preHumanizeAts - 5) {
+        console.warn(
+          `[pipeline] ATS regression after humanize: ${preHumanizeAts} -> ${atsScore.overall}. ` +
+            `Triggering keyword gap repair to recover.`,
+        );
+        try {
+          const recoveryResult = await repairKeywordGaps(
+            sections, jd, atsScore.missingRequired, atsScore.missingPreferred, snapshotStore,
+          );
+          sections = recoveryResult.sections;
+          atsScore = calculateATSScore(sections, jd);
+          console.log(`[pipeline] ATS after recovery: ${atsScore.overall}`);
+        } catch (err) {
+          console.warn(`[pipeline] ATS recovery failed: ${err instanceof Error ? err.message : err}`);
+        }
+      }
+
+      if (humanVoiceResult.overall >= HUMANIZE_THRESHOLD &&
+          (!aiDetectionResult || aiDetectionResult.risk === "low")) {
+        break;
+      }
     } catch (error) {
       // Non-critical — keep current bullets
       const msg = error instanceof Error ? error.message : String(error);
-      console.warn(`[pipeline] Humanize pass failed: ${msg}`);
-      telemetry.failStage("humanize-pass", msg);
+      console.warn(`[pipeline] Humanize pass ${hPass} failed: ${msg}`);
+      telemetry.failStage(`humanize-pass-${hPass}`, msg);
+      break;
     }
-  } else if (config.modules.useAntiAIDetection && humanVoiceResult) {
+  }
+
+  if (humanizePassCount === 0 && humanVoiceResult) {
     telemetry.skipStage(
       "humanize-pass",
-      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} and AI risk is low`,
+      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD} and AI risk is ${aiDetectionResult?.risk ?? 'not checked'}`,
     );
   }
+
+  // ── Stage 4.95: Surgical Verb Dedup (fixes collisions introduced by humanize) ──
+  if (humanizePassCount > 0) {
+    const postBullets = sections.experience.flatMap((r) => r.bullets);
+    const postVerbs = postBullets.map((b) => b.trim().split(/\s+/)[0].toLowerCase());
+    const postVerbCounts = new Map<string, number>();
+    postVerbs.forEach((v) => postVerbCounts.set(v, (postVerbCounts.get(v) || 0) + 1));
+    const hasCollisions = [...postVerbCounts.values()].some((c) => c > 2);
+
+    if (hasCollisions) {
+      try {
+        telemetry.startStage("verb-dedup");
+        const dedupResult = await fixVerbCollisions(
+          sections,
+          humanizeJdKeywords,
+          jd.experienceLevel,
+          snapshotStore,
+        );
+        if (dedupResult.fixed > 0) {
+          sections = dedupResult.sections;
+          aiDetectionResult = estimateAIDetectionRisk(
+            sections.experience.flatMap((r) => r.bullets),
+          );
+          console.log(
+            `[pipeline] AI Risk after verb dedup: ${aiDetectionResult.risk}`,
+          );
+        }
+        telemetry.endStage(
+          "verb-dedup",
+          dedupResult.fixed > 0 ? 1 : 0,
+          dedupResult.inputTokens,
+          dedupResult.outputTokens,
+        );
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error);
+        console.warn(`[pipeline] Verb dedup failed: ${msg}`);
+        telemetry.failStage("verb-dedup", msg);
+      }
+    } else {
+      telemetry.skipStage("verb-dedup", "No verb collisions detected after humanize");
+    }
+  }
+
+  // ── Final ATS recalculation (accounts for all humanize + verb-dedup changes) ──
+  atsScore = calculateATSScore(sections, jd);
 
   // ── Stage 5: LaTeX Assembly ───────────────────────────────────
   emit({ type: "stage-start", stage: "latex-assembler" });
