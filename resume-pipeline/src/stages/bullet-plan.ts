@@ -206,36 +206,9 @@ export function buildPlans(args: BuildPlansArgs): BulletPlan[][] {
       const pattern =
         patternsRotation[(patternStart + bi) % patternsRotation.length];
 
-      // Pick an opening verb not yet used. Fallback to original if pool exhausted.
-      const pool = verbListForPattern(pattern);
-      let chosenVerb = "";
-      const shuffledPool = shuffle([...pool], rng);
-      for (const v of shuffledPool) {
-        if (!usedVerbs.has(v.toLowerCase())) {
-          chosenVerb = v;
-          break;
-        }
-      }
-      if (!chosenVerb) {
-        // All pattern-specific verbs used — fall back to any unused verb
-        const allVerbs = [
-          ...VERB_POOL.creation,
-          ...VERB_POOL.impact,
-          ...VERB_POOL.problem,
-          ...VERB_POOL.team,
-          ...VERB_POOL.migration,
-          ...VERB_POOL.ownership,
-        ];
-        const shuffledAll = shuffle(allVerbs, rng);
-        for (const v of shuffledAll) {
-          if (!usedVerbs.has(v.toLowerCase())) {
-            chosenVerb = v;
-            break;
-          }
-        }
-        if (!chosenVerb) chosenVerb = briefs[bi].action || "built";
-      }
-      usedVerbs.add(chosenVerb.toLowerCase());
+      // Simply use the original verb from the brief. This prevents the resume from forcing 
+      // weird synonyms ("Consolidated", "Hardened") just to achieve mathematical uniqueness.
+      const chosenVerb = briefs[bi].action || "built";
 
       const { min, max } = LENGTH_BANDS[band];
 
@@ -265,11 +238,10 @@ export function buildPlans(args: BuildPlansArgs): BulletPlan[][] {
 
 export function formatPlanForPrompt(plan: BulletPlan): string {
   const parts: string[] = [];
-  parts.push(`length: ${plan.lengthBand} (${plan.targetWordsMin}-${plan.targetWordsMax} words)`);
-  parts.push(`opening verb: "${plan.openingVerb}" (use exactly this, case may vary)`);
-  parts.push(`pattern: ${plan.sentencePattern}`);
+  parts.push(`Keep length concise (max 1-2 lines)`);
+  parts.push(`START bullet with exact verb: "${plan.openingVerb}"`);
   parts.push(
-    plan.metricRequired ? "metric: REQUIRED" : "metric: optional (qualitative OK)",
+    plan.metricRequired ? "metric: highly recommended if applicable" : "metric: optional (qualitative OK)",
   );
   if (plan.preservedMetric) {
     parts.push(`PRESERVE metric verbatim: "${plan.preservedMetric}"`);

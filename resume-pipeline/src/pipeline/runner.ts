@@ -743,32 +743,20 @@ export async function runPipeline(
   // burstinessMinStdDev (default 4), humanize runs regardless of the
   // composite score — flat bullet lengths are the single strongest AI signal.
   const HUMANIZE_THRESHOLD = config.constraints.humanVoiceThreshold;
-  const MAX_HUMANIZE_PASSES = 2;
+  const MAX_HUMANIZE_PASSES = 0; // Disabled: primary generator handles anti-AI now
   const humanizeJdKeywords = [...jd.requiredSkills, ...jd.preferredSkills];
   let humanizePassCount = 0;
-
-  const lengthStdDev = (bs: string[]): number => {
-    if (bs.length === 0) return 0;
-    const words = bs.map((b) => b.split(/\s+/).length);
-    const mean = words.reduce((a, b) => a + b, 0) / words.length;
-    const variance =
-      words.reduce((a, c) => a + Math.pow(c - mean, 2), 0) / words.length;
-    return Math.sqrt(variance);
-  };
 
   for (let hPass = 1; hPass <= MAX_HUMANIZE_PASSES; hPass++) {
     const currentBullets = sections.experience.flatMap((r) => r.bullets);
     const currentVoice = hPass === 1 ? humanVoiceResult : scoreHumanVoice(currentBullets);
     const currentAI = hPass === 1 ? aiDetectionResult : estimateAIDetectionRisk(currentBullets);
-    const stdDev = lengthStdDev(currentBullets);
-    const burstinessFailed = stdDev < config.constraints.burstinessMinStdDev;
 
     const needsHumanize =
       currentVoice &&
       (
         (config.modules.useHumanVoiceScoring && currentVoice.overall < HUMANIZE_THRESHOLD) ||
-        (config.modules.useAntiAIDetection && currentAI && currentAI.risk !== "low") ||
-        burstinessFailed
+        (config.modules.useAntiAIDetection && currentAI && currentAI.risk !== "low")
       );
 
     if (!needsHumanize || !currentVoice) break;
@@ -776,9 +764,7 @@ export async function runPipeline(
     const reason =
       currentVoice.overall < HUMANIZE_THRESHOLD
         ? `Human Voice ${currentVoice.overall} < ${HUMANIZE_THRESHOLD}`
-        : burstinessFailed
-          ? `Burstiness stdDev ${stdDev.toFixed(1)} < ${config.constraints.burstinessMinStdDev}`
-          : `AI Detection Risk: ${currentAI!.risk.toUpperCase()}`;
+        : `AI Detection Risk: ${currentAI!.risk.toUpperCase()}`;
 
     try {
       console.log(
@@ -831,11 +817,9 @@ export async function runPipeline(
         }
       }
 
-      const postStdDev = lengthStdDev(updatedBullets);
       if (
         humanVoiceResult.overall >= HUMANIZE_THRESHOLD &&
-        (!aiDetectionResult || aiDetectionResult.risk === "low") &&
-        postStdDev >= config.constraints.burstinessMinStdDev
+        (!aiDetectionResult || aiDetectionResult.risk === "low")
       ) {
         break;
       }
@@ -849,12 +833,9 @@ export async function runPipeline(
   }
 
   if (humanizePassCount === 0 && humanVoiceResult) {
-    const finalStdDev = lengthStdDev(
-      sections.experience.flatMap((r) => r.bullets),
-    );
     telemetry.skipStage(
       "humanize-pass",
-      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD}, AI risk ${aiDetectionResult?.risk ?? "not checked"}, stdDev ${finalStdDev.toFixed(1)} >= ${config.constraints.burstinessMinStdDev}`,
+      `Human Voice ${humanVoiceResult.overall} >= ${HUMANIZE_THRESHOLD}, AI risk ${aiDetectionResult?.risk ?? "not checked"}`,
     );
   }
 

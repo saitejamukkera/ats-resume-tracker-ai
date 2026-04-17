@@ -79,9 +79,9 @@ KEYWORD INJECTION WITH IMPACT (critical rule):
 When adding a missing keyword (e.g. Kafka, Redis, Kubernetes), you MUST
 show what impact was made USING that technology. Never just name-drop.
   BAD:  "...using Kafka for message processing."
-  GOOD: "...using Kafka event streams, reducing payment settlement lag from 5 minutes to under 30 seconds."
+  GOOD: "...using Kafka event streams, reducing payment settlement lag from [X] minutes to under [Y] seconds."
   BAD:  "...with Redis caching."
-  GOOD: "...with Redis caching, cutting P95 response latency from 850ms to 500ms."
+  GOOD: "...with Redis caching, reducing P95 response latency from [X]ms to [Y]ms."
 The keyword must be tied to a measurable outcome or system-level improvement.
 
 TARGET SELECTION STRATEGY:
@@ -107,7 +107,9 @@ RULES:
 - DO NOT use em dashes or en dashes. Use commas or semicolons.
 - Repaired bullets must stay under 35 words / 220 characters. If adding a keyword would make a bullet too long, rephrase to be tighter rather than appending.
 - Remove filler phrases to make room: "using data structures", "using system design principles", "in an agile environment" add no value and can be replaced with the missing keyword + impact.
-- If a keyword genuinely cannot be incorporated with demonstrated impact, skip it
+- MAXIMIZE SCORE WITH ALL KEYWORDS (CRITICAL): You MUST weave ALL missing keywords (even soft skills or CS concepts like "algorithms", "design patterns", "system architecture") into the bullets to maximize ATS match. 
+- ORGANIC WEAVING FOR SOFT SKILLS: NEVER use abstract skills as blunt active verbs (e.g., NEVER write "applying algorithms", "using design patterns"). Weave them naturally as descriptive noun phrases (e.g. "by designing scalable query algorithms", "using resilient system architecture").
+- If a keyword genuinely cannot be incorporated without breaking grammar, skip it, but prioritize maximum inclusion.
 
 Return:
 - repairedBullets: array of {roleIndex, bulletIndex, text} for ONLY the bullets you changed`;

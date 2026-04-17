@@ -95,15 +95,15 @@ TIER A BULLETS (aim for 80% of all bullets):
   - Include scale, performance, or system-level impact
   - Have a before/after or percentage improvement
   Examples:
-    "Reduced P95 latency from 850ms to 500ms by consolidating Redis caching across high-frequency query paths."
-    "Cut CI/CD pipeline runtime from 18 to 12 minutes by restructuring GitHub Actions with Docker layer caching."
-    "Halved defect escape rate to production by raising automated test coverage from 65% to 90% with JUnit 5."
+    "Reduced P95 latency from [X]ms to [Y]ms by consolidating Redis caching across high-frequency query paths."
+    "Decreased CI/CD pipeline runtime from [X] to [Y] minutes by restructuring GitHub Actions with Docker layer caching."
+    "Reduced defect escape rate to production by raising automated test coverage from [X]% to [Y]% with JUnit 5."
 
 TIER B BULLETS (limit to ~20%):
   - Have an action with some context but weaker impact signal
   - Acceptable for supporting bullets, but push toward Tier A when possible
   Examples:
-    "Established OpenTelemetry distributed tracing across microservices, cutting mean time to root-cause by about 29%."
+    "Established OpenTelemetry distributed tracing across microservices, reducing mean time to root-cause by about [X]%."
 
 TIER C BULLETS (DELETE or rewrite — never generate these):
   - Normal engineering work described without any outcome
@@ -115,8 +115,8 @@ TIER C BULLETS (DELETE or rewrite — never generate these):
 STRUCTURE PREFERENCE (in order of strength):
   1. OUTCOME-FIRST: "Reduced X by Y% by implementing Z" (STRONGEST)
   2. ACTION-THEN-IMPACT: "Implemented Z, reducing X by Y%" (GOOD)
-  3. CONTEXT-THEN-OUTCOME: "During Q3 hardening, cut on-call pages by 43% by adding circuit breakers" (GOOD with context)
-  4. ACTION-ONLY: "Configured Redis caching for volunteer endpoints" (WEAK — always add "...cutting queries by 38%")
+  3. CONTEXT-THEN-OUTCOME: "During Q3 hardening, decreased on-call pages by [X]% by adding circuit breakers" (GOOD with context)
+  4. ACTION-ONLY: "Configured Redis caching for volunteer endpoints" (WEAK — always add "...reducing queries by [X]%")
 
 THE 6-SECOND TEST: A recruiter skims your resume in 6 seconds.
 If they can't see concrete impact in the first 3-4 words of each
@@ -142,21 +142,21 @@ LOW-VALUE BULLETS (limit to 20% MAX — these dilute your strongest story):
   - Delivery: shipping features, release management (unless tied to velocity/scale)
 
 KILL LIST — never generate these patterns:
-  - "Diagnosed N defects per sprint" → doing your job, not improving a system
-  - "Cut PR review cycle time by N%" → process work, not engineering impact
+  - "Diagnosed defects per sprint" → doing your job, not improving a system
+  - "Reduced PR review cycle time by [X]%" → process work, not engineering impact
   - "Collaborated with the team" → says nothing about what you built
   - "Presented at sprint demo" → ceremony attendance, not achievement
-  - "Built APIs serving 3K users" → weak without latency/throughput impact
+  - "Built APIs serving [X]K users" → weak without latency/throughput impact
 
 REFRAME LOW-VALUE INTO HIGH-VALUE:
-  Instead of: "Cut PR review cycle time by 27%"
+  Instead of: "Reduced PR review cycle time by [X]%"
   Write:      (DELETE this bullet and replace with a performance/scale bullet)
 
-  Instead of: "Diagnosed 3-5 defects per sprint"
-  Write:      (DELETE — or reframe as: "Resolved 3 payment-flow regressions per sprint cycle, maintaining zero defect carryover across production releases")
+  Instead of: "Diagnosed defects per sprint"
+  Write:      (DELETE — or reframe as: "Resolved payment-flow regressions per sprint cycle, maintaining zero defect carryover across production releases")
 
   Instead of: "Deployed test coverage suites"
-  Write:      "Halved defect escape rate to production by raising test coverage from 55% to 75% with JUnit 5" (frames quality as RELIABILITY impact)`;
+  Write:      "Reduced defect escape rate to production by raising test coverage from [X]% to [Y]% with JUnit 5" (frames quality as RELIABILITY impact)`;
 
 const KEYWORD_INTEGRATION_RULES = `
 MISSING JD KEYWORD INTEGRATION (weave missing tech WITH impact):
@@ -179,7 +179,7 @@ STRATEGY FOR WEAVING MISSING KEYWORDS:
    GOOD: "...publishing payment events to Kafka topics, reducing settlement
           lag from batch to near-real-time processing."
    BAD:  "...with Redis caching."
-   GOOD: "...with Redis caching, cutting P95 response latency from 850ms to 500ms."
+   GOOD: "...with Redis caching, reducing P95 response latency from [X]ms to [Y]ms."
 
 PRIORITY: If you must choose between keeping a low-value process bullet
 and replacing it with a keyword+impact bullet, ALWAYS replace.`;
@@ -195,202 +195,21 @@ ${KEYWORD_INTEGRATION_RULES}
 
 ${FILLER_PATTERN_BAN}
 
-PERSONAL CONTEXT MARKERS (this is what real engineering resumes look like):
-- AT LEAST 40% of bullets in EACH role must contain a personal context
-  marker that grounds the work in a specific time, ceremony, or team.
-- Each role with 5+ bullets MUST include at least TWO quarter+year
-  anchors (e.g. "Q3 2022", "Q1 2021", "Q4 2023"). Pick quarters
-  that fall inside the role's date range. Distribute across the role,
-  not all on the same bullet.
-- Valid context markers (use a MIX of these, don't lean on only one type):
-    * Temporal anchors: "Q1 2022", "Q3 2023", "in early 2024",
-      "late Q4 2021".
-    * Agile / scrum ceremonies: "during sprint planning", "at sprint
-      demo", "in the Q3 retrospective", "during backlog refinement",
-      "at Q2 PI planning", "during grooming for epic X",
-      "in the Q2 release-cycle standup", "during the Q4 RC hardening".
-    * User-story / estimation vocabulary: "broke the epic into 5
-      user stories", "pointed at 13 story points", "pulled 3 tickets
-      from the Q3 backlog", "sized the spike at 5 points", "split
-      the story across 2 sprints".
-    * Team / squad names: "the payments team", "the risk platform
-      squad", "the settlements team", "the on-call rotation",
-      "the checkout pod".
-    * Release / milestone tags: "during the Q2 release cycle",
-      "for the v4.2 release", "in the Q3 hardening freeze",
-      "before the Black Friday cutover".
-    * Stakeholder groups: "with the QA engineers", "for the
-      compliance team", "with product management during the Q3
-      roadmap review".
-- Blend markers naturally into the bullet. They should feel like a
-  detail an engineer would actually remember and write, not like a
-  tacked-on label.
-
 OTHER ANTI-AI RULES:
 - NEVER use these buzzwords: ${BUZZWORD_BAN}.
-- KEEP RESUME REGISTER: write like a formal resume, not like a Slack
-  message, standup, or blog post. Do NOT use informal/narrative verbs
-  such as "unblocked", "ballooned", "tackled", "hacked", "kicked off",
-  "rolled up", "nailed", "knocked out", "smashed", "crushed", "slammed",
-  "wrangled".
-- AVOID colorful narrative metaphors for neutral facts: do NOT write
-  that metrics "ballooned", "skyrocketed", "plummeted", "exploded",
-  "soared", "tanked", "crashed". Use plain verbs: "grew", "rose",
-  "climbed", "fell", "dropped", "reached".
-- NEVER use em dashes (—) or en dashes (–). Use commas, periods, or
-  semicolons.
+- NO PERSONAL PRONOUNS: Write like a formal resume. Do NOT use personal pronouns like "I", "my", or "me".
+- KEEP RESUME REGISTER: Do NOT use informal/narrative verbs such as "unblocked", "ballooned", "tackled", "hacked", "kicked off", "rolled up", "nailed", "knocked out", "smashed", "crushed", "slammed", "wrangled".
+- AVOID colorful narrative metaphors for neutral facts: do NOT write that metrics "ballooned", "skyrocketed", "plummeted", "exploded", "soared", "tanked", "crashed". Use plain verbs: "grew", "rose", "climbed", "fell", "dropped", "reached".
+- NEVER use em dashes (—) or en dashes (–). Use commas, periods, or semicolons.
 - NEVER reuse any JD phrase of 6+ consecutive words verbatim.
-- NEVER write "X, resulting in Y" or "X, while Y-ing" — these are
-  ChatGPT signatures.
-- NEVER start two consecutive bullets with the same verb.
-- Vary sentence shape: mix action-first, impact-first, context-first,
-  and problem-first patterns across a role.
-- Bullet lengths MUST vary visibly: some short (11-15 words, single
-  clause, period ok at the end), most medium (22-28 words), a few
-  longer (30-34 words). Uniform-length bullets = instantly flagged
-  as AI.
-- Fragments are allowed on SHORT bullets, e.g.
-  "Owned the CI pipeline. 400+ builds/month, 99.2% green."`;
+- NEVER write "X, resulting in Y" or "X, while Y-ing".
+- BULLET LENGTH: The optimal length is 1 to 2 lines per bullet (roughly 15 to 35 words). NEVER exceed 2 lines.
+- USE XYZ / STAR METHODOLOGY: [Action Verb] + [Task/Project] + [Context/Tech Stack/How] + [Measurable Result]. Every bullet must clearly state the technologies used to achieve the outcome.
+- VARY SENTENCE STRUCTURE: Mix short, punchy statements with descriptive ones, while staying within the 1-2 line limit.
+- USE EVERYDAY LANGUAGE: Swap high-level AI phrases for normal terms (e.g. use "used" instead of "utilized"). Eliminate fluff like "various", "numerous", "exceptional" or "proven track record".
+- BE CONCRETE: Name specific concrete tools, frameworks, metrics, and outcomes clearly instead of making broad theoretical claims."`;
 
-const FEWSHOT_EXAMPLES = `
-FEW-SHOT EXAMPLES:
-
-=== OUTCOME-FIRST REWRITES (description → impact) ===
-
-BEFORE (Tier C — describes work, no outcome):
-  "Configured Redis caching and NoSQL query optimization using Cassandra for volunteer discovery endpoints."
-AFTER (Tier A — outcome first, then method):
-  "Cut redundant database queries by 38% and brought median API response time below 120ms by configuring Redis caching and Cassandra query optimization for volunteer discovery endpoints."
-
-BEFORE (Tier C — normal engineering work):
-  "Diagnosed 3 to 5 API defects per sprint by tracing request flows through Spring MVC controllers."
-AFTER (Tier A — prove the outcome, not the activity):
-  "Resolved API defects within sprint cycle by tracing request flows through Spring MVC controllers and PostgreSQL repositories, maintaining zero defect carryover across Q1 2026."
-
-BEFORE (Tier B — has metric but buries it):
-  "Addressed a slow CI/CD pipeline by restructuring GitHub Actions workflows with Docker layer caching."
-AFTER (Tier A — lead with the impact):
-  "Cut CI/CD pipeline runtime from 18 to 12 minutes by restructuring GitHub Actions workflows with Docker layer caching."
-
-=== FILLER PATTERN REMOVAL ===
-
-BEFORE: "Traced and enhanced backend API modules using system design principles within a microservices architecture."
-AFTER:  "Traced and enhanced backend API modules behind AWS API Gateway using Spring Boot, supporting 8K-12K daily requests across Truist's digital banking platform."
-
-BEFORE: "Trained on and enhanced RESTful APIs using Java, Spring Boot, and data structures principles."
-AFTER:  "Enhanced RESTful APIs for the member portal using Java and Spring Boot, supporting 5K+ daily API requests across healthcare portal services."
-
-=== AI → HUMAN REWRITES ===
-
-AI:  "Spearheaded the development of innovative software solutions to optimize efficiency."
-OK:  "Built a Python ETL that replaced 6 spreadsheets, cutting manual entry by 10 hours/week."
-
-AI:  "Leveraged cutting-edge cloud technologies to build robust, scalable solutions."
-OK:  "Moved the job queue from RabbitMQ to SQS, halving infra cost and smoothing peak-hour spikes."
-
-SCALE FRAMING EXAMPLES (Category B — platform scale cited, IC action kept
-distinct, plausible for the employer):
-
-Employer: Truist Bank (top-10 US bank, public payment-volume scale)
-OK:  "Designed REST APIs for payment services using Spring Boot, eliminating
-      idempotency errors across 5M+ monthly transactions."
-OK:  "Debugged and maintained Spring Boot microservices behind AWS API
-      Gateway, handling 12K daily API requests."
-BAD: "Processed 5M+ transactions monthly."
-     (claims personal authorship of the whole volume)
-
-Employer: 20-person early-stage startup
-OK:  "Shipped the billing service, supporting the platform's first 200 paying
-      customers without an on-call page for 6 weeks."
-BAD: "Built a billing system handling 10M transactions monthly."
-     (wildly implausible for a 20-person startup)
-
-Employer: Healthcare plan admin (Fortune 100, e.g. UnitedHealth / Optum)
-OK:  "Refined RESTful APIs for the member portal using Spring Boot and
-      Spring MVC, supporting 5K+ daily eligibility lookups."
-
-RESCALE EXAMPLES (use sparingly — only when the original number is clearly
-off by an order of magnitude from a well-known employer's real scale):
-
-Employer: Google (FAANG, public QPS in the billions)
-Original bullet: "Built REST APIs handling 10K requests daily."
-Observation:     10K/day is 5+ orders of magnitude below Google's
-                 platform scale — almost certainly an admin/internal
-                 tool, and the candidate has understated scope.
-Rescaled OK:     "Built REST APIs for a Google platform microservice,
-                 sustaining ~3M daily requests at sub-50ms p95."
-                 → Candidate action preserved ("Built REST APIs").
-                 → Scope narrowed to "a Google platform microservice"
-                   so the candidate isn't claiming the whole of Google.
-                 → Scale (3M/day) is credible for a team-owned service
-                   inside Google, within the junior/mid IC scope band.
-                 → Reported in invented.scope as:
-                   "rescaled from 10K daily to 3M daily to align with
-                    Google platform scale".
-Rescaled BAD:    "Built REST APIs handling 1B daily requests at Google."
-                 → Claims the whole Google traffic; not credible for
-                   any individual IC regardless of seniority.
-
-Employer: 15-person early-stage startup
-Original bullet: "Shipped billing service handling 10M transactions monthly."
-Observation:     10M/month is wildly above early-stage plausibility
-                 (band 100-10K). Either a typo or overclaim.
-Rescaled OK:     "Shipped billing service supporting the company's
-                 first ~800 paying customers through production launch."
-                 → Qualitative pivot to avoid fabrication in either
-                   direction.
-                 → Reported in invented.scope as:
-                   "rescaled from 10M monthly transactions to ~800
-                    customers to align with early-stage scale".
-
-AGILE / CEREMONY / USER-STORY EXAMPLES (this is what real engineering
-resumes sound like — human, specific, grounded in time and team
-rituals; aim for ~40% of bullets in a role to carry one of these):
-
-Quarter + release cycle:
-OK:  "Stabilized the payments settlement job during the Q3 2022
-      release cycle, bringing the nightly SLA from 87% to 99.1%."
-OK:  "Owned the Kafka consumer rebalance fix that went out in the
-      Q1 2023 hardening freeze, cutting on-call pages by roughly half."
-
-Sprint planning / user stories / story points:
-OK:  "Broke the member-eligibility epic into 6 user stories during
-      Q2 2022 sprint planning, shipping all 34 points across two
-      sprints with zero rollover."
-OK:  "Pulled 3 performance tickets from the Q4 backlog, sized them
-      at 8 points collectively, and merged all three before the
-      sprint demo."
-OK:  "Refined and pointed the idempotency-key spike at 5 story
-      points in Q3 2023, then led the implementation across the
-      settlements team."
-
-Sprint demo / retrospective / backlog grooming:
-OK:  "Presented the circuit-breaker rollout at the Q2 sprint demo,
-      walking through failover behavior for 4 downstream services."
-OK:  "Drove retrospective action items after the Q1 2023 RC outage,
-      adding synthetic-monitoring dashboards that caught two
-      regressions before the next release."
-OK:  "Refactored query-tuning guidance during Q3 2022 backlog
-      grooming, cutting review time per story by about 20%."
-
-On-call / RC / release trains:
-OK:  "Rotated on the payments on-call roster through Q4 2022,
-      resolving 17 production incidents with a median MTTR under
-      30 minutes."
-OK:  "Owned two RC hardening cycles in 2023, gating 14 services
-      through load-testing and integration sign-off with QA."
-
-Stakeholder / team / pod anchors:
-OK:  "Paired with the settlements squad during the Q2 sprint on
-      Kafka consumer tuning, trimming average lag from 400ms to 80ms."
-OK:  "Partnered with the compliance team in Q3 2023 to roll out
-      audit-log redaction across 9 member-facing endpoints."
-
-BAD (no temporal or ceremonial anchor at all — generic AI feel):
-BAD: "Developed microservices to support business requirements and
-      improve system performance."
-BAD: "Collaborated with cross-functional teams to deliver
-      high-quality software on time."`;
+const FEWSHOT_EXAMPLES = ``;
 
 // ── Summary Generator ──────────────────────────────────────────
 
@@ -734,54 +553,7 @@ function candidateProfileBlock(profile: CandidateProfile): string {
 // bullet count. 40% of bullets in a role should carry a context marker;
 // of those, at least two should be quarter+year specifically.
 function formatRoleAnchors(heading: string, bulletCount: number): string {
-  const range = extractDateRange(heading);
-  if (!range) {
-    return `ROLE CONTEXT ANCHORS:
-- Could not parse dates from this role heading.
-- Use team-name, ceremony-name, or release-cycle markers instead of
-  quarter+year (e.g. "during sprint planning", "at the sprint demo",
-  "with the on-call rotation").
-- At least ${Math.max(2, Math.round(bulletCount * 0.4))} of ${bulletCount} bullets must carry SOME personal context marker.`;
-  }
-
-  // Build quarter list from fractional-year start/end (inclusive on both
-  // ends). Cap at ~16 quarters to keep the prompt tight on long roles.
-  const startY = Math.floor(range.startYear);
-  const startQ = Math.min(3, Math.floor((range.startYear - startY) * 4));
-  const endY = Math.floor(range.endYear);
-  const endQ = Math.min(3, Math.floor((range.endYear - endY) * 4));
-
-  const quarters: string[] = [];
-  let y = startY;
-  let q = startQ;
-  while (y < endY || (y === endY && q <= endQ)) {
-    quarters.push(`Q${q + 1} ${y}`);
-    q++;
-    if (q > 3) {
-      q = 0;
-      y++;
-    }
-    if (quarters.length >= 16) break;
-  }
-
-  const targetMarkers = Math.max(2, Math.round(bulletCount * 0.4));
-  const minQuarterMarkers = bulletCount >= 5 ? 2 : 1;
-
-  return `ROLE CONTEXT ANCHORS (use these to ground bullets in real time + team rituals):
-- Role date range (parsed): ${range.startYear.toFixed(2)} to ${range.endYear.toFixed(2)}
-- Valid quarter anchors (only pick from this list — do NOT invent
-  quarters outside the role's range):
-    ${quarters.join(", ")}
-- TARGET: at least ${targetMarkers} of ${bulletCount} bullets must carry some
-  personal context marker (quarter+year, agile ceremony, team/squad name,
-  release cycle, or stakeholder group).
-- Of those, at least ${minQuarterMarkers} bullet${minQuarterMarkers === 1 ? "" : "s"} in this role MUST use a
-  specific quarter+year from the list above.
-- Distribute anchors across different bullets — do NOT stack two
-  quarters on the same bullet, and do NOT reuse the same quarter in
-  multiple bullets in the same role.
-- Anchors must feel natural, not tacked on. Good: "during Q3 2022
-  sprint planning, broke the epic into 5 stories...". Bad: "Did X. Q3 2022."`;
+  return "";
 }
 
 // ── Per-bullet instruction block ───────────────────────────────
@@ -835,7 +607,6 @@ export async function generateExperience(
     .map((role, i) => {
       const lines = role.heading.split("\n").filter((l) => l.trim());
       return `ROLE ${i}: ${lines.join(" | ")}
-${formatRoleAnchors(role.heading, role.bullets.length)}
 ${formatBriefsAndPlans(rolesBriefs[i], plans[i])}`;
     })
     .join("\n\n");
@@ -854,8 +625,6 @@ ${inventionPolicyBlock(profile)}
 
 ${ANTI_AI_RULES}
 
-${FEWSHOT_EXAMPLES}
-
 JD CONTEXT:
 - Position: ${jd.position} at ${jd.company}
 - Domain: ${jd.domainFocus}
@@ -870,21 +639,13 @@ ${rolesContext}
 
 HARD CONSTRAINTS:
 - Keep the SAME number of bullets per role.
-- Each bullet must start with the PLAN's "opening verb" (tense may vary).
-- Each bullet must fall within the PLAN's word band (±1 word tolerance).
-- Each bullet must follow the PLAN's sentence pattern.
-- Each bullet must preserve every technology in "PRESERVE technologies".
-- Each bullet must preserve every metric in "PRESERVE metric verbatim".
-- Each bullet must preserve the project name in "PRESERVE project name".
-- Each role must honor its ROLE CONTEXT ANCHORS block: hit the target
-  number of context markers, using the listed valid quarters only, and
-  distributing markers across different bullets.
-- Weave required/preferred JD skills into bullets where truthful; list
-  them in that bullet's "keywordsUsed" array.
-- Bullets with no real metric AND plan="metric: REQUIRED" may invent ONE
-  number per the invention policy. Report what was invented in "invented".
-- Bullets with "metric: optional" stay qualitative — show impact without
-  numbers. Pick these to break the numeric monotony.
+- Keep length concise (Target 1 to 2 lines, exactly 15 to 35 words). NEVER exceed 2 lines. 
+- Do NOT use personal pronouns like "I", "my", or "me".
+- YOU MUST PRESERVE all technologies, metrics, and project names listed in the brief. Do not drop any technologies from the "tech=" array.
+- MAXIMIZE ATS SCORE (HARD TECH ONLY): Aggressively weave as many concrete technologies, languages, and frameworks from the JD into the bullets as truthfully possible. Do NOT inject soft skills or abstract concepts (e.g., "algorithms", "design patterns"). List injected keywords in "keywordsUsed".
+- You MAY invent realistic metrics (e.g. latency improvement, DB queries reduced) if a bullet needs impact. Report what you invented in "invented".
+- ONLY invent standard engineering metrics: latency (ms), throughput (requests/sec), reduction in database queries/CPU (%), pipeline build time (minutes), or test coverage (%).
+- NEVER quantify abstract concepts (e.g., do NOT invent "reduced auth bypass risk by 40%", "increased security by 20%", or "improved user experience by 30%").
 - Do NOT fabricate project names, employers, or technologies outside the
   candidate profile tech list.
 - Do NOT modify factual content (what the candidate actually did).
@@ -975,8 +736,6 @@ ${inventionPolicyBlock(profile)}
 
 ${ANTI_AI_RULES}
 
-${FEWSHOT_EXAMPLES}
-
 JD CONTEXT:
 - Position: ${jd.position} at ${jd.company}
 - Domain: ${jd.domainFocus}
@@ -988,21 +747,18 @@ JD CONTEXT:
 
 ROLE HEADING: ${lines.join(" | ")}
 
-${formatRoleAnchors(role.heading, role.bullets.length)}
-
 PER-BULLET BRIEFS AND PLANS:
 ${formatBriefsAndPlans(briefs, rolePlans)}
 
 HARD CONSTRAINTS:
 - Exactly ${role.bullets.length} bullets (one per brief above).
-- Each bullet starts with its PLAN's "opening verb" (tense may vary).
-- Each bullet falls within its word band (±1 word tolerance).
-- Follows its sentence pattern.
-- Preserves all technologies, metrics, and project names from the brief.
-- Weaves JD skills where truthful and reports them in "keywordsUsed".
-- Respects invention policy — report invented items in "invented" field.
-- Honors ROLE CONTEXT ANCHORS above (quarter markers, ceremony anchors,
-  team/squad names).
+- Keep length concise (Target 1 to 2 lines, exactly 15 to 35 words). NEVER exceed 2 lines.
+- Do NOT use personal pronouns like "I", "my", or "me".
+- YOU MUST PRESERVE all technologies, metrics, and project names listed in the brief. Do not drop any technologies from the "tech=" array.
+- MAXIMIZE ATS SCORE (HARD TECH ONLY): Aggressively weave as many concrete technologies, languages, and frameworks from the JD into the bullets as truthfully possible. Do NOT inject soft skills or abstract concepts (e.g., "algorithms", "design patterns"). List injected keywords in "keywordsUsed".
+- You MAY invent realistic metrics (e.g. latency improvement) if a bullet needs impact. Report what you invented in "invented".
+- ONLY invent standard engineering metrics: latency (ms), throughput (requests/sec), reduction in database queries/CPU (%), pipeline build time (minutes), or test coverage (%).
+- NEVER quantify abstract concepts (e.g., do NOT invent "reduced auth bypass risk by 40%", "increased security by 20%", or "improved user experience by 30%").
 
 FORMATTING:
 - Plain text. No LaTeX, no em/en dashes.
@@ -1142,11 +898,11 @@ ${targetsBlock}
 
 RULES:
 - Rewrite ONLY the listed bullets. Do NOT add new ones.
-- Each rewrite must satisfy its plan: correct opening verb, word band
-  (±1 tolerance), sentence pattern, preserved tech/metric/project.
-- Do NOT invent metrics unless the plan says "metric: REQUIRED" and the
-  original brief has no metric. Use the invention bands above.
-- Report invented items in "invented".
+- Keeps them concise and human-written. Do not overly complicate verbs.
+- YOU MUST PRESERVE all technologies, metrics, and project names listed in the brief. Do not drop any technologies from the "tech=" array.
+- You MAY invent realistic metrics if the bullet needs impact. Report what you invented in "invented".
+- ONLY invent standard engineering metrics: latency (ms), throughput (requests/sec), reduction in database queries/CPU (%), pipeline build time (minutes), or test coverage (%).
+- NEVER quantify abstract concepts (e.g., do NOT invent "reduced auth bypass risk by 40%", "increased security by 20%", or "improved user experience by 30%").
 
 Return { rewrites: [{ roleIndex, bulletIndex, text, keywordsUsed, invented }] }.`;
 
@@ -1231,23 +987,13 @@ export function detectDeviations(
       const reasons: string[] = [];
       const words = b.text.split(/\s+/).length;
 
-      // Length deviation (tolerance ±2)
-      if (words < plan.targetWordsMin - 2)
+      // Length deviation
+      if (words > 40)
         reasons.push(
-          `too short (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`,
-        );
-      if (words > plan.targetWordsMax + 2)
-        reasons.push(
-          `too long (${words} words, target ${plan.targetWordsMin}-${plan.targetWordsMax})`,
+          `too long (${words} words, keep it under 40 words)`,
         );
 
-      // Verb collision (same opening verb appears >2 times resume-wide)
-      const firstVerb = (b.text.trim().split(/\s+/)[0] || "").toLowerCase();
-      if ((verbCounts.get(firstVerb) || 0) > 2) {
-        reasons.push(
-          `verb "${firstVerb}" collides (used ${verbCounts.get(firstVerb)}x resume-wide)`,
-        );
-      }
+
 
       // Preserved tech lost
       for (const tech of plan.preservedTechnologies) {

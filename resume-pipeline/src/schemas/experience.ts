@@ -17,7 +17,7 @@ export const InventionReportSchema = z.object({
     'If scope/team size/scale was invented, the invented phrase. Null otherwise.',
   ),
   context: z.string().nullable().describe(
-    'If personal context (quarter, release, project codename, stakeholder group) was added, the phrase. Null otherwise.',
+    'If personal context was added to naturally ground the work, the phrase. Null otherwise.',
   ),
 });
 

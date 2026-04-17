@@ -18,8 +18,8 @@ const PROVIDERS = {
     quality: google("gemini-2.5-flash"),
   },
   openai: {
-    fast: openai("gpt-4o-mini"),
-    quality: openai("gpt-4o"),
+    fast: openai("gpt-5.4-mini"),
+    quality: openai("gpt-5.4"),
   },
   anthropic: {
     fast: anthropic("claude-haiku-4-5"),

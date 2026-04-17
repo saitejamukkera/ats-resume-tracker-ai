@@ -141,7 +141,9 @@ function extractProjectTag(text: string, techs: string[]): string | null {
 
 function extractAction(text: string): string {
   const first = text.trim().split(/\s+/)[0] || "";
-  return first.replace(/[^A-Za-z]/g, "").toLowerCase();
+  const cleaned = first.replace(/[^A-Za-z]/g, "");
+  if (!cleaned) return "";
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
 }
 
 // ── Public API ─────────────────────────────────────────────────

@@ -485,8 +485,11 @@ export function rankAndTrimRole(
     };
   });
 
-  // Stable sort: primary key = score desc, tiebreaker = original order.
+  // Stable sort: ALWAYS pin the original first bullet to the top.
+  // Then primary key = score desc, tiebreaker = original order.
   const sorted = [...scored].sort((a, b) => {
+    if (a.originalIndex === 0) return -1;
+    if (b.originalIndex === 0) return 1;
     if (b.score !== a.score) return b.score - a.score;
     return a.originalIndex - b.originalIndex;
   });
@@ -504,7 +507,7 @@ export function rankAndTrimRole(
     Math.min(total, perRoleTarget),
   );
 
-  const keptList: RankedBullet[] = sorted.slice(0, keepCount);
+  const keptList: RankedBullet[] = sorted.slice(0, keepCount).sort((a, b) => a.originalIndex - b.originalIndex);
   const droppedList: RankedBullet[] = sorted.slice(keepCount).map((b) => ({
     ...b,
     kept: false,

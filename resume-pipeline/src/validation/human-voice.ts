@@ -54,16 +54,9 @@ export function scoreHumanVoice(bullets: string[]): HumanVoiceScore {
   // Good: 8 unique verbs across 10 bullets (0.8)
 
   // ── Length Variance (20% of score) ─────────────────────────
-  // Real resumes have messy length — big projects get long bullets, small wins get short ones.
-  const wordCounts = bullets.map((b) => b.split(/\s+/).length);
-  const mean = wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length;
-  const variance =
-    wordCounts.reduce((a, c) => a + Math.pow(c - mean, 2), 0) /
-    wordCounts.length;
-  const stdDev = Math.sqrt(variance);
-  // Bad: stdDev < 2 (all bullets same length — robotic)
-  // Good: stdDev 4-8 (natural variation)
-  const lengthVariance = Math.min(stdDev / 8, 1); // normalize to 0-1
+  // Since we explicitly enforce 15-25 word bullets, they will be uniform.
+  // We no longer punish this.
+  const lengthVariance = 1.0;
 
   // ── Metrics Balance (25% of score) ─────────────────────────
   // The insight: 100% metrics = AI. 60-80% metrics = real engineer who tracks impact.
@@ -242,16 +235,7 @@ export function estimateAIDetectionRisk(
   }
 
   // 2. Bullet length uniformity — stdDev-based (matches Human Voice scorer)
-  const lengths = bullets.map((b) => b.split(/\s+/).length);
-  const avgLen = lengths.reduce((a, b) => a + b, 0) / lengths.length;
-  const lenVariance = lengths.reduce((a, c) => a + Math.pow(c - avgLen, 2), 0) / lengths.length;
-  const lenStdDev = Math.sqrt(lenVariance);
-
-  if (lenStdDev < 3 && bullets.length >= 4) {
-    signals.push(
-      `All ${bullets.length} bullets suspiciously similar length (avg ${Math.round(avgLen)} words, stdDev ${lenStdDev.toFixed(1)}) — mix short punchy lines (10-15 words) with longer detailed ones (25-30 words)`,
-    );
-  }
+  // Check removed because 1-1.5 line (15-25 word) enforcement guarantees uniformity.
 
   // 3. AI-favorite buzzwords — >2 total is suspicious.
   // Research-report additions: the phrases below are the most frequently
@@ -430,8 +414,8 @@ export async function humanizePass(
     // Build avoid list — verbs already used, so the LLM doesn't swap into another collision
     const usedVerbs = [...verbCounts.keys()].filter((v) => verbCounts.get(v)! >= 1);
     const suggestedVerbs = [
-      "tackled", "shipped", "debugged", "proposed", "configured",
-      "migrated", "automated", "resolved", "profiled", "streamlined",
+      "built", "designed", "developed", "created", "configured",
+      "migrated", "automated", "resolved", "optimized", "streamlined",
       "refactored", "consolidated", "integrated", "eliminated", "established",
       "wrote", "owned", "architected", "introduced", "delivered",
     ].filter((v) => !usedVerbs.includes(v));
@@ -449,39 +433,7 @@ export async function humanizePass(
     );
   }
 
-  if (voiceScore.lengthVariance < 0.5) {
-    const wordCounts = allBullets.map((b, i) => ({ i, words: b.split(/\s+/).length }));
-    const avgWords = wordCounts.reduce((s, b) => s + b.words, 0) / wordCounts.length;
-
-    const nearAvg = wordCounts
-      .filter((b) => Math.abs(b.words - avgWords) < 3)
-      .sort((a, b) => Math.abs(a.words - avgWords) - Math.abs(b.words - avgWords));
-
-    const targetCount = Math.min(Math.ceil(allBullets.length * 0.25), 5);
-    const targets = nearAvg.slice(0, targetCount);
-
-    let flatIdx = 0;
-    const bulletPositions: string[] = [];
-    for (let ri = 0; ri < sections.experience.length; ri++) {
-      for (let bi = 0; bi < sections.experience[ri].bullets.length; bi++) {
-        if (targets.some((t) => t.i === flatIdx)) {
-          bulletPositions.push(`[${ri}-${bi}] (${allBullets[flatIdx].split(/\s+/).length} words)`);
-        }
-        flatIdx++;
-      }
-    }
-
-    const severity = voiceScore.lengthVariance < 0.3 ? "CRITICAL" : "IMPORTANT";
-
-    issues.push(
-      `${severity} — BULLET LENGTH UNIFORMITY: All bullets are ~${Math.round(avgWords)} words (stdDev only ${Math.round(voiceScore.lengthVariance * 8)} words). ` +
-        `This is the #1 sign of AI-generated text. ` +
-        `SHORTEN these specific bullets to 10-15 words (punchy, single-clause):\n` +
-        bulletPositions.map((p) => `   ${p}`).join("\n") + "\n" +
-        `   Examples of SHORT bullets: "Owned the CI pipeline, 400+ builds/month, 99.2% green rate." or "Fixed 12 flaky tests blocking the release branch."\n` +
-        `   Keep the remaining bullets at 22-30 words. The goal is a visible MIX of short and long.`,
-    );
-  }
+  // Length Uniformity removed as we force 15-25 words exclusively.
 
   if (voiceScore.metricsBalance < 0.7 && voiceScore.metricsBalance > 0) {
     const metricCount = allBullets.filter((b) =>
@@ -702,29 +654,31 @@ export async function fixVerbCollisions(
   }
 
   const suggestedVerbs = [
-    "tackled", "shipped", "debugged", "proposed", "configured",
-    "migrated", "automated", "resolved", "profiled", "streamlined",
-    "refactored", "consolidated", "integrated", "eliminated", "established",
-    "wrote", "owned", "architected", "introduced", "delivered",
-    "diagnosed", "standardized", "replaced", "accelerated", "simplified",
+      "built", "designed", "developed", "created", "configured",
+      "migrated", "automated", "resolved", "optimized", "streamlined",
+      "refactored", "consolidated", "integrated", "eliminated", "established",
+      "wrote", "owned", "introduced", "delivered",
+      "standardized", "replaced", "accelerated", "simplified",
   ].filter((v) => !usedVerbs.has(v));
 
   const bulletList = bulletsToFix
     .map((b) => `[${b.ri}-${b.bi}] (starts with "${b.verb}"): "${b.text}"`)
     .join("\n");
 
-  const prompt = `You are fixing verb repetition in a resume. These bullets start with the same verb as another bullet in the resume. Change ONLY the opening verb of each bullet below. Keep the rest of the sentence IDENTICAL.
+  const prompt = `You are fixing verb repetition in a resume. These bullets start with a verb that is used too heavily elsewhere.
 
 BULLETS TO FIX:
 ${bulletList}
 
-VERBS ALREADY USED (do NOT use these): ${[...usedVerbs].join(", ")}
+VERBS ALREADY USED (do NOT use these as the new starting verb): ${[...usedVerbs].join(", ")}
 USE ONE OF THESE INSTEAD: ${suggestedVerbs.slice(0, 15).join(", ")}
 
 RULES:
-- Change ONLY the first word (the opening verb). Keep everything else exactly the same.
-- Each replacement verb must be different from all other bullets in the resume.
-- PRESERVE all technologies, metrics, and JD keywords: ${jdKeywords.slice(0, 10).join(", ")}
+- Rewrite the bullet to open with a DIFFERENT strong engineering action verb that is not in the used list.
+- You MAY slightly rephrase the first few words so the new verb makes grammatical and logical sense.
+- DO NOT just swap the first word blindly if it makes the sentence sound broken (e.g. don't replace "Reduced latency" with "Built latency").
+- PRESERVE all technologies, metrics, and JD keywords EXACTLY: ${jdKeywords.slice(0, 10).join(", ")}
+- Use plain engineering language. Do NOT use unnatural terminology like "triaging" or "auth bypass".
 - DO NOT use em dashes or en dashes. Use commas or semicolons.
 
 Return the fixed bullets as {roleIndex, bulletIndex, text}.`;
