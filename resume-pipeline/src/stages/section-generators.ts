@@ -18,6 +18,7 @@ import type {
   GeneratedRole,
 } from "../schemas/pipeline.js";
 import type { SnapshotStore } from "../observability/debug.js";
+import type { CandidateTechProfile } from "./tech-stack-extractor.js";
 
 // ── Strict App-Side Schemas (§4 two-layer approach) ────────────
 // These are NOT sent to the LLM. They validate LLM output app-side.
@@ -111,6 +112,7 @@ export async function generateExperience(
   jd: JDAnalysis,
   experienceLevel: string,
   userInfo?: string,
+  candidateTech?: CandidateTechProfile,
   snapshotStore?: SnapshotStore,
 ): Promise<{
   roles: GeneratedRole[];
@@ -128,6 +130,8 @@ ${role.bullets.map((b, j) => `  ${j + 1}. ${b}`).join("\n")}`;
     })
     .join("\n\n");
 
+  const techCoverageBlock = buildTechCoverageBlock(candidateTech);
+
   const prompt = `Rewrite these experience bullets for a ${jd.position} role at ${jd.company}.
 
 ${rolesContext}
@@ -140,9 +144,11 @@ JD CONTEXT:
 - Key Responsibilities: ${jd.keyResponsibilities.join("; ")}
 - Experience Level: ${experienceLevel}
 - Key Phrases to Mirror: ${jd.keyPhrases.join(", ")}
-
+${techCoverageBlock}
 HARD CONSTRAINTS:
 - Keep the SAME number of bullets per role (do not add or remove)
+- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave JD keywords around these core achievements rather than overwriting them.
+- ANTI-STUFFING: Limit each bullet to 1 core achievement and 2-3 technologies max. Do NOT create overloaded run-on sentences. Do NOT awkwardly force JD keywords into unrelated bullets.
 - Every bullet must contain: technical action + tools/frameworks + measurable or clearly defined outcome
 - Mirror JD language and technical stack naturally
 - Weave as many required and preferred skills from the JD into bullets as possible, where truthful
@@ -210,6 +216,7 @@ export async function generateExperiencePerRole(
   jd: JDAnalysis,
   experienceLevel: string,
   userInfo?: string,
+  candidateTech?: CandidateTechProfile,
   snapshotStore?: SnapshotStore,
 ): Promise<{
   roles: GeneratedRole[];
@@ -219,6 +226,8 @@ export async function generateExperiencePerRole(
   let totalIn = 0;
   let totalOut = 0;
   const generatedRoles: GeneratedRole[] = [];
+
+  const techCoverageBlock = buildTechCoverageBlock(candidateTech);
 
   for (let i = 0; i < roles.length; i++) {
     const role = roles[i];
@@ -239,9 +248,11 @@ JD CONTEXT:
 - Key Responsibilities: ${jd.keyResponsibilities.join("; ")}
 - Experience Level: ${experienceLevel}
 - Key Phrases to Mirror: ${jd.keyPhrases.join(", ")}
-
+${techCoverageBlock}
 HARD CONSTRAINTS:
 - Keep the SAME number of bullets (${role.bullets.length} bullets)
+- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology from the original bullets. Weave JD keywords around these core achievements rather than overwriting them.
+- ANTI-STUFFING: Limit each bullet to 1 core achievement and 2-3 technologies max. Do NOT create overloaded run-on sentences. Do NOT awkwardly force JD keywords into unrelated bullets.
 - Every bullet must contain: technical action + tools/frameworks + measurable or clearly defined outcome
 - Mirror JD language and technical stack naturally
 - Do NOT fabricate experience or invent unrealistic achievements
@@ -298,3 +309,23 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
     outputTokens: totalOut,
   };
 }
+
+// ── Tech Coverage Prompt Block Builder ──────────────────────────
+// Builds a soft prompt hint from the candidate's extracted tech profile.
+// Returns empty string if no profile is available (graceful degradation).
+
+function buildTechCoverageBlock(
+  candidateTech?: CandidateTechProfile,
+): string {
+  if (!candidateTech || candidateTech.primary.length === 0) return "";
+
+  return `
+CANDIDATE'S PRIMARY TECHNOLOGIES (extracted from their base resume):
+${candidateTech.primary.join(", ")}
+
+TECH COVERAGE GUIDANCE:
+- If a role's rewritten bullets contain ZERO mentions of any primary technology listed above, naturally incorporate the most relevant one(s) into a bullet where truthful.
+- Do NOT force insertion if the role's bullets already reference these technologies.
+- Do NOT add technologies the candidate did not actually use in that role.
+`;}
+

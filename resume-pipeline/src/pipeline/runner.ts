@@ -9,6 +9,7 @@ import {
   generateExperiencePerRole,
 } from "../stages/section-generators.js";
 import { reorderSkills } from "../stages/skills-reorderer.js";
+import { extractTechProfile } from "../stages/tech-stack-extractor.js";
 import { generateCoverLetter } from "../stages/cover-letter.js";
 import { parseLatexResume, assembleLatex } from "../stages/latex-assembler.js";
 import { extractBoldKeywords } from "../stages/keyword-extractor.js";
@@ -77,6 +78,14 @@ export async function runPipeline(
     throw new Error(`LaTeX parsing failed: ${msg}`);
   }
 
+  // ── Stage 1.5: Extract Candidate Tech Profile ─────────────────
+  // Deterministic, no LLM cost — extracts primary technologies from the
+  // candidate's own resume for downstream tech coverage guidance.
+  const candidateTech = extractTechProfile(parsed);
+  console.log(
+    `[pipeline] Candidate tech profile: primary=[${candidateTech.primary.join(", ")}], secondary=[${candidateTech.secondary.join(", ")}]`,
+  );
+
   // ── Stage 2: JD Parser (LLM Call #1) ──────────────────────────
   emit({ type: "stage-start", stage: "jd-parser" });
   telemetry.startStage("jd-parser");
@@ -144,6 +153,7 @@ export async function runPipeline(
       jd,
       jd.experienceLevel,
       input.userInfo,
+      candidateTech,
       snapshotStore,
     ).catch((err) => {
       if (err instanceof RateLimitError) throw err; // propagate rate limit up
@@ -188,6 +198,25 @@ export async function runPipeline(
         experienceResult.roles[i].bullets = experienceResult.roles[
           i
         ].bullets.slice(0, expected);
+      }
+    }
+  }
+
+  // ── Post-Generation Tech Coverage Check ────────────────────────
+  // Deterministic warning only — no LLM cost, no repair.
+  // Flags roles where the candidate's primary tech stack is completely absent.
+  if (candidateTech.primary.length > 0) {
+    for (let i = 0; i < experienceResult.roles.length; i++) {
+      const roleBullets = experienceResult.roles[i].bullets
+        .join(" ")
+        .toLowerCase();
+      const hasPrimaryTech = candidateTech.primary.some((t) =>
+        roleBullets.includes(t.toLowerCase()),
+      );
+      if (!hasPrimaryTech) {
+        console.warn(
+          `[pipeline] Tech coverage gap: Role ${i} ("${experienceResult.roles[i].roleTitle || "unknown"}") has no mention of candidate's primary technologies [${candidateTech.primary.join(", ")}]`,
+        );
       }
     }
   }
