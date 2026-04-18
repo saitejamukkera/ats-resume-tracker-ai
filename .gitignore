@@ -39,9 +39,4 @@ DEPLOY.md
 *.sql
 *.sql.gz
 !**/db/migration/*.sql
-
-# Skills
-.agent
-.agents
-
 resume_generation_system_design.md
