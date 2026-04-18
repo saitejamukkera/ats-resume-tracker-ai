@@ -1,0 +1,29 @@
+# .graphifyignore
+
+# Node / frontend
+node_modules/
+.next/
+dist/
+build/
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# Generated files
+*.generated.*
+*.gen.*
+*.lock
+
+# Java / backend
+target/
+out/
+
+# Git + editor noise
+.git/
+.vscode/
+.cursor/
+
+# Graphify output
+graphify-out/
