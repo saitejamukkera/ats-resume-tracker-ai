@@ -314,9 +314,7 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
 // Builds a soft prompt hint from the candidate's extracted tech profile.
 // Returns empty string if no profile is available (graceful degradation).
 
-function buildTechCoverageBlock(
-  candidateTech?: CandidateTechProfile,
-): string {
+function buildTechCoverageBlock(candidateTech?: CandidateTechProfile): string {
   if (!candidateTech || candidateTech.primary.length === 0) return "";
 
   return `
@@ -327,5 +325,5 @@ TECH COVERAGE GUIDANCE:
 - If a role's rewritten bullets contain ZERO mentions of any primary technology listed above, naturally incorporate the most relevant one(s) into a bullet where truthful.
 - Do NOT force insertion if the role's bullets already reference these technologies.
 - Do NOT add technologies the candidate did not actually use in that role.
-`;}
-
+`;
+}
