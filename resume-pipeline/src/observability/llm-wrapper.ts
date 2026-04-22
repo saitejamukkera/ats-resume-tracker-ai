@@ -80,6 +80,7 @@ export async function callLLM<T>(opts: {
   schema: ZodSchema<T>;
   prompt: string;
   maxRetries?: number;
+  maxTokens?: number;
   stage: string;
   snapshotStore?: SnapshotStore;
 }): Promise<LLMCallResult<T>> {
@@ -91,6 +92,7 @@ export async function callLLM<T>(opts: {
       schema: opts.schema,
       prompt: opts.prompt,
       maxRetries: opts.maxRetries ?? 2,
+      maxTokens: opts.maxTokens,
     });
 
     const usage = result.usage as any;

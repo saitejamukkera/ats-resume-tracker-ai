@@ -174,6 +174,17 @@ export async function runPipeline(
     }),
   ]);
 
+  // ── Diagnostic Logging for Experience Result ───────────────────
+  console.log(
+    `[pipeline] Experience result structure: roles=${experienceResult.roles?.length ?? "undefined"}, expected=${parsed.experience.length}`,
+  );
+  for (let i = 0; i < Math.min(experienceResult.roles?.length ?? 0, 3); i++) {
+    const role = experienceResult.roles[i];
+    console.log(
+      `[pipeline] Role ${i}: title="${role?.roleTitle}", company="${role?.company}", bullets=${role?.bullets?.length ?? "undefined"}`,
+    );
+  }
+
   // ── Bullet Count Preservation ─────────────────────────────────
   // Design §5.3: The LLM MUST return the same number of bullets per role.
   // If it doesn't, pad with originals or trim to preserve structure.
@@ -186,18 +197,31 @@ export async function runPipeline(
         `[pipeline] Bullet count mismatch for role ${i}: expected ${expected}, got ${actual}. Correcting.`,
       );
 
+      // Ensure the role exists before modifying it
+      if (!experienceResult.roles[i]) {
+        const bulletsSample = parsed.experience[i].bullets.slice(0, 2).join(" | ");
+        console.warn(
+          `[pipeline] Role ${i} is missing! Creating fallback with ${expected} original bullets (sample: "${bulletsSample}")`,
+        );
+        experienceResult.roles[i] = {
+          roleTitle: parsed.experience[i].heading.split("\n")[0] || "",
+          company: "",
+          bullets: [],
+        };
+      }
+
       if (actual < expected) {
         // Pad with original bullets the LLM missed
-        const padded = [...experienceResult.roles[i].bullets];
-        for (let j = actual; j < expected; j++) {
+        const padded = [...(experienceResult.roles[i].bullets || [])];
+        for (let j = padded.length; j < expected; j++) {
           padded.push(parsed.experience[i].bullets[j]);
         }
         experienceResult.roles[i].bullets = padded;
       } else {
         // Trim excess bullets
-        experienceResult.roles[i].bullets = experienceResult.roles[
-          i
-        ].bullets.slice(0, expected);
+        experienceResult.roles[i].bullets = (
+          experienceResult.roles[i].bullets || []
+        ).slice(0, expected);
       }
     }
   }
@@ -207,7 +231,12 @@ export async function runPipeline(
   // Flags roles where the candidate's primary tech stack is completely absent.
   if (candidateTech.primary.length > 0) {
     for (let i = 0; i < experienceResult.roles.length; i++) {
-      const roleBullets = experienceResult.roles[i].bullets
+      const role = experienceResult.roles[i];
+      if (!role || !role.bullets) {
+        console.debug(`[pipeline] Skipping tech coverage check for role ${i} (no bullets)`);
+        continue;
+      }
+      const roleBullets = role.bullets
         .join(" ")
         .toLowerCase();
       const hasPrimaryTech = candidateTech.primary.some((t) =>
@@ -215,7 +244,7 @@ export async function runPipeline(
       );
       if (!hasPrimaryTech) {
         console.warn(
-          `[pipeline] Tech coverage gap: Role ${i} ("${experienceResult.roles[i].roleTitle || "unknown"}") has no mention of candidate's primary technologies [${candidateTech.primary.join(", ")}]`,
+          `[pipeline] Tech coverage gap: Role ${i} ("${role.roleTitle || "unknown"}") has no mention of candidate's primary technologies [${candidateTech.primary.join(", ")}]`,
         );
       }
     }

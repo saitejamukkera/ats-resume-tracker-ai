@@ -180,12 +180,13 @@ CRITICAL FORMATTING CONSTRAINTS:
 - DO NOT use em dashes (—) or en dashes (–) in your output. Use commas or semicolons to separate clauses.
 - Return plain text.
 
-Return a JSON object with \`roles\` array. Each role has \`roleTitle\`, \`company\`, and \`bullets\` (array of objects with \`text\` and \`technologies\`).`;
+CRITICAL: Return a JSON object with exactly ${roles.length} roles in the \`roles\` array. Each role must have \`roleTitle\`, \`company\`, and \`bullets\` (array of objects with \`text\` and \`technologies\`). DO NOT omit any roles.`;
 
   const result = await callLLM({
     model: models.generation,
     schema: ExperienceOutputSchema,
     prompt,
+    maxTokens: 2500, // Allow sufficient room for all roles + bullets
     stage: "experience-generator",
     snapshotStore,
   });
@@ -196,6 +197,18 @@ Return a JSON object with \`roles\` array. Each role has \`roleTitle\`, \`compan
     console.warn(
       `[experience-generator] Strict validation failed: ${parsed.error.issues.map((i) => i.message).join(", ")}. Proceeding with LLM output.`,
     );
+  }
+
+  // Diagnostic logging before transformation
+  console.debug(
+    `[experience-generator] LLM returned: roles=${result.object?.roles?.length ?? "undefined"}, roles_type=${typeof result.object?.roles}`,
+  );
+  if (result.object?.roles) {
+    result.object.roles.slice(0, 2).forEach((r, i) => {
+      console.debug(
+        `[experience-generator] Role ${i}: title="${r?.roleTitle}", bullets_count=${r?.bullets?.length ?? "undefined"}, bullets_type=${typeof r?.bullets}`,
+      );
+    });
   }
 
   return {
@@ -283,8 +296,15 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
       snapshotStore,
     });
 
+    console.debug(
+      `[experience-generator-role-${i + 1}] LLM returned: roles_array_exists=${!!result.object?.roles}, roles_length=${result.object?.roles?.length ?? "undefined"}`,
+    );
+
     const generated = result.object.roles[0];
     if (generated) {
+      console.debug(
+        `[experience-generator-role-${i + 1}] Generated role: title="${generated.roleTitle}", bullets=${generated.bullets?.length ?? "undefined"}`,
+      );
       generatedRoles.push({
         roleTitle: generated.roleTitle,
         company: generated.company,
@@ -292,6 +312,9 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
       });
     } else {
       // Fallback: keep original bullets
+      console.warn(
+        `[experience-generator-role-${i + 1}] Missing or empty role in LLM response! Using original ${role.bullets.length} bullets.`,
+      );
       generatedRoles.push({
         roleTitle: "",
         company: "",
