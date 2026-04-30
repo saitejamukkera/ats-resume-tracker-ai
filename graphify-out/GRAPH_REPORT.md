@@ -1,7 +1,7 @@
-# Graph Report - C:\Users\mukke\Desktop\Job-Resume-Tracker  (2026-04-18)
+# Graph Report - C:\Users\mukke\Desktop\Job-Resume-Tracker  (2026-04-29)
 
 ## Corpus Check
-- 116 files · ~60,455 words
+- 116 files · ~60,673 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
