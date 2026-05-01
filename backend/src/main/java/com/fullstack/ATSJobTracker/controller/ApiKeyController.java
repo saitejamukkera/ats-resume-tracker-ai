@@ -23,7 +23,7 @@ public class ApiKeyController {
     private String pipelineUrl;
 
     private final HttpClient httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(5))
+            .connectTimeout(Duration.ofSeconds(30))
             .build();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -53,7 +53,7 @@ public class ApiKeyController {
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(pipelineUrl + "/validate-key"))
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(30))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
