@@ -160,29 +160,46 @@ export default function ApiKeySettings() {
 
           {/* Validation indicator */}
           {state.validated !== null && !state.testing && (
-            <motion.span
+            <motion.div
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold"
+              className="flex flex-col gap-1"
             >
-              {state.validated ? (
-                <>
-                  <Check size={14} className="text-emerald-500" />
-                  <span className="text-emerald-600 dark:text-emerald-400">
-                    Key valid
-                  </span>
-                </>
-              ) : (
-                <>
-                  <X size={14} className="text-red-500" />
-                  <span className="text-red-600 dark:text-red-400">
-                    Invalid key
-                  </span>
-                </>
-              )}
-            </motion.span>
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold">
+                {state.validated ? (
+                  <>
+                    <Check size={14} className="text-emerald-500" />
+                    <span className="text-emerald-600 dark:text-emerald-400">
+                      Key valid
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <X size={14} className="text-red-500" />
+                    <span className="text-red-600 dark:text-red-400">
+                      Invalid key
+                    </span>
+                  </>
+                )}
+              </div>
+            </motion.div>
           )}
         </div>
+        
+        {/* Detailed Validation Message */}
+        {state.validationMessage && !state.testing && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`text-[13px] p-3 rounded-lg border ${
+              state.validated 
+                ? 'bg-emerald-50/50 border-emerald-100/50 text-emerald-700 dark:bg-emerald-900/10 dark:border-emerald-800/30 dark:text-emerald-400' 
+                : 'bg-red-50/50 border-red-100/50 text-red-700 dark:bg-red-900/10 dark:border-red-800/30 dark:text-red-400'
+            }`}
+          >
+            {state.validationMessage}
+          </motion.div>
+        )}
 
         {/* Save locally toggle */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-200/60 dark:border-gray-800/60">
