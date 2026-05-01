@@ -23,6 +23,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,6 +36,7 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final RateLimitFilter rateLimitFilter;
     private final CsrfCookieFilter csrfCookieFilter;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
@@ -52,6 +57,15 @@ public class SecurityConfig {
         }
     }
 
+    private OAuth2AuthorizationRequestResolver authorizationRequestResolver() {
+        DefaultOAuth2AuthorizationRequestResolver resolver =
+                new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization");
+        resolver.setAuthorizationRequestCustomizer(customizer -> {
+            customizer.additionalParameters(params -> params.put("prompt", "select_account"));
+        });
+        return resolver;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -70,7 +84,8 @@ public class SecurityConfig {
             )
             .oauth2Login(oauth2 -> oauth2
                 .authorizationEndpoint(endpoint -> endpoint
-                    .baseUri("/oauth2/authorization"))
+                    .baseUri("/oauth2/authorization")
+                    .authorizationRequestResolver(authorizationRequestResolver()))
                 .redirectionEndpoint(endpoint -> endpoint
                     .baseUri("/login/oauth2/code/*"))
                 .successHandler(oAuth2SuccessHandler)
