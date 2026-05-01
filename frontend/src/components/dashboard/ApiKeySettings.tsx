@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Key, Eye, EyeOff, Check, X, Loader2, Shield, ArrowUpRight } from "lucide-react";
 import {
   useApiKeys,
@@ -42,18 +42,18 @@ export default function ApiKeySettings() {
 
   const [showKey, setShowKey] = useState(false);
   const [savedFeedback, setSavedFeedback] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleProviderChange = async (p: LLMProvider) => {
     setProvider(p);
   };
 
   const handleTest = async () => {
-    if (state.validated === true) {
-      const confirm = window.confirm(
-        "This key has already been successfully validated. Testing it again will consume a fraction of a token from your provider. Are you sure you want to test again?"
-      );
-      if (!confirm) return;
+    if (state.validated === true && !showConfirmPopup) {
+      setShowConfirmPopup(true);
+      return;
     }
+    setShowConfirmPopup(false);
     await testKey();
   };
 
@@ -151,7 +151,7 @@ export default function ApiKeySettings() {
         </div>
 
         {/* Action row: Test button + validation feedback */}
-        <div className="flex items-center gap-3">
+        <div className="relative flex items-center gap-3">
           <button
             onClick={handleTest}
             disabled={!state.key.trim() || state.testing}
@@ -163,6 +163,42 @@ export default function ApiKeySettings() {
               "Test Key"
             )}
           </button>
+
+          <AnimatePresence>
+            {showConfirmPopup && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 10, x: 0 }}
+                animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10, x: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="absolute left-0 bottom-[120%] z-50 p-4 w-72 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700"
+              >
+                {/* Chat tail */}
+                <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white dark:bg-zinc-800 border-b border-r border-gray-200 dark:border-gray-700 rotate-45" />
+                
+                <p className="text-[13px] text-gray-600 dark:text-gray-300 mb-3 relative z-10 leading-relaxed">
+                  <strong>Are you sure about this?</strong> You recently tested this key successfully. Testing again will consume a fraction of a token.
+                </p>
+                <div className="flex gap-2 relative z-10">
+                  <button 
+                    onClick={() => {
+                      setShowConfirmPopup(false);
+                      testKey();
+                    }}
+                    className="flex-1 px-3 py-1.5 bg-primary-600 text-white text-[11px] font-bold rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    Yes, test again
+                  </button>
+                  <button 
+                    onClick={() => setShowConfirmPopup(false)}
+                    className="flex-1 px-3 py-1.5 bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-gray-200 text-[11px] font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-600 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Validation indicator */}
           {state.validated !== null && !state.testing && (
