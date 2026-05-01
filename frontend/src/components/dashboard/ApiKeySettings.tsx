@@ -48,6 +48,12 @@ export default function ApiKeySettings() {
   };
 
   const handleTest = async () => {
+    if (state.validated === true) {
+      const confirm = window.confirm(
+        "This key has already been successfully validated. Testing it again will consume a fraction of a token from your provider. Are you sure you want to test again?"
+      );
+      if (!confirm) return;
+    }
     await testKey();
   };
 
