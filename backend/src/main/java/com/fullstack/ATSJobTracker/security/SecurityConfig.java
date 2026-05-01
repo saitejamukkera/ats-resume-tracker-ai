@@ -1,5 +1,6 @@
 package com.fullstack.ATSJobTracker.security;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,13 @@ public class SecurityConfig {
 
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
+
+    @PostConstruct
+    void normalizeCookieDomain() {
+        if (cookieDomain != null) {
+            cookieDomain = cookieDomain.replaceFirst("^\\.", "");
+        }
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -5,6 +5,7 @@ import com.fullstack.ATSJobTracker.model.AuthUser;
 import com.fullstack.ATSJobTracker.model.RefreshToken;
 import com.fullstack.ATSJobTracker.repository.AuthUserRepository;
 import com.fullstack.ATSJobTracker.service.RefreshTokenService;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
+
+    @PostConstruct
+    void normalizeCookieDomain() {
+        if (cookieDomain != null) {
+            cookieDomain = cookieDomain.replaceFirst("^\\.", "");
+        }
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,

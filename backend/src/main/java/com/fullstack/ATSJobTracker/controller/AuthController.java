@@ -18,6 +18,7 @@ import com.fullstack.ATSJobTracker.service.AuthService;
 import com.fullstack.ATSJobTracker.service.EmailService;
 import com.fullstack.ATSJobTracker.service.OtpService;
 import com.fullstack.ATSJobTracker.service.RefreshTokenService;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -60,6 +61,13 @@ public class AuthController {
 
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
+
+    @PostConstruct
+    void normalizeCookieDomain() {
+        if (cookieDomain != null) {
+            cookieDomain = cookieDomain.replaceFirst("^\\.", "");
+        }
+    }
 
     @GetMapping("/csrf")
     public ResponseEntity<Map<String, String>> csrf(CsrfToken token) {
