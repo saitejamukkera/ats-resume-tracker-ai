@@ -44,7 +44,7 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
 
   return (
     <div className="fixed inset-0 z-10000 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-black/50 dark:bg-black/60 animate-fade-in" />
 
       <div className="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border/60 dark:border-gray-700 w-full max-w-[380px] mx-4 p-6 animate-scale-in">
         <div className="flex justify-center mb-4">

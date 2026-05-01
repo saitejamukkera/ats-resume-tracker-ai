@@ -84,7 +84,7 @@ export function ConfirmModal({
     <div className="fixed inset-0 z-9998 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/50 dark:bg-black/60 animate-fade-in"
         onClick={onCancel}
       />
 
