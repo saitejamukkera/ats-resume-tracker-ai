@@ -15,6 +15,7 @@ export interface ApiKeyState {
   key: string;
   saved: boolean;
   validated: boolean | null;
+  validationMessage?: string;
   testing: boolean;
 }
 
@@ -35,6 +36,7 @@ export function useApiKeys() {
     key: "",
     saved: false,
     validated: null,
+    validationMessage: undefined,
     testing: false,
   });
 
@@ -57,11 +59,11 @@ export function useApiKeys() {
   }, []);
 
   const setProvider = useCallback((p: LLMProvider) => {
-    setState((s) => ({ ...s, provider: p, validated: null, key: "" }));
+    setState((s) => ({ ...s, provider: p, validated: null, validationMessage: undefined, key: "" }));
   }, []);
 
   const setKey = useCallback((key: string) => {
-    setState((s) => ({ ...s, key: key.trim(), validated: null }));
+    setState((s) => ({ ...s, key: key.trim(), validated: null, validationMessage: undefined }));
   }, []);
 
   const setSaved = useCallback((saved: boolean) => {
@@ -83,14 +85,14 @@ export function useApiKeys() {
   }, [state.key, state.provider]);
 
   const testKey = useCallback(async (): Promise<boolean> => {
-    setState((s) => ({ ...s, testing: true, validated: null }));
+    setState((s) => ({ ...s, testing: true, validated: null, validationMessage: undefined }));
     try {
       const data = await api.settings.validateKey(state.provider, state.key);
       const valid = data.valid === true;
-      setState((s) => ({ ...s, validated: valid, testing: false }));
+      setState((s) => ({ ...s, validated: valid, validationMessage: data.message, testing: false }));
       return valid;
-    } catch {
-      setState((s) => ({ ...s, validated: false, testing: false }));
+    } catch (err: any) {
+      setState((s) => ({ ...s, validated: false, validationMessage: "Validation service unavailable.", testing: false }));
       return false;
     }
   }, [state.provider, state.key]);

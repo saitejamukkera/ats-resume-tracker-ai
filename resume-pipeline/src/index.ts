@@ -17,7 +17,7 @@ import {
   type LLMProvider,
 } from "./security/key-provider.js";
 import { sanitizeObject } from "./security/key-sanitizer.js";
-import { validateKeyFormat } from "./security/key-validator.js";
+import { validateKeyFormat, validateKeyWithPing } from "./security/key-validator.js";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -183,7 +183,7 @@ app.post("/generate-stream", async (req, res) => {
 });
 
 // ── Validate Key Endpoint ──────────────────────────────────────
-app.post("/validate-key", (req, res) => {
+app.post("/validate-key", async (req, res) => {
   const body = req.body as Record<string, unknown>;
   const provider = (body.provider as string) || "";
   const apiKey = (body.apiKey as string) || "";
@@ -194,7 +194,7 @@ app.post("/validate-key", (req, res) => {
     return;
   }
 
-  const result = validateKeyFormat(provider as LLMProvider, apiKey);
+  const result = await validateKeyWithPing(provider as LLMProvider, apiKey);
   res.json(result);
 });
 
