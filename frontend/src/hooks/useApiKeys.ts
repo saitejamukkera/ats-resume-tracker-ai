@@ -48,7 +48,7 @@ export function useApiKeys() {
           setState((s) => ({
             ...s,
             provider: provider as LLMProvider,
-            key,
+            key: key.trim(),
             saved: true,
           }));
         }
@@ -61,7 +61,7 @@ export function useApiKeys() {
   }, []);
 
   const setKey = useCallback((key: string) => {
-    setState((s) => ({ ...s, key, validated: null }));
+    setState((s) => ({ ...s, key: key.trim(), validated: null }));
   }, []);
 
   const setSaved = useCallback((saved: boolean) => {
