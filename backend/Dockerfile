@@ -8,12 +8,11 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 
 # Download dependencies (this layer will be cached unless pom.xml changes)
-RUN chmod +x ./mvnw
-RUN ./mvnw dependency:go-offline
+RUN chmod +x ./mvnw && ./mvnw dependency:go-offline -B
 
 # Copy source code and build
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests -B
 
 # Stage 2: create the runner image
 FROM eclipse-temurin:21-jre-alpine
@@ -29,5 +28,9 @@ COPY --from=build /app/target/*.jar app.jar
 # Expose the port
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Health check for container orchestration (Coolify, K8s, Docker)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+
+# Run the application with container-aware JVM settings
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-XX:+UseZGC", "-jar", "app.jar"]

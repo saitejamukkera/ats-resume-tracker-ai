@@ -107,8 +107,8 @@
 ## Surprising Connections (you probably didn't know these)
 - `profileRoleImpact()` --calls--> `runPipeline()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\impact\detector.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts
-- `runPipeline()` --calls--> `createModels()`  [INFERRED]
-  C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\config\models.ts
+- `createModels()` --calls--> `runPipeline()`  [INFERRED]
+  C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\config\models.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts
 - `analyzeBullet()` --calls--> `repairBullets()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\impact\detector.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\validation\repair.ts
 - `analyzeBullet()` --calls--> `repairKeywordGaps()`  [INFERRED]
