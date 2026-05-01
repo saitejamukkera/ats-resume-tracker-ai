@@ -24,6 +24,8 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    validate-on-migrate: false
+    repair-on-migrate: true
     baseline-version: 1
     locations: classpath:db/migration
   logging:
@@ -64,7 +66,12 @@ gemini:
 jwt:
   secret: ${JWT_SECRET}
   expiration: 900000
-  refresh-expiration: 604800000
+  refresh-expiration: 1209600000
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  cookie-domain: ${COOKIE_DOMAIN:}
+  cookie-secure: ${COOKIE_SECURE:false}
+
+resume-pipeline:
+  url: ${RESUME_PIPELINE_URL:http://localhost:3001}

@@ -32,8 +32,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
 
-    @Value("${jwt.refresh-expiration:604800000}")
+    @Value("${jwt.refresh-expiration:1209600000}")
     private long refreshExpirationMs;
+
+    @Value("${app.cookie-domain:}")
+    private String cookieDomain;
+
+    @Value("${app.cookie-secure:false}")
+    private boolean cookieSecure;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -80,18 +86,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.generateToken(user.getEmail());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
-        boolean isLocalhost = frontendUrl.contains("localhost");
-        String sameSite = isLocalhost ? "Lax" : "None";
-        boolean secure = !isLocalhost;
-
         ResponseCookie.ResponseCookieBuilder jwtCookieBuilder = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
                 .maxAge(900)
-                .sameSite(sameSite)
-                .secure(secure);
-        if (isLocalhost) {
-            jwtCookieBuilder.domain("localhost");
+                .sameSite("Lax")
+                .secure(cookieSecure);
+        if (cookieDomain != null && !cookieDomain.isEmpty()) {
+            jwtCookieBuilder.domain(cookieDomain);
         }
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookieBuilder.build().toString());
 
@@ -99,10 +101,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .httpOnly(true)
                 .path("/api/auth/refresh")
                 .maxAge(refreshExpirationMs / 1000)
-                .sameSite(sameSite)
-                .secure(secure);
-        if (isLocalhost) {
-            refreshCookieBuilder.domain("localhost");
+                .sameSite("Lax")
+                .secure(cookieSecure);
+        if (cookieDomain != null && !cookieDomain.isEmpty()) {
+            refreshCookieBuilder.domain(cookieDomain);
         }
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieBuilder.build().toString());
 

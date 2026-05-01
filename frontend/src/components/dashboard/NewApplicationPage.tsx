@@ -30,6 +30,7 @@ import { useDownloader } from "@/hooks/useDownloader";
 import { api, type GenerateFromJdResponse } from "@/lib/api";
 import type { UserProfile } from "@/types/dtos";
 import { useToast } from "@/context/ToastContext";
+import { useApiKeys } from "@/hooks/useApiKeys";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -47,9 +48,11 @@ const staggerContainer = {
 export default function NewApplicationPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [streamStage, setStreamStage] = useState<string>("");
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const toast = useToast();
+  const { getApiKeys } = useApiKeys();
   const {
     downloadResumePdf,
     downloadResumeDocx,
@@ -219,29 +222,95 @@ export default function NewApplicationPage() {
     }
 
     setLoading(true);
+    setStreamStage("Connecting...");
     try {
-      const response = await api.resumes.generateFromJd(
+      const byok = getApiKeys();
+      await api.resumes.generateFromJdStream(
         jobDescription,
         useIconResume,
+        (eventType, data) => {
+          switch (eventType) {
+            case "stage-start": {
+              const stageLabels: Record<string, string> = {
+                "latex-parser": "Parsing your base resume...",
+                "jd-parser": "Analyzing job description...",
+                generators: "Rewriting resume sections...",
+                validator: "Validating & optimizing content...",
+                "latex-assembler": "Assembling final LaTeX...",
+              };
+              setStreamStage(
+                stageLabels[(data.stage as string) || ""] || "Processing...",
+              );
+              break;
+            }
+            case "jd-parsed":
+              setFormData({
+                position: (data.position as string) || "Unknown Position",
+                company: (data.company as string) || "Unknown Company",
+                jobId: (data.jobId as string) || "",
+                location: (data.location as string) || "",
+              });
+              setStreamStage(
+                `Generating resume for ${data.position || "position"} at ${data.company || "company"}...`,
+              );
+              break;
+            case "resume-ready":
+              setResult({
+                applicationId: data.applicationId as number,
+                position: (data.position as string) || formData.position,
+                company: (data.company as string) || formData.company,
+                jobId: (data.jobId as string) || formData.jobId,
+                location: (data.location as string) || formData.location,
+                latexContent: (data.latex as string) || "",
+                coverLetterContent: "",
+              });
+              setGenerated(true);
+              setIsEditing(true);
+              setIsDrawerOpen(true);
+              compilePdfPreview(data.applicationId as number);
+              setStreamStage("Generating cover letter...");
+              break;
+            case "complete":
+              if (data.coverLetter) {
+                setResult((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        coverLetterContent: data.coverLetter as string,
+                      }
+                    : null,
+                );
+              }
+              setLoading(false);
+              setStreamStage("");
+              break;
+            case "error":
+              if (data.rateLimited) {
+                const seconds = (data.retryAfterSeconds as number) || 30;
+                toast.error(
+                  `API rate limit exceeded. Please try again in ${seconds} seconds.`,
+                );
+              } else {
+                toast.error((data.error as string) || "Generation failed.");
+              }
+              setLoading(false);
+              setStreamStage("");
+              break;
+          }
+        },
+        byok?.apiKeys,
+        byok?.llmProvider,
       );
-      setResult(response);
-      setFormData({
-        position: response.position,
-        company: response.company,
-        jobId: response.jobId,
-        location: response.location,
-      });
-      setGenerated(true);
-      setIsEditing(true);
-      setIsDrawerOpen(true);
-      compilePdfPreview(response.applicationId);
+      // Stream ended — ensure loading is off
+      setLoading(false);
+      setStreamStage("");
     } catch (error) {
       console.error(error);
       toast.error(
         "Failed to generate. Ensure base resumes are uploaded in Settings and the backend is running.",
       );
-    } finally {
       setLoading(false);
+      setStreamStage("");
     }
   };
 
@@ -249,11 +318,12 @@ export default function NewApplicationPage() {
     if (!result) return;
     setLoading(true);
     try {
+      const byok = getApiKeys();
       const response = await api.resumes.generate(result.applicationId, {
         jobDescription,
         customPrompt: customPrompt.trim() || undefined,
         useIconResume: useIconResumeRegen,
-      });
+      }, byok?.apiKeys, byok?.llmProvider);
       setResult((prev) =>
         prev
           ? {
@@ -332,7 +402,7 @@ export default function NewApplicationPage() {
 
   if (!mounted) return null;
 
-  if (loading) {
+  if (loading && !generated) {
     return (
       <div className="max-w-3xl mx-auto flex flex-col justify-center min-h-[60vh]">
         <motion.div
@@ -348,12 +418,13 @@ export default function NewApplicationPage() {
           </div>
           <h2 className="text-xl font-bold tracking-tight mb-3">
             <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              Analyzing Job Description...
+              {streamStage || "Analyzing Job Description..."}
             </span>
           </h2>
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium animate-pulse text-center max-w-sm leading-relaxed">
-            Extracting job details, rewriting your resume, and drafting a cover
-            letter...
+            {formData.position && formData.company
+              ? `Tailoring for ${formData.position} at ${formData.company}`
+              : "Extracting job details, rewriting your resume, and drafting a cover letter..."}
           </p>
         </motion.div>
       </div>
@@ -379,7 +450,7 @@ export default function NewApplicationPage() {
           </Link>
         </motion.div>
 
-        <motion.div variants={fadeInUp} className="mb-8">
+        <motion.div variants={fadeInUp} className="mb-4">
           <h1 className="text-3xl font-extrabold tracking-tight">
             <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
               New Application

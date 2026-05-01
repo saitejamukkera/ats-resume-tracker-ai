@@ -40,6 +40,5 @@ DEPLOY.md
 *.sql.gz
 !**/db/migration/*.sql
 
-# Skills
-.agent
-.agentsgraphify-out/
+resume_generation_system_design.md
+graphify-out/cache/

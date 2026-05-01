@@ -9,9 +9,14 @@ import com.fullstack.ATSJobTracker.model.UserProfile;
 import com.fullstack.ATSJobTracker.repository.JobApplicationRepository;
 import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
 import com.fullstack.ATSJobTracker.repository.UserProfileRepository;
+import com.fullstack.ATSJobTracker.util.KeySanitizer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,6 +24,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Slf4j
@@ -28,8 +35,7 @@ public class ResumeService {
     private final ResumeBaseRepository resumeBaseRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final UserProfileRepository userProfileRepository;
-    private final GeminiService geminiService;
-    private final PromptBuilder promptBuilder;
+    private final ResumePipelineClient resumePipelineClient;
     private final AuthService authService;
 
     private static final String LATEX_API_URL = "https://latex.ytotech.com/builds/sync";
@@ -37,8 +43,10 @@ public class ResumeService {
     /**
      * Parses the JD, extracts key details, and generates a tailored resume and cover letter.
      */
-    public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume) {
-        log.info("Generating from JD, useIconResume={}", useIconResume);
+    public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume,
+                                                  Map<String, String> apiKeys, String llmProvider) {
+        log.info("Generating from JD via pipeline sidecar, useIconResume={} [{}]",
+                useIconResume, KeySanitizer.sanitizeForLog(llmProvider, apiKeys != null && !apiKeys.isEmpty()));
 
         Long userId = authService.getCurrentUserId();
 
@@ -60,50 +68,21 @@ public class ResumeService {
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
         }
 
-        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects);
-        log.info("Calling Gemini for JD generation...");
-        String generatedContent = geminiService.getCompletion(prompt);
+        // Call the pipeline sidecar — returns structured, validated output
+        log.info("Calling pipeline sidecar for JD generation...");
+        ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects,
+                null, apiKeys, llmProvider);
 
-        String position = "Unknown Position";
-        String company = "Unknown Company";
-        String jobId = "";
-        String location = "";
+        String position = pipelineResult.getPosition() != null ? pipelineResult.getPosition() : "Unknown Position";
+        String company = pipelineResult.getCompany() != null ? pipelineResult.getCompany() : "Unknown Company";
+        String jobId = pipelineResult.getJobId() != null ? pipelineResult.getJobId() : "";
+        String location = pipelineResult.getLocation() != null ? pipelineResult.getLocation() : "";
+        String resumeLatex = pipelineResult.getLatex();
+        String coverLetter = pipelineResult.getCoverLetter() != null ? pipelineResult.getCoverLetter() : "";
 
-        if (generatedContent.contains("===EXTRACTED_FIELDS_START===") && generatedContent.contains("===EXTRACTED_FIELDS_END===")) {
-            int start = generatedContent.indexOf("===EXTRACTED_FIELDS_START===") + "===EXTRACTED_FIELDS_START===".length();
-            int end = generatedContent.indexOf("===EXTRACTED_FIELDS_END===");
-            String fieldsBlock = generatedContent.substring(start, end).trim();
-
-            for (String line : fieldsBlock.split("\n")) {
-                line = line.trim();
-                if (line.startsWith("Position:")) {
-                    position = line.substring("Position:".length()).trim();
-                } else if (line.startsWith("Company:")) {
-                    company = line.substring("Company:".length()).trim();
-                } else if (line.startsWith("JobID:")) {
-                    String val = line.substring("JobID:".length()).trim();
-                    jobId = "NONE".equalsIgnoreCase(val) ? "" : val;
-                } else if (line.startsWith("Location:")) {
-                    location = line.substring("Location:".length()).trim();
-                }
-            }
-        }
-        log.info("Extracted: position={}, company={}, jobId={}, location={}", position, company, jobId, location);
-
-        String resumeLatex = generatedContent;
-        String coverLetter = "";
-
-        if (generatedContent.contains("===RESUME_START===") && generatedContent.contains("===RESUME_END===")) {
-            int resumeStart = generatedContent.indexOf("===RESUME_START===") + "===RESUME_START===".length();
-            int resumeEnd = generatedContent.indexOf("===RESUME_END===");
-            resumeLatex = generatedContent.substring(resumeStart, resumeEnd).trim();
-        }
-
-        if (generatedContent.contains("===COVER_LETTER_START===") && generatedContent.contains("===COVER_LETTER_END===")) {
-            int clStart = generatedContent.indexOf("===COVER_LETTER_START===") + "===COVER_LETTER_START===".length();
-            int clEnd = generatedContent.indexOf("===COVER_LETTER_END===");
-            coverLetter = generatedContent.substring(clStart, clEnd).trim();
-        }
+        log.info("Pipeline result: position={}, company={}, atsScore={}",
+                position, company, pipelineResult.getAtsScore());
 
         JobApplication application = new JobApplication();
         application.setPosition(position);
@@ -130,14 +109,124 @@ public class ResumeService {
     }
 
     /**
+     * Stream SSE events from the pipeline sidecar to the frontend.
+     * Creates the DB record when resume-ready fires, updates it when complete fires.
+     */
+    public void generateFromJdStream(String jobDescription, boolean useIconResume,
+                                       SseEmitter emitter, Long userId,
+                                       Map<String, String> apiKeys, String llmProvider) {
+
+        String resumeName = useIconResume ? "Base Resume B" : "Base Resume A";
+        ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
+                .orElse(resumeBaseRepository.findAllByUserId(userId).stream().findFirst().orElse(null));
+
+        if (baseResume == null) {
+            try {
+                emitter.send(SseEmitter.event().name("error")
+                        .data("{\"error\":\"No base resume found. Please upload base resumes in Settings.\"}"));
+                emitter.complete();
+            } catch (Exception ignored) {}
+            return;
+        }
+
+        String userInfo = "";
+        String masterSubjects = "";
+        var profileOpt = userProfileRepository.findByUserId(userId);
+        if (profileOpt.isPresent()) {
+            UserProfile profile = profileOpt.get();
+            userInfo = buildUserInfo(profile);
+            masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
+        }
+
+        AtomicReference<Long> applicationIdRef = new AtomicReference<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            resumePipelineClient.generateStream(
+                    baseResume.getContent(), jobDescription, userInfo, masterSubjects,
+                    (eventType, jsonData) -> {
+                        try {
+                            if ("resume-ready".equals(eventType)) {
+                                // Create the application in DB
+                                JsonNode data = mapper.readTree(jsonData);
+                                String position = data.has("position") ? data.get("position").asText("Unknown Position") : "Unknown Position";
+                                String company = data.has("company") ? data.get("company").asText("Unknown Company") : "Unknown Company";
+                                String jobIdVal = data.has("jobId") ? data.get("jobId").asText("") : "";
+                                String locationVal = data.has("location") ? data.get("location").asText("") : "";
+                                String latex = data.has("latex") ? data.get("latex").asText("") : "";
+
+                                JobApplication application = new JobApplication();
+                                application.setPosition(position);
+                                application.setCompany(company);
+                                application.setJobId(jobIdVal);
+                                application.setLocation(locationVal);
+                                application.setJobDescription(jobDescription);
+                                application.setGeneratedResumeContent(latex);
+                                application.setCoverLetterContent(""); // will be updated on complete
+                                application.setOutcome(ApplicationStatus.DRAFT);
+                                application.setUserId(userId);
+                                JobApplication saved = jobApplicationRepository.save(application);
+                                applicationIdRef.set(saved.getId());
+
+                                log.info("SSE: Application created with id: {} at resume-ready", saved.getId());
+
+                                // Enrich the event with applicationId for the frontend
+                                ObjectNode enriched = (ObjectNode) data;
+                                enriched.put("applicationId", saved.getId());
+                                emitter.send(SseEmitter.event().name(eventType).data(enriched.toString()));
+                            } else if ("complete".equals(eventType)) {
+                                // Update application with cover letter
+                                Long appId = applicationIdRef.get();
+                                if (appId != null) {
+                                    JsonNode data = mapper.readTree(jsonData);
+                                    String coverLetter = data.has("coverLetter") ? data.get("coverLetter").asText("") : "";
+                                    if (!coverLetter.isEmpty()) {
+                                        jobApplicationRepository.findById(appId).ifPresent(app -> {
+                                            app.setCoverLetterContent(coverLetter);
+                                            jobApplicationRepository.save(app);
+                                            log.info("SSE: Cover letter saved for application {}", appId);
+                                        });
+                                    }
+                                    // Enrich with applicationId
+                                    ObjectNode enriched = (ObjectNode) data;
+                                    enriched.put("applicationId", appId);
+                                    emitter.send(SseEmitter.event().name(eventType).data(enriched.toString()));
+                                } else {
+                                    emitter.send(SseEmitter.event().name(eventType).data(jsonData));
+                                }
+                            } else {
+                                // Forward other events as-is (stage-start, jd-parsed, etc.)
+                                emitter.send(SseEmitter.event().name(eventType).data(jsonData));
+                            }
+                        } catch (Exception e) {
+                            log.error("Error processing SSE event {}: {}", eventType, e.getMessage());
+                        }
+                    },
+                    apiKeys, llmProvider
+            );
+            emitter.complete();
+        } catch (Exception e) {
+            log.error("SSE stream error: {}", e.getMessage(), e);
+            try {
+                emitter.send(SseEmitter.event().name("error")
+                        .data("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}"));
+                emitter.complete();
+            } catch (Exception ignored) {}
+        }
+    }
+
+    /**
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
-        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null);
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null, null, null);
     }
 
-    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt, Boolean useIconResume) {
-        log.info("Re-generating resume for application id: {}, useIconResume: {}", applicationId, useIconResume);
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt,
+                                                    Boolean useIconResume, Map<String, String> apiKeys, String llmProvider) {
+        log.info("Re-generating resume via pipeline for application id: {}, useIconResume: {} [{}]",
+                applicationId, useIconResume,
+                KeySanitizer.sanitizeForLog(llmProvider, apiKeys != null && !apiKeys.isEmpty()));
 
         Long userId = authService.getCurrentUserId();
 
@@ -163,28 +252,20 @@ public class ResumeService {
             masterSubjects = profile.getMasterSubjects() != null ? profile.getMasterSubjects() : "";
         }
 
-        String prompt = promptBuilder.buildPrompt(baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt);
-        String generatedContent = geminiService.getCompletion(prompt);
+        // Call the pipeline sidecar — passes custom prompt if provided
+        ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt,
+                apiKeys, llmProvider);
 
-        String resumeLatex = generatedContent;
-        String coverLetter = "";
-
-        if (generatedContent.contains("===RESUME_START===") && generatedContent.contains("===RESUME_END===")) {
-            int resumeStart = generatedContent.indexOf("===RESUME_START===") + "===RESUME_START===".length();
-            int resumeEnd = generatedContent.indexOf("===RESUME_END===");
-            resumeLatex = generatedContent.substring(resumeStart, resumeEnd).trim();
-        }
-        if (generatedContent.contains("===COVER_LETTER_START===") && generatedContent.contains("===COVER_LETTER_END===")) {
-            int clStart = generatedContent.indexOf("===COVER_LETTER_START===") + "===COVER_LETTER_START===".length();
-            int clEnd = generatedContent.indexOf("===COVER_LETTER_END===");
-            coverLetter = generatedContent.substring(clStart, clEnd).trim();
-        }
+        String resumeLatex = pipelineResult.getLatex();
+        String coverLetter = pipelineResult.getCoverLetter() != null ? pipelineResult.getCoverLetter() : "";
 
         application.setGeneratedResumeContent(resumeLatex);
         application.setCoverLetterContent(coverLetter);
         application.setJobDescription(jobDescription);
         jobApplicationRepository.save(application);
-        log.info("Resume re-generated and saved for application id: {}", applicationId);
+        log.info("Resume re-generated via pipeline for application id: {}, atsScore: {}",
+                applicationId, pipelineResult.getAtsScore());
 
         return new String[]{resumeLatex, coverLetter};
     }

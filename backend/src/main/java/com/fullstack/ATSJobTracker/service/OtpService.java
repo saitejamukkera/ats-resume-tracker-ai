@@ -22,6 +22,13 @@ public class OtpService {
 
     public String generateOtp(String email) {
         String key = email.toLowerCase().trim();
+
+        OtpEntry existing = otpStore.get(key);
+        if (existing != null && Instant.now().isBefore(existing.expiresAt().minusSeconds(OTP_EXPIRY_SECONDS - 60))) {
+            log.warn("OTP cooldown active for: {}", key);
+            throw new RuntimeException("Please wait 60 seconds before requesting another code");
+        }
+
         String otp = String.format("%06d", random.nextInt(1_000_000));
         Instant expiresAt = Instant.now().plusSeconds(OTP_EXPIRY_SECONDS);
         otpStore.put(key, new OtpEntry(otp, expiresAt));

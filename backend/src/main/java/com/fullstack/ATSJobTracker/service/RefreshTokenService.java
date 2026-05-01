@@ -20,15 +20,17 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Value("${jwt.refresh-expiration:604800000}")
+    @Value("${jwt.refresh-expiration:1209600000}")
     private long refreshExpirationMs;
 
     @Transactional
     public RefreshToken createRefreshToken(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
         RefreshToken token = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
                 .userId(userId)
-                .expiresAt(LocalDateTime.now().plusSeconds(refreshExpirationMs / 1000))
+                .expiresAt(now.plusSeconds(refreshExpirationMs / 1000))
+                .lastUsedAt(now)
                 .revoked(false)
                 .build();
         return refreshTokenRepository.save(token);
@@ -47,7 +49,15 @@ public class RefreshTokenService {
     public RefreshToken rotateRefreshToken(RefreshToken oldToken) {
         oldToken.setRevoked(true);
         refreshTokenRepository.save(oldToken);
-        return createRefreshToken(oldToken.getUserId());
+        RefreshToken newToken = RefreshToken.builder()
+                .token(UUID.randomUUID().toString())
+                .userId(oldToken.getUserId())
+                .expiresAt(LocalDateTime.now().plusSeconds(refreshExpirationMs / 1000))
+                .lastUsedAt(LocalDateTime.now())
+                .createdAt(oldToken.getCreatedAt())
+                .revoked(false)
+                .build();
+        return refreshTokenRepository.save(newToken);
     }
 
     /**
@@ -56,7 +66,9 @@ public class RefreshTokenService {
     @Scheduled(cron = "0 0 3 * * *")
     @Transactional
     public void purgeExpiredTokens() {
-        refreshTokenRepository.deleteExpiredAndRevoked(LocalDateTime.now());
+        refreshTokenRepository.deleteExpiredAndRevoked(
+                LocalDateTime.now().minusDays(14),
+                LocalDateTime.now().minusDays(60));
         log.info("Purged expired/revoked refresh tokens");
     }
 }

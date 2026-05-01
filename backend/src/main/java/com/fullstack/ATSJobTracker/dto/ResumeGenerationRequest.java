@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,6 @@ public class ResumeGenerationRequest {
     private Long baseResumeId;
     private String customPrompt;
     private Boolean useIconResume;
+    private Map<String, String> apiKeys;
+    private String llmProvider;
 }

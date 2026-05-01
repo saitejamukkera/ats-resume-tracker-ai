@@ -14,6 +14,7 @@ import {
 import { api } from "../../lib/api";
 import type { UserProfile } from "../../types/dtos";
 import { useToast } from "../../context/ToastContext";
+import ApiKeySettings from "./ApiKeySettings";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -290,6 +291,8 @@ export default function SettingsPage() {
           </div>
         </div>
       </motion.div>
+
+      <ApiKeySettings />
 
       <motion.div
         variants={fadeInUp}

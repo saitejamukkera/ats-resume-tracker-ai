@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,6 @@ import lombok.NoArgsConstructor;
 public class GenerateFromJdRequest {
     private String jobDescription;
     private boolean useIconResume;
+    private Map<String, String> apiKeys;
+    private String llmProvider;
 }

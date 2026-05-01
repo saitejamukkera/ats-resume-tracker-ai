@@ -1,9 +1,9 @@
-# Local full-stack: PostgreSQL + backend in one compose.
+# Local full-stack: PostgreSQL + backend + resume pipeline in one compose.
 
 services:
   # ── PostgreSQL ──────────────────────────────────────────────
   postgres:
-    image: postgres:16-alpine
+    image: postgres:latest
     container_name: ats-postgres
     restart: always
     environment:
@@ -21,6 +21,29 @@ services:
       timeout: 5s
       retries: 5
 
+  # ── Resume Pipeline (Node.js LLM Sidecar) ───────────────────
+  resume-pipeline:
+    build:
+      context: ./resume-pipeline
+      dockerfile: Dockerfile
+    container_name: ats-resume-pipeline
+    restart: always
+    environment:
+      GOOGLE_GENERATIVE_AI_API_KEY: ${GEMINI_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      LLM_PROVIDER: ${LLM_PROVIDER}
+      PORT: "3001"
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
   # ── Spring Boot Backend ─────────────────────────────────────
   backend:
     build:
@@ -31,6 +54,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      resume-pipeline:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -38,14 +63,19 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      RESUME_PIPELINE_URL: http://resume-pipeline:3001
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
       MAIL_USERNAME: ${MAIL_USERNAME:-}
       MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
     ports:
       - "${SERVER_PORT:-8080}:8080"
 
 volumes:
   postgres_data:
+    name: backend_postgres_data
+    external: true
