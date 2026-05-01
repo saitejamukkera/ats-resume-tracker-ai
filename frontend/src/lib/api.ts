@@ -99,7 +99,11 @@ const apiFetch = async (
       if (refreshed) {
         return apiFetch(input, init, true);
       }
-      emitSessionExpired();
+      // Do not popup the "Session Expired" modal if the user was simply
+      // loading the site and the background identity check failed.
+      if (!url.includes("/api/auth/me")) {
+        emitSessionExpired();
+      }
     }
   }
 
