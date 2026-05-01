@@ -143,6 +143,8 @@ public class AuthController {
                     RefreshToken newRefreshToken = refreshTokenService.rotateRefreshToken(existingToken);
 
                     String accessToken = jwtUtil.generateToken(user.getEmail());
+                    ResponseCookie jwtCookie = createJwtCookie(accessToken);
+                    httpResponse.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
                     addRefreshTokenCookie(httpResponse, newRefreshToken.getToken());
 
                     return ResponseEntity.ok((Object) Map.of(
@@ -315,7 +317,7 @@ public class AuthController {
         ResponseCookie.ResponseCookieBuilder builder = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(900)
+                .maxAge(3600)
                 .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {

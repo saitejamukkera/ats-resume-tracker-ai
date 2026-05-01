@@ -52,7 +52,12 @@ async function silentRefresh(): Promise<boolean> {
       credentials: "include",
       headers: { "X-XSRF-TOKEN": getCsrfToken() || "" },
     });
-    return response.ok;
+    if (response.ok) {
+      // Refresh CSRF token so future mutating requests don't fail
+      await ensureCsrfToken();
+      return true;
+    }
+    return false;
   } catch {
     return false;
   }
@@ -69,6 +74,37 @@ async function attemptRefresh(): Promise<boolean> {
   });
   return refreshPromise;
 }
+
+// ── Proactive background refresh ────────────────────────────────────
+// Refresh the JWT every 50 min (before the 60-min expiry) while the
+// user is actively using the tab.  This prevents the "Session Expired"
+// modal from ever appearing during normal use.
+
+const PROACTIVE_REFRESH_MS = 50 * 60 * 1000; // 50 minutes
+let lastActivity = Date.now();
+
+function trackActivity() {
+  lastActivity = Date.now();
+}
+
+function startProactiveRefresh() {
+  if (typeof window === "undefined") return;
+  // Track user activity (mouse, keyboard, touch, scroll)
+  window.addEventListener("mousemove", trackActivity, { passive: true });
+  window.addEventListener("keydown", trackActivity, { passive: true });
+  window.addEventListener("touchstart", trackActivity, { passive: true });
+  window.addEventListener("scroll", trackActivity, { passive: true });
+
+  setInterval(async () => {
+    const isVisible = typeof document !== "undefined" && !document.hidden;
+    const wasRecentlyActive = Date.now() - lastActivity < 10 * 60 * 1000; // 10 min
+    if (isVisible && wasRecentlyActive) {
+      await attemptRefresh();
+    }
+  }, PROACTIVE_REFRESH_MS);
+}
+
+startProactiveRefresh();
 
 // ── Core fetch wrapper with 401 interception ────────────────────────
 
