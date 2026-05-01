@@ -65,7 +65,8 @@ public class ResumeController {
         log.info("POST /api/resumes/generate-from-jd");
         try {
             GenerateFromJdResponse response = resumeService.generateFromJd(
-                    request.getJobDescription(), request.isUseIconResume());
+                    request.getJobDescription(), request.isUseIconResume(),
+                    request.getApiKeys(), request.getLlmProvider());
             return ResponseEntity.ok(response);
         } catch (com.fullstack.ATSJobTracker.exception.GeminiApiException e) {
             log.warn("Gemini API busy/failed: {}", e.getMessage());
@@ -88,7 +89,8 @@ public class ResumeController {
         Thread.startVirtualThread(() -> {
             try {
                 resumeService.generateFromJdStream(
-                        request.getJobDescription(), request.isUseIconResume(), emitter, userId);
+                        request.getJobDescription(), request.isUseIconResume(), emitter, userId,
+                        request.getApiKeys(), request.getLlmProvider());
             } catch (Exception e) {
                 log.error("SSE stream thread error: {}", e.getMessage(), e);
                 try {
@@ -110,7 +112,8 @@ public class ResumeController {
         log.info("POST /api/resumes/generate/{}", applicationId);
         try {
             String[] result = resumeService.generateResumeAndCoverLetter(
-                    applicationId, request.getJobDescription(), request.getCustomPrompt(), request.getUseIconResume());
+                    applicationId, request.getJobDescription(), request.getCustomPrompt(),
+                    request.getUseIconResume(), request.getApiKeys(), request.getLlmProvider());
 
             ResumeGenerationResponse response = ResumeGenerationResponse.builder()
                     .latexContent(result[0])

@@ -4,8 +4,9 @@
 // Uses the fast/cheap model since it's a simple extraction task.
 
 import { z } from "zod";
-import { models } from "../config/models.js";
+import { models as defaultModels } from "../config/models.js";
 import { callLLM } from "../observability/llm-wrapper.js";
+import type { LanguageModel } from "ai";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { GeneratedSections } from "../schemas/pipeline.js";
 import type { SnapshotStore } from "../observability/debug.js";
@@ -26,11 +27,13 @@ export async function extractBoldKeywords(
   sections: GeneratedSections,
   jd: JDAnalysis,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{
   boldPhrases: string[];
   inputTokens: number;
   outputTokens: number;
 }> {
+  const mdl = models ?? defaultModels;
   // Collect all resume text for the LLM to scan
   const resumeText = [
     `SUMMARY: ${sections.summary}`,
@@ -66,7 +69,7 @@ RULES:
 - Each phrase should be 1-4 words`;
 
   const result = await callLLM({
-    model: models.extraction,
+    model: mdl.extraction,
     schema: KeywordExtractionSchema,
     prompt,
     stage: "keyword-extractor",

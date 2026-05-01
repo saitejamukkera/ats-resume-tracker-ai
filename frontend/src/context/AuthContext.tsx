@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
-import { api, tokenStorage, onSessionExpired } from "../lib/api";
+import { api, onSessionExpired, ensureCsrfToken } from "../lib/api";
 import { SessionExpiredModal } from "../components/SessionExpiredModal";
 
 export interface AuthUser {
@@ -42,13 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const userRef = useRef<AuthUser | null>(null);
 
   const refreshUser = useCallback(async (): Promise<boolean> => {
-    const token = tokenStorage.get();
-    if (!token) {
-      setUser(null);
-      userRef.current = null;
-      setLoading(false);
-      return false;
-    }
     try {
       const userData = await api.auth.me();
       const authUser: AuthUser = {
@@ -58,19 +51,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       setUser(authUser);
       userRef.current = authUser;
+      setLoading(false);
       return true;
     } catch {
-      tokenStorage.remove();
       setUser(null);
       userRef.current = null;
-      return false;
-    } finally {
       setLoading(false);
+      return false;
     }
   }, []);
 
   useEffect(() => {
-    refreshUser();
+    ensureCsrfToken().then(() => refreshUser());
   }, [refreshUser]);
 
   useEffect(() => {
@@ -124,7 +116,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleSessionExpiredLogin = () => {
     setSessionExpired(false);
-    tokenStorage.remove();
     router.push("/login");
   };
 

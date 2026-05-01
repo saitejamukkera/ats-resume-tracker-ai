@@ -31,11 +31,15 @@ public class RefreshToken {
     private boolean revoked;
 
     @Column(nullable = false)
+    private LocalDateTime lastUsedAt;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) createdAt = LocalDateTime.now();
+        if (lastUsedAt == null) lastUsedAt = LocalDateTime.now();
     }
 
     public boolean isExpired() {
@@ -43,6 +47,9 @@ public class RefreshToken {
     }
 
     public boolean isUsable() {
-        return !revoked && !isExpired();
+        if (revoked) return false;
+        LocalDateTime now = LocalDateTime.now();
+        return lastUsedAt.plusDays(14).isAfter(now)
+                && createdAt.plusDays(60).isAfter(now);
     }
 }

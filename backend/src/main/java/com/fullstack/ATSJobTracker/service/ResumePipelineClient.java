@@ -3,6 +3,7 @@ package com.fullstack.ATSJobTracker.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fullstack.ATSJobTracker.util.KeySanitizer;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,6 +114,66 @@ public class ResumePipelineClient {
     }
 
     /**
+     * BYOK overload — forwards user API keys to the pipeline sidecar.
+     * Keys are held in local variables only and garbage-collected after the call.
+     */
+    public PipelineResponse generate(
+            String baseResumeLatex,
+            String jobDescription,
+            String userInfo,
+            String masterSubjects,
+            String customPrompt,
+            Map<String, String> apiKeys,
+            String llmProvider
+    ) {
+        try {
+            Map<String, Object> body = new HashMap<>();
+            body.put("baseResumeLatex", baseResumeLatex);
+            body.put("jobDescription", jobDescription);
+            if (userInfo != null && !userInfo.isEmpty()) body.put("userInfo", userInfo);
+            if (masterSubjects != null && !masterSubjects.isEmpty()) body.put("masterSubjects", masterSubjects);
+            if (customPrompt != null && !customPrompt.isBlank()) body.put("customPrompt", customPrompt);
+            if (apiKeys != null && !apiKeys.isEmpty()) body.put("apiKeys", apiKeys);
+            if (llmProvider != null && !llmProvider.isBlank()) body.put("llmProvider", llmProvider);
+
+            String jsonBody = objectMapper.writeValueAsString(body);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(pipelineUrl + "/generate"))
+                    .timeout(Duration.ofSeconds(120))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+                    .build();
+
+            log.info("Calling resume pipeline at {}/generate [{}]",
+                    pipelineUrl, KeySanitizer.sanitizeForLog(
+                            llmProvider != null ? llmProvider : "server",
+                            apiKeys != null && !apiKeys.isEmpty()));
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                PipelineResponse result = objectMapper.readValue(response.body(), PipelineResponse.class);
+                log.info("Pipeline response: position={}, company={}, atsScore={}, status={}",
+                        result.getPosition(), result.getCompany(), result.getAtsScore(),
+                        result.getTrace() != null ? result.getTrace().get("status") : "unknown");
+                return result;
+            } else {
+                String errorBody = KeySanitizer.sanitize(response.body());
+                log.error("Pipeline returned status {}: {}", response.statusCode(),
+                        errorBody.substring(0, Math.min(errorBody.length(), 500)));
+                throw new RuntimeException("Resume pipeline failed with status " + response.statusCode()
+                        + ": " + errorBody.substring(0, Math.min(errorBody.length(), 200)));
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error calling resume pipeline: {}", KeySanitizer.sanitize(e.getMessage()), e);
+            throw new RuntimeException("Resume pipeline unavailable: " + e.getMessage(), e);
+        }
+    }
+
+    /**
      * Stream pipeline events via SSE from the sidecar.
      * @param onEvent callback receiving (eventType, jsonData) for each SSE event
      */
@@ -181,6 +242,83 @@ public class ResumePipelineClient {
             throw e;
         } catch (Exception e) {
             log.error("Error in pipeline SSE stream: {}", e.getMessage(), e);
+            throw new RuntimeException("Resume pipeline SSE unavailable: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * BYOK overload for SSE streaming — forwards user API keys.
+     */
+    public void generateStream(
+            String baseResumeLatex,
+            String jobDescription,
+            String userInfo,
+            String masterSubjects,
+            BiConsumer<String, String> onEvent,
+            Map<String, String> apiKeys,
+            String llmProvider
+    ) {
+        try {
+            Map<String, Object> body = new HashMap<>();
+            body.put("baseResumeLatex", baseResumeLatex);
+            body.put("jobDescription", jobDescription);
+            if (userInfo != null && !userInfo.isEmpty()) body.put("userInfo", userInfo);
+            if (masterSubjects != null && !masterSubjects.isEmpty()) body.put("masterSubjects", masterSubjects);
+            if (apiKeys != null && !apiKeys.isEmpty()) body.put("apiKeys", apiKeys);
+            if (llmProvider != null && !llmProvider.isBlank()) body.put("llmProvider", llmProvider);
+
+            String jsonBody = objectMapper.writeValueAsString(body);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(pipelineUrl + "/generate-stream"))
+                    .timeout(Duration.ofSeconds(180))
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "text/event-stream")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+                    .build();
+
+            log.info("Calling resume pipeline SSE at {}/generate-stream [{}]",
+                    pipelineUrl, KeySanitizer.sanitizeForLog(
+                            llmProvider != null ? llmProvider : "server",
+                            apiKeys != null && !apiKeys.isEmpty()));
+
+            HttpResponse<java.io.InputStream> response = httpClient.send(
+                    request, HttpResponse.BodyHandlers.ofInputStream());
+
+            if (response.statusCode() != 200) {
+                String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
+                log.error("Pipeline SSE returned status {}: {}", response.statusCode(),
+                        KeySanitizer.sanitize(errorBody));
+                throw new RuntimeException("Resume pipeline SSE failed with status " + response.statusCode());
+            }
+
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
+                String currentEvent = "message";
+                StringBuilder dataBuffer = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("event: ")) {
+                        currentEvent = line.substring(7).trim();
+                    } else if (line.startsWith("data: ")) {
+                        dataBuffer.append(line.substring(6));
+                    } else if (line.isEmpty() && dataBuffer.length() > 0) {
+                        onEvent.accept(currentEvent, dataBuffer.toString());
+                        currentEvent = "message";
+                        dataBuffer.setLength(0);
+                    }
+                }
+                if (dataBuffer.length() > 0) {
+                    onEvent.accept(currentEvent, dataBuffer.toString());
+                }
+            }
+
+            log.info("Pipeline SSE stream completed [BYOK]");
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error in pipeline SSE stream: {}", KeySanitizer.sanitize(e.getMessage()), e);
             throw new RuntimeException("Resume pipeline SSE unavailable: " + e.getMessage(), e);
         }
     }

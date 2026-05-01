@@ -30,6 +30,7 @@ import { useDownloader } from "@/hooks/useDownloader";
 import { api, type GenerateFromJdResponse } from "@/lib/api";
 import type { UserProfile } from "@/types/dtos";
 import { useToast } from "@/context/ToastContext";
+import { useApiKeys } from "@/hooks/useApiKeys";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -51,6 +52,7 @@ export default function NewApplicationPage() {
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const toast = useToast();
+  const { getApiKeys } = useApiKeys();
   const {
     downloadResumePdf,
     downloadResumeDocx,
@@ -222,6 +224,7 @@ export default function NewApplicationPage() {
     setLoading(true);
     setStreamStage("Connecting...");
     try {
+      const byok = getApiKeys();
       await api.resumes.generateFromJdStream(
         jobDescription,
         useIconResume,
@@ -295,6 +298,8 @@ export default function NewApplicationPage() {
               break;
           }
         },
+        byok?.apiKeys,
+        byok?.llmProvider,
       );
       // Stream ended — ensure loading is off
       setLoading(false);
@@ -313,11 +318,12 @@ export default function NewApplicationPage() {
     if (!result) return;
     setLoading(true);
     try {
+      const byok = getApiKeys();
       const response = await api.resumes.generate(result.applicationId, {
         jobDescription,
         customPrompt: customPrompt.trim() || undefined,
         useIconResume: useIconResumeRegen,
-      });
+      }, byok?.apiKeys, byok?.llmProvider);
       setResult((prev) =>
         prev
           ? {

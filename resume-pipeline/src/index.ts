@@ -8,6 +8,16 @@ import type { PipelineInput } from "./schemas/pipeline.js";
 import type { PipelineEvent } from "./pipeline/runner.js";
 import { DEFAULT_CONFIG } from "./schemas/pipeline.js";
 import { RateLimitError } from "./observability/llm-wrapper.js";
+import {
+  PerRequestKeyProvider,
+  ServerKeyProvider,
+  CompositeKeyProvider,
+  resolveProvider,
+  type ProviderKeyProvider,
+  type LLMProvider,
+} from "./security/key-provider.js";
+import { sanitizeObject } from "./security/key-sanitizer.js";
+import { validateKeyFormat } from "./security/key-validator.js";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -24,26 +34,59 @@ app.get("/health", (_req, res) => {
   });
 });
 
+// ── Key extraction helper ───────────────────────────────────────
+function extractKeyProvider(body: Record<string, unknown>): {
+  keyProvider?: ProviderKeyProvider;
+  pipelineInput: PipelineInput;
+} {
+  const { apiKeys, llmProvider, ...pipelineInputRaw } = body;
+  const pipelineInput = pipelineInputRaw as unknown as PipelineInput;
+
+  let keyProvider: ProviderKeyProvider | undefined;
+
+  if (apiKeys && typeof apiKeys === "object") {
+    const keys = apiKeys as Record<string, string>;
+    const hasAnyKey = Object.values(keys).some((v) => v && v.trim().length > 0);
+
+    if (hasAnyKey) {
+      const preferred = resolveProvider(
+        llmProvider as string | undefined,
+        process.env.LLM_PROVIDER,
+      );
+      const userKp = new PerRequestKeyProvider(keys, preferred);
+      const serverKp = new ServerKeyProvider(
+        process.env.LLM_PROVIDER as LLMProvider || "google",
+      );
+      keyProvider = new CompositeKeyProvider(userKp, serverKp);
+    }
+  }
+
+  return { keyProvider, pipelineInput };
+}
+
 // ── Generate Endpoint (original — returns full JSON) ────────────
 app.post("/generate", async (req, res) => {
   const startTime = Date.now();
 
   try {
-    const body = req.body as PipelineInput;
+    const body = req.body as Record<string, unknown>;
+    const { keyProvider, pipelineInput } = extractKeyProvider(body);
+
+    // Log sanitized request (no keys)
+    const loggable = sanitizeObject(body);
+    console.log(
+      `[server] POST /generate — JD length: ${(loggable.jobDescription as string)?.length ?? 0}, Resume length: ${(loggable.baseResumeLatex as string)?.length ?? 0}${keyProvider ? " [BYOK]" : ""}`,
+    );
 
     // Validate required fields
-    if (!body.baseResumeLatex || !body.jobDescription) {
+    if (!pipelineInput.baseResumeLatex || !pipelineInput.jobDescription) {
       res.status(400).json({
         error: "Missing required fields: baseResumeLatex, jobDescription",
       });
       return;
     }
 
-    console.log(
-      `[server] POST /generate — JD length: ${body.jobDescription.length}, Resume length: ${body.baseResumeLatex.length}`,
-    );
-
-    const result = await runPipeline(body, DEFAULT_CONFIG);
+    const result = await runPipeline(pipelineInput, DEFAULT_CONFIG, undefined, keyProvider);
 
     console.log(
       `[server] Generation complete in ${Date.now() - startTime}ms — ATS: ${result.atsScore}`,
@@ -78,8 +121,15 @@ app.post("/generate", async (req, res) => {
 app.post("/generate-stream", async (req, res) => {
   const startTime = Date.now();
 
-  const body = req.body as PipelineInput;
-  if (!body.baseResumeLatex || !body.jobDescription) {
+  const body = req.body as Record<string, unknown>;
+  const { keyProvider, pipelineInput } = extractKeyProvider(body);
+
+  const loggable = sanitizeObject(body);
+  console.log(
+    `[server] POST /generate-stream — JD length: ${(loggable.jobDescription as string)?.length ?? 0}, Resume length: ${(loggable.baseResumeLatex as string)?.length ?? 0}${keyProvider ? " [BYOK]" : ""}`,
+  );
+
+  if (!pipelineInput.baseResumeLatex || !pipelineInput.jobDescription) {
     res
       .status(400)
       .json({
@@ -87,10 +137,6 @@ app.post("/generate-stream", async (req, res) => {
       });
     return;
   }
-
-  console.log(
-    `[server] POST /generate-stream — JD length: ${body.jobDescription.length}, Resume length: ${body.baseResumeLatex.length}`,
-  );
 
   // Set SSE headers
   res.writeHead(200, {
@@ -107,7 +153,7 @@ app.post("/generate-stream", async (req, res) => {
   };
 
   try {
-    const result = await runPipeline(body, DEFAULT_CONFIG, sendEvent);
+    const result = await runPipeline(pipelineInput, DEFAULT_CONFIG, sendEvent, keyProvider);
     // The runner emits a 'complete' event with cover letter + scores.
     // No need to send another one here.
     console.log(
@@ -136,6 +182,22 @@ app.post("/generate-stream", async (req, res) => {
   }
 });
 
+// ── Validate Key Endpoint ──────────────────────────────────────
+app.post("/validate-key", (req, res) => {
+  const body = req.body as Record<string, unknown>;
+  const provider = (body.provider as string) || "";
+  const apiKey = (body.apiKey as string) || "";
+
+  const validProviders: LLMProvider[] = ["google", "openai", "anthropic"];
+  if (!validProviders.includes(provider as LLMProvider)) {
+    res.json({ valid: false, message: "Invalid provider." });
+    return;
+  }
+
+  const result = validateKeyFormat(provider as LLMProvider, apiKey);
+  res.json(result);
+});
+
 // ── Start Server ────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`[server] Resume pipeline listening on port ${PORT}`);
@@ -143,4 +205,5 @@ app.listen(PORT, () => {
   console.log(`[server]   GET  /health`);
   console.log(`[server]   POST /generate`);
   console.log(`[server]   POST /generate-stream (SSE)`);
+  console.log(`[server]   POST /validate-key`);
 });

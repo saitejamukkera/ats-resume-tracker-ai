@@ -9,6 +9,7 @@ import com.fullstack.ATSJobTracker.model.UserProfile;
 import com.fullstack.ATSJobTracker.repository.JobApplicationRepository;
 import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
 import com.fullstack.ATSJobTracker.repository.UserProfileRepository;
+import com.fullstack.ATSJobTracker.util.KeySanitizer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,6 +24,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -41,8 +43,10 @@ public class ResumeService {
     /**
      * Parses the JD, extracts key details, and generates a tailored resume and cover letter.
      */
-    public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume) {
-        log.info("Generating from JD via pipeline sidecar, useIconResume={}", useIconResume);
+    public GenerateFromJdResponse generateFromJd(String jobDescription, boolean useIconResume,
+                                                  Map<String, String> apiKeys, String llmProvider) {
+        log.info("Generating from JD via pipeline sidecar, useIconResume={} [{}]",
+                useIconResume, KeySanitizer.sanitizeForLog(llmProvider, apiKeys != null && !apiKeys.isEmpty()));
 
         Long userId = authService.getCurrentUserId();
 
@@ -67,7 +71,8 @@ public class ResumeService {
         // Call the pipeline sidecar — returns structured, validated output
         log.info("Calling pipeline sidecar for JD generation...");
         ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
-                baseResume.getContent(), jobDescription, userInfo, masterSubjects);
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects,
+                null, apiKeys, llmProvider);
 
         String position = pipelineResult.getPosition() != null ? pipelineResult.getPosition() : "Unknown Position";
         String company = pipelineResult.getCompany() != null ? pipelineResult.getCompany() : "Unknown Company";
@@ -107,7 +112,9 @@ public class ResumeService {
      * Stream SSE events from the pipeline sidecar to the frontend.
      * Creates the DB record when resume-ready fires, updates it when complete fires.
      */
-    public void generateFromJdStream(String jobDescription, boolean useIconResume, SseEmitter emitter, Long userId) {
+    public void generateFromJdStream(String jobDescription, boolean useIconResume,
+                                       SseEmitter emitter, Long userId,
+                                       Map<String, String> apiKeys, String llmProvider) {
 
         String resumeName = useIconResume ? "Base Resume B" : "Base Resume A";
         ResumeBase baseResume = resumeBaseRepository.findByNameAndUserId(resumeName, userId)
@@ -194,7 +201,8 @@ public class ResumeService {
                         } catch (Exception e) {
                             log.error("Error processing SSE event {}: {}", eventType, e.getMessage());
                         }
-                    }
+                    },
+                    apiKeys, llmProvider
             );
             emitter.complete();
         } catch (Exception e) {
@@ -211,11 +219,14 @@ public class ResumeService {
      * Re-generate for an existing application.
      */
     public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription) {
-        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null);
+        return generateResumeAndCoverLetter(applicationId, jobDescription, null, null, null, null);
     }
 
-    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt, Boolean useIconResume) {
-        log.info("Re-generating resume via pipeline for application id: {}, useIconResume: {}", applicationId, useIconResume);
+    public String[] generateResumeAndCoverLetter(Long applicationId, String jobDescription, String customPrompt,
+                                                    Boolean useIconResume, Map<String, String> apiKeys, String llmProvider) {
+        log.info("Re-generating resume via pipeline for application id: {}, useIconResume: {} [{}]",
+                applicationId, useIconResume,
+                KeySanitizer.sanitizeForLog(llmProvider, apiKeys != null && !apiKeys.isEmpty()));
 
         Long userId = authService.getCurrentUserId();
 
@@ -243,7 +254,8 @@ public class ResumeService {
 
         // Call the pipeline sidecar — passes custom prompt if provided
         ResumePipelineClient.PipelineResponse pipelineResult = resumePipelineClient.generate(
-                baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt);
+                baseResume.getContent(), jobDescription, userInfo, masterSubjects, customPrompt,
+                apiKeys, llmProvider);
 
         String resumeLatex = pipelineResult.getLatex();
         String coverLetter = pipelineResult.getCoverLetter() != null ? pipelineResult.getCoverLetter() : "";

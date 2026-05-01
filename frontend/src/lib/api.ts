@@ -7,34 +7,7 @@ import type {
 } from "../types/dtos";
 
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-
-// ── Token storage (access token in memory + localStorage) ───────────
-
-let cachedToken: string | null = null;
-
-export const tokenStorage = {
-  get: () => {
-    if (cachedToken !== null) return cachedToken;
-    if (typeof window !== "undefined") {
-      cachedToken = localStorage.getItem("jwt");
-      return cachedToken;
-    }
-    return null;
-  },
-  set: (token: string) => {
-    cachedToken = token;
-    if (typeof window !== "undefined") {
-      localStorage.setItem("jwt", token);
-    }
-  },
-  remove: () => {
-    cachedToken = null;
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("jwt");
-    }
-  },
-};
+  process.env.NEXT_PUBLIC_API_URL || "";
 
 // ── Session expired event bus ───────────────────────────────────────
 
@@ -52,29 +25,19 @@ function emitSessionExpired() {
   sessionExpiredListeners.forEach((listener) => listener());
 }
 
-// ── JWT expiry helpers ──────────────────────────────────────────────
+// ── CSRF Token ──────────────────────────────────────────────────────
 
-function tokenExpiresWithin(ms: number): boolean {
-  const token = tokenStorage.get();
-  if (!token) return true;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const expiresAt = payload.exp * 1000;
-    return expiresAt - Date.now() < ms;
-  } catch {
-    return true;
-  }
+function getCsrfToken(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : null;
 }
 
-async function ensureFreshToken(): Promise<void> {
-  if (tokenExpiresWithin(3 * 60 * 1000)) {
-    const refreshed = await attemptRefresh();
-    if (!refreshed) {
-      tokenStorage.remove();
-      emitSessionExpired();
-      throw new Error("Session expired. Please log in again.");
-    }
-  }
+export async function ensureCsrfToken(): Promise<void> {
+  if (getCsrfToken()) return;
+  await fetch(`${API_BASE_URL}/api/auth/csrf`, {
+    credentials: "include",
+  }).catch(() => {});
 }
 
 // ── Silent token refresh with request queuing ───────────────────────
@@ -87,14 +50,9 @@ async function silentRefresh(): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
       method: "POST",
       credentials: "include",
+      headers: { "X-XSRF-TOKEN": getCsrfToken() || "" },
     });
-    if (!response.ok) return false;
-    const data = await response.json();
-    if (data.token) {
-      tokenStorage.set(data.token);
-      return true;
-    }
-    return false;
+    return response.ok;
   } catch {
     return false;
   }
@@ -119,13 +77,15 @@ const apiFetch = async (
   init?: RequestInit,
   _isRetry = false,
 ): Promise<Response> => {
-  const token = tokenStorage.get();
   const headers = new Headers(init?.headers);
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
+
+  const method = (init?.method || "GET").toUpperCase();
+  if (["POST", "PUT", "DELETE", "PATCH"].includes(method)) {
+    const csrf = getCsrfToken();
+    if (csrf) headers.set("X-XSRF-TOKEN", csrf);
   }
 
-  const response = await fetch(input, { ...init, headers });
+  const response = await fetch(input, { ...init, headers, credentials: "include" });
 
   if (response.status === 401 && !_isRetry) {
     const url = typeof input === "string" ? input : input.toString();
@@ -139,7 +99,6 @@ const apiFetch = async (
       if (refreshed) {
         return apiFetch(input, init, true);
       }
-      tokenStorage.remove();
       emitSessionExpired();
     }
   }
@@ -172,15 +131,18 @@ export interface AuthResponse {
 export const api = {
   auth: {
     login: async (email: string, password: string): Promise<AuthResponse> => {
+      const csrf = getCsrfToken();
       const response = await apiFetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(csrf ? { "X-XSRF-TOKEN": csrf } : {}),
+        },
         credentials: "include",
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Login failed");
-      if (data.token) tokenStorage.set(data.token);
       return data;
     },
     register: async (
@@ -188,24 +150,25 @@ export const api = {
       password: string,
       fullName: string,
     ): Promise<AuthResponse> => {
+      const csrf = getCsrfToken();
       const response = await apiFetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(csrf ? { "X-XSRF-TOKEN": csrf } : {}),
+        },
         credentials: "include",
         body: JSON.stringify({ fullName, email, password }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Registration failed");
-      if (data.token) tokenStorage.set(data.token);
       return data;
     },
     logout: async (): Promise<void> => {
-      const token = tokenStorage.get();
-      tokenStorage.remove();
       await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: { "X-XSRF-TOKEN": getCsrfToken() || "" },
       }).catch(() => {});
     },
     me: async (): Promise<AuthResponse> => {
@@ -240,7 +203,6 @@ export const api = {
       );
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Verification failed");
-      if (data.token) tokenStorage.set(data.token);
       return data;
     },
     forgotPassword: async (email: string): Promise<AuthResponse> => {
@@ -327,13 +289,18 @@ export const api = {
     generateFromJd: async (
       jobDescription: string,
       useIconResume: boolean,
+      apiKeys?: Record<string, string>,
+      llmProvider?: string,
     ): Promise<GenerateFromJdResponse> => {
+      const body: Record<string, unknown> = { jobDescription, useIconResume };
+      if (apiKeys) body.apiKeys = apiKeys;
+      if (llmProvider) body.llmProvider = llmProvider;
       const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/generate-from-jd`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ jobDescription, useIconResume }),
+          body: JSON.stringify(body),
         },
       );
       if (!response.ok) {
@@ -346,15 +313,24 @@ export const api = {
       jobDescription: string,
       useIconResume: boolean,
       onEvent: (eventType: string, data: Record<string, unknown>) => void,
+      apiKeys?: Record<string, string>,
+      llmProvider?: string,
     ): Promise<void> => {
-      await ensureFreshToken();
+      const refreshed = await silentRefresh();
+      if (!refreshed) {
+        emitSessionExpired();
+        throw new Error("Session expired. Please log in again.");
+      }
+      const body: Record<string, unknown> = { jobDescription, useIconResume };
+      if (apiKeys) body.apiKeys = apiKeys;
+      if (llmProvider) body.llmProvider = llmProvider;
       const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/generate-from-jd/stream`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ jobDescription, useIconResume }),
+          body: JSON.stringify(body),
         },
       );
       if (!response.ok) {
@@ -402,13 +378,18 @@ export const api = {
     generate: async (
       applicationId: number,
       data: ResumeGenerationRequest,
+      apiKeys?: Record<string, string>,
+      llmProvider?: string,
     ): Promise<ResumeGenerationResponse> => {
+      const body: Record<string, unknown> = { ...data };
+      if (apiKeys) body.apiKeys = apiKeys;
+      if (llmProvider) body.llmProvider = llmProvider;
       const response = await apiFetch(
         `${API_BASE_URL}/api/resumes/generate/${applicationId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(body),
         },
       );
       if (!response.ok) {
@@ -512,6 +493,22 @@ export const api = {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Failed to save profile");
+      return response.json();
+    },
+  },
+  settings: {
+    validateKey: async (
+      provider: string,
+      apiKey: string,
+    ): Promise<{ valid: boolean; message?: string }> => {
+      const response = await apiFetch(`${API_BASE_URL}/api/settings/validate-key`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider, apiKey }),
+      });
+      if (!response.ok) {
+        return { valid: false, message: "Validation service unavailable." };
+      }
       return response.json();
     },
   },

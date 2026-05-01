@@ -3,7 +3,6 @@
 import { useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../../src/context/AuthContext";
-import { tokenStorage } from "../../../src/lib/api";
 
 function OAuthCallbackContent() {
   const router = useRouter();
@@ -21,7 +20,6 @@ function OAuthCallbackContent() {
 
     if (token) {
       handledRef.current = true;
-      tokenStorage.set(token);
       refreshUser().then((success) => {
         router.replace(success ? "/dashboard" : "/login");
       });

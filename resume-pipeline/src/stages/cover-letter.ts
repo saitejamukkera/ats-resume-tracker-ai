@@ -1,9 +1,10 @@
 // src/stages/cover-letter.ts
 // Cover letter generator — focused single LLM call.
 
-import { models } from "../config/models.js";
+import { models as defaultModels } from "../config/models.js";
 import { CoverLetterOutputSchema } from "../schemas/cover-letter.js";
 import { callLLM } from "../observability/llm-wrapper.js";
+import type { LanguageModel } from "ai";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { SnapshotStore } from "../observability/debug.js";
 
@@ -13,7 +14,9 @@ export async function generateCoverLetter(
   masterSubjects: string,
   currentDate: string,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{ coverLetter: string; inputTokens: number; outputTokens: number }> {
+  const mdl = models ?? defaultModels;
   const prompt = `Generate a JD-specific cover letter for this application.
 
 ROLE: ${jd.position} at ${jd.company}
@@ -69,7 +72,7 @@ Sincerely,
 Return the full cover letter text.`;
 
   const result = await callLLM({
-    model: models.generation,
+    model: mdl.generation,
     schema: CoverLetterOutputSchema,
     prompt,
     stage: "cover-letter",

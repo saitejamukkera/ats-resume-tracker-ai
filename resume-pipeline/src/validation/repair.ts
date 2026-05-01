@@ -4,9 +4,10 @@
 // After each repair, individual fixes are re-validated before acceptance.
 
 import { z } from "zod";
-import { models } from "../config/models.js";
+import { models as defaultModels } from "../config/models.js";
 import { callLLM } from "../observability/llm-wrapper.js";
 import { analyzeBullet } from "../impact/detector.js";
+import type { LanguageModel } from "ai";
 import type { ValidationError, GeneratedRole } from "../schemas/pipeline.js";
 import type { SnapshotStore } from "../observability/debug.js";
 
@@ -37,12 +38,14 @@ export async function repairBullets(
   jdKeywords: string[],
   maxAttempts: number,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{
   repairedRoles: GeneratedRole[];
   repairAttempts: number;
   totalInputTokens: number;
   totalOutputTokens: number;
 }> {
+  const mdl = models ?? defaultModels;
   let currentRoles = roles.map((r) => ({ ...r, bullets: [...r.bullets] }));
   let totalInputTokens = 0;
   let totalOutputTokens = 0;
@@ -66,7 +69,7 @@ export async function repairBullets(
 
     try {
       const result = await callLLM({
-        model: models.repair,
+        model: mdl.repair,
         schema: BulletRepairSchema,
         prompt,
         stage: `bullet-repair-attempt-${attempt + 1}`,

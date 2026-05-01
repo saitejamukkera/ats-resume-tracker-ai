@@ -4,13 +4,14 @@
 // Two-layer Zod: loose schema for LLM output, strict app-side validation after.
 
 import { z } from "zod";
-import { models } from "../config/models.js";
+import { models as defaultModels } from "../config/models.js";
 import { SummaryOutputSchema } from "../schemas/summary.js";
 import {
   ExperienceOutputSchema,
   type RoleExperience,
 } from "../schemas/experience.js";
 import { callLLM } from "../observability/llm-wrapper.js";
+import type { LanguageModel } from "ai";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type {
   ParsedResume,
@@ -54,7 +55,9 @@ export async function generateSummary(
   jd: JDAnalysis,
   experienceLevel: string,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{ summary: string; inputTokens: number; outputTokens: number }> {
+  const mdl = models ?? defaultModels;
   const prompt = `Rewrite this resume summary for a ${jd.position} role at ${jd.company}.
 
 CURRENT SUMMARY:
@@ -83,7 +86,7 @@ RULES:
 Return the summary as a single string.`;
 
   const result = await callLLM({
-    model: models.generation,
+    model: mdl.generation,
     schema: SummaryOutputSchema,
     prompt,
     stage: "summary-generator",
@@ -114,11 +117,13 @@ export async function generateExperience(
   userInfo?: string,
   candidateTech?: CandidateTechProfile,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{
   roles: GeneratedRole[];
   inputTokens: number;
   outputTokens: number;
 }> {
+  const mdl = models ?? defaultModels;
   // Build a single call with all roles (they share JD context)
   const rolesContext = roles
     .map((role, i) => {
@@ -183,7 +188,7 @@ CRITICAL FORMATTING CONSTRAINTS:
 CRITICAL: Return a JSON object with exactly ${roles.length} roles in the \`roles\` array. Each role must have \`roleTitle\`, \`company\`, and \`bullets\` (array of objects with \`text\` and \`technologies\`). DO NOT omit any roles.`;
 
   const result = await callLLM({
-    model: models.generation,
+    model: mdl.generation,
     schema: ExperienceOutputSchema,
     prompt,
     maxTokens: 2500, // Allow sufficient room for all roles + bullets
@@ -231,11 +236,13 @@ export async function generateExperiencePerRole(
   userInfo?: string,
   candidateTech?: CandidateTechProfile,
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{
   roles: GeneratedRole[];
   inputTokens: number;
   outputTokens: number;
 }> {
+  const mdl = models ?? defaultModels;
   let totalIn = 0;
   let totalOut = 0;
   const generatedRoles: GeneratedRole[] = [];
@@ -289,7 +296,7 @@ CRITICAL FORMATTING CONSTRAINTS:
 Return a JSON object with \`roles\` array containing exactly 1 role with \`roleTitle\`, \`company\`, and \`bullets\` (array of objects with \`text\` and \`technologies\`).`;
 
     const result = await callLLM({
-      model: models.generation,
+      model: mdl.generation,
       schema: ExperienceOutputSchema,
       prompt,
       stage: `experience-generator-role-${i + 1}`,

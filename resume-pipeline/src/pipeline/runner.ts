@@ -20,6 +20,9 @@ import { calculateATSScore } from "../validation/ats-scorer.js";
 import { profileRoleImpact } from "../impact/detector.js";
 import { PipelineTelemetry } from "../observability/trace.js";
 import { RateLimitError } from "../observability/llm-wrapper.js";
+import { createModels } from "../config/models.js";
+import type { ProviderKeyProvider } from "../security/key-provider.js";
+import type { LanguageModel } from "ai";
 import type {
   PipelineInput,
   PipelineOutput,
@@ -52,14 +55,17 @@ export async function runPipeline(
   input: PipelineInput,
   config: PipelineConfig = defaultConfig,
   onEvent?: OnPipelineEvent,
+  keyProvider?: ProviderKeyProvider,
 ): Promise<PipelineOutput> {
   const emit = onEvent || (() => {});
   const telemetry = new PipelineTelemetry();
   const snapshotStore = telemetry.snapshotStore;
   let pipelineStatus: "success" | "partial" | "failed" = "success";
 
+  const models = keyProvider ? createModels(keyProvider) : undefined;
+
   console.log(
-    `[pipeline] Starting generation (trace: ${telemetry.getTraceId()})`,
+    `[pipeline] Starting generation (trace: ${telemetry.getTraceId()})${models ? " [BYOK]" : ""}`,
   );
 
   // ── Stage 1: Parse LaTeX ──────────────────────────────────────
@@ -91,7 +97,7 @@ export async function runPipeline(
   telemetry.startStage("jd-parser");
   let jdResult;
   try {
-    jdResult = await parseJD(input.jobDescription, snapshotStore);
+    jdResult = await parseJD(input.jobDescription, snapshotStore, models);
     console.log(
       `[pipeline] JD parsed: ${jdResult.jdAnalysis.position} at ${jdResult.jdAnalysis.company}`,
     );
@@ -139,6 +145,7 @@ export async function runPipeline(
       jd,
       jd.experienceLevel,
       snapshotStore,
+      models,
     ).catch((err) => {
       if (err instanceof RateLimitError) throw err; // propagate rate limit up
       console.error(
@@ -155,6 +162,7 @@ export async function runPipeline(
       input.userInfo,
       candidateTech,
       snapshotStore,
+      models,
     ).catch((err) => {
       if (err instanceof RateLimitError) throw err; // propagate rate limit up
       console.error(
@@ -303,6 +311,7 @@ export async function runPipeline(
         jdKeywords,
         config.constraints.maxRepairAttempts,
         snapshotStore,
+        models,
       );
 
       sections.experience = repairResult.repairedRoles;
@@ -361,6 +370,7 @@ export async function runPipeline(
         atsScore.missingRequired,
         atsScore.missingPreferred,
         snapshotStore,
+        models,
       );
       sections = gapResult.sections;
       gapRepairTotalIn += gapResult.inputTokens;
@@ -404,7 +414,7 @@ export async function runPipeline(
   ];
   try {
     telemetry.startStage("keyword-extractor");
-    const kwResult = await extractBoldKeywords(sections, jd, snapshotStore);
+    const kwResult = await extractBoldKeywords(sections, jd, snapshotStore, models);
     // Merge LLM-identified phrases with JD skills (deduplicated in boldifyKeywords)
     boldKeywords = [...boldKeywords, ...kwResult.boldPhrases];
     telemetry.endStage(
@@ -471,6 +481,7 @@ export async function runPipeline(
         input.masterSubjects || "",
         currentDate,
         snapshotStore,
+        models,
       );
       sections.coverLetter = clResult.coverLetter;
       if (clResult.inputTokens > 0) {

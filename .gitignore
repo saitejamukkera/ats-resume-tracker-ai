@@ -41,3 +41,4 @@ DEPLOY.md
 !**/db/migration/*.sql
 
 resume_generation_system_design.md
+graphify-out/cache/

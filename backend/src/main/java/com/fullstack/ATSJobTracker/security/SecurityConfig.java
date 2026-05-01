@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -26,21 +29,32 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final RateLimitFilter rateLimitFilter;
+    private final CsrfCookieFilter csrfCookieFilter;
 
     @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
+
+    @Value("${app.cookie-domain:}")
+    private String cookieDomain;
+
+    @Value("${app.cookie-secure:false}")
+    private boolean cookieSecure;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(csrfTokenRepository())
+                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers("/actuator/**").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -56,10 +70,29 @@ public class SecurityConfig {
                     response.setContentType("application/json");
                     response.getWriter().write("{\"message\":\"Unauthorized\"}");
                 })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"message\":\"Forbidden\"}");
+                })
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(jwtAuthFilter, RateLimitFilter.class)
+            .addFilterAfter(csrfCookieFilter, CsrfFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repo = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        repo.setCookieCustomizer(c -> {
+            c.secure(cookieSecure).sameSite("Lax");
+            if (cookieDomain != null && !cookieDomain.isEmpty()) {
+                c.domain(cookieDomain);
+            }
+        });
+        return repo;
     }
 
     @Bean
@@ -75,7 +108,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // Support both www and non-www variants of the frontend URL
         String wwwFrontendUrl = frontendUrl.contains("://www.")
             ? frontendUrl.replace("://www.", "://")
             : frontendUrl.replace("://", "://www.");

@@ -22,7 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
-import { api, API_BASE_URL } from "@/lib/api";
+import { api, API_BASE_URL, ensureCsrfToken } from "@/lib/api";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -47,9 +47,10 @@ interface AuthPageProps {
 
 export default function AuthPage({ initialView = "login" }: AuthPageProps) {
   const { theme, toggle: toggleTheme } = useTheme();
-  const { login, user } = useAuth();
+  const { login, user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [view, setView] = useState<View>(initialView);
+  const [csrfReady, setCsrfReady] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -69,6 +70,10 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
       router.replace("/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    ensureCsrfToken().finally(() => setCsrfReady(true));
   }, []);
 
   useEffect(() => {
@@ -146,7 +151,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
     try {
       await api.auth.sendOtp(email);
       setView("signup-otp");
-      setCountdown(300);
+      setCountdown(60);
       setOtp(["", "", "", "", "", ""]);
       setTimeout(() => otpRefs.current[0]?.focus(), 100);
     } catch (err: unknown) {
@@ -181,7 +186,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
     try {
       await api.auth.forgotPassword(email);
       setView("forgot-otp");
-      setCountdown(300);
+      setCountdown(60);
       setOtp(["", "", "", "", "", ""]);
       setTimeout(() => otpRefs.current[0]?.focus(), 100);
     } catch (err: unknown) {
@@ -225,7 +230,7 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
       } else {
         await api.auth.forgotPassword(email);
       }
-      setCountdown(300);
+      setCountdown(60);
       setOtp(["", "", "", "", "", ""]);
       setSuccess("New code sent!");
       setTimeout(() => setSuccess(""), 3000);
@@ -247,7 +252,8 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
   const formatCountdown = (s: number) => {
     const min = Math.floor(s / 60);
     const sec = s % 60;
-    return `${min}:${sec.toString().padStart(2, "0")}`;
+    if (min > 0) return `${min}:${sec.toString().padStart(2, "0")}`;
+    return `${sec}s`;
   };
 
   const renderOtpInputs = () => (
@@ -296,6 +302,17 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans selection:bg-primary-100 dark:selection:bg-primary-900 selection:text-primary-900 dark:selection:text-primary-100 overflow-x-hidden">
+      {(!csrfReady || authLoading) && !user ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-10 h-10 rounded-full border-2 border-primary-200 dark:border-primary-800 border-t-primary-600 animate-spin" />
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium animate-pulse">
+              Loading...
+            </p>
+          </div>
+        </div>
+      ) : (
+        <>
       <nav className="fixed w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm py-3">
         <div className="container mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
@@ -766,11 +783,11 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
 
                       <div className="text-center">
                         {countdown > 0 ? (
-                          <p className="text-[12px] text-gray-400">
-                            Code expires in{" "}
-                            <span className="font-semibold text-primary-600">
-                              {formatCountdown(countdown)}
-                            </span>
+                           <p className="text-[12px] text-gray-400">
+                              Resend code in{" "}
+                              <span className="font-semibold text-primary-600">
+                                {formatCountdown(countdown)}
+                              </span>
                           </p>
                         ) : (
                           <button
@@ -866,11 +883,11 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
 
                       <div className="text-center">
                         {countdown > 0 ? (
-                          <p className="text-[12px] text-gray-400">
-                            Code expires in{" "}
-                            <span className="font-semibold text-primary-600">
-                              {formatCountdown(countdown)}
-                            </span>
+                           <p className="text-[12px] text-gray-400">
+                              Resend code in{" "}
+                              <span className="font-semibold text-primary-600">
+                                {formatCountdown(countdown)}
+                              </span>
                           </p>
                         ) : (
                           <button
@@ -943,6 +960,8 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

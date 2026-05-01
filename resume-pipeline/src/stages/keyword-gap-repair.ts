@@ -4,8 +4,9 @@
 // specific bullets to naturally incorporate them. Single LLM call.
 
 import { z } from "zod";
-import { models } from "../config/models.js";
+import { models as defaultModels } from "../config/models.js";
 import { callLLM } from "../observability/llm-wrapper.js";
+import type { LanguageModel } from "ai";
 import type { GeneratedSections, GeneratedRole } from "../schemas/pipeline.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { SnapshotStore } from "../observability/debug.js";
@@ -26,12 +27,14 @@ export async function repairKeywordGaps(
   missingRequired: string[],
   missingPreferred: string[],
   snapshotStore?: SnapshotStore,
+  models?: Record<string, LanguageModel>,
 ): Promise<{
   sections: GeneratedSections;
   inputTokens: number;
   outputTokens: number;
   keywordsTargeted: number;
 }> {
+  const mdl = models ?? defaultModels;
   // Prioritize: all missing required + up to 5 missing preferred
   const targetKeywords = [...missingRequired, ...missingPreferred.slice(0, 5)];
 
@@ -85,7 +88,7 @@ Return:
 - repairedBullets: array of {roleIndex, bulletIndex, text} for ONLY the bullets you changed`;
 
   const result = await callLLM({
-    model: models.repair,
+    model: mdl.repair,
     schema: KeywordGapRepairSchema,
     prompt,
     stage: "keyword-gap-repair",
