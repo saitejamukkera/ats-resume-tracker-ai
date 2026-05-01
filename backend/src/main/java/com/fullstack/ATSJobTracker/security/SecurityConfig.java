@@ -42,6 +42,9 @@ public class SecurityConfig {
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
 
+    @Value("${app.cookie-same-site:Lax}")
+    private String cookieSameSite;
+
     @PostConstruct
     void normalizeCookieDomain() {
         if (cookieDomain != null) {
@@ -95,7 +98,7 @@ public class SecurityConfig {
     public CsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repo = CookieCsrfTokenRepository.withHttpOnlyFalse();
         repo.setCookieCustomizer(c -> {
-            c.secure(cookieSecure).sameSite("Lax");
+            c.secure(cookieSecure).sameSite(cookieSameSite);
             if (cookieDomain != null && !cookieDomain.isEmpty()) {
                 c.domain(cookieDomain);
             }

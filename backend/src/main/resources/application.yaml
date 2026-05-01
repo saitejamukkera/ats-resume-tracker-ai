@@ -72,6 +72,7 @@ app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
   cookie-domain: ${COOKIE_DOMAIN:}
   cookie-secure: ${COOKIE_SECURE:false}
+  cookie-same-site: ${COOKIE_SAME_SITE:Lax}
 
 resume-pipeline:
   url: ${RESUME_PIPELINE_URL:http://localhost:3001}

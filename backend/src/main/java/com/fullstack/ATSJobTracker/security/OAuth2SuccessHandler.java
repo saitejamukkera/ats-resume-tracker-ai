@@ -42,6 +42,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
 
+    @Value("${app.cookie-same-site:Lax}")
+    private String cookieSameSite;
+
     @PostConstruct
     void normalizeCookieDomain() {
         if (cookieDomain != null) {
@@ -98,7 +101,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .httpOnly(true)
                 .path("/")
                 .maxAge(900)
-                .sameSite("Lax")
+                .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {
             jwtCookieBuilder.domain(cookieDomain);
@@ -109,7 +112,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .httpOnly(true)
                 .path("/api/auth/refresh")
                 .maxAge(refreshExpirationMs / 1000)
-                .sameSite("Lax")
+                .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {
             refreshCookieBuilder.domain(cookieDomain);

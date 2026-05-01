@@ -62,6 +62,9 @@ public class AuthController {
     @Value("${app.cookie-secure:false}")
     private boolean cookieSecure;
 
+    @Value("${app.cookie-same-site:Lax}")
+    private String cookieSameSite;
+
     @PostConstruct
     void normalizeCookieDomain() {
         if (cookieDomain != null) {
@@ -169,11 +172,11 @@ public class AuthController {
         }
 
         ResponseCookie.ResponseCookieBuilder jwtBuilder = ResponseCookie.from("jwt", "")
-                .httpOnly(true).path("/").maxAge(0).sameSite("Lax").secure(cookieSecure);
+                .httpOnly(true).path("/").maxAge(0).sameSite(cookieSameSite).secure(cookieSecure);
         ResponseCookie.ResponseCookieBuilder refreshBuilder = ResponseCookie.from("refreshToken", "")
-                .httpOnly(true).path("/api/auth/refresh").maxAge(0).sameSite("Lax").secure(cookieSecure);
+                .httpOnly(true).path("/api/auth/refresh").maxAge(0).sameSite(cookieSameSite).secure(cookieSecure);
         ResponseCookie.ResponseCookieBuilder sessionBuilder = ResponseCookie.from("JSESSIONID", "")
-                .httpOnly(true).path("/").maxAge(0).sameSite("Lax").secure(cookieSecure);
+                .httpOnly(true).path("/").maxAge(0).sameSite(cookieSameSite).secure(cookieSecure);
 
         if (cookieDomain != null && !cookieDomain.isEmpty()) {
             jwtBuilder.domain(cookieDomain);
@@ -313,7 +316,7 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/")
                 .maxAge(900)
-                .sameSite("Lax")
+                .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {
             builder.domain(cookieDomain);
@@ -326,7 +329,7 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/api/auth/refresh")
                 .maxAge(refreshExpirationMs / 1000)
-                .sameSite("Lax")
+                .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {
             builder.domain(cookieDomain);
