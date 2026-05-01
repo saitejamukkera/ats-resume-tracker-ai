@@ -35,40 +35,57 @@ public class ApiKeyController {
 
         log.info("POST /api/settings/validate-key for provider={}", KeySanitizer.sanitize(provider));
 
-        if (provider == null || apiKey == null) {
+        if (provider == null || apiKey == null || apiKey.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(
                     Map.of("valid", false, "message", "Missing provider or apiKey."));
         }
 
-        // Always validate format locally — no pipeline dependency
+        apiKey = apiKey.trim();
+
+        // 1. Local format validation
         Map<String, Object> formatResult = KeySanitizer.validateKeyFormat(provider, apiKey);
         if (Boolean.FALSE.equals(formatResult.get("valid"))) {
             return ResponseEntity.ok(formatResult);
         }
 
-        // Optional: forward to pipeline for deeper validation (graceful fallback)
+        // 2. Direct ultra-fast auth ping (bypasses Node pipeline)
         try {
-            Map<String, String> pipelineBody = Map.of("provider", provider, "apiKey", apiKey);
-            String jsonBody = objectMapper.writeValueAsString(pipelineBody);
+            HttpRequest.Builder reqBuilder;
+            
+            if ("openai".equals(provider)) {
+                reqBuilder = HttpRequest.newBuilder(URI.create("https://api.openai.com/v1/models"))
+                        .header("Authorization", "Bearer " + apiKey)
+                        .GET();
+            } else if ("google".equals(provider)) {
+                reqBuilder = HttpRequest.newBuilder(URI.create("https://generativelanguage.googleapis.com/v1beta/models?key=" + apiKey))
+                        .GET();
+            } else if ("anthropic".equals(provider)) {
+                reqBuilder = HttpRequest.newBuilder(URI.create("https://api.anthropic.com/v1/models"))
+                        .header("x-api-key", apiKey)
+                        .header("anthropic-version", "2023-06-01")
+                        .GET();
+            } else {
+                return ResponseEntity.ok(Map.of("valid", false, "message", "Unsupported provider."));
+            }
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(pipelineUrl + "/validate-key"))
-                    .timeout(Duration.ofSeconds(30))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                    .build();
-
+            HttpRequest httpRequest = reqBuilder.timeout(Duration.ofSeconds(10)).build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                var pipelineResult = objectMapper.readValue(response.body(), Map.class);
-                return ResponseEntity.ok(pipelineResult);
+            int status = response.statusCode();
+            
+            if (status == 200) {
+                return ResponseEntity.ok(Map.of("valid", true));
+            } else if (status == 401 || status == 403 || status == 400) {
+                return ResponseEntity.ok(Map.of("valid", false, "message", "Invalid API key provided. Authentication failed."));
+            } else if (status == 429) {
+                return ResponseEntity.ok(Map.of("valid", false, "message", "Key is valid, but currently you have insufficient credits. Please add balance."));
+            } else {
+                log.warn("Direct validation for {} returned status {}", provider, status);
+                return ResponseEntity.ok(Map.of("valid", false, "message", "Validation service unavailable (Status " + status + ")."));
             }
         } catch (Exception e) {
-            log.debug("Pipeline validate-key unavailable (format check passed): {}", KeySanitizer.sanitize(e.getMessage()));
+            log.error("Error pinging provider directly: {}", KeySanitizer.sanitize(e.getMessage()));
+            return ResponseEntity.ok(Map.of("valid", false, "message", "Network error while validating key."));
         }
-
-        // Pipeline unreachable — format validation already passed above
-        return ResponseEntity.ok(Map.of("valid", true));
     }
 }
