@@ -3,6 +3,10 @@
 // Prevents obviously malformed keys from being passed to LLM providers.
 
 import type { LLMProvider } from "./key-provider.js";
+import { generateText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createAnthropic } from "@ai-sdk/anthropic";
 
 const PATTERNS: Record<LLMProvider, RegExp> = {
   openai: /^sk-(?:proj-)?[A-Za-z0-9_-]{20,}$/,
@@ -31,11 +35,9 @@ export function validateKeyFormat(
       }`,
     };
   }
-
-import { generateText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createAnthropic } from "@ai-sdk/anthropic";
+  
+  return { valid: true };
+}
 
 export async function validateKeyWithPing(
   provider: LLMProvider,
@@ -59,11 +61,10 @@ export async function validateKeyWithPing(
       return { valid: false, message: "Unsupported provider." };
     }
 
-    // Ping the API with a tiny 1-token request
+    // Ping the API with a tiny request
     await generateText({
       model,
       prompt: "hi",
-      maxTokens: 1,
     });
 
     return { valid: true };
