@@ -40,6 +40,13 @@ public class ApiKeyController {
                     Map.of("valid", false, "message", "Missing provider or apiKey."));
         }
 
+        // Always validate format locally — no pipeline dependency
+        Map<String, Object> formatResult = KeySanitizer.validateKeyFormat(provider, apiKey);
+        if (Boolean.FALSE.equals(formatResult.get("valid"))) {
+            return ResponseEntity.ok(formatResult);
+        }
+
+        // Optional: forward to pipeline for deeper validation (graceful fallback)
         try {
             Map<String, String> pipelineBody = Map.of("provider", provider, "apiKey", apiKey);
             String jsonBody = objectMapper.writeValueAsString(pipelineBody);
@@ -54,15 +61,14 @@ public class ApiKeyController {
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                var result = objectMapper.readValue(response.body(), Map.class);
-                return ResponseEntity.ok(result);
-            } else {
-                log.warn("Pipeline validate-key returned status {}", response.statusCode());
-                return ResponseEntity.ok(Map.of("valid", false, "message", "Validation service unavailable."));
+                var pipelineResult = objectMapper.readValue(response.body(), Map.class);
+                return ResponseEntity.ok(pipelineResult);
             }
         } catch (Exception e) {
-            log.error("Error calling validate-key: {}", KeySanitizer.sanitize(e.getMessage()));
-            return ResponseEntity.ok(Map.of("valid", false, "message", "Validation service unavailable."));
+            log.debug("Pipeline validate-key unavailable (format check passed): {}", KeySanitizer.sanitize(e.getMessage()));
         }
+
+        // Pipeline unreachable — format validation already passed above
+        return ResponseEntity.ok(Map.of("valid", true));
     }
 }
