@@ -325,19 +325,23 @@ export default function NewApplicationPage() {
       return;
     }
 
+    console.log("=== DUPE-CHECK START === jdLength:", jobDescription.length);
     setCheckingDuplicate(true);
     try {
       const check = await api.applications.checkDuplicate(jobDescription);
+      console.log("=== DUPE-CHECK RESULT ===", JSON.stringify(check));
       if (check.duplicate && check.existingApplication) {
+        console.log("=== DUPE-CHECK === DUPLICATE FOUND:", check.existingApplication);
         setDuplicateApp(check.existingApplication);
         setShowDuplicateModal(true);
         setCheckingDuplicate(false);
         return;
       }
+      console.log("=== DUPE-CHECK === NO DUPLICATE, proceeding to generate");
       setCheckingDuplicate(false);
       await doGenerate();
     } catch (error) {
-      console.error(error);
+      console.error("=== DUPE-CHECK ERROR ===", error);
       toast.error("Failed to check for duplicate applications.");
       setCheckingDuplicate(false);
     }
