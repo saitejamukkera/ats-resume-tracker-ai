@@ -1,4 +1,5 @@
 import type {
+  CheckDuplicateResponse,
   JobApplicationRequest,
   JobApplicationResponse,
   ResumeGenerationRequest,
@@ -102,6 +103,13 @@ function startProactiveRefresh() {
       await attemptRefresh();
     }
   }, PROACTIVE_REFRESH_MS);
+
+  // Refresh token immediately when user returns to a stale tab
+  document.addEventListener("visibilitychange", async () => {
+    if (!document.hidden) {
+      await attemptRefresh();
+    }
+  });
 }
 
 startProactiveRefresh();
@@ -323,6 +331,20 @@ export const api = {
         },
       );
       if (!response.ok) throw new Error("Failed to delete application");
+    },
+    checkDuplicate: async (
+      jobDescription: string,
+    ): Promise<CheckDuplicateResponse> => {
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/applications/check-duplicate`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jobDescription }),
+        },
+      );
+      if (!response.ok) throw new Error("Failed to check for duplicate");
+      return response.json();
     },
   },
   resumes: {

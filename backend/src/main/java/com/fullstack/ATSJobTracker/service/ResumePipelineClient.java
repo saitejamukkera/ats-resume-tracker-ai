@@ -343,6 +343,63 @@ public class ResumePipelineClient {
     }
 
     /**
+     * Parse a raw job description via the pipeline sidecar.
+     *
+     * @param jobDescription The raw job description text
+     * @return Structured JD metadata (position, company, jobId, location, etc.)
+     */
+    public JDParseResult parseJD(String jobDescription) {
+        return parseJD(jobDescription, null, null);
+    }
+
+    /**
+     * Parse a raw job description via the pipeline sidecar with BYOK support.
+     *
+     * @param jobDescription The raw job description text
+     * @param apiKeys Optional user-provided API keys
+     * @param llmProvider Optional LLM provider preference
+     * @return Structured JD metadata (position, company, jobId, location, etc.)
+     */
+    public JDParseResult parseJD(String jobDescription, Map<String, String> apiKeys, String llmProvider) {
+        try {
+            Map<String, Object> body = new HashMap<>();
+            body.put("jobDescription", jobDescription);
+            if (apiKeys != null && !apiKeys.isEmpty()) body.put("apiKeys", apiKeys);
+            if (llmProvider != null && !llmProvider.isBlank()) body.put("llmProvider", llmProvider);
+
+            String jsonBody = objectMapper.writeValueAsString(body);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(pipelineUrl + "/parse-jd"))
+                    .timeout(Duration.ofSeconds(30))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+                    .build();
+
+            log.info("Calling resume pipeline at {}/parse-jd...", pipelineUrl);
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JDParseResult result = objectMapper.readValue(response.body(), JDParseResult.class);
+                log.info("JD parsed: position={}, company={}, jobId={}",
+                        result.getPosition(), result.getCompany(), result.getJobId());
+                return result;
+            } else {
+                String errorBody = response.body();
+                log.error("Pipeline /parse-jd returned status {}: {}", response.statusCode(),
+                        errorBody.substring(0, Math.min(errorBody.length(), 500)));
+                throw new RuntimeException("JD parse failed with status " + response.statusCode()
+                        + ": " + errorBody.substring(0, Math.min(errorBody.length(), 200)));
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error calling JD parse: {}", e.getMessage(), e);
+            throw new RuntimeException("JD parser unavailable: " + e.getMessage(), e);
+        }
+    }
+
+    /**
      * Response from the resume pipeline sidecar.
      */
     @Data
@@ -357,5 +414,17 @@ public class ResumePipelineClient {
         private int atsScore;
         private JsonNode jdAnalysis;
         private JsonNode trace;
+    }
+
+    /**
+     * Lightweight JD parse result from the resume pipeline sidecar.
+     */
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class JDParseResult {
+        private String position;
+        private String company;
+        private String jobId;
+        private String location;
     }
 }

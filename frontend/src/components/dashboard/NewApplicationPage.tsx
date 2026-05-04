@@ -26,6 +26,7 @@ import {
 import Drawer from "../ui/Drawer";
 import ResizableSplitView from "../ui/ResizableSplitView";
 import { DownloadDropdown } from "../DownloadDropdown";
+import { DuplicateJobModal } from "../DuplicateJobModal";
 import { useDownloader } from "@/hooks/useDownloader";
 import { api, type GenerateFromJdResponse } from "@/lib/api";
 import type { UserProfile } from "@/types/dtos";
@@ -109,6 +110,15 @@ export default function NewApplicationPage() {
   const [showPromptInput, setShowPromptInput] = useState(false);
   const [useIconResumeRegen, setUseIconResumeRegen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const [checkingDuplicate, setCheckingDuplicate] = useState(false);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [duplicateApp, setDuplicateApp] = useState<{
+    id: number;
+    position: string;
+    company: string;
+    appliedOn: string;
+  } | null>(null);
 
   const compilePdfPreview = useCallback(async (applicationId: number) => {
     setPdfLoading(true);
@@ -215,12 +225,7 @@ export default function NewApplicationPage() {
     compilePdfPreview,
   ]);
 
-  const handleGenerate = async () => {
-    if (!jobDescription.trim()) {
-      toast.warning("Please paste a job description.");
-      return;
-    }
-
+  const doGenerate = async () => {
     setLoading(true);
     setStreamStage("Connecting...");
     try {
@@ -312,6 +317,43 @@ export default function NewApplicationPage() {
       setLoading(false);
       setStreamStage("");
     }
+  };
+
+  const handleGenerate = async () => {
+    if (!jobDescription.trim()) {
+      toast.warning("Please paste a job description.");
+      return;
+    }
+
+    setCheckingDuplicate(true);
+    try {
+      const check = await api.applications.checkDuplicate(jobDescription);
+      if (check.duplicate && check.existingApplication) {
+        setDuplicateApp(check.existingApplication);
+        setShowDuplicateModal(true);
+        setCheckingDuplicate(false);
+        return;
+      }
+      setCheckingDuplicate(false);
+      await doGenerate();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to check for duplicate applications.");
+      setCheckingDuplicate(false);
+    }
+  };
+
+  const handleConfirmDuplicate = () => {
+    setShowDuplicateModal(false);
+    setDuplicateApp(null);
+    doGenerate();
+  };
+
+  const handleCancelDuplicate = () => {
+    setShowDuplicateModal(false);
+    setDuplicateApp(null);
+    setJobDescription("");
+    localStorage.removeItem("newApp_jobDescription");
   };
 
   const handleRegenerate = async () => {
@@ -530,11 +572,19 @@ export default function NewApplicationPage() {
             <button
               onClick={handleGenerate}
               disabled={
-                loading || !jobDescription.trim() || hasBaseResumes === false
+                loading ||
+                checkingDuplicate ||
+                !jobDescription.trim() ||
+                hasBaseResumes === false
               }
               className="inline-flex items-center gap-2 px-8 py-3 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-full text-base font-semibold shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5 transition-all"
             >
-              {loading ? (
+              {checkingDuplicate ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Checking existing applications...
+                </>
+              ) : loading ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
                   Analyzing & Generating...
@@ -549,6 +599,15 @@ export default function NewApplicationPage() {
             </button>
           </div>
         </motion.div>
+
+        <DuplicateJobModal
+          open={showDuplicateModal}
+          position={duplicateApp?.position ?? ""}
+          company={duplicateApp?.company ?? ""}
+          appliedOn={duplicateApp?.appliedOn ?? ""}
+          onConfirm={handleConfirmDuplicate}
+          onCancel={handleCancelDuplicate}
+        />
       </motion.div>
     );
   }

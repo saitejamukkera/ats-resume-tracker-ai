@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ShieldAlert } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Clock } from "lucide-react";
 
 interface SessionExpiredModalProps {
   open: boolean;
@@ -11,11 +11,9 @@ interface SessionExpiredModalProps {
 
 export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpiredModalProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [countdown, setCountdown] = useState(30);
 
   useEffect(() => {
     if (open) {
-      setCountdown(30);
       buttonRef.current?.focus();
 
       const originalOverflow = document.body.style.overflow;
@@ -27,19 +25,6 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
     }
   }, [open]);
 
-  useEffect(() => {
-    if (!open || countdown <= 0) return;
-    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [open, countdown]);
-
-  useEffect(() => {
-    if (countdown === 0) {
-      onSaveWork?.();
-      onLogin();
-    }
-  }, [countdown, onSaveWork, onLogin]);
-
   if (!open) return null;
 
   return (
@@ -49,16 +34,16 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
       <div className="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border/60 dark:border-gray-700 w-full max-w-[380px] mx-4 p-6 animate-scale-in">
         <div className="flex justify-center mb-4">
           <div className="w-14 h-14 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/30 ring-4 ring-amber-50 dark:ring-amber-900/10">
-            <ShieldAlert size={26} className="text-amber-600 dark:text-amber-400" />
+            <Clock size={26} className="text-amber-600 dark:text-amber-400" />
           </div>
         </div>
 
         <h3 className="text-lg font-bold text-gray-900 dark:text-white text-center mb-1.5">
-          Session Expired
+          Session Timed Out
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 text-center leading-relaxed mb-6">
-          Your session has ended for security reasons. Please sign in again to
-          continue where you left off.
+          Your session timed out while you were away. Sign in again to pick up
+          right where you left off.
         </p>
 
         <button
@@ -71,10 +56,6 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
         >
           Sign In Again
         </button>
-
-        <p className="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-3">
-          Auto-redirecting in {countdown}s — your unsaved work is safe.
-        </p>
       </div>
     </div>
   );

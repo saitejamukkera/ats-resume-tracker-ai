@@ -38,6 +38,16 @@ export interface JobApplicationResponse {
   note?: string;
 }
 
+export interface CheckDuplicateResponse {
+  duplicate: boolean;
+  existingApplication: {
+    id: number;
+    position: string;
+    company: string;
+    appliedOn: string;
+  } | null;
+}
+
 export interface ResumeGenerationRequest {
   jobDescription: string;
   baseResumeId?: number;

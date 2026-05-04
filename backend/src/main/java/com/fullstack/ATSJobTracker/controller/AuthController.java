@@ -53,6 +53,9 @@ public class AuthController {
     private final EmailService emailService;
     private final RefreshTokenService refreshTokenService;
 
+    @Value("${jwt.expiration:86400000}")
+    private long jwtExpirationMs;
+
     @Value("${jwt.refresh-expiration:1209600000}")
     private long refreshExpirationMs;
 
@@ -317,7 +320,7 @@ public class AuthController {
         ResponseCookie.ResponseCookieBuilder builder = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(3600)
+                .maxAge(jwtExpirationMs / 1000)
                 .sameSite(cookieSameSite)
                 .secure(cookieSecure);
         if (cookieDomain != null && !cookieDomain.isEmpty()) {

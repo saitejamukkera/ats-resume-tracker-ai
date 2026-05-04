@@ -54,7 +54,7 @@ public class RefreshTokenService {
                 .userId(oldToken.getUserId())
                 .expiresAt(LocalDateTime.now().plusSeconds(refreshExpirationMs / 1000))
                 .lastUsedAt(LocalDateTime.now())
-                .createdAt(oldToken.getCreatedAt())
+                .createdAt(LocalDateTime.now())
                 .revoked(false)
                 .build();
         return refreshTokenRepository.save(newToken);

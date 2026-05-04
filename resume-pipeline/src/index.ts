@@ -18,6 +18,8 @@ import {
 } from "./security/key-provider.js";
 import { sanitizeObject } from "./security/key-sanitizer.js";
 import { validateKeyFormat, validateKeyWithPing } from "./security/key-validator.js";
+import { parseJD } from "./stages/jd-parser.js";
+import { createModels } from "./config/models.js";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -182,6 +184,69 @@ app.post("/generate-stream", async (req, res) => {
   }
 });
 
+// ── Parse JD Endpoint ───────────────────────────────────────────
+// Lightweight endpoint: parses a raw job description and returns
+// structured metadata (position, company, jobId, location, skills, etc.).
+// Supports BYOK (Bring Your Own Key).
+app.post("/parse-jd", async (req, res) => {
+  const startTime = Date.now();
+
+  try {
+    const body = req.body as Record<string, unknown>;
+    const jobDescription = (body.jobDescription as string) || "";
+    if (!jobDescription || typeof jobDescription !== "string") {
+      res.status(400).json({ error: "Missing required field: jobDescription" });
+      return;
+    }
+
+    // Extract API keys if provided (BYOK)
+    let keyProvider: ProviderKeyProvider | undefined;
+    const apiKeys = body.apiKeys as Record<string, string> | undefined;
+    const llmProvider = body.llmProvider as string | undefined;
+
+    if (apiKeys && typeof apiKeys === "object") {
+      const hasAnyKey = Object.values(apiKeys).some((v) => v && v.trim().length > 0);
+      if (hasAnyKey) {
+        const preferred = resolveProvider(
+          llmProvider,
+          process.env.LLM_PROVIDER,
+        );
+        const userKp = new PerRequestKeyProvider(apiKeys, preferred);
+        const serverKp = new ServerKeyProvider(
+          process.env.LLM_PROVIDER as LLMProvider || "google",
+        );
+        keyProvider = new CompositeKeyProvider(userKp, serverKp);
+      }
+    }
+
+    console.log(`[server] POST /parse-jd — JD length: ${jobDescription.length}${keyProvider ? " [BYOK]" : ""}`);
+
+    const models = keyProvider ? createModels(keyProvider) : undefined;
+    const { jdAnalysis } = await parseJD(jobDescription, undefined, models);
+
+    console.log(
+      `[server] JD parsed in ${Date.now() - startTime}ms — position: ${jdAnalysis.position}, company: ${jdAnalysis.company}`,
+    );
+
+    res.json({
+      position: jdAnalysis.position,
+      company: jdAnalysis.company,
+      jobId: jdAnalysis.jobId,
+      location: jdAnalysis.location,
+      requiredSkills: jdAnalysis.requiredSkills,
+      preferredSkills: jdAnalysis.preferredSkills,
+      keyResponsibilities: jdAnalysis.keyResponsibilities,
+      experienceLevel: jdAnalysis.experienceLevel,
+      domainFocus: jdAnalysis.domainFocus,
+      keyPhrases: jdAnalysis.keyPhrases,
+    });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error(`[server] JD parse failed after ${Date.now() - startTime}ms:`, msg);
+    res.status(500).json({ error: "JD parsing failed", message: msg });
+  }
+});
+
 // ── Validate Key Endpoint ──────────────────────────────────────
 app.post("/validate-key", async (req, res) => {
   const body = req.body as Record<string, unknown>;
@@ -205,5 +270,6 @@ app.listen(PORT, () => {
   console.log(`[server]   GET  /health`);
   console.log(`[server]   POST /generate`);
   console.log(`[server]   POST /generate-stream (SSE)`);
+  console.log(`[server]   POST /parse-jd`);
   console.log(`[server]   POST /validate-key`);
 });
