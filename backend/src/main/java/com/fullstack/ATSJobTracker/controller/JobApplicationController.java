@@ -92,10 +92,11 @@ public class JobApplicationController {
         String parsedCompany = parsed.getCompany() != null ? parsed.getCompany().trim() : "";
         String parsedJobId = parsed.getJobId() != null ? parsed.getJobId().trim() : "";
 
-        // Fetch user's ACTIVE applications
+        // Fetch user's ACTIVE and DRAFT applications
         List<JobApplication> activeApps = jobApplicationRepository.findAllByUserIdOrderByAppliedOnDesc(userId)
                 .stream()
-                .filter(app -> app.getOutcome() == ApplicationStatus.ACTIVE)
+                .filter(app -> app.getOutcome() == ApplicationStatus.ACTIVE
+                        || app.getOutcome() == ApplicationStatus.DRAFT)
                 .toList();
 
         Optional<JobApplication> duplicate = Optional.empty();
