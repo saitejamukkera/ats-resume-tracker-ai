@@ -334,13 +334,18 @@ export const api = {
     },
     checkDuplicate: async (
       jobDescription: string,
+      apiKeys?: Record<string, string>,
+      llmProvider?: string,
     ): Promise<CheckDuplicateResponse> => {
+      const body: Record<string, unknown> = { jobDescription };
+      if (apiKeys) body.apiKeys = apiKeys;
+      if (llmProvider) body.llmProvider = llmProvider;
       const response = await apiFetch(
         `${API_BASE_URL}/api/applications/check-duplicate`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ jobDescription }),
+          body: JSON.stringify(body),
         },
       );
       if (!response.ok) throw new Error("Failed to check for duplicate");

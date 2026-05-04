@@ -328,7 +328,8 @@ export default function NewApplicationPage() {
     console.log("=== DUPE-CHECK START === jdLength:", jobDescription.length);
     setCheckingDuplicate(true);
     try {
-      const check = await api.applications.checkDuplicate(jobDescription);
+      const byok = getApiKeys();
+      const check = await api.applications.checkDuplicate(jobDescription, byok?.apiKeys, byok?.llmProvider);
       console.log("=== DUPE-CHECK RESULT ===", JSON.stringify(check));
       if (check.duplicate && check.existingApplication) {
         console.log("=== DUPE-CHECK === DUPLICATE FOUND:", check.existingApplication);

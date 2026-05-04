@@ -80,7 +80,7 @@ public class JobApplicationController {
 
         ResumePipelineClient.JDParseResult parsed;
         try {
-            parsed = resumePipelineClient.parseJD(request.getJobDescription());
+            parsed = resumePipelineClient.parseJD(request.getJobDescription(), request.getApiKeys(), request.getLlmProvider());
         } catch (Exception e) {
             log.warn("=== DUPE-CHECK === JD parse failed: {}", e.getMessage());
             return ResponseEntity.ok(CheckDuplicateResponse.builder()
