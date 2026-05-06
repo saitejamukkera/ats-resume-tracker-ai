@@ -59,7 +59,7 @@ export function useApiKeys() {
   }, []);
 
   const setProvider = useCallback((p: LLMProvider) => {
-    setState((s) => ({ ...s, provider: p, validated: null, validationMessage: undefined, key: "" }));
+    setState((s) => ({ ...s, provider: p, validated: null, validationMessage: undefined, key: "", saved: false }));
   }, []);
 
   const setKey = useCallback((key: string) => {

@@ -45,6 +45,7 @@ export default function ApiKeySettings() {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleProviderChange = async (p: LLMProvider) => {
+    clearPersisted();
     setProvider(p);
   };
 
