@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Key, Eye, EyeOff, Check, X, Loader2, Shield, ArrowUpRight } from "lucide-react";
+import { Key, Eye, EyeOff, Check, X, Loader2, Shield, ArrowUpRight, ChevronDown } from "lucide-react";
 import {
   useApiKeys,
   PROVIDER_LABELS,
@@ -32,20 +32,19 @@ export default function ApiKeySettings() {
   const {
     state,
     setProvider,
+    setActiveProvider,
     setKey,
-    setSaved,
     persist,
     clearPersisted,
     testKey,
-    getApiKeys,
   } = useApiKeys();
 
   const [showKey, setShowKey] = useState(false);
   const [savedFeedback, setSavedFeedback] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleProviderChange = async (p: LLMProvider) => {
-    clearPersisted();
+  const handleProviderChange = (p: LLMProvider) => {
     setProvider(p);
   };
 
@@ -61,10 +60,8 @@ export default function ApiKeySettings() {
   const handleSaveLocally = async () => {
     if (state.saved) {
       clearPersisted();
-      setSaved(false);
     } else {
       await persist();
-      setSaved(true);
       setSavedFeedback(true);
       setTimeout(() => setSavedFeedback(false), 2000);
     }
@@ -93,22 +90,73 @@ export default function ApiKeySettings() {
       </div>
 
       <div className="space-y-5">
+        {/* Active provider dropdown (only when multiple keys are saved) */}
+        {state.savedProviderCount > 1 && (
+          <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30">
+            <label className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 block">
+              Use AI Provider for Generation
+            </label>
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-blue-200/60 dark:border-blue-800/60 bg-white dark:bg-zinc-800 text-sm font-medium text-gray-900 dark:text-white transition-all hover:border-blue-400 dark:hover:border-blue-600"
+              >
+                <span>{PROVIDER_LABELS[state.activeProvider]}</span>
+                <ChevronDown
+                  size={16}
+                  className={`text-gray-400 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute z-50 mt-1 w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 shadow-lg overflow-hidden">
+                  {PROVIDERS.filter((p) => state.savedProviders.includes(p) || p === state.activeProvider).map((p) => {
+                    const isActive = p === state.activeProvider;
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => {
+                          setActiveProvider(p);
+                          setDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${
+                          isActive
+                            ? "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 font-semibold"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700"
+                        }`}
+                      >
+                        <span>{PROVIDER_LABELS[p]}</span>
+                        {isActive && <Check size={14} className="text-blue-500" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Provider selector pills */}
         <div className="flex items-center justify-between">
           <div className="flex p-1.5 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full">
-            {PROVIDERS.map((p) => (
-              <button
-                key={p}
-                onClick={() => handleProviderChange(p)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                  state.provider === p
-                    ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                    : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
-                }`}
-              >
-                {PROVIDER_LABELS[p]}
-              </button>
-            ))}
+            {PROVIDERS.map((p) => {
+              const hasSaved = state.savedProviders.includes(p);
+              return (
+                <button
+                  key={p}
+                  onClick={() => handleProviderChange(p)}
+                  className={`relative px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    state.provider === p
+                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                  }`}
+                >
+                  {PROVIDER_LABELS[p]}
+                  {hasSaved && (
+                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-zinc-900" />
+                  )}
+                </button>
+              );
+            })}
           </div>
           <a
             href={PROVIDER_KEY_URLS[state.provider]}
@@ -174,7 +222,6 @@ export default function ApiKeySettings() {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="absolute left-0 bottom-[120%] z-50 p-4 w-72 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700"
               >
-                {/* Chat tail */}
                 <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white dark:bg-zinc-800 border-b border-r border-gray-200 dark:border-gray-700 rotate-45" />
                 
                 <p className="text-[13px] text-gray-600 dark:text-gray-300 mb-3 relative z-10 leading-relaxed">
@@ -282,7 +329,7 @@ export default function ApiKeySettings() {
 
         {/* Security notice */}
         <p className="text-xs text-gray-400 dark:text-gray-500">
-          Your key is sent directly to {PROVIDER_SHORT_NAMES[state.provider]}, never stored on our servers
+          Your key is sent directly to {PROVIDER_SHORT_NAMES[state.activeProvider]}, never stored on our servers
           or logged.
         </p>
       </div>
