@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
-  Briefcase,
   Mail,
   Lock,
   User,
@@ -23,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import { api, API_BASE_URL, ensureCsrfToken } from "@/lib/api";
+import { Logo } from "@/components/Logo";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -315,13 +315,8 @@ export default function AuthPage({ initialView = "login" }: AuthPageProps) {
         <>
       <nav className="fixed w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm py-3">
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/30">
-              <Briefcase className="text-white" size={20} />
-            </div>
-            <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              TrackHire AI
-            </span>
+          <Link href="/">
+            <Logo size="lg" />
           </Link>
 
           <div className="flex items-center gap-4">

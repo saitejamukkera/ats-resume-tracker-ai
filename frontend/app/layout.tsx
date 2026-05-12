@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     "Track your job applications, optimize your resume for ATS, and land your dream job faster with our privacy-focused, secure job tracking tool.",
   keywords:
     "TrackHire AI, ATS, Resume Tracker, Job Application, Career Management, Privacy, Security",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -16,8 +16,25 @@ import {
   Moon,
   Github,
 } from "lucide-react";
+
+import { Logo } from "./Logo";
 import { useState, useEffect } from "react";
 import { useTheme } from "../hooks/useTheme";
+
+function DashboardImage() {
+  return (
+    <div
+      role="img"
+      aria-label="TrackHire AI Dashboard"
+      className="w-full bg-cover bg-center bg-no-repeat"
+      style={{
+        aspectRatio: "16 / 9",
+        backgroundImage:
+          "url('/dashboard-trackhireai.avif'), url('/dashboard-trackhireai.webp'), url('/dashboard-trackhireai.png'), url('/dashboard-trackhireai.jpg')",
+      }}
+    />
+  );
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -58,14 +75,9 @@ export default function LandingPage() {
         }`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/30">
-              <Briefcase className="text-white" size={20} />
-            </div>
-            <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              <a href="#">TrackHire AI</a>
-            </span>
-          </div>
+          <a href="#">
+            <Logo size="lg" />
+          </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
@@ -248,33 +260,8 @@ export default function LandingPage() {
             transition={{ duration: 1, delay: 0.4 }}
             className="mt-20 relative mx-auto max-w-5xl"
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50 dark:border-gray-800 bg-white dark:bg-zinc-900 ring-1 ring-gray-900/5 dark:ring-white/5">
-              {/* Mock UI Header */}
-              <div className="h-8 bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-gray-800 flex items-center px-4 gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-                <div className="w-3 h-3 rounded-full bg-green-400/80" />
-              </div>
-              {/* Abstract UI Representation */}
-              <div className="p-8 bg-white dark:bg-zinc-900 grid grid-cols-12 gap-6 h-100 lg:h-125">
-                <div className="col-span-3 hidden lg:block bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-gray-800 h-full animate-pulse opacity-50" />
-                <div className="col-span-12 lg:col-span-9 flex flex-col gap-6">
-                  <div className="h-32 bg-linear-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 rounded-xl border border-primary-100/50 dark:border-primary-800/50 w-full" />
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="h-24 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-gray-800" />
-                    <div className="h-24 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-gray-800" />
-                    <div className="h-24 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-gray-800" />
-                  </div>
-                  <div className="flex-1 bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-gray-800" />
-                </div>
-              </div>
-
-              {/* Overlay Text */}
-              <div className="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-xs">
-                <span className="px-6 py-3 bg-black/80 text-white rounded-full font-medium backdrop-blur-md shadow-2xl">
-                  Interactive Dashboard Preview
-                </span>
-              </div>
+            <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50 dark:border-gray-800 ring-1 ring-gray-900/5 dark:ring-white/5">
+              <DashboardImage />
             </div>
           </motion.div>
         </div>

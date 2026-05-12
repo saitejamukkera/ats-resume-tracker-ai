@@ -11,7 +11,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Briefcase,
   LayoutDashboard,
   FilePlus,
   Settings,
@@ -25,6 +24,7 @@ import {
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../context/AuthContext";
 import { ConfirmModal } from "../ConfirmModal";
+import { Logo } from "../Logo";
 
 const NAV_ITEMS = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -123,20 +123,9 @@ export default function DashboardClientLayout({
         <div className="h-16 px-5 flex items-center justify-between border-b border-gray-100 dark:border-gray-800/60 shrink-0">
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 group"
             onClick={() => setSidebarOpen(false)}
           >
-            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/25 group-hover:shadow-primary-500/40 transition-all duration-300 group-hover:scale-105">
-              <Briefcase size={17} className="text-white" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-                TrackHire AI
-              </span>
-              <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
-                Job Application Manager
-              </span>
-            </div>
+            <Logo size="sm" showSubtitle />
           </Link>
           {/* Mobile close */}
           <button
@@ -241,13 +230,8 @@ export default function DashboardClientLayout({
           >
             <Menu size={20} />
           </button>
-          <div className="ml-3 flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-md shadow-primary-500/20">
-              <Briefcase size={13} className="text-white" />
-            </div>
-            <span className="text-sm font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              TrackHire AI
-            </span>
+          <div className="ml-3">
+            <Logo size="xs" />
           </div>
         </header>
 
