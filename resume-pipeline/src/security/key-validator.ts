@@ -50,7 +50,7 @@ export async function validateKeyWithPing(
     let model;
     if (provider === "openai") {
       const openai = createOpenAI({ apiKey: key.trim() });
-      model = openai("gpt-4o-mini");
+      model = openai("gpt-5-mini");
     } else if (provider === "google") {
       const google = createGoogleGenerativeAI({ apiKey: key.trim() });
       model = google("gemini-2.5-flash");
