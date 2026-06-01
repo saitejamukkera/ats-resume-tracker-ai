@@ -94,6 +94,27 @@ public class ResumeService {
         application.setCoverLetterContent(coverLetter);
         application.setOutcome(ApplicationStatus.DRAFT);
         application.setUserId(userId);
+        application.setAtsScore(pipelineResult.getAtsScore());
+
+        int resolvedImpactScore = pipelineResult.getImpactScore();
+        JsonNode dtoScoreBreakdown = pipelineResult.getScoreBreakdown();
+
+        if (pipelineResult.getAtsScoreDetails() != null) {
+            JsonNode details = pipelineResult.getAtsScoreDetails();
+            if (resolvedImpactScore == 0 && details.has("impactScore")) {
+                resolvedImpactScore = details.get("impactScore").asInt();
+            }
+            if (dtoScoreBreakdown == null && details.has("componentBreakdown")) {
+                dtoScoreBreakdown = details.get("componentBreakdown");
+            }
+            if (details.has("version")) {
+                application.setScoreVersion(details.get("version").asInt());
+            }
+        }
+        application.setImpactScore(resolvedImpactScore);
+        if (dtoScoreBreakdown != null) {
+            application.setScoreBreakdown(dtoScoreBreakdown.toString());
+        }
         JobApplication saved = jobApplicationRepository.save(application);
         log.info("Application created with id: {}", saved.getId());
 
@@ -105,6 +126,9 @@ public class ResumeService {
                 .location(location)
                 .latexContent(resumeLatex)
                 .coverLetterContent(coverLetter)
+                .atsScore(pipelineResult.getAtsScore())
+                .impactScore(resolvedImpactScore)
+                .scoreBreakdown(dtoScoreBreakdown)
                 .build();
     }
 
@@ -165,6 +189,12 @@ public class ResumeService {
                                 application.setCoverLetterContent(""); // will be updated on complete
                                 application.setOutcome(ApplicationStatus.DRAFT);
                                 application.setUserId(userId);
+                                if (data.has("atsScore")) {
+                                    application.setAtsScore(data.get("atsScore").asInt());
+                                }
+                                if (data.has("impactScore")) {
+                                    application.setImpactScore(data.get("impactScore").asInt());
+                                }
                                 JobApplication saved = jobApplicationRepository.save(application);
                                 applicationIdRef.set(saved.getId());
 
@@ -175,18 +205,27 @@ public class ResumeService {
                                 enriched.put("applicationId", saved.getId());
                                 emitter.send(SseEmitter.event().name(eventType).data(enriched.toString()));
                             } else if ("complete".equals(eventType)) {
-                                // Update application with cover letter
+                                // Update application with cover letter and scores
                                 Long appId = applicationIdRef.get();
                                 if (appId != null) {
                                     JsonNode data = mapper.readTree(jsonData);
                                     String coverLetter = data.has("coverLetter") ? data.get("coverLetter").asText("") : "";
-                                    if (!coverLetter.isEmpty()) {
-                                        jobApplicationRepository.findById(appId).ifPresent(app -> {
+                                    jobApplicationRepository.findById(appId).ifPresent(app -> {
+                                        if (!coverLetter.isEmpty()) {
                                             app.setCoverLetterContent(coverLetter);
-                                            jobApplicationRepository.save(app);
-                                            log.info("SSE: Cover letter saved for application {}", appId);
-                                        });
-                                    }
+                                        }
+                                        if (data.has("atsScore")) {
+                                            app.setAtsScore(data.get("atsScore").asInt());
+                                        }
+                                        if (data.has("impactScore")) {
+                                            app.setImpactScore(data.get("impactScore").asInt());
+                                        }
+                                        if (data.has("componentBreakdown")) {
+                                            app.setScoreBreakdown(data.get("componentBreakdown").toString());
+                                        }
+                                        jobApplicationRepository.save(app);
+                                        log.info("SSE: Scores saved for application {}", appId);
+                                    });
                                     // Enrich with applicationId
                                     ObjectNode enriched = (ObjectNode) data;
                                     enriched.put("applicationId", appId);
@@ -260,9 +299,32 @@ public class ResumeService {
         String resumeLatex = pipelineResult.getLatex();
         String coverLetter = pipelineResult.getCoverLetter() != null ? pipelineResult.getCoverLetter() : "";
 
+        int resolvedImpactScore = pipelineResult.getImpactScore();
+        String scoreBreakdown = null;
+        if (pipelineResult.getScoreBreakdown() != null) {
+            scoreBreakdown = pipelineResult.getScoreBreakdown().toString();
+        }
+        if (pipelineResult.getAtsScoreDetails() != null) {
+            JsonNode details = pipelineResult.getAtsScoreDetails();
+            if (resolvedImpactScore == 0 && details.has("impactScore")) {
+                resolvedImpactScore = details.get("impactScore").asInt();
+            }
+            if (scoreBreakdown == null && details.has("componentBreakdown")) {
+                scoreBreakdown = details.get("componentBreakdown").toString();
+            }
+            if (details.has("version")) {
+                application.setScoreVersion(details.get("version").asInt());
+            }
+        }
+
         application.setGeneratedResumeContent(resumeLatex);
         application.setCoverLetterContent(coverLetter);
         application.setJobDescription(jobDescription);
+        application.setAtsScore(pipelineResult.getAtsScore());
+        application.setImpactScore(resolvedImpactScore);
+        if (scoreBreakdown != null) {
+            application.setScoreBreakdown(scoreBreakdown);
+        }
         jobApplicationRepository.save(application);
         log.info("Resume re-generated via pipeline for application id: {}, atsScore: {}",
                 applicationId, pipelineResult.getAtsScore());
@@ -353,6 +415,8 @@ public class ResumeService {
             info.append("Degree: ").append(profile.getMastersDegree()).append("\n");
         if (profile.getMastersGpa() != null && !profile.getMastersGpa().isEmpty())
             info.append("GPA: ").append(profile.getMastersGpa()).append("\n");
+        if (profile.getSkills() != null && !profile.getSkills().isEmpty())
+            info.append("Skills: ").append(profile.getSkills()).append("\n");
         return info.toString();
     }
     public byte[] generateCoverLetterPdf(Long applicationId) {

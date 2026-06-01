@@ -27,6 +27,7 @@ import Drawer from "../ui/Drawer";
 import ResizableSplitView from "../ui/ResizableSplitView";
 import { DownloadDropdown } from "../DownloadDropdown";
 import { DuplicateJobModal } from "../DuplicateJobModal";
+import { ATSScoreCard } from "../ATSScoreCard";
 import { useDownloader } from "@/hooks/useDownloader";
 import { api, type GenerateFromJdResponse } from "@/lib/api";
 import type { UserProfile } from "@/types/dtos";
@@ -268,6 +269,9 @@ export default function NewApplicationPage() {
                 location: (data.location as string) || formData.location,
                 latexContent: (data.latex as string) || "",
                 coverLetterContent: "",
+                atsScore: data.atsScore as number | undefined,
+                impactScore: data.impactScore as number | undefined,
+                scoreBreakdown: data.componentBreakdown as Record<string, { raw: number; weighted: number; max: number; label: string }> | undefined,
               });
               setGenerated(true);
               setIsEditing(true);
@@ -276,16 +280,17 @@ export default function NewApplicationPage() {
               setStreamStage("Generating cover letter...");
               break;
             case "complete":
-              if (data.coverLetter) {
-                setResult((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        coverLetterContent: data.coverLetter as string,
-                      }
-                    : null,
-                );
-              }
+              setResult((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      coverLetterContent: (data.coverLetter as string) || prev.coverLetterContent,
+                      atsScore: (data.atsScore as number) ?? prev.atsScore,
+                      impactScore: (data.impactScore as number) ?? prev.impactScore,
+                      scoreBreakdown: (data.componentBreakdown as Record<string, { raw: number; weighted: number; max: number; label: string }>) ?? prev.scoreBreakdown,
+                    }
+                  : null,
+              );
               setLoading(false);
               setStreamStage("");
               break;
@@ -377,6 +382,11 @@ export default function NewApplicationPage() {
               ...prev,
               latexContent: response.latexContent,
               coverLetterContent: response.coverLetterContent,
+              atsScore: response.atsScore ?? prev.atsScore,
+              impactScore: response.impactScore ?? prev.impactScore,
+              scoreBreakdown: typeof response.scoreBreakdown === "string"
+                ? JSON.parse(response.scoreBreakdown)
+                : response.scoreBreakdown ?? prev.scoreBreakdown,
             }
           : null,
       );
@@ -821,6 +831,18 @@ export default function NewApplicationPage() {
             </div>
           </motion.div>
 
+          {result.atsScore != null && result.scoreBreakdown && (
+            <motion.div variants={fadeInUp}>
+              <ATSScoreCard
+                overallScore={result.atsScore}
+                impactScore={result.impactScore ?? 0}
+                breakdown={result.scoreBreakdown}
+                missingRequired={[]}
+                missingPreferred={[]}
+              />
+            </motion.div>
+          )}
+
           <motion.div variants={fadeInUp} className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex gap-1 p-1 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full w-fit">
@@ -854,16 +876,16 @@ export default function NewApplicationPage() {
                   onDownloadPdf={() =>
                     downloadCoverLetterPdf(
                       result.applicationId,
-                      formData.jobId || result.jobId,
-                      formData.company || result.company,
+                      result.jobId || formData.jobId,
+                      result.position || formData.position,
                       userProfile?.fullName || "Candidate",
                     )
                   }
                   onDownloadDocx={() =>
                     downloadCoverLetterDocx(
                       result.applicationId,
-                      formData.jobId || result.jobId,
-                      formData.company || result.company,
+                      result.jobId || formData.jobId,
+                      result.position || formData.position,
                       userProfile?.fullName || "Candidate",
                     )
                   }
@@ -874,16 +896,16 @@ export default function NewApplicationPage() {
                   onDownloadPdf={() =>
                     downloadResumePdf(
                       result.applicationId,
-                      formData.jobId || result.jobId,
-                      formData.company || result.company,
+                      result.jobId || formData.jobId,
+                      result.position || formData.position,
                       userProfile?.fullName || "Candidate",
                     )
                   }
                   onDownloadDocx={() =>
                     downloadResumeDocx(
                       result.applicationId,
-                      formData.jobId || result.jobId,
-                      formData.company || result.company,
+                      result.jobId || formData.jobId,
+                      result.position || formData.position,
                       userProfile?.fullName || "Candidate",
                     )
                   }
@@ -1031,6 +1053,19 @@ export default function NewApplicationPage() {
                   )}
                   Regenerate
                 </button>
+                {result.atsScore != null && (
+                  <span
+                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${
+                      result.atsScore >= 80
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        : result.atsScore >= 60
+                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                    }`}
+                  >
+                    ATS {result.atsScore}
+                  </span>
+                )}
                 <button
                   onClick={() => setShowPromptInput(!showPromptInput)}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -1064,16 +1099,16 @@ export default function NewApplicationPage() {
                     onDownloadPdf={() =>
                       downloadCoverLetterPdf(
                         result.applicationId,
-                        formData.jobId || result.jobId,
-                        formData.company || result.company,
+                        result.jobId || formData.jobId,
+                        result.position || formData.position,
                         userProfile?.fullName || "Candidate",
                       )
                     }
                     onDownloadDocx={() =>
                       downloadCoverLetterDocx(
                         result.applicationId,
-                        formData.jobId || result.jobId,
-                        formData.company || result.company,
+                        result.jobId || formData.jobId,
+                        result.position || formData.position,
                         userProfile?.fullName || "Candidate",
                       )
                     }
@@ -1084,16 +1119,16 @@ export default function NewApplicationPage() {
                     onDownloadPdf={() =>
                       downloadResumePdf(
                         result.applicationId,
-                        formData.jobId || result.jobId,
-                        formData.company || result.company,
+                        result.jobId || formData.jobId,
+                        result.position || formData.position,
                         userProfile?.fullName || "Candidate",
                       )
                     }
                     onDownloadDocx={() =>
                       downloadResumeDocx(
                         result.applicationId,
-                        formData.jobId || result.jobId,
-                        formData.company || result.company,
+                        result.jobId || formData.jobId,
+                        result.position || formData.position,
                         userProfile?.fullName || "Candidate",
                       )
                     }

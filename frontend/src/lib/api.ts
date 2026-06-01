@@ -164,6 +164,16 @@ export interface GenerateFromJdResponse {
   location: string;
   latexContent: string;
   coverLetterContent: string;
+  atsScore?: number;
+  impactScore?: number;
+  scoreBreakdown?: Record<string, ScoreComponent>;
+}
+
+export interface ScoreComponent {
+  raw: number;
+  weighted: number;
+  max: number;
+  label: string;
 }
 
 export interface AuthResponse {

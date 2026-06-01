@@ -1,12 +1,12 @@
-# Graph Report - C:\Users\mukke\Desktop\Job-Resume-Tracker  (2026-05-06)
+# Graph Report - C:\Users\mukke\Desktop\Job-Resume-Tracker  (2026-05-12)
 
 ## Corpus Check
-- 131 files · ~69,142 words
+- 132 files · ~106,861 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 503 nodes · 720 edges · 81 communities detected
-- Extraction: 74% EXTRACTED · 26% INFERRED · 0% AMBIGUOUS · INFERRED: 184 edges (avg confidence: 0.8)
+- 506 nodes · 722 edges · 83 communities detected
+- Extraction: 75% EXTRACTED · 25% INFERRED · 0% AMBIGUOUS · INFERRED: 184 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -91,6 +91,8 @@
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `runPipeline()` - 24 edges
@@ -107,28 +109,28 @@
 ## Surprising Connections (you probably didn't know these)
 - `profileRoleImpact()` --calls--> `runPipeline()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\impact\detector.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts
+- `createModels()` --calls--> `runPipeline()`  [INFERRED]
+  C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\config\models.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts
 - `analyzeBullet()` --calls--> `repairBullets()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\impact\detector.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\validation\repair.ts
 - `callLLM()` --calls--> `parseJD()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\observability\llm-wrapper.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\stages\jd-parser.ts
 - `callLLM()` --calls--> `repairKeywordGaps()`  [INFERRED]
   C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\observability\llm-wrapper.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\stages\keyword-gap-repair.ts
-- `runPipeline()` --calls--> `parseLatexResume()`  [INFERRED]
-  C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\pipeline\runner.ts → C:\Users\mukke\Desktop\Job-Resume-Tracker\resume-pipeline\src\stages\latex-assembler.ts
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.05
-Nodes (17): AuthService, handleSave(), checkBaseResumes(), clearStorage(), doGenerate(), handleConfirmDuplicate(), handleGenerate(), handleRegenerate() (+9 more)
+Cohesion: 0.07
+Nodes (12): ApiKeyController, GeminiService, sanitize(), sanitizeObject(), sanitizeSnapshot(), PromptBuilder, ResumeBaseRepository, JDParseResult (+4 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.09
-Nodes (22): calculateATSScore(), extractAllText(), stripLatexCommands(), generateCoverLetter(), classifyError(), extractKeyProvider(), PerRequestKeyProvider, resolveProvider() (+14 more)
+Cohesion: 0.05
+Nodes (17): confirmDelete(), handleSave(), async(), confirmDelete(), handleStatusChange(), parseJD(), JobApplicationController, JobApplicationRepository (+9 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.07
-Nodes (16): buildHealthReport(), emptyReport(), percentile(), ApiKeyController, GeminiService, parseJD(), JobApplicationController, sanitize() (+8 more)
+Cohesion: 0.1
+Nodes (21): calculateATSScore(), extractAllText(), stripLatexCommands(), generateCoverLetter(), classifyError(), extractKeyProvider(), resolveProvider(), validateKeyFormat() (+13 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.09
@@ -136,11 +138,11 @@ Nodes (8): AuthController, handleResendOtp(), handleSendSignupOtp(), AuthUserRep
 
 ### Community 4 - "Community 4"
 Cohesion: 0.09
-Nodes (10): SnapshotStore, CompositeKeyProvider, createModels(), extractSummaryText(), runPipeline(), getVariants(), reorderSkills(), scoreSkillLine() (+2 more)
+Nodes (7): AuthService, checkBaseResumes(), ResumeController, handleSaveAll(), load(), UserProfileController, WordDocumentService
 
 ### Community 5 - "Community 5"
-Cohesion: 0.09
-Nodes (6): confirmDelete(), async(), confirmDelete(), handleStatusChange(), JobApplicationRepository, JobApplicationService
+Cohesion: 0.11
+Nodes (8): SnapshotStore, extractSummaryText(), runPipeline(), getVariants(), reorderSkills(), scoreSkillLine(), PipelineTelemetry, validateSections()
 
 ### Community 6 - "Community 6"
 Cohesion: 0.13
@@ -151,12 +153,12 @@ Cohesion: 0.19
 Nodes (3): CustomUserDetailsService, JwtAuthenticationFilter, JwtUtil
 
 ### Community 8 - "Community 8"
-Cohesion: 0.31
-Nodes (10): analyzeBullet(), checkCredibility(), classifyStrength(), detectCategory(), detectSignals(), detectTech(), generateSuggestion(), profileRoleImpact() (+2 more)
-
-### Community 9 - "Community 9"
 Cohesion: 0.33
 Nodes (10): assembleLatex(), boldifyKeywords(), boldifyMetrics(), escapeLatex(), extractNamedSection(), findSectionBoundaries(), parseExperienceRoles(), parseLatexResume() (+2 more)
+
+### Community 9 - "Community 9"
+Cohesion: 0.31
+Nodes (10): analyzeBullet(), checkCredibility(), classifyStrength(), detectCategory(), detectSignals(), detectTech(), generateSuggestion(), profileRoleImpact() (+2 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.27
@@ -167,172 +169,172 @@ Cohesion: 0.36
 Nodes (6): apiFetch(), attemptRefresh(), emitSessionExpired(), ensureCsrfToken(), getCsrfToken(), silentRefresh()
 
 ### Community 12 - "Community 12"
-Cohesion: 0.33
-Nodes (1): WordDocumentService
+Cohesion: 0.24
+Nodes (3): CompositeKeyProvider, KeySanitizer, createModels()
 
 ### Community 13 - "Community 13"
+Cohesion: 0.21
+Nodes (2): PerRequestKeyProvider, ServerKeyProvider
+
+### Community 14 - "Community 14"
 Cohesion: 0.33
 Nodes (2): RateLimitFilter, RateLimitStore
 
-### Community 14 - "Community 14"
+### Community 15 - "Community 15"
 Cohesion: 0.71
 Nodes (6): extractFromProjectHeadings(), extractFromSkillsSection(), extractTechProfile(), isWordBoundary(), scanTextForTechs(), stripLatex()
 
-### Community 15 - "Community 15"
+### Community 16 - "Community 16"
 Cohesion: 0.33
 Nodes (2): useAuth(), OAuthCallbackContent()
 
-### Community 16 - "Community 16"
+### Community 17 - "Community 17"
 Cohesion: 0.33
 Nodes (2): useThemeContext(), useTheme()
 
-### Community 17 - "Community 17"
+### Community 18 - "Community 18"
 Cohesion: 0.4
 Nodes (2): useToast(), useDownloader()
 
-### Community 18 - "Community 18"
+### Community 19 - "Community 19"
 Cohesion: 0.5
 Nodes (1): ATSJobTrackerApplication
 
-### Community 19 - "Community 19"
+### Community 20 - "Community 20"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 20 - "Community 20"
+### Community 21 - "Community 21"
 Cohesion: 0.67
 Nodes (2): Trigger(), useDropdown()
 
-### Community 21 - "Community 21"
+### Community 22 - "Community 22"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 22 - "Community 22"
+### Community 23 - "Community 23"
 Cohesion: 0.83
 Nodes (3): decryptApiKeys(), deriveKey(), encryptApiKeys()
 
-### Community 23 - "Community 23"
-Cohesion: 0.5
-Nodes (1): ServerKeyProvider
-
 ### Community 24 - "Community 24"
-Cohesion: 0.67
-Nodes (2): CheckDuplicateResponse, ExistingApplicationInfo
+Cohesion: 0.83
+Nodes (3): buildHealthReport(), emptyReport(), percentile()
 
 ### Community 25 - "Community 25"
 Cohesion: 0.67
-Nodes (1): GeminiApiException
+Nodes (2): CheckDuplicateResponse, ExistingApplicationInfo
 
 ### Community 26 - "Community 26"
 Cohesion: 0.67
-Nodes (1): NotAuthenticatedException
+Nodes (1): GeminiApiException
 
 ### Community 27 - "Community 27"
 Cohesion: 0.67
-Nodes (1): UserNotFoundException
+Nodes (1): NotAuthenticatedException
 
 ### Community 28 - "Community 28"
 Cohesion: 0.67
-Nodes (1): AuthUser
+Nodes (1): UserNotFoundException
 
 ### Community 29 - "Community 29"
 Cohesion: 0.67
-Nodes (1): JobApplication
+Nodes (1): AuthUser
 
 ### Community 30 - "Community 30"
 Cohesion: 0.67
-Nodes (1): CsrfCookieFilter
+Nodes (1): JobApplication
 
 ### Community 31 - "Community 31"
 Cohesion: 0.67
-Nodes (1): InMemoryRateLimitStore
+Nodes (1): CsrfCookieFilter
 
 ### Community 32 - "Community 32"
 Cohesion: 0.67
-Nodes (1): PromptConstants
+Nodes (1): InMemoryRateLimitStore
 
 ### Community 33 - "Community 33"
 Cohesion: 0.67
-Nodes (1): ATSJobTrackerApplicationTests
+Nodes (1): PromptConstants
 
 ### Community 34 - "Community 34"
 Cohesion: 0.67
-Nodes (0): 
+Nodes (1): ATSJobTrackerApplicationTests
 
 ### Community 35 - "Community 35"
 Cohesion: 0.67
 Nodes (0): 
 
 ### Community 36 - "Community 36"
-Cohesion: 1.0
-Nodes (2): getCompanyInitials(), getFormattedFilename()
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 37 - "Community 37"
-Cohesion: 1.0
-Nodes (1): AuthResponse
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 38 - "Community 38"
 Cohesion: 1.0
-Nodes (1): CheckDuplicateRequest
+Nodes (2): getCompanyInitials(), getFormattedFilename()
 
 ### Community 39 - "Community 39"
 Cohesion: 1.0
-Nodes (1): GenerateFromJdRequest
+Nodes (1): AuthResponse
 
 ### Community 40 - "Community 40"
 Cohesion: 1.0
-Nodes (1): GenerateFromJdResponse
+Nodes (1): CheckDuplicateRequest
 
 ### Community 41 - "Community 41"
 Cohesion: 1.0
-Nodes (1): JobApplicationRequest
+Nodes (1): GenerateFromJdRequest
 
 ### Community 42 - "Community 42"
 Cohesion: 1.0
-Nodes (1): JobApplicationResponse
+Nodes (1): GenerateFromJdResponse
 
 ### Community 43 - "Community 43"
 Cohesion: 1.0
-Nodes (1): LoginRequest
+Nodes (1): JobApplicationRequest
 
 ### Community 44 - "Community 44"
 Cohesion: 1.0
-Nodes (1): RegisterRequest
+Nodes (1): JobApplicationResponse
 
 ### Community 45 - "Community 45"
 Cohesion: 1.0
-Nodes (1): ResumeGenerationRequest
+Nodes (1): LoginRequest
 
 ### Community 46 - "Community 46"
 Cohesion: 1.0
-Nodes (1): ResumeGenerationResponse
+Nodes (1): RegisterRequest
 
 ### Community 47 - "Community 47"
 Cohesion: 1.0
-Nodes (1): SendOtpRequest
+Nodes (1): ResumeGenerationRequest
 
 ### Community 48 - "Community 48"
 Cohesion: 1.0
-Nodes (1): UpdateContentRequest
+Nodes (1): ResumeGenerationResponse
 
 ### Community 49 - "Community 49"
 Cohesion: 1.0
-Nodes (1): VerifyOtpRegisterRequest
+Nodes (1): SendOtpRequest
 
 ### Community 50 - "Community 50"
 Cohesion: 1.0
-Nodes (1): ResumeBase
+Nodes (1): UpdateContentRequest
 
 ### Community 51 - "Community 51"
 Cohesion: 1.0
-Nodes (1): UserProfile
+Nodes (1): VerifyOtpRegisterRequest
 
 ### Community 52 - "Community 52"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): ResumeBase
 
 ### Community 53 - "Community 53"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): UserProfile
 
 ### Community 54 - "Community 54"
 Cohesion: 1.0
@@ -442,107 +444,115 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 81 - "Community 81"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 82 - "Community 82"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
 - **19 isolated node(s):** `AuthResponse`, `CheckDuplicateRequest`, `CheckDuplicateResponse`, `ExistingApplicationInfo`, `GenerateFromJdRequest` (+14 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 37`** (2 nodes): `AuthResponse`, `AuthResponse.java`
+- **Thin community `Community 39`** (2 nodes): `AuthResponse`, `AuthResponse.java`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (2 nodes): `CheckDuplicateRequest.java`, `CheckDuplicateRequest`
+- **Thin community `Community 40`** (2 nodes): `CheckDuplicateRequest.java`, `CheckDuplicateRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (2 nodes): `GenerateFromJdRequest.java`, `GenerateFromJdRequest`
+- **Thin community `Community 41`** (2 nodes): `GenerateFromJdRequest.java`, `GenerateFromJdRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (2 nodes): `GenerateFromJdResponse.java`, `GenerateFromJdResponse`
+- **Thin community `Community 42`** (2 nodes): `GenerateFromJdResponse.java`, `GenerateFromJdResponse`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (2 nodes): `JobApplicationRequest.java`, `JobApplicationRequest`
+- **Thin community `Community 43`** (2 nodes): `JobApplicationRequest.java`, `JobApplicationRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (2 nodes): `JobApplicationResponse.java`, `JobApplicationResponse`
+- **Thin community `Community 44`** (2 nodes): `JobApplicationResponse.java`, `JobApplicationResponse`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (2 nodes): `LoginRequest.java`, `LoginRequest`
+- **Thin community `Community 45`** (2 nodes): `LoginRequest.java`, `LoginRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (2 nodes): `RegisterRequest.java`, `RegisterRequest`
+- **Thin community `Community 46`** (2 nodes): `RegisterRequest.java`, `RegisterRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (2 nodes): `ResumeGenerationRequest.java`, `ResumeGenerationRequest`
+- **Thin community `Community 47`** (2 nodes): `ResumeGenerationRequest.java`, `ResumeGenerationRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (2 nodes): `ResumeGenerationResponse.java`, `ResumeGenerationResponse`
+- **Thin community `Community 48`** (2 nodes): `ResumeGenerationResponse.java`, `ResumeGenerationResponse`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (2 nodes): `SendOtpRequest.java`, `SendOtpRequest`
+- **Thin community `Community 49`** (2 nodes): `SendOtpRequest.java`, `SendOtpRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (2 nodes): `UpdateContentRequest.java`, `UpdateContentRequest`
+- **Thin community `Community 50`** (2 nodes): `UpdateContentRequest.java`, `UpdateContentRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (2 nodes): `VerifyOtpRegisterRequest.java`, `VerifyOtpRegisterRequest`
+- **Thin community `Community 51`** (2 nodes): `VerifyOtpRegisterRequest.java`, `VerifyOtpRegisterRequest`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (2 nodes): `ResumeBase.java`, `ResumeBase`
+- **Thin community `Community 52`** (2 nodes): `ResumeBase.java`, `ResumeBase`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (2 nodes): `UserProfile.java`, `UserProfile`
+- **Thin community `Community 53`** (2 nodes): `UserProfile.java`, `UserProfile`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (2 nodes): `layout.tsx`, `RootLayout()`
+- **Thin community `Community 54`** (2 nodes): `layout.tsx`, `RootLayout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (2 nodes): `page.tsx`, `Home()`
+- **Thin community `Community 55`** (2 nodes): `page.tsx`, `Home()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (2 nodes): `layout.tsx`, `ProtectedLayout()`
+- **Thin community `Community 56`** (2 nodes): `layout.tsx`, `ProtectedLayout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (2 nodes): `loading.tsx`, `ProtectedLoading()`
+- **Thin community `Community 57`** (2 nodes): `loading.tsx`, `ProtectedLoading()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (2 nodes): `page.tsx`, `ApplicationDetail()`
+- **Thin community `Community 58`** (2 nodes): `page.tsx`, `ApplicationDetail()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (2 nodes): `page.tsx`, `Dashboard()`
+- **Thin community `Community 59`** (2 nodes): `page.tsx`, `Dashboard()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (2 nodes): `page.tsx`, `NewApplication()`
+- **Thin community `Community 60`** (2 nodes): `page.tsx`, `NewApplication()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (2 nodes): `page.tsx`, `Settings()`
+- **Thin community `Community 61`** (2 nodes): `page.tsx`, `Settings()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (2 nodes): `page.tsx`, `LoginPage()`
+- **Thin community `Community 62`** (2 nodes): `page.tsx`, `LoginPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (2 nodes): `page.tsx`, `RegisterPage()`
+- **Thin community `Community 63`** (2 nodes): `page.tsx`, `RegisterPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 62`** (2 nodes): `ConfirmModal.tsx`, `ConfirmModal()`
+- **Thin community `Community 64`** (2 nodes): `ConfirmModal.tsx`, `ConfirmModal()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (2 nodes): `DownloadDropdown.tsx`, `handleDownload()`
+- **Thin community `Community 65`** (2 nodes): `DownloadDropdown.tsx`, `handleDownload()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (2 nodes): `DuplicateJobModal.tsx`, `handleKey()`
+- **Thin community `Community 66`** (2 nodes): `DuplicateJobModal.tsx`, `handleKey()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (2 nodes): `LandingPage.tsx`, `handleScroll()`
+- **Thin community `Community 67`** (2 nodes): `LandingPage.tsx`, `handleScroll()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (2 nodes): `Providers.tsx`, `Providers()`
+- **Thin community `Community 68`** (2 nodes): `Providers.tsx`, `Providers()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (2 nodes): `SessionExpiredModal.tsx`, `SessionExpiredModal()`
+- **Thin community `Community 69`** (2 nodes): `SessionExpiredModal.tsx`, `SessionExpiredModal()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (2 nodes): `StatusDropdown.tsx`, `StatusDropdown()`
+- **Thin community `Community 70`** (2 nodes): `StatusDropdown.tsx`, `StatusDropdown()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (2 nodes): `getStatusConfig()`, `ApplicationHeader.tsx`
+- **Thin community `Community 71`** (2 nodes): `getStatusConfig()`, `ApplicationHeader.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (2 nodes): `JobDescriptionCard.tsx`, `JobDescriptionCard()`
+- **Thin community `Community 72`** (2 nodes): `JobDescriptionCard.tsx`, `JobDescriptionCard()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 71`** (2 nodes): `Drawer.tsx`, `handleEsc()`
+- **Thin community `Community 73`** (2 nodes): `Drawer.tsx`, `handleEsc()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 72`** (1 nodes): `ApplicationStatus.java`
+- **Thin community `Community 74`** (1 nodes): `ApplicationStatus.java`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 73`** (1 nodes): `AuthProvider.java`
+- **Thin community `Community 75`** (1 nodes): `AuthProvider.java`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 74`** (1 nodes): `eslint.config.mjs`
+- **Thin community `Community 76`** (1 nodes): `eslint.config.mjs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 75`** (1 nodes): `next-env.d.ts`
+- **Thin community `Community 77`** (1 nodes): `next-env.d.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 76`** (1 nodes): `next.config.ts`
+- **Thin community `Community 78`** (1 nodes): `next.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 77`** (1 nodes): `postcss.config.mjs`
+- **Thin community `Community 79`** (1 nodes): `postcss.config.mjs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 78`** (1 nodes): `PdfPreview.tsx`
+- **Thin community `Community 80`** (1 nodes): `PdfPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 79`** (1 nodes): `dtos.ts`
+- **Thin community `Community 81`** (1 nodes): `dtos.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 80`** (1 nodes): `inspect_latex.js`
+- **Thin community `Community 82`** (1 nodes): `inspect_latex.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `runPipeline()` connect `Community 4` to `Community 1`, `Community 2`, `Community 8`, `Community 9`, `Community 14`?**
-  _High betweenness centrality (0.151) - this node is a cross-community bridge._
-- **Why does `JobApplicationController` connect `Community 2` to `Community 5`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `runPipeline()` connect `Community 5` to `Community 0`, `Community 1`, `Community 2`, `Community 8`, `Community 9`, `Community 12`, `Community 15`?**
+  _High betweenness centrality (0.149) - this node is a cross-community bridge._
+- **Why does `JobApplicationController` connect `Community 1` to `Community 0`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Why does `AuthController` connect `Community 3` to `Community 10`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+  _High betweenness centrality (0.042) - this node is a cross-community bridge._
 - **Are the 22 inferred relationships involving `runPipeline()` (e.g. with `createModels()` and `.getTraceId()`) actually correct?**
   _`runPipeline()` has 22 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `callLLM()` (e.g. with `.capture()` and `generateCoverLetter()`) actually correct?**
@@ -550,4 +560,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `AuthResponse`, `CheckDuplicateRequest`, `CheckDuplicateResponse` to the rest of the system?**
   _19 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07 - nodes in this community are weakly interconnected._

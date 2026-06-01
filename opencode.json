@@ -1,12 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    ".opencode/plugins/graphify.js"
-  ],
-  "mcp": {
-    "tinyfish": {
-      "type": "remote",
-      "url": "https://agent.tinyfish.ai/mcp"
-    }
-  }
+  "plugin": [".opencode/plugins/graphify.js"]
 }

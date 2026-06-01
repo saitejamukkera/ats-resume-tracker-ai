@@ -7,12 +7,14 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "setup-taxonomy": "tsx scripts/build-taxonomy.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.68",
     "@ai-sdk/google": "^3.0.60",
     "@ai-sdk/openai": "^3.0.52",
+    "@huggingface/transformers": "^4.2.0",
     "ai": "^6.0.154",
     "express": "^5.1.0",
     "uuid": "^11.1.0",

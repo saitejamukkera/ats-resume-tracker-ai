@@ -135,7 +135,7 @@ ${role.bullets.map((b, j) => `  ${j + 1}. ${b}`).join("\n")}`;
     })
     .join("\n\n");
 
-  const techCoverageBlock = buildTechCoverageBlock(candidateTech);
+  const techWeaveBlock = buildTechWeaveBlock(jd, candidateTech);
 
   const prompt = `Rewrite these experience bullets for a ${jd.position} role at ${jd.company}.
 
@@ -144,21 +144,18 @@ ${rolesContext}
 JD CONTEXT:
 - Position: ${jd.position} at ${jd.company}
 - Domain: ${jd.domainFocus}
-- Required Skills: ${jd.requiredSkills.join(", ")}
-- Preferred Skills: ${jd.preferredSkills.join(", ")}
 - Key Responsibilities: ${jd.keyResponsibilities.join("; ")}
 - Experience Level: ${experienceLevel}
 - Key Phrases to Mirror: ${jd.keyPhrases.join(", ")}
-${techCoverageBlock}
+${techWeaveBlock}
 HARD CONSTRAINTS:
-- Keep the SAME number of bullets per role (do not add or remove)
-- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave JD keywords around these core achievements rather than overwriting them.
-- ANTI-STUFFING: Limit each bullet to 1 core achievement and 2-3 technologies max. Do NOT create overloaded run-on sentences. Do NOT awkwardly force JD keywords into unrelated bullets.
-- Every bullet must contain: technical action + tools/frameworks + measurable or clearly defined outcome
-- Mirror JD language and technical stack naturally
-- Weave as many required and preferred skills from the JD into bullets as possible, where truthful
+- You are explicitly authorized to weave the technologies listed in the "AUTHORIZED TECHNOLOGIES TO WEAVE" section.
+- Under NO circumstances should you mention, weave, or fabricate experience with the technologies listed in the "FORBIDDEN / UNAUTHORIZED TECHNOLOGIES" section.
+- IMPACT-DRIVEN WEAVING: Do not insert technologies randomly or as a laundry list at the end of a bullet. Weave them naturally alongside measurable engineering achievements, performance metrics, or software engineering problems solved.
+- BULLET COUNT FLEXIBILITY: You are allowed to add, combine, or adjust bullets per job experience if it improves readability and quality. Do not adhere to a strict 1-to-1 match if it hampers logical flow.
+- WORD LENGTH & STUFFING PROTECTION: Maintain the optimal word limit of 15-25 words per bullet. If adding a technology increases sentence length or creates a run-on sentence, you MUST proactively trim filler words, verbose phrasing, or secondary details from the original bullet text to keep it tight, punchy, and short. Do not overstuff.
+- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave authorized JD keywords around these core achievements rather than overwriting them.
 - Use the EXACT technology names from the JD (e.g. if JD says "AWS", write "AWS" not "cloud services")
-- Do NOT fabricate experience or invent unrealistic achievements
 - Do NOT modify project details
 - Use realistic metrics (10-50% improvements, not 10x claims)
 - Avoid generic phrasing: "Responsible for", "Worked on", "Helped with"
@@ -247,7 +244,7 @@ export async function generateExperiencePerRole(
   let totalOut = 0;
   const generatedRoles: GeneratedRole[] = [];
 
-  const techCoverageBlock = buildTechCoverageBlock(candidateTech);
+  const techWeaveBlock = buildTechWeaveBlock(jd, candidateTech);
 
   for (let i = 0; i < roles.length; i++) {
     const role = roles[i];
@@ -263,19 +260,18 @@ ${role.bullets.map((b, j) => `  ${j + 1}. ${b}`).join("\n")}
 JD CONTEXT:
 - Position: ${jd.position} at ${jd.company}
 - Domain: ${jd.domainFocus}
-- Required Skills: ${jd.requiredSkills.join(", ")}
-- Preferred Skills: ${jd.preferredSkills.join(", ")}
 - Key Responsibilities: ${jd.keyResponsibilities.join("; ")}
 - Experience Level: ${experienceLevel}
 - Key Phrases to Mirror: ${jd.keyPhrases.join(", ")}
-${techCoverageBlock}
+${techWeaveBlock}
 HARD CONSTRAINTS:
-- Keep the SAME number of bullets (${role.bullets.length} bullets)
-- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology from the original bullets. Weave JD keywords around these core achievements rather than overwriting them.
-- ANTI-STUFFING: Limit each bullet to 1 core achievement and 2-3 technologies max. Do NOT create overloaded run-on sentences. Do NOT awkwardly force JD keywords into unrelated bullets.
-- Every bullet must contain: technical action + tools/frameworks + measurable or clearly defined outcome
-- Mirror JD language and technical stack naturally
-- Do NOT fabricate experience or invent unrealistic achievements
+- You are explicitly authorized to weave the technologies listed in the "AUTHORIZED TECHNOLOGIES TO WEAVE" section.
+- Under NO circumstances should you mention, weave, or fabricate experience with the technologies listed in the "FORBIDDEN / UNAUTHORIZED TECHNOLOGIES" section.
+- IMPACT-DRIVEN WEAVING: Do not insert technologies randomly or as a laundry list at the end of a bullet. Weave them naturally alongside measurable engineering achievements, performance metrics, or software engineering problems solved.
+- BULLET COUNT FLEXIBILITY: You are allowed to add, combine, or adjust bullets per job experience if it improves readability and quality. Do not adhere to a strict 1-to-1 match if it hampers logical flow.
+- WORD LENGTH & STUFFING PROTECTION: Maintain the optimal word limit of 15-25 words per bullet. If adding a technology increases sentence length or creates a run-on sentence, you MUST proactively trim filler words, verbose phrasing, or secondary details from the original bullet text to keep it tight, punchy, and short. Do not overstuff.
+- PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave authorized JD keywords around these core achievements rather than overwriting them.
+- Use the EXACT technology names from the JD (e.g. if JD says "AWS", write "AWS" not "cloud services")
 - Do NOT modify project details
 - Use realistic metrics (10-50% improvements, not 10x claims)
 - Avoid generic phrasing: "Responsible for", "Worked on", "Helped with"
@@ -340,20 +336,65 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
   };
 }
 
-// ── Tech Coverage Prompt Block Builder ──────────────────────────
-// Builds a soft prompt hint from the candidate's extracted tech profile.
-// Returns empty string if no profile is available (graceful degradation).
+// ── Tech Weave & Whitelist Helpers ──────────────────────────
 
-function buildTechCoverageBlock(candidateTech?: CandidateTechProfile): string {
-  if (!candidateTech || candidateTech.primary.length === 0) return "";
+function intersectSkills(
+  jdSkills: string[],
+  candidateTech?: CandidateTechProfile
+): { authorized: string[]; forbidden: string[] } {
+  if (!candidateTech) {
+    return { authorized: jdSkills, forbidden: [] };
+  }
+
+  const authorized: string[] = [];
+  const forbidden: string[] = [];
+
+  // Combine primary and secondary technologies into a single lowercase Set
+  const candidateSet = new Set(
+    [...candidateTech.primary, ...candidateTech.secondary].map((s) => s.toLowerCase())
+  );
+
+  for (const skill of jdSkills) {
+    const lowerSkill = skill.toLowerCase();
+    let isMatched = candidateSet.has(lowerSkill);
+
+    if (!isMatched) {
+      // Check if any of the candidate's skills are variants or substrings of this JD skill
+      for (const candTech of candidateSet) {
+        if (lowerSkill.includes(candTech) || candTech.includes(lowerSkill)) {
+          isMatched = true;
+          break;
+        }
+      }
+    }
+
+    if (isMatched) {
+      authorized.push(skill);
+    } else {
+      forbidden.push(skill);
+    }
+  }
+
+  return { authorized, forbidden };
+}
+
+function buildTechWeaveBlock(
+  jd: JDAnalysis,
+  candidateTech?: CandidateTechProfile
+): string {
+  const jdRequired = intersectSkills(jd.requiredSkills, candidateTech);
+  const jdPreferred = intersectSkills(jd.preferredSkills, candidateTech);
+
+  const authorizedSkills = [...new Set([...jdRequired.authorized, ...jdPreferred.authorized])];
+  const forbiddenSkills = [...new Set([...jdRequired.forbidden, ...jdPreferred.forbidden])];
 
   return `
-CANDIDATE'S PRIMARY TECHNOLOGIES (extracted from their base resume):
-${candidateTech.primary.join(", ")}
+AUTHORIZED TECHNOLOGIES TO WEAVE:
+${authorizedSkills.length > 0 ? authorizedSkills.join(", ") : "None. (Only weave skills if they are present in the candidate's skills profile.)"}
+(The candidate has explicit knowledge of these technologies. You are authorized to weave these naturally and contextually into the experience bullets.)
 
-TECH COVERAGE GUIDANCE:
-- If a role's rewritten bullets contain ZERO mentions of any primary technology listed above, naturally incorporate the most relevant one(s) into a bullet where truthful.
-- Do NOT force insertion if the role's bullets already reference these technologies.
-- Do NOT add technologies the candidate did not actually use in that role.
+FORBIDDEN / UNAUTHORIZED TECHNOLOGIES:
+${forbiddenSkills.length > 0 ? forbiddenSkills.join(", ") : "None"}
+(The Job Description requests these technologies, but the candidate does NOT know them. Under NO circumstances should you mention, weave, or fabricate experience with these technologies in the rewritten bullets.)
 `;
 }

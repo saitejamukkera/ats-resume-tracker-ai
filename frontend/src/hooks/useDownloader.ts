@@ -39,12 +39,12 @@ export function useDownloader() {
   const downloadResumePdf = async (
     applicationId: number,
     jobId: string,
-    company: string,
+    position: string,
     fullName: string,
   ) => {
     await handleDownload(
       api.resumes.downloadPdf(applicationId),
-      getFormattedFilename(fullName, jobId, company, "Resume", "pdf"),
+      getFormattedFilename(fullName, position, jobId, applicationId, "Resume", "pdf"),
       "Resume PDF Downloaded",
       "Failed to download Resume PDF",
     );
@@ -53,12 +53,12 @@ export function useDownloader() {
   const downloadResumeDocx = async (
     applicationId: number,
     jobId: string,
-    company: string,
+    position: string,
     fullName: string,
   ) => {
     await handleDownload(
       api.resumes.downloadResumeDocx(applicationId),
-      getFormattedFilename(fullName, jobId, company, "Resume", "docx"),
+      getFormattedFilename(fullName, position, jobId, applicationId, "Resume", "docx"),
       "Resume Word Doc Downloaded",
       "Failed to download Resume Word Doc",
     );
@@ -67,12 +67,12 @@ export function useDownloader() {
   const downloadCoverLetterPdf = async (
     applicationId: number,
     jobId: string,
-    company: string,
+    position: string,
     fullName: string,
   ) => {
     await handleDownload(
       api.resumes.downloadCoverLetterPdf(applicationId),
-      getFormattedFilename(fullName, jobId, company, "Cover_Letter", "pdf"),
+      getFormattedFilename(fullName, position, jobId, applicationId, "Cover_Letter", "pdf"),
       "Cover Letter PDF Downloaded",
       "Failed to download Cover Letter PDF",
     );
@@ -81,12 +81,12 @@ export function useDownloader() {
   const downloadCoverLetterDocx = async (
     applicationId: number,
     jobId: string,
-    company: string,
+    position: string,
     fullName: string,
   ) => {
     await handleDownload(
       api.resumes.downloadCoverLetterDocx(applicationId),
-      getFormattedFilename(fullName, jobId, company, "Cover_Letter", "docx"),
+      getFormattedFilename(fullName, position, jobId, applicationId, "Cover_Letter", "docx"),
       "Cover Letter Word Doc Downloaded",
       "Failed to download Cover Letter Word Doc",
     );
@@ -95,13 +95,14 @@ export function useDownloader() {
   const downloadCoverLetterText = async (
     content: string,
     jobId: string,
-    company: string,
+    position: string,
+    applicationId: number,
     fullName: string,
   ) => {
     const blob = new Blob([content], { type: "text/plain" });
     await handleDownload(
       Promise.resolve(blob),
-      getFormattedFilename(fullName, jobId, company, "Cover_Letter", "txt"),
+      getFormattedFilename(fullName, position, jobId, applicationId, "Cover_Letter", "txt"),
       "Cover Letter Text Downloaded",
       "Failed to download Cover Letter Text",
     );

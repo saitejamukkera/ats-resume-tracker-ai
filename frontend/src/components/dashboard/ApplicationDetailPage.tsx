@@ -156,7 +156,7 @@ export default function ApplicationDetailPage({
           downloadResumePdf(
             application.id,
             application.jobId,
-            application.company,
+            application.position,
             user?.fullName || "Candidate",
           )
         }
@@ -164,7 +164,7 @@ export default function ApplicationDetailPage({
           downloadResumeDocx(
             application.id,
             application.jobId,
-            application.company,
+            application.position,
             user?.fullName || "Candidate",
           )
         }

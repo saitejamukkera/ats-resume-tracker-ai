@@ -28,6 +28,9 @@ public class UserProfile {
     @Column(columnDefinition = "TEXT")
     private String masterSubjects;
 
+    @Column(columnDefinition = "TEXT")
+    private String skills;
+
     private String mastersDegree;
     private String mastersGpa;
 

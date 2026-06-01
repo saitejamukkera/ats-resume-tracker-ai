@@ -72,7 +72,7 @@ public class ResumePipelineClient {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(pipelineUrl + "/generate"))
-                    .timeout(Duration.ofSeconds(120)) // pipeline can take up to 2 min
+                    .timeout(Duration.ofSeconds(180)) // pipeline can take up to 3 min
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                     .build();
@@ -140,7 +140,7 @@ public class ResumePipelineClient {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(pipelineUrl + "/generate"))
-                    .timeout(Duration.ofSeconds(120))
+                    .timeout(Duration.ofSeconds(180))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                     .build();
@@ -412,6 +412,9 @@ public class ResumePipelineClient {
         private String jobId;
         private String location;
         private int atsScore;
+        private int impactScore;
+        private JsonNode scoreBreakdown;
+        private JsonNode atsScoreDetails;
         private JsonNode jdAnalysis;
         private JsonNode trace;
     }

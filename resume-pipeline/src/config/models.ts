@@ -29,7 +29,7 @@ const PROVIDERS = {
     quality: google("gemini-2.5-flash"),
   },
   openai: {
-    fast: openai("gpt-5-mini"),
+    fast: openai("gpt-5.4-nano"),
     quality: openai("gpt-5.4-mini"),
   },
   anthropic: {
@@ -57,7 +57,7 @@ console.log(`[models] Server LLM Provider: ${PROVIDER}`);
 
 const MODEL_NAMES: Record<LLMProvider, { fast: string; quality: string }> = {
   google: { fast: "gemini-2.5-flash", quality: "gemini-2.5-flash" },
-  openai: { fast: "gpt-5-mini", quality: "gpt-5.4-mini" },
+  openai: { fast: "gpt-5.4-nano", quality: "gpt-5.4-mini" },
   anthropic: { fast: "claude-haiku-4-5", quality: "claude-sonnet-4-6" },
 };
 

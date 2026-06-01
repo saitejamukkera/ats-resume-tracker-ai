@@ -98,6 +98,9 @@ public class JobApplicationService {
                 .generatedResumeContent(app.getGeneratedResumeContent())
                 .coverLetterContent(app.getCoverLetterContent())
                 .note(app.getNote())
+                .atsScore(app.getAtsScore())
+                .impactScore(app.getImpactScore())
+                .scoreBreakdown(app.getScoreBreakdown())
                 .build();
     }
 }

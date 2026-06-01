@@ -2,6 +2,8 @@ package com.fullstack.ATSJobTracker.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -42,6 +44,19 @@ public class JobApplication {
 
     @Column(columnDefinition = "TEXT")
     private String note;
+
+    @Column(name = "ats_score")
+    private Integer atsScore;
+
+    @Column(name = "impact_score")
+    private Integer impactScore;
+
+    @Column(name = "score_version")
+    private Integer scoreVersion;
+
+    @Column(name = "score_breakdown")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private String scoreBreakdown;
 
     @PrePersist
     protected void onCreate() {

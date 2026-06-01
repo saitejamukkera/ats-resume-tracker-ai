@@ -115,14 +115,55 @@ export interface ValidationError {
 
 // ── ATS Score ──────────────────────────────────────────────────
 export interface ATSScore {
+  version: number;
   overall: number;
+
   keywordMatch: number;
+  keywordRelevance: number;
   preferredMatch: number;
+  preferredRelevance: number;
   sectionCompleteness: number;
   formatScore: number;
   keywordPlacement: number;
+
+  impactScore: number;
+  metricsRatio: number;
+  actionVerbRatio: number;
+  skillExperienceCoherence: number;
+  experienceLevelMatch: number;
+  educationLevelMatch: number;
+  taxonomyCoverage: number;
+  bulletLengthHealth: number;
+
+  densityPenaltyFactor: number;
+  semanticSimilarity: number;
+  semanticScoringAvailable: boolean;
+
   missingRequired: string[];
   missingPreferred: string[];
+
+  componentBreakdown: Record<
+    string,
+    {
+      raw: number;
+      weighted: number;
+      max: number;
+      label: string;
+    }
+  >;
+
+  formatIssues: FormatIssue[];
+
+  features: {
+    semanticScoring: boolean;
+    formatValidated: boolean;
+  };
+}
+
+export interface FormatIssue {
+  severity: "critical" | "warning";
+  category: "parsing" | "headings" | "contact" | "dates" | "bullets";
+  message: string;
 }
 
 // ── Pipeline Output (returned to Spring Boot) ──────────────────
@@ -134,6 +175,7 @@ export interface PipelineOutput {
   jobId: string;
   location: string;
   atsScore: number;
+  atsScoreDetails?: ATSScore;
   jdAnalysis: JDAnalysis;
   trace: GenerationTrace;
 }
@@ -162,6 +204,10 @@ export interface GenerationTrace {
   scores: {
     ats: number;
     impactScore: number;
+    componentBreakdown?: Record<
+      string,
+      { raw: number; weighted: number; max: number; label: string }
+    >;
   };
   validation: {
     totalChecks: number;

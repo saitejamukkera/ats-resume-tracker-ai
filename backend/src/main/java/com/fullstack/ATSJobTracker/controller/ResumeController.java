@@ -115,9 +115,14 @@ public class ResumeController {
                     applicationId, request.getJobDescription(), request.getCustomPrompt(),
                     request.getUseIconResume(), request.getApiKeys(), request.getLlmProvider());
 
+            var app = jobApplicationService.getApplication(applicationId);
+
             ResumeGenerationResponse response = ResumeGenerationResponse.builder()
                     .latexContent(result[0])
                     .coverLetterContent(result[1])
+                    .atsScore(app.map(a -> a.getAtsScore()).orElse(null))
+                    .impactScore(app.map(a -> a.getImpactScore()).orElse(null))
+                    .scoreBreakdown(app.map(a -> a.getScoreBreakdown()).orElse(null))
                     .build();
 
             return ResponseEntity.ok(response);

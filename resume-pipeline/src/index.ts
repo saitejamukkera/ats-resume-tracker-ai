@@ -8,6 +8,8 @@ import type { PipelineInput } from "./schemas/pipeline.js";
 import type { PipelineEvent } from "./pipeline/runner.js";
 import { DEFAULT_CONFIG } from "./schemas/pipeline.js";
 import { RateLimitError } from "./observability/llm-wrapper.js";
+import { traceStore } from "./observability/trace-store.js";
+import { buildHealthReport } from "./observability/analytics.js";
 import {
   PerRequestKeyProvider,
   ServerKeyProvider,
@@ -20,6 +22,7 @@ import { sanitizeObject } from "./security/key-sanitizer.js";
 import { validateKeyFormat, validateKeyWithPing } from "./security/key-validator.js";
 import { parseJD } from "./stages/jd-parser.js";
 import { createModels } from "./config/models.js";
+import { getEmbedder } from "./validation/embedding-matcher.js";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -263,8 +266,36 @@ app.post("/validate-key", async (req, res) => {
   res.json(result);
 });
 
+// ── Admin Analytics (protected) ──────────────────────────────────
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+
+function adminAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!ADMIN_API_KEY) {
+    res.status(403).json({ error: "ADMIN_API_KEY not configured" });
+    return;
+  }
+  const token = (req.headers.authorization || "").replace("Bearer ", "");
+  if (token === ADMIN_API_KEY) {
+    next();
+    return;
+  }
+  res.status(401).json({ error: "Unauthorized" });
+}
+
+app.get("/admin/analytics", adminAuth, (_req, res) => {
+  const traces = traceStore.getAll();
+  const report = buildHealthReport(traces);
+  res.json(report);
+});
+
+app.get("/admin/traces", adminAuth, (req, res) => {
+  const limit = parseInt(req.query.limit as string) || 10;
+  const traces = traceStore.getRecent(Math.min(limit, 100));
+  res.json(traces);
+});
+
 // ── Start Server ────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`[server] Resume pipeline listening on port ${PORT}`);
   console.log(`[server] Endpoints:`);
   console.log(`[server]   GET  /health`);
@@ -272,4 +303,20 @@ app.listen(PORT, () => {
   console.log(`[server]   POST /generate-stream (SSE)`);
   console.log(`[server]   POST /parse-jd`);
   console.log(`[server]   POST /validate-key`);
+
+  if (process.env.ENABLE_SEMANTIC_SCORING !== "false") {
+    getEmbedder()
+      .then((m) => {
+        if (m) {
+          console.log("[server] Embedding model pre-loaded — semantic scoring enabled");
+        } else {
+          console.log("[server] Embedding model unavailable — semantic scoring disabled");
+        }
+      })
+      .catch((e) =>
+        console.warn(`[server] Embedding model pre-load failed: ${e.message}`),
+      );
+  } else {
+    console.log("[server] Semantic scoring disabled (ENABLE_SEMANTIC_SCORING=false)");
+  }
 });

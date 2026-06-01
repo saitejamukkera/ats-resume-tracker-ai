@@ -36,6 +36,9 @@ export interface JobApplicationResponse {
   generatedResumeContent?: string;
   coverLetterContent?: string;
   note?: string;
+  atsScore?: number;
+  impactScore?: number;
+  scoreBreakdown?: string;
 }
 
 export interface CheckDuplicateResponse {
@@ -59,6 +62,9 @@ export interface ResumeGenerationResponse {
   latexContent: string;
   coverLetterContent: string;
   generatedResumeContent?: string;
+  atsScore?: number;
+  impactScore?: number;
+  scoreBreakdown?: Record<string, { raw: number; weighted: number; max: number; label: string }>;
 }
 
 export interface UserProfile {
@@ -73,4 +79,5 @@ export interface UserProfile {
   masterSubjects: string;
   mastersDegree: string;
   mastersGpa: string;
+  skills?: string;
 }

@@ -17,4 +17,7 @@ public class GenerateFromJdResponse {
     private String latexContent;
     private String coverLetterContent;
     private Long applicationId;
+    private int atsScore;
+    private int impactScore;
+    private Object scoreBreakdown;
 }

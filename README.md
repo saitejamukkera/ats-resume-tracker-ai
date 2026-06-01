@@ -8,8 +8,10 @@ A full-stack application to track job applications and generate AI-tailored resu
 - **AI Generation**: Generate role-specific resumes and cover letters from job descriptions via a multi-stage LLM pipeline.
 - **Application Tracking**: Manage application status (Saved, Applied, Interviewing, Offer, Rejected, etc.).
 - **Bring Your Own Key (BYOK)**: Users supply their own LLM API keys (Google Gemini, OpenAI, Anthropic) — server keys are optional fallbacks.
-- **Resume Analysis**: ATS compatibility scoring and keyword coverage analysis.
-- **PDF/DOCX/TXT Export**: Download resumes and cover letters in multiple formats.
+- **ATS Scoring Engine**: 13-dimension weighted resume scoring with semantic embeddings, ESCO taxonomy matching, impact detection, keyword stuffing prevention, and format validation.
+- **Resume Analysis**: Real-time ATS compatibility scoring with component breakdown shown during generation.
+- **PDF/DOCX/TXT Export**: Download resumes and cover letters in multiple formats with intelligent naming (Name_Position_JobID_Type.ext).
+- **Admin Analytics**: Per-dimension score breakdown, latency/cost trends, and trace history via protected API endpoints.
 
 ## Tech Stack
 
@@ -75,6 +77,8 @@ GEMINI_API_KEY=your_api_key_here  # server fallback key (optional with BYOK)
 | `GEMINI_API_KEY` | No | Server fallback API key (leave blank for BYOK-only mode) |
 | `OPENAI_API_KEY` | No | Server fallback (if `LLM_PROVIDER=openai`) |
 | `ANTHROPIC_API_KEY` | No | Server fallback (if `LLM_PROVIDER=anthropic`) |
+| `ENABLE_SEMANTIC_SCORING` | No | Default: `true`. Enables SBERT embedding-based semantic matching (~80MB model download on first run) |
+| `ADMIN_API_KEY` | No | Secret key for `/admin/analytics` and `/admin/traces` endpoints |
 | `FRONTEND_URL` | No | Default: `http://localhost:3000` |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | No | Google OAuth2 credentials |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | No | GitHub OAuth2 credentials |
@@ -133,7 +137,7 @@ cp .env.example .env
 ```bash
 cd resume-pipeline
 cp .env.example .env
-# Edit with LLM_PROVIDER and provider keys (optional)
+# Key settings: LLM_PROVIDER, ENABLE_SEMANTIC_SCORING, ADMIN_API_KEY
 ```
 
 ### 2. Start PostgreSQL
@@ -202,6 +206,13 @@ In dev mode, Next.js proxies `/api/*` requests to `localhost:8080` (configured i
 | POST | `/api/settings/validate-key` | Validate an LLM API key |
 | POST | `/api/settings/profile` | Save user profile |
 
+### Admin Analytics (Protected — Bearer Token via `ADMIN_API_KEY`)
+
+| Endpoint | Description |
+|---|---|
+| `GET /admin/analytics` | System health report: 13-dimension score breakdown, distribution stats (p50/p95), cost/latency trends |
+| `GET /admin/traces?limit=N` | Raw generation traces for debugging |
+
 ### OAuth2
 
 | Endpoint | Description |
@@ -244,10 +255,13 @@ Job-Resume-Tracker/
 ├── resume-pipeline/          # LLM sidecar (Express + Vercel AI SDK)
 │   ├── src/
 │   │   ├── pipeline/         # Pipeline orchestrator (runner.ts)
-│   │   ├── stages/           # LLM generation stages (summary, experience, cover letter)
-│   │   ├── validation/       # Rule-based validator + ATS scorer
+│   │   ├── stages/           # LLM generation stages (jd-parser, section-generators, gap-repair)
+│   │   ├── validation/       # 13-dimension ATS scorer + dimensions/ + taxonomy/ + format validation
+│   │   ├── impact/           # Impact detection system (bullet-level scoring)
 │   │   ├── security/         # Key providers (BYOK: CompositeKeyProvider)
-│   │   └── observability/    # Telemetry, tracing, LLM call wrapper
+│   │   ├── observability/    # Telemetry, trace store, analytics (Phase 5), LLM call wrapper
+│   │   └── config/           # Model registry (Google, OpenAI, Anthropic)
+│   ├── scripts/              # build-taxonomy.ts (ESCO CSV → JSON)
 │   └── package.json
 ├── docker-compose.yml        # Local full-stack compose (postgres + pipeline + backend)
 ├── deploy-oracle.yml         # Production compose for Oracle Cloud ARM

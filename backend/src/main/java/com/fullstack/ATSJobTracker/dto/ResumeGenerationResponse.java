@@ -13,4 +13,7 @@ import lombok.NoArgsConstructor;
 public class ResumeGenerationResponse {
     private String latexContent;
     private String coverLetterContent;
+    private Integer atsScore;
+    private Integer impactScore;
+    private String scoreBreakdown;
 }

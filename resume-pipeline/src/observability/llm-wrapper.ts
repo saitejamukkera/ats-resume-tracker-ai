@@ -81,6 +81,7 @@ export async function callLLM<T>(opts: {
   prompt: string;
   maxRetries?: number;
   maxTokens?: number;
+  temperature?: number;
   stage: string;
   snapshotStore?: SnapshotStore;
 }): Promise<LLMCallResult<T>> {
@@ -93,6 +94,7 @@ export async function callLLM<T>(opts: {
       prompt: opts.prompt,
       maxRetries: opts.maxRetries ?? 2,
       maxTokens: opts.maxTokens,
+      ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
     });
 
     const usage = result.usage as any;

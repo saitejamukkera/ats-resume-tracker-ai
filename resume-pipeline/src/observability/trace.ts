@@ -105,7 +105,11 @@ export class PipelineTelemetry {
 
   finalize(
     status: "success" | "partial" | "failed",
-    scores: { ats: number; impactScore: number },
+    scores: {
+      ats: number;
+      impactScore: number;
+      componentBreakdown?: Record<string, { raw: number; weighted: number; max: number; label: string }>;
+    },
     validation: {
       totalChecks: number;
       passed: number;

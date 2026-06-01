@@ -10,6 +10,7 @@ import {
   FileText,
   Sparkles,
   Info,
+  X,
 } from "lucide-react";
 import { api } from "../../lib/api";
 import type { UserProfile } from "../../types/dtos";
@@ -28,6 +29,29 @@ const staggerContainer = {
     transition: { staggerChildren: 0.08 },
   },
 };
+
+const SUGGESTED_SKILLS = [
+  "Java", "Python", "JavaScript", "TypeScript", "Go", "Rust", "C++", "C#", "Ruby", "PHP", 
+  "Scala", "Kotlin", "Swift", "SQL", "R", "Dart", "Elixir", "Haskell", "Perl", "Lua", 
+  "Groovy", "Objective-C", "Spring Boot", "Spring", "Spring Security", "Spring MVC", 
+  "Spring Data", "Hibernate", "Maven", "Gradle", "JPA", "JDBC", "JUnit", "Mockito", 
+  "Testcontainers", "Lombok", "Flyway", "Node.js", "Express.js", "Next.js", "NestJS", 
+  "Deno", "Bun", "React", "Angular", "Vue.js", "Svelte", "Redux", "Redux Toolkit", 
+  "TailwindCSS", "Bootstrap", "HTML5", "CSS3", "Sass", "Webpack", "Vite", "Django", 
+  "Flask", "FastAPI", "Pandas", "NumPy", "PyTorch", "TensorFlow", "scikit-learn", 
+  "Celery", "SQLAlchemy", "PostgreSQL", "MySQL", "MongoDB", "Redis", "Elasticsearch", 
+  "DynamoDB", "Cassandra", "Oracle", "SQLite", "Neo4j", "CouchDB", "MariaDB", "AWS", 
+  "GCP", "Azure", "EC2", "S3", "RDS", "Lambda", "CloudWatch", "API Gateway", "SQS", 
+  "SNS", "CloudFront", "ECS", "EKS", "Fargate", "Docker", "Kubernetes", "Terraform", 
+  "Ansible", "Helm", "Vagrant", "Nginx", "Caddy", "Apache", "GitHub Actions", "Jenkins", 
+  "CircleCI", "Travis CI", "Bamboo", "GitLab CI", "Azure DevOps", "Argo CD", "SonarQube", 
+  "Kafka", "RabbitMQ", "Amazon SQS", "ActiveMQ", "NATS", "Pulsar", "Splunk", "Grafana", 
+  "DataDog", "Prometheus", "OpenTelemetry", "New Relic", "AppDynamics", "ELK Stack", 
+  "Kibana", "Logstash", "Jaeger", "Log4j", "REST", "GraphQL", "gRPC", "Microservices", 
+  "OAuth2", "OAuth", "JWT", "Swagger", "OpenAPI", "Resilience4j", "WireMock", "Git", 
+  "GitHub", "GitLab", "Bitbucket", "OpenAI", "Gemini", "Claude", "LangChain", 
+  "Hugging Face", "React Native", "Flutter", "Vercel", "Heroku", "Netlify"
+];
 
 export default function SettingsPage() {
   const toast = useToast();
@@ -50,11 +74,20 @@ export default function SettingsPage() {
 
   const [saving, setSaving] = useState(false);
 
+  const [tags, setTags] = useState<string[]>([]);
+  const [skillInput, setSkillInput] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     const load = async () => {
       try {
         const data = await api.profile.get();
-        if (data) setProfile(data);
+        if (data) {
+          setProfile(data);
+          if (data.skills) {
+            setTags(data.skills.split(",").map((s) => s.trim()).filter(Boolean));
+          }
+        }
       } catch {
         /* not set yet */
       }
@@ -82,7 +115,7 @@ export default function SettingsPage() {
 
     try {
       const savePromises: Promise<unknown>[] = [
-        api.profile.save(profile),
+        api.profile.save({ ...profile, skills: tags.join(", ") }),
         api.resumes.uploadBaseResume({
           name: "Base Resume A",
           content: resumeAContent,
@@ -286,6 +319,118 @@ export default function SettingsPage() {
               />
               <p className="text-xs text-gray-400 dark:text-gray-500">
                 Comma-separated. AI picks the most relevant subjects per job.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-4 border-t border-gray-200/60 dark:border-gray-800/60">
+              <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                My Skills (Claims of Knowledge)
+              </label>
+              
+              {/* Selected Tags Display */}
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-primary-50/80 dark:bg-primary-950/20 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-900/30 transition-all hover:scale-[1.02]"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => setTags(tags.filter((t) => t !== tag))}
+                      className="hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-full p-0.5 transition-colors"
+                    >
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+                {tags.length === 0 && (
+                  <p className="text-xs text-gray-400 dark:text-gray-500 italic">No skills added yet. Add skills you know below.</p>
+                )}
+              </div>
+
+              {/* Tag Autocomplete Input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all"
+                  placeholder="Type a skill (e.g. ReactJS, Kubernetes) and press Enter or select below..."
+                  value={skillInput}
+                  onChange={(e) => {
+                    setSkillInput(e.target.value);
+                    setIsOpen(true);
+                  }}
+                  onFocus={() => setIsOpen(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      if (skillInput.trim()) {
+                        const match = SUGGESTED_SKILLS.find(
+                          (s) => s.toLowerCase() === skillInput.trim().toLowerCase()
+                        );
+                        const tagToAdd = match || skillInput.trim();
+                        if (!tags.includes(tagToAdd)) {
+                          setTags([...tags, tagToAdd]);
+                        }
+                        setSkillInput("");
+                        setIsOpen(false);
+                      }
+                    }
+                  }}
+                />
+
+                {/* Suggestions Dropdown */}
+                {isOpen && skillInput.trim() && (
+                  <>
+                    {/* Backdrop to close dropdown on click outside */}
+                    <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+                    
+                    <div className="absolute left-0 right-0 mt-1 max-h-56 overflow-y-auto z-20 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-gray-200/20 dark:shadow-black/30 py-1.5 scrollbar-thin">
+                      {SUGGESTED_SKILLS.filter(
+                        (s) =>
+                          s.toLowerCase().includes(skillInput.toLowerCase()) &&
+                          !tags.includes(s)
+                      )
+                        .slice(0, 8)
+                        .map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            className="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-950/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                            onClick={() => {
+                              if (!tags.includes(suggestion)) {
+                                setTags([...tags, suggestion]);
+                              }
+                              setSkillInput("");
+                              setIsOpen(false);
+                            }}
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      
+                      {SUGGESTED_SKILLS.filter((s) => s.toLowerCase() === skillInput.toLowerCase()).length === 0 && (
+                        <button
+                          type="button"
+                          className="w-full text-left px-4 py-2 text-xs font-bold text-primary-600 dark:text-primary-400 bg-primary-50/20 dark:bg-primary-950/5 hover:bg-primary-50 dark:hover:bg-primary-950/10 transition-colors"
+                          onClick={() => {
+                            if (!tags.includes(skillInput.trim())) {
+                              setTags([...tags, skillInput.trim()]);
+                            }
+                            setSkillInput("");
+                            setIsOpen(false);
+                          }}
+                        >
+                          Add custom skill &quot;{skillInput.trim()}&quot;
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+              
+              <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+                These skills act as an authorized whitelist. Missing skills required by a Job Description will only be woven into your experience section if listed here or present in your base resume.
               </p>
             </div>
           </div>

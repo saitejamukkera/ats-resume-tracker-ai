@@ -35,13 +35,17 @@ services:
       LLM_PROVIDER: ${LLM_PROVIDER}
       PORT: "3001"
       NODE_ENV: production
+      ENABLE_SEMANTIC_SCORING: ${ENABLE_SEMANTIC_SCORING:-true}
+      HF_HOME: /app/.cache/huggingface
     ports:
       - "3001:3001"
+    volumes:
+      - hf_cache:/app/.cache/huggingface
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
       interval: 30s
       timeout: 5s
-      start_period: 15s
+      start_period: 45s
       retries: 3
 
   # ── Spring Boot Backend ─────────────────────────────────────
@@ -79,4 +83,5 @@ services:
 volumes:
   postgres_data:
     name: backend_postgres_data
-    external: true
+  hf_cache:
+    name: resume_pipeline_hf_cache

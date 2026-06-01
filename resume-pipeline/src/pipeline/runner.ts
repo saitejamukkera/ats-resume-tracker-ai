@@ -16,9 +16,10 @@ import { extractBoldKeywords } from "../stages/keyword-extractor.js";
 import { repairKeywordGaps } from "../stages/keyword-gap-repair.js";
 import { validateSections } from "../validation/validator.js";
 import { repairBullets } from "../validation/repair.js";
-import { calculateATSScore } from "../validation/ats-scorer.js";
+import { calculateATSScore, calculateATSScoreWithEmbeddings } from "../validation/ats-scorer.js";
 import { profileRoleImpact } from "../impact/detector.js";
 import { PipelineTelemetry } from "../observability/trace.js";
+import { traceStore } from "../observability/trace-store.js";
 import { RateLimitError } from "../observability/llm-wrapper.js";
 import { createModels } from "../config/models.js";
 import type { ProviderKeyProvider } from "../security/key-provider.js";
@@ -84,10 +85,22 @@ export async function runPipeline(
     throw new Error(`LaTeX parsing failed: ${msg}`);
   }
 
+  // Extract UI-declared skills from userInfo if present
+  let uiSkills: string[] = [];
+  if (input.userInfo) {
+    const match = input.userInfo.match(/^Skills:\s*(.*)$/m);
+    if (match && match[1]) {
+      uiSkills = match[1]
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+  }
+
   // ── Stage 1.5: Extract Candidate Tech Profile ─────────────────
   // Deterministic, no LLM cost — extracts primary technologies from the
   // candidate's own resume for downstream tech coverage guidance.
-  const candidateTech = extractTechProfile(parsed);
+  const candidateTech = extractTechProfile(parsed, uiSkills, 15, 30);
   console.log(
     `[pipeline] Candidate tech profile: primary=[${candidateTech.primary.join(", ")}], secondary=[${candidateTech.secondary.join(", ")}]`,
   );
@@ -339,13 +352,40 @@ export async function runPipeline(
 
   // ── Stage 4.5: ATS Score ──────────────────────────────────────
   telemetry.startStage("ats-scorer");
-  let atsScore = calculateATSScore(sections, jd);
-  console.log(`[pipeline] ATS Score: ${atsScore.overall}/100`);
+
+  const jdKeywords = [...jd.requiredSkills, ...jd.preferredSkills];
+  const impactProfiles = sections.experience.map((role, i) =>
+    profileRoleImpact(
+      `${role.roleTitle || `Role ${i}`}`,
+      role.bullets,
+      jdKeywords,
+      jd.experienceLevel,
+    ),
+  );
+
+  let atsScore = await calculateATSScoreWithEmbeddings(
+    sections,
+    jd,
+    parsed,
+    impactProfiles,
+    "", // LaTeX not assembled yet — format dimension degrades gracefully to 0.85
+    input.jobDescription,
+  );
+  console.log(`[pipeline] ATS Score: ${atsScore.overall}/100 (v${atsScore.version})${atsScore.features.semanticScoring ? " [semantic]" : ""}`);
+  console.log(`[pipeline] Breakdown:`,
+    Object.entries(atsScore.componentBreakdown)
+      .map(([k, v]) => `${v.label}: ${v.weighted}/${v.max}`)
+      .join(" | "),
+  );
+  if (!atsScore.features.formatValidated) {
+    console.log("[pipeline] Format validation skipped — LaTeX not yet assembled");
+  }
   telemetry.endStage("ats-scorer");
 
   // ── Stage 4.6: Keyword Gap Repair (up to 2 passes if ATS < 85) ─
   const ATS_GAP_REPAIR_THRESHOLD = 85;
   const MAX_GAP_REPAIR_PASSES = 2;
+  const attemptedKeywords = new Set<string>();
   let gapRepairTotalIn = 0;
   let gapRepairTotalOut = 0;
   let gapRepairPasses = 0;
@@ -367,8 +407,11 @@ export async function runPipeline(
       const gapResult = await repairKeywordGaps(
         sections,
         jd,
+        input.jobDescription,
         atsScore.missingRequired,
         atsScore.missingPreferred,
+        attemptedKeywords,
+        candidateTech,
         snapshotStore,
         models,
       );
@@ -376,6 +419,11 @@ export async function runPipeline(
       gapRepairTotalIn += gapResult.inputTokens;
       gapRepairTotalOut += gapResult.outputTokens;
       gapRepairPasses++;
+
+      // Track attempted keywords so Pass 2 targets different ones
+      for (const kw of gapResult.targetedKeywords) {
+        attemptedKeywords.add(kw.toLowerCase());
+      }
       telemetry.endStage(
         `keyword-gap-repair-${pass}`,
         1,
@@ -383,9 +431,16 @@ export async function runPipeline(
         gapResult.outputTokens,
       );
 
-      // Re-score after repair
+      // Re-score after repair with expanded context
       const prevScore = atsScore.overall;
-      atsScore = calculateATSScore(sections, jd);
+      atsScore = await calculateATSScoreWithEmbeddings(
+        sections,
+        jd,
+        parsed,
+        impactProfiles,
+        "",
+        input.jobDescription,
+      );
       console.log(
         `[pipeline] ATS after gap repair pass ${pass}: ${prevScore} → ${atsScore.overall}`,
       );
@@ -444,6 +499,26 @@ export async function runPipeline(
   try {
     finalLatex = assembleLatex(parsed, validatedSections, boldKeywords);
     telemetry.endStage("latex-assembler");
+
+    // ── Re-score with assembled LaTeX for real format validation ──
+    atsScore = await calculateATSScoreWithEmbeddings(
+      sections,
+      jd,
+      parsed,
+      impactProfiles,
+      finalLatex,
+      input.jobDescription,
+    );
+    console.log(
+      `[pipeline] Final ATS Score (post-assembly): ${atsScore.overall}/100`,
+    );
+    if (atsScore.formatIssues.length > 0) {
+      for (const issue of atsScore.formatIssues) {
+        console.log(
+          `[pipeline] Format ${issue.severity}: ${issue.message}`,
+        );
+      }
+    }
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     telemetry.failStage("latex-assembler", msg);
@@ -463,6 +538,8 @@ export async function runPipeline(
       jobId: jd.jobId,
       location: jd.location,
       atsScore: atsScore.overall,
+      impactScore: atsScore.impactScore,
+      componentBreakdown: atsScore.componentBreakdown,
     },
   });
 
@@ -509,22 +586,9 @@ export async function runPipeline(
     sections.coverLetter = "";
   }
 
-  // ── Compute Impact Score ──────────────────────────────────────
-  const allBullets = sections.experience.flatMap((r) => r.bullets);
-  const jdKeywords = [...jd.requiredSkills, ...jd.preferredSkills];
-  let impactScore = 0;
-  let metricsRatio = 0;
-  if (allBullets.length > 0) {
-    const profile = profileRoleImpact(
-      "all-roles",
-      allBullets,
-      jdKeywords,
-      jd.experienceLevel,
-    );
-    impactScore = profile.overallScore;
-    const withMetrics = allBullets.filter((b) => /\d/.test(b)).length;
-    metricsRatio = withMetrics / allBullets.length;
-  }
+  // ── Impact Score (already computed inside atsScore) ────────────
+  const impactScore = atsScore.impactScore;
+  const metricsRatio = atsScore.metricsRatio / 100; // atsScore stores as 0-100, convert to 0-1
 
   // ── Record failed rules for trace ─────────────────────────────
   const ruleCountMap = new Map<
@@ -555,7 +619,7 @@ export async function runPipeline(
   // ── Finalize Trace ────────────────────────────────────────────
   const trace = telemetry.finalize(
     pipelineStatus,
-    { ats: atsScore.overall, impactScore },
+    { ats: atsScore.overall, impactScore, componentBreakdown: atsScore.componentBreakdown },
     {
       totalChecks: validationResult.errors.length,
       passed:
@@ -582,8 +646,10 @@ export async function runPipeline(
     },
   );
 
+  traceStore.persist(trace);
+
   console.log(
-    `[pipeline] Complete in ${trace.durationMs}ms | Status: ${pipelineStatus} | ATS: ${atsScore.overall} | Impact: ${impactScore} | LLM calls: ${trace.cost.llmCalls}`,
+    `[pipeline] Complete in ${trace.durationMs}ms | Status: ${pipelineStatus} | ATS: ${atsScore.overall} | Impact: ${atsScore.impactScore}/${atsScore.metricsRatio} | LLM calls: ${trace.cost.llmCalls}`,
   );
 
   emit({
@@ -591,7 +657,9 @@ export async function runPipeline(
     data: {
       coverLetter: sections.coverLetter,
       atsScore: atsScore.overall,
-      impactScore,
+      impactScore: atsScore.impactScore,
+      metricsRatio: atsScore.metricsRatio,
+      componentBreakdown: atsScore.componentBreakdown,
       durationMs: trace.durationMs,
     },
   });
@@ -604,6 +672,7 @@ export async function runPipeline(
     jobId: jd.jobId,
     location: jd.location,
     atsScore: atsScore.overall,
+    atsScoreDetails: atsScore,
     jdAnalysis: jd,
     trace,
   };

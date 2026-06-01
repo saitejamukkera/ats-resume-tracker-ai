@@ -25,4 +25,7 @@ public class JobApplicationResponse {
     private String generatedResumeContent;
     private String coverLetterContent;
     private String note;
+    private Integer atsScore;
+    private Integer impactScore;
+    private String scoreBreakdown;
 }

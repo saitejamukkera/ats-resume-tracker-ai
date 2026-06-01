@@ -6,13 +6,11 @@ This is a three-service monorepo:
 
 | Directory | Stack | Port |
 |-----------|-------|------|
-| `frontend/` | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS v4 | 3000 (prod) / 5173? |
+| `frontend/` | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS v4 | 3000 |
 | `backend/` | Spring Boot 4.0.2, Java 21, PostgreSQL, Flyway, Maven | 8080 |
 | `resume-pipeline/` | Node.js/Express, TypeScript, Vercel AI SDK (Google/OpenAI/Anthropic) | 3001 |
 
 The resume-pipeline is a stateless LLM sidecar called by the backend via `RESUME_PIPELINE_URL`. It has its own `.env` with `LLM_PROVIDER` and provider API keys.
-
-**The README is stale** — it says "React + Vite" but the actual frontend is Next.js App Router. Trust the code over the README.
 
 ## Commands
 
@@ -48,9 +46,27 @@ Three sets of `.env` files, all gitignored (only `.env.example` files are tracke
 
 2. **`backend/.env`** — loaded by Spring Boot via `spring-dotenv` (me.paulschwarz:spring-dotenv:4.0.0). Simpler subset of the root env. See `backend/.env.example`.
 
-3. **`resume-pipeline/.env`** — `LLM_PROVIDER` (default: `google`), optional provider keys (`GOOGLE_GENERATIVE_AI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`), `PORT=3001`, `NODE_ENV`.
+3. **`resume-pipeline/.env`** — `LLM_PROVIDER` (default: `google`), optional provider keys (`GOOGLE_GENERATIVE_AI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`), `PORT=3001`, `NODE_ENV`, `ENABLE_SEMANTIC_SCORING=true`, `ADMIN_API_KEY`.
 
 4. **`frontend/.env`** — only `NEXT_PUBLIC_API_URL`. In dev, leave blank (Next.js rewrites proxy `/api/*` to `localhost:8080`). In production, set to the backend URL.
+
+### Pipeline Commands
+
+```bash
+cd resume-pipeline
+
+# Core
+npm run dev            # tsx watch (hot reload)
+npm run build          # tsc
+npm run typecheck      # tsc --noEmit
+
+# Taxonomy (one-time setup — downloads ~9MB ESCO CSV, builds ~19MB JSON)
+npm run setup-taxonomy # generates src/validation/taxonomy/skills-taxonomy.json
+
+# Admin analytics (requires ADMIN_API_KEY in .env)
+curl -H "Authorization: Bearer <key>" http://localhost:3001/admin/analytics
+curl -H "Authorization: Bearer <key>" http://localhost:3001/admin/traces?limit=5
+```
 
 ## Docker Compose Files
 
@@ -87,6 +103,79 @@ SWR (`swr` package v2.4.0) for client-side data fetching. The API client is in `
 ### Resume Generation Flow
 
 Frontend → Backend (`POST /api/resumes/generate`) → Backend calls resume-pipeline → Pipeline runs 10+ deterministic + LLM stages → Returns Latex + cover letter + scores.
+
+### ATS Scoring Engine
+
+The resume-pipeline contains a production-grade ATS (Applicant Tracking System) scoring engine with 13 weighted dimensions. Architecture is fully pluggable via `ScorerDimension` interface (SOLID: OCP + DIP).
+
+**Scoring Pipeline Flow:**
+```
+JD Text → [Stage 2: JD Parser] → JDAnalysis { requiredSkills[], preferredSkills[], ... }
+         → [Stage 3: Section Generators] → GeneratedSections { summary, skills, experience }
+         → [Stage 4: Validator + Repair] → impact profiles
+         → [Stage 4.5: ATS Scorer] → 13-dimension weighted score (0-100)
+         → [Stage 4.6: Keyword Gap Repair] → capped at 8 keywords, anti-stuffing
+         → [Stage 5: LaTeX Assembly] → post-assembly format validation
+```
+
+**13 Scoring Dimensions** (weights vary by Phase 2/Phase 3 with embeddings):
+
+| Dimension | Weight | Description |
+|---|---|---|
+| `keywordRelevance` | 22-27 | % JD required skills found (word-boundary + variant-aware) |
+| `semanticSimilarity` | 0-15 | SBERT embedding cosine similarity (Phase 3 only) |
+| `preferredRelevance` | 8-10 | % JD preferred skills found |
+| `impactScore` | 12-14 | Bullet-level impact scoring (verb, metric, causality) |
+| `metricsRatio` | 8-9 | % bullets with quantifiable numbers |
+| `actionVerbRatio` | 6-7 | % bullets starting with strong verbs |
+| `keywordPlacement` | 6-7 | % skills in summary + first 2 bullets |
+| `sectionCompleteness` | 7-8 | 6-section completeness check |
+| `formatScore` | 7-8 | LaTeX format validation (headings, contact, dates) |
+| `skillExperienceCoherence` | 5-6 | Skills in both skills section AND experience |
+| `experienceLevelMatch` | 4 | JD experience level vs resume role count |
+| `educationLevelMatch` | 4 | JD education requirement vs resume degree (regex detection) |
+| `taxonomyCoverage` | 3 | ESCO taxonomy synonym + hierarchy matching (15K skills) |
+
+**Key Features:**
+- **Semantic embeddings**: `all-MiniLM-L6-v2` via `@huggingface/transformers` — runs locally, 0 API cost
+- **ESCO taxonomy**: 99,624 synonyms across 13,939 skills with transitive hierarchy closure
+- **Variant-aware matching**: Word-boundary regex + skill variant expansion (200+ tech terms)
+- **Density penalty**: Prevents ATS keyword stuffing (multiplier on keywordRelevance)
+- **Post-assembly format validation**: Checks for ATS-hostile LaTeX artifacts
+- **Category-preserving augmentation**: JD parser separates required vs preferred, gap repair respects boundaries
+
+**Scoring Architecture:**
+```
+resume-pipeline/src/validation/
+├── ats-scorer.ts              # Pure core scorer + async wrapper
+├── scorer-dimension.ts         # ScorerDimension interface + ScoringContext
+├── scorer-factory.ts           # createScorer() + 13-dim weight tables
+├── scoring-context.ts          # buildScoringContext()
+├── dimensions/                 # 13 pluggable dimension files
+├── taxonomy/                   # ESCO integration (ITaxonomyProvider, StaticProvider, TaxonomyService)
+│   └── skills-taxonomy.json    # 99K synonyms, 14K skills (generated via setup-taxonomy)
+├── skill-variants.ts           # 200+ tech term variants (exported PREDEFINED_VARIANTS)
+├── format-validator.ts         # LaTeX format checks
+├── utils/
+│   ├── word-boundary.ts        # C++/C#/.NET-safe word boundary matching
+│   ├── density-penalty.ts      # Document-length-relative stuffing detection
+│   └── latex-stripper.ts       # LaTeX → plain text extraction
+└── embedding-matcher.ts        # SBERT similarity compute
+```
+
+**Admin Analytics (Phase 5):**
+- `GET /admin/analytics` — dimension breakdown, score distributions, cost trends (bearer token auth via `ADMIN_API_KEY`)
+- `GET /admin/traces?limit=N` — raw trace data
+- `InMemoryTraceStore` — circular buffer, last 1000 generations
+- Analyzers: dimension, score, cost/latency (plugged into `buildHealthReport()`)
+
+**Key Design Decisions:**
+- **Temperature=0** for extraction (OpenAI: `gpt-5.4-nano`, non-reasoning, respects temperature)
+- **JD Parser** uses few-shot examples with `"""` delimiters for deterministic extraction
+- **Gap repair capped at 8 keywords** per pass with pass-aware skipping (2 passes max)
+- **Format validation degrades gracefully** to 0.85 when LaTeX not yet assembled
+- **Density penalty is a multiplier**, not a standalone dimension
+- **Score persistence**: Backend stores `ats_score`, `impact_score`, `score_version`, `score_breakdown` (JSONB) via Flyway V8 migration
 
 ## Other Notes
 

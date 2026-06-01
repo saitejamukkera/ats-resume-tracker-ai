@@ -1,9 +1,14 @@
 // src/observability/analytics.ts
 // Layer 3: Aggregate Analytics — system health reports across multiple generations.
+// Composes individual analyzers for scores, dimensions, and cost.
 
-import type { GenerationTrace, FailedRule } from "../schemas/pipeline.js";
+import type { GenerationTrace } from "../schemas/pipeline.js";
+import { analyzeScores, type ScoreDistribution } from "./analyzers/score-analyzer.js";
+import { analyzeDimensions, type DimensionStats } from "./analyzers/dimension-analyzer.js";
+import { analyzeCost, type CostStats } from "./analyzers/cost-analyzer.js";
 
-// ── System Health Report ────────────────────────────────────────
+export type { DimensionStats, ScoreDistribution, CostStats };
+
 export interface SystemHealthReport {
   period: { from: string; to: string };
   totalGenerations: number;
@@ -19,25 +24,13 @@ export interface SystemHealthReport {
     avgRepairAttempts: number;
   };
   scoreDistributions: {
-    ats: { min: number; max: number; avg: number; p50: number };
-    impact: { min: number; max: number; avg: number; p50: number };
+    ats: ScoreDistribution;
+    impact: ScoreDistribution;
   };
-  latency: {
-    avgDurationMs: number;
-    p50DurationMs: number;
-    p95DurationMs: number;
-  };
-  cost: {
-    totalLLMCalls: number;
-    totalTokens: number;
+  dimensionBreakdown: DimensionStats[];
+  cost: CostStats & {
     avgTokensPerGeneration: number;
   };
-}
-
-function percentile(sorted: number[], p: number): number {
-  if (sorted.length === 0) return 0;
-  const idx = Math.ceil((p / 100) * sorted.length) - 1;
-  return sorted[Math.max(0, idx)];
 }
 
 export function buildHealthReport(
@@ -52,7 +45,6 @@ export function buildHealthReport(
   const partial = traces.filter((t) => t.status === "partial").length;
   const failed = traces.filter((t) => t.status === "failed").length;
 
-  // Aggregate failing rules
   const ruleCounts = new Map<string, number>();
   for (const trace of traces) {
     if (trace.failedRules) {
@@ -73,7 +65,6 @@ export function buildHealthReport(
       percentage: (count / traces.length) * 100,
     }));
 
-  // Repair stats
   const totalRepairs = traces.reduce(
     (s, t) => s + t.validation.repairAttempts,
     0,
@@ -82,20 +73,13 @@ export function buildHealthReport(
     (t) => t.validation.repairAttempts > 0,
   );
   const avgRepairAttempts =
-    tracesWithRepairs.length > 0 ? totalRepairs / tracesWithRepairs.length : 0;
+    tracesWithRepairs.length > 0
+      ? totalRepairs / tracesWithRepairs.length
+      : 0;
 
-  // Score distributions
-  const atsScores = traces.map((t) => t.scores.ats).sort((a, b) => a - b);
-  const impactScores = traces
-    .map((t) => t.scores.impactScore)
-    .sort((a, b) => a - b);
-
-  // Latency
-  const durations = traces.map((t) => t.durationMs).sort((a, b) => a - b);
-
-  // Cost
-  const totalLLMCalls = traces.reduce((s, t) => s + t.cost.llmCalls, 0);
-  const totalTokens = traces.reduce((s, t) => s + t.cost.totalTokens, 0);
+  const scoreDistributions = analyzeScores(traces);
+  const dimensionBreakdown = analyzeDimensions(traces);
+  const costStats = analyzeCost(traces);
 
   return {
     period: { from: timestamps[0], to: timestamps[timestamps.length - 1] },
@@ -107,49 +91,39 @@ export function buildHealthReport(
       successRate: (success / traces.length) * 100,
     },
     topFailingRules,
-    repairEffectiveness: {
-      totalRepairs,
-      avgRepairAttempts,
-    },
-    scoreDistributions: {
-      ats: {
-        min: atsScores[0],
-        max: atsScores[atsScores.length - 1],
-        avg: atsScores.reduce((s, v) => s + v, 0) / atsScores.length,
-        p50: percentile(atsScores, 50),
-      },
-      impact: {
-        min: impactScores[0],
-        max: impactScores[impactScores.length - 1],
-        avg: impactScores.reduce((s, v) => s + v, 0) / impactScores.length,
-        p50: percentile(impactScores, 50),
-      },
-    },
-    latency: {
-      avgDurationMs: durations.reduce((s, v) => s + v, 0) / durations.length,
-      p50DurationMs: percentile(durations, 50),
-      p95DurationMs: percentile(durations, 95),
-    },
+    repairEffectiveness: { totalRepairs, avgRepairAttempts },
+    scoreDistributions,
+    dimensionBreakdown,
     cost: {
-      totalLLMCalls,
-      totalTokens,
-      avgTokensPerGeneration: totalTokens / traces.length,
+      ...costStats,
+      avgTokensPerGeneration:
+        traces.length > 0
+          ? Math.round(costStats.totalTokens / traces.length)
+          : 0,
     },
   };
 }
 
 function emptyReport(): SystemHealthReport {
+  const emptyDist: ScoreDistribution = { min: 0, max: 0, avg: 0, p50: 0, p95: 0 };
   return {
     period: { from: "", to: "" },
     totalGenerations: 0,
     outcomes: { success: 0, partial: 0, failed: 0, successRate: 0 },
     topFailingRules: [],
     repairEffectiveness: { totalRepairs: 0, avgRepairAttempts: 0 },
-    scoreDistributions: {
-      ats: { min: 0, max: 0, avg: 0, p50: 0 },
-      impact: { min: 0, max: 0, avg: 0, p50: 0 },
+    scoreDistributions: { ats: emptyDist, impact: emptyDist },
+    dimensionBreakdown: [],
+    cost: {
+      totalLLMCalls: 0,
+      totalTokens: 0,
+      avgTokensPerGen: 0,
+      avgDurationMs: 0,
+      p50DurationMs: 0,
+      p95DurationMs: 0,
+      providers: [],
+      modelsUsed: [],
+      avgTokensPerGeneration: 0,
     },
-    latency: { avgDurationMs: 0, p50DurationMs: 0, p95DurationMs: 0 },
-    cost: { totalLLMCalls: 0, totalTokens: 0, avgTokensPerGeneration: 0 },
   };
 }

@@ -145,6 +145,7 @@ const ALL_ALIASES: string[] = [...CANONICAL_TECH.keys()].sort(
 
 export function extractTechProfile(
   parsed: ParsedResume,
+  uiSkills?: string[],
   maxPrimary = 5,
   maxSecondary = 10,
 ): CandidateTechProfile {
@@ -152,6 +153,21 @@ export function extractTechProfile(
 
   function addScore(canonical: string, points: number) {
     scores.set(canonical, (scores.get(canonical) ?? 0) + points);
+  }
+
+  // Layer 0: UI Skills (highest authority, weight = 4)
+  if (uiSkills && uiSkills.length > 0) {
+    for (const skill of uiSkills) {
+      const canonicals = scanTextForTechs(skill);
+      if (canonicals.length > 0) {
+        for (const tech of canonicals) {
+          addScore(tech, 4);
+        }
+      } else {
+        // Fallback for custom user skills not in our map: treat as canonical
+        addScore(skill, 4);
+      }
+    }
   }
 
   // Layer 1: Skills section (highest signal, weight = 3)
@@ -264,7 +280,7 @@ function extractFromProjectHeadings(projectsRaw: string): string[] {
 
 // ── Core: Scan text for tech dictionary matches ─────────────────
 
-function scanTextForTechs(text: string): string[] {
+export function scanTextForTechs(text: string): string[] {
   const found: string[] = [];
   const lower = text.toLowerCase();
   const matched = new Set<string>(); // avoid duplicate canonical names
