@@ -178,6 +178,7 @@ export interface PipelineOutput {
   atsScoreDetails?: ATSScore;
   jdAnalysis: JDAnalysis;
   trace: GenerationTrace;
+  docxBase64?: string;
 }
 
 // ── Observability ──────────────────────────────────────────────

@@ -17,6 +17,7 @@ export function buildScoringContext(
   const fullText = [
     sections.summary,
     stripLatexCommands(sections.skills),
+    stripLatexCommands(parsedResume.skills),
     ...sections.experience.flatMap((r) => [
       r.roleTitle,
       r.company,
@@ -26,7 +27,12 @@ export function buildScoringContext(
     .join(" ")
     .toLowerCase();
 
-  const skillsText = stripLatexCommands(sections.skills).toLowerCase();
+  const skillsText = [
+    stripLatexCommands(sections.skills),
+    stripLatexCommands(parsedResume.skills),
+  ]
+    .join(" ")
+    .toLowerCase();
 
   const experienceText = sections.experience
     .flatMap((r) => [r.roleTitle, ...r.bullets])

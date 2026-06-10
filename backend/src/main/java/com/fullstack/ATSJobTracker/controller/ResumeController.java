@@ -148,6 +148,7 @@ public class ResumeController {
                 .map(app -> {
                     if (request.getResumeContent() != null) {
                         app.setGeneratedResumeContent(request.getResumeContent());
+                        app.setGeneratedResumeDocx(null);
                     }
                     if (request.getCoverLetterContent() != null) {
                         app.setCoverLetterContent(request.getCoverLetterContent());

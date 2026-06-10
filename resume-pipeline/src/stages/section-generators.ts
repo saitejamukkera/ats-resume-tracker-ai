@@ -153,7 +153,7 @@ HARD CONSTRAINTS:
 - Under NO circumstances should you mention, weave, or fabricate experience with the technologies listed in the "FORBIDDEN / UNAUTHORIZED TECHNOLOGIES" section.
 - IMPACT-DRIVEN WEAVING: Do not insert technologies randomly or as a laundry list at the end of a bullet. Weave them naturally alongside measurable engineering achievements, performance metrics, or software engineering problems solved.
 - BULLET COUNT FLEXIBILITY: You are allowed to add, combine, or adjust bullets per job experience if it improves readability and quality. Do not adhere to a strict 1-to-1 match if it hampers logical flow.
-- WORD LENGTH & STUFFING PROTECTION: Maintain the optimal word limit of 15-25 words per bullet. If adding a technology increases sentence length or creates a run-on sentence, you MUST proactively trim filler words, verbose phrasing, or secondary details from the original bullet text to keep it tight, punchy, and short. Do not overstuff.
+- SKILL WEAVING BREVITY: When you weave an authorized technology into a bullet, you MUST trim 3-5 filler words elsewhere in the SAME bullet to keep it within 15-25 words. Do NOT simply append new skills to the end of already-complete bullets. If the bullet is already at 22 words and you add 8 words of tech, remove 5-6 words of weaker phrasing. The weave should REPLACE verbosity, not accumulate alongside it.
 - PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave authorized JD keywords around these core achievements rather than overwriting them.
 - Use the EXACT technology names from the JD (e.g. if JD says "AWS", write "AWS" not "cloud services")
 - Do NOT modify project details
@@ -269,7 +269,7 @@ HARD CONSTRAINTS:
 - Under NO circumstances should you mention, weave, or fabricate experience with the technologies listed in the "FORBIDDEN / UNAUTHORIZED TECHNOLOGIES" section.
 - IMPACT-DRIVEN WEAVING: Do not insert technologies randomly or as a laundry list at the end of a bullet. Weave them naturally alongside measurable engineering achievements, performance metrics, or software engineering problems solved.
 - BULLET COUNT FLEXIBILITY: You are allowed to add, combine, or adjust bullets per job experience if it improves readability and quality. Do not adhere to a strict 1-to-1 match if it hampers logical flow.
-- WORD LENGTH & STUFFING PROTECTION: Maintain the optimal word limit of 15-25 words per bullet. If adding a technology increases sentence length or creates a run-on sentence, you MUST proactively trim filler words, verbose phrasing, or secondary details from the original bullet text to keep it tight, punchy, and short. Do not overstuff.
+- SKILL WEAVING BREVITY: When you weave an authorized technology into a bullet, you MUST trim 3-5 filler words elsewhere in the SAME bullet to keep it within 15-25 words. Do NOT simply append new skills to the end of already-complete bullets. If the bullet is already at 22 words and you add 8 words of tech, remove 5-6 words of weaker phrasing. The weave should REPLACE verbosity, not accumulate alongside it.
 - PRESERVE ADVANCED IDENTITY: Do NOT dilute advanced architectural terminology (e.g., OpenTelemetry, Resilience4j, DTO patterns, Testcontainers) from the original bullets. Weave authorized JD keywords around these core achievements rather than overwriting them.
 - Use the EXACT technology names from the JD (e.g. if JD says "AWS", write "AWS" not "cloud services")
 - Do NOT modify project details

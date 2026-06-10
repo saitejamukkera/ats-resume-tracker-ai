@@ -417,6 +417,7 @@ public class ResumePipelineClient {
         private JsonNode atsScoreDetails;
         private JsonNode jdAnalysis;
         private JsonNode trace;
+        private String docxBase64;
     }
 
     /**

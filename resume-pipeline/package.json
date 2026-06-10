@@ -16,6 +16,7 @@
     "@ai-sdk/openai": "^3.0.52",
     "@huggingface/transformers": "^4.2.0",
     "ai": "^6.0.154",
+    "docx": "^9.7.1",
     "express": "^5.1.0",
     "uuid": "^11.1.0",
     "zod": "^3.24.0"

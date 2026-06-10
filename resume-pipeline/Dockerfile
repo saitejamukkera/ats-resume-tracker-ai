@@ -18,6 +18,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 ENV NODE_ENV=production
 RUN mkdir -p /app/.cache/huggingface && chown nodeapp:nodeapp /app/.cache/huggingface
+RUN mkdir -p /app/data && chown nodeapp:nodeapp /app/data
 USER nodeapp
 EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

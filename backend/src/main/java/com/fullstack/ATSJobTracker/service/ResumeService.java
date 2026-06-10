@@ -92,6 +92,7 @@ public class ResumeService {
         application.setJobDescription(jobDescription);
         application.setGeneratedResumeContent(resumeLatex);
         application.setCoverLetterContent(coverLetter);
+        application.setGeneratedResumeDocx(pipelineResult.getDocxBase64());
         application.setOutcome(ApplicationStatus.DRAFT);
         application.setUserId(userId);
         application.setAtsScore(pipelineResult.getAtsScore());
@@ -223,6 +224,9 @@ public class ResumeService {
                                         if (data.has("componentBreakdown")) {
                                             app.setScoreBreakdown(data.get("componentBreakdown").toString());
                                         }
+                                        if (data.has("docxBase64") && !data.get("docxBase64").isNull()) {
+                                            app.setGeneratedResumeDocx(data.get("docxBase64").asText());
+                                        }
                                         jobApplicationRepository.save(app);
                                         log.info("SSE: Scores saved for application {}", appId);
                                     });
@@ -319,6 +323,7 @@ public class ResumeService {
 
         application.setGeneratedResumeContent(resumeLatex);
         application.setCoverLetterContent(coverLetter);
+        application.setGeneratedResumeDocx(pipelineResult.getDocxBase64());
         application.setJobDescription(jobDescription);
         application.setAtsScore(pipelineResult.getAtsScore());
         application.setImpactScore(resolvedImpactScore);

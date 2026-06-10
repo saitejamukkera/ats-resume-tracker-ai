@@ -58,6 +58,9 @@ public class JobApplication {
     @JdbcTypeCode(SqlTypes.JSON)
     private String scoreBreakdown;
 
+    @Column(name = "generated_resume_docx", columnDefinition = "TEXT")
+    private String generatedResumeDocx;
+
     @PrePersist
     protected void onCreate() {
         if (appliedOn == null) appliedOn = LocalDateTime.now();

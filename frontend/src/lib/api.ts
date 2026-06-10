@@ -34,9 +34,10 @@ function getCsrfToken(): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export async function ensureCsrfToken(): Promise<void> {
-  if (getCsrfToken()) return;
+export async function ensureCsrfToken(force = false): Promise<void> {
+  if (!force && getCsrfToken()) return;
   await fetch(`${API_BASE_URL}/api/auth/csrf`, {
+    cache: "no-store",
     credentials: "include",
   }).catch(() => {});
 }
@@ -48,14 +49,24 @@ let refreshPromise: Promise<boolean> | null = null;
 
 async function silentRefresh(): Promise<boolean> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+    await ensureCsrfToken();
+
+    let response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
       method: "POST",
       credentials: "include",
       headers: { "X-XSRF-TOKEN": getCsrfToken() || "" },
     });
+    if (response.status === 403) {
+      await ensureCsrfToken(true);
+      response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "X-XSRF-TOKEN": getCsrfToken() || "" },
+      });
+    }
     if (response.ok) {
-      // Refresh CSRF token so future mutating requests don't fail
-      await ensureCsrfToken();
+      // Refresh CSRF token so future mutating requests don't fail.
+      await ensureCsrfToken(true);
       return true;
     }
     return false;
@@ -120,16 +131,27 @@ const apiFetch = async (
   input: RequestInfo | URL,
   init?: RequestInit,
   _isRetry = false,
+  _isCsrfRetry = false,
 ): Promise<Response> => {
   const headers = new Headers(init?.headers);
 
   const method = (init?.method || "GET").toUpperCase();
   if (["POST", "PUT", "DELETE", "PATCH"].includes(method)) {
+    await ensureCsrfToken();
     const csrf = getCsrfToken();
     if (csrf) headers.set("X-XSRF-TOKEN", csrf);
   }
 
   const response = await fetch(input, { ...init, headers, credentials: "include" });
+
+  if (
+    response.status === 403 &&
+    !_isCsrfRetry &&
+    ["POST", "PUT", "DELETE", "PATCH"].includes(method)
+  ) {
+    await ensureCsrfToken(true);
+    return apiFetch(input, init, _isRetry, true);
+  }
 
   if (response.status === 401 && !_isRetry) {
     const url = typeof input === "string" ? input : input.toString();
@@ -141,7 +163,7 @@ const apiFetch = async (
     if (!isAuthEndpoint) {
       const refreshed = await attemptRefresh();
       if (refreshed) {
-        return apiFetch(input, init, true);
+        return apiFetch(input, init, true, _isCsrfRetry);
       }
       // Do not popup the "Session Expired" modal if the user was simply
       // loading the site and the background identity check failed.
@@ -393,7 +415,7 @@ export const api = {
       apiKeys?: Record<string, string>,
       llmProvider?: string,
     ): Promise<void> => {
-      const refreshed = await silentRefresh();
+      const refreshed = await attemptRefresh();
       if (!refreshed) {
         emitSessionExpired();
         throw new Error("Session expired. Please log in again.");

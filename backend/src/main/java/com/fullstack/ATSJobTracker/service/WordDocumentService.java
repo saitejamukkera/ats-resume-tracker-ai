@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Base64;
 
 @Service
 @Slf4j
@@ -84,7 +85,18 @@ public class WordDocumentService {
     }
 
     public byte[] generateResumeDocx(Long applicationId) {
-        throw new UnsupportedOperationException("DOCX generation is not supported for resumes. Use PDF instead.");
+        log.info("Generating Resume DOCX for application id: {}", applicationId);
+
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        String docxBase64 = application.getGeneratedResumeDocx();
+        if (docxBase64 == null || docxBase64.isEmpty()) {
+            throw new RuntimeException(
+                    "Word document not available. Regenerate the resume to enable Word download.");
+        }
+
+        return Base64.getDecoder().decode(docxBase64);
     }
 
     private void setPageMargins(XWPFDocument document, long twips) {

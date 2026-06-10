@@ -20,11 +20,11 @@ export function detectSignals(text: string, jdKeywords: string[] = []): ImpactSi
   return {
     hasPercentage:     /\d+%|\d+x|\d+X/.test(text),
     hasNumber:         /\d/.test(text),
-    hasComparison:     /from\s+\S+\s+to\s+\S+|by\s+\d|versus|compared to/i.test(text),
+    hasComparison:     /(?:cut|reduced|improved|increased|dropped|lowered|boosted|decreased|saved|eliminated).{0,40}?\d+%|from\s+\S+\s+to\s+\S+|by\s+\d+|versus|compared to|(?:down|up)\s+from/i.test(text),
     hasScaleIndicator: /\d+\s*(K|M|B|\+|k)\b|\d{4,}|million|thousand|enterprise|production|company-wide/i.test(text),
     hasImpactVerb:     /\b(reduced|improved|increased|decreased|eliminated|stabilized|streamlined|accelerated|automated|consolidated|optimized|simplified|migrated|resolved|prevented|scaled|cut|halved|doubled|minimized|maximized|redesigned|overhauled|established)\b/i.test(text),
-    hasCausality:      /\b(by\s+(implementing|building|creating|designing|introducing|migrating|refactoring|writing|deploying|adding|configuring|integrating|developing|leveraging|using|adopting)|using|through|via)\b/i.test(text),
-    hasResultClause:   /resulting in|leading to|which\s+(reduced|improved|enabled|saved|cut)|saving|enabling|achieving/i.test(text),
+    hasCausality:      /\b(by\s+\w+ing|by\s+\w+\s+\w+ing|using|through|via|,\s*(cutting|reducing|improving|saving|dropping|lowering|boosting|preventing|eliminating|slashing))\b/i.test(text),
+    hasResultClause:   /(resulting in|leading to|which\s+(reduced|improved|enabled|saved|cut)|saving|enabling|achieving|,\s*(cutting|reducing|improving|saving|dropping|lowering|boosting|preventing|eliminating|slashing|enabling|removing))/i.test(text),
     hasTech:           detectTech(text, jdKeywords),
     hasTimeframe:      /\b(in\s+\d+\s+(days|weeks|months|sprints)|within\s+Q\d|over\s+\d+\s+months|per\s+(day|week|month|sprint))\b/i.test(text),
   };

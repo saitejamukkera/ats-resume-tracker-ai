@@ -14,6 +14,7 @@ import { generateCoverLetter } from "../stages/cover-letter.js";
 import { parseLatexResume, assembleLatex } from "../stages/latex-assembler.js";
 import { extractBoldKeywords } from "../stages/keyword-extractor.js";
 import { repairKeywordGaps } from "../stages/keyword-gap-repair.js";
+import { generateDocx } from "../stages/docx-generator.js";
 import { validateSections } from "../validation/validator.js";
 import { repairBullets } from "../validation/repair.js";
 import { calculateATSScore, calculateATSScoreWithEmbeddings } from "../validation/ats-scorer.js";
@@ -496,9 +497,23 @@ export async function runPipeline(
   };
 
   let finalLatex: string;
+  let docxBase64: string | undefined;
   try {
     finalLatex = assembleLatex(parsed, validatedSections, boldKeywords);
     telemetry.endStage("latex-assembler");
+
+    // ── Stage 5.5: DOCX Generation (non-critical) ──────────────────
+    try {
+      telemetry.startStage("docx-generator");
+      const docxBuffer = await generateDocx(parsed, validatedSections, boldKeywords);
+      docxBase64 = docxBuffer.toString("base64");
+      telemetry.endStage("docx-generator");
+      console.log(`[pipeline] DOCX generated: ${docxBuffer.length} bytes`);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.warn(`[pipeline] DOCX generation failed (non-critical): ${msg}`);
+      telemetry.failStage("docx-generator", msg);
+    }
 
     // ── Re-score with assembled LaTeX for real format validation ──
     atsScore = await calculateATSScoreWithEmbeddings(
@@ -661,6 +676,7 @@ export async function runPipeline(
       metricsRatio: atsScore.metricsRatio,
       componentBreakdown: atsScore.componentBreakdown,
       durationMs: trace.durationMs,
+      docxBase64,
     },
   });
 
@@ -675,6 +691,7 @@ export async function runPipeline(
     atsScoreDetails: atsScore,
     jdAnalysis: jd,
     trace,
+    docxBase64,
   };
 }
 

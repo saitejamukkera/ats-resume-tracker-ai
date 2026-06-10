@@ -36,10 +36,12 @@ export const WEIGHTS_PHASE2: DimensionWeight[] = [
 ];
 
 // Phase 3 weights (with embedding)
-// Total = 107, same top-end compression logic
+// Total = 102 — semantic reduced to 5 as domain similarity is not a
+// hiring signal. Real ATS systems score on tech stack alignment, not
+// industry-domain overlap. Keyword match gets the redistributed weight.
 export const WEIGHTS_PHASE3: DimensionWeight[] = [
-  { key: "keywordRelevance", weight: 22 },
-  { key: "semanticSimilarity", weight: 15 },
+  { key: "keywordRelevance", weight: 27 },
+  { key: "semanticSimilarity", weight: 5 },
   { key: "preferredRelevance", weight: 8 },
   { key: "impactScore", weight: 12 },
   { key: "metricsRatio", weight: 8 },
@@ -57,7 +59,7 @@ export const WEIGHTS_PHASE3: DimensionWeight[] = [
 const LABELS: Record<string, string> = {
   keywordRelevance: "Keyword Match",
   semanticSimilarity: "Semantic Fit",
-  preferredRelevance: "Preferred Skills",
+  preferredRelevance: "Preferred Skills (bonus)",
   impactScore: "Bullet Impact",
   metricsRatio: "Metrics Usage",
   actionVerbRatio: "Action Verbs",
@@ -203,11 +205,21 @@ function composeFinalScore(
     }
   }
 
-  const baseOverall = Object.values(componentBreakdown).reduce(
+  // preferredRelevance is a bonus — missing preferred skills should not
+  // penalize the base score. Real ATS systems treat "nice to have" as
+  // additive: present = bonus, missing = zero, never a penalty.
+  const preferredContribution =
+    componentBreakdown["preferredRelevance"]?.weighted ?? 0;
+
+  const baseWithoutPreferred = Object.values(componentBreakdown).reduce(
     (sum, c) => sum + c.weighted,
     0,
+  ) - preferredContribution;
+
+  const overall = Math.min(
+    100,
+    Math.round(baseWithoutPreferred) + preferredContribution,
   );
-  const overall = Math.min(100, Math.round(baseOverall));
 
   return {
     version: 1,

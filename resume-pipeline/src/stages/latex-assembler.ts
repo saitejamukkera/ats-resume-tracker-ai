@@ -142,20 +142,20 @@ function extractNamedSection(
   return bodyLines.slice(startLine, endLine).join("\n").trim();
 }
 
-// ── Experience Role Parser ─────────────────────────────────────
+// ── Subheading Role Parser (Experience + Projects) ─────────────
 
-function parseExperienceRoles(experienceSection: string): ParsedRole[] {
+const SUBHEADING_CMD_RE = /^\\(?:resume[Ss]ub[Hh]eading(?!List)|resumeProjectHeading)/;
+const SUBHEADING_SPLIT_RE = /(?=\\(?:resume[Ss]ub[Hh]eading(?!List)|resumeProjectHeading))/;
+
+/** Parse `\resumeSubheading` blocks (case-insensitive) into heading + bullets. */
+export function parseSubheadingRoles(section: string): ParsedRole[] {
   const roles: ParsedRole[] = [];
-
-  // Split on \resumeSubheading — each one starts a new role
-  // Lookahead avoids eating the command, handles newlines between command and braces
-  const blocks = experienceSection.split(/(?=\\resumeSubheading)/);
+  const blocks = section.split(SUBHEADING_SPLIT_RE);
 
   for (const block of blocks) {
     const trimmed = block.trim();
-    if (!trimmed || !trimmed.startsWith("\\resumeSubheading")) continue;
+    if (!trimmed || !SUBHEADING_CMD_RE.test(trimmed)) continue;
 
-    // Find the heading by looking for the first \resumeItem or \resumeItemListStart
     const itemListStart = trimmed.search(
       /\\resumeItemListStart|\\resumeItem\{/,
     );
@@ -164,7 +164,6 @@ function parseExperienceRoles(experienceSection: string): ParsedRole[] {
         ? trimmed.substring(0, itemListStart).trim()
         : trimmed;
 
-    // Extract bullet texts from \resumeItem{...} entries
     const bullets: string[] = [];
     const bulletRegex = /\\resumeItem\{((?:[^{}]|\{[^{}]*\})*)\}/g;
     let match: RegExpExecArray | null;
@@ -173,14 +172,14 @@ function parseExperienceRoles(experienceSection: string): ParsedRole[] {
       bullets.push(match[1].trim());
     }
 
-    roles.push({
-      heading,
-      bullets,
-      rawBlock: trimmed,
-    });
+    roles.push({ heading, bullets, rawBlock: trimmed });
   }
 
   return roles;
+}
+
+function parseExperienceRoles(experienceSection: string): ParsedRole[] {
+  return parseSubheadingRoles(experienceSection);
 }
 
 // ── LaTeX Assembler ────────────────────────────────────────────
@@ -329,7 +328,7 @@ function rebuildExperienceSection(
  * Escapes unescaped standard LaTeX special characters from LLM outputs.
  * Uses negative lookbehind (?<!\\) to avoid double-escaping already escaped chars.
  */
-function escapeLatex(text: string): string {
+export function escapeLatex(text: string): string {
   if (!text) return text;
   return (
     text
@@ -350,7 +349,7 @@ function escapeLatex(text: string): string {
  * Matches: "30\%", "8K to 12K", "20+", "$5M", "850ms to 500ms", "10K\+" etc.
  * Skips metrics already inside a \textbf{} block.
  */
-function boldifyMetrics(text: string): string {
+export function boldifyMetrics(text: string): string {
   if (!text) return text;
 
   // Patterns for common resume metrics (applied after escapeLatex, so % is \%)
@@ -397,7 +396,7 @@ function boldifyMetrics(text: string): string {
  * Only bolds whole-word matches to avoid mangling partial words.
  * Skips keywords that are already inside a \textbf{} block.
  */
-function boldifyKeywords(text: string, jdKeywords: string[]): string {
+export function boldifyKeywords(text: string, jdKeywords: string[]): string {
   if (!text || jdKeywords.length === 0) return text;
 
   // Build a unique set of keywords, sorted longest-first to avoid partial replacements

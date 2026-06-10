@@ -36,11 +36,14 @@ services:
       PORT: "3001"
       NODE_ENV: production
       ENABLE_SEMANTIC_SCORING: ${ENABLE_SEMANTIC_SCORING:-true}
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+      TRACE_STORE_FILE: /app/data/traces.jsonl
       HF_HOME: /app/.cache/huggingface
     ports:
       - "3001:3001"
     volumes:
       - hf_cache:/app/.cache/huggingface
+      - trace_data:/app/data
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
       interval: 30s
@@ -85,3 +88,5 @@ volumes:
     name: backend_postgres_data
   hf_cache:
     name: resume_pipeline_hf_cache
+  trace_data:
+    name: resume_pipeline_trace_data
