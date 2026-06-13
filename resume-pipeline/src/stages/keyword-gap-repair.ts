@@ -85,6 +85,10 @@ function selectRepairKeywords(
     1,
   );
 
+  // Required (knockout) skills are weighted above preferred so the limited
+  // repair budget closes hard-requirement gaps first.
+  const requiredSet = new Set(missingRequired.map((s) => s.toLowerCase()));
+
   const scored = filtered.map((skill) => {
     let jdFreq = 0;
     for (const v of getAllSkillVariants(skill)) {
@@ -96,7 +100,8 @@ function selectRepairKeywords(
     }
     const jdScore = maxJdFreq > 0 ? jdFreq / maxJdFreq : 0;
     const resumeGap = Math.max(0, (2 - resumeCount) / 2);
-    return { skill, impact: jdScore * resumeGap };
+    const requiredBoost = requiredSet.has(skill.toLowerCase()) ? 1.5 : 1.0;
+    return { skill, impact: jdScore * resumeGap * requiredBoost };
   });
 
   scored.sort((a, b) => b.impact - a.impact);

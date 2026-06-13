@@ -142,6 +142,15 @@ export interface ATSScore {
   missingRequired: string[];
   missingPreferred: string[];
 
+  /** Required skills not satisfied at exact/implied tier — the must-have gaps. */
+  knockouts: string[];
+  /** Fraction (0-100) of required skills met at exact/implied tier. */
+  hardRequirementCoverage: number;
+  /** Whether the knockout gate capped the overall score. */
+  knockoutGateApplied: boolean;
+  /** Per-skill match tier for required skills (exact|implied|semantic|none). */
+  requiredMatchTiers: Record<string, string>;
+
   componentBreakdown: Record<
     string,
     {

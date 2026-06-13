@@ -110,4 +110,62 @@ export async function computeSkillSimilarity(
   }
 }
 
+/**
+ * Split a skills-section / skill-dense string into individual skill tokens
+ * suitable for token-vs-token semantic comparison.
+ */
+export function tokenizeSkills(text: string, max = 80): string[] {
+  return [
+    ...new Set(
+      text
+        .split(/[,;|/\n•·]+/)
+        .map((t) => t.replace(/\s+/g, " ").trim().toLowerCase())
+        .filter((t) => t.length >= 2 && t.length <= 40),
+    ),
+  ].slice(0, max);
+}
+
+/**
+ * Max cosine similarity of each JD skill against the candidate's skill tokens.
+ * Embeds candidate tokens once and reuses them across all JD skills — token-vs-token
+ * comparison is where SBERT is strongest (e.g. "container orchestration" ≈ "kubernetes").
+ * Returns skill → max cosine (0 when embeddings unavailable).
+ */
+export async function computeSkillSetSimilarity(
+  jdSkills: string[],
+  candidateSkills: string[],
+): Promise<Map<string, number>> {
+  const out = new Map<string, number>();
+  if (jdSkills.length === 0 || candidateSkills.length === 0) return out;
+
+  try {
+    const model = await getEmbedder();
+    if (!model) return out;
+
+    const candVecs = await Promise.all(
+      candidateSkills.map((s) =>
+        model(s, { pooling: "mean", normalize: true }).then((o) => o.data),
+      ),
+    );
+
+    for (const skill of jdSkills) {
+      const skillVec = (
+        await model(skill, { pooling: "mean", normalize: true })
+      ).data;
+      let max = 0;
+      for (const cv of candVecs) {
+        const sim = cosineSimilarity(skillVec, cv);
+        if (sim > max) max = sim;
+      }
+      out.set(skill, max);
+    }
+  } catch (error) {
+    console.warn(
+      `[embedding-matcher] Skill-set similarity failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  return out;
+}
+
 export const SEMANTIC_MATCH_THRESHOLD = 0.45;

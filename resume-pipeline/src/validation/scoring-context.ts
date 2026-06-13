@@ -6,6 +6,8 @@ import type { GeneratedSections, ParsedResume } from "../schemas/pipeline.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
 import type { RoleImpactProfile } from "../impact/detector.js";
 import { stripLatexCommands } from "./utils/latex-stripper.js";
+import { detectPresentSkills, matchSkillsLexical } from "./skill-matcher.js";
+import { computeExperienceYears } from "./utils/experience-years.js";
 
 export function buildScoringContext(
   sections: GeneratedSections,
@@ -45,6 +47,18 @@ export function buildScoringContext(
   ];
   const highWeightText = highWeightTexts.join(" ").toLowerCase();
 
+  // Graded skill matching (exact + implied tiers, synchronous). The semantic
+  // tier, when available, is merged onto these maps by the async embedding path.
+  const presentSkills = detectPresentSkills(fullText);
+  const requiredMatches = matchSkillsLexical(jd.requiredSkills, fullText, presentSkills);
+  const preferredMatches = matchSkillsLexical(jd.preferredSkills, fullText, presentSkills);
+
+  // Years of experience from parsed role date ranges (heading + raw block).
+  const roleDateTexts = parsedResume.experience.map((r) =>
+    `${r.heading} ${r.rawBlock}`,
+  );
+  const duration = computeExperienceYears(roleDateTexts);
+
   return {
     sections,
     jd,
@@ -55,5 +69,9 @@ export function buildScoringContext(
     skillsText,
     experienceText,
     highWeightText,
+    requiredMatches,
+    preferredMatches,
+    totalExperienceYears: duration.totalYears,
+    mostRecentRoleYears: duration.mostRecentYears,
   };
 }

@@ -13,7 +13,10 @@ import { defaultDimensions, phase3Dimensions } from "./dimensions/index.js";
 import {
   prepareTextForEmbedding,
   computeResumeJDSimilarity,
+  computeSkillSetSimilarity,
+  tokenizeSkills,
 } from "./embedding-matcher.js";
+import { applySemanticMatches, unmatchedSkills } from "./skill-matcher.js";
 
 const scorerPhase2: ATSScorer = createScorer(defaultDimensions, WEIGHTS_PHASE2);
 const scorerPhase3: ATSScorer = createScorer(phase3Dimensions, WEIGHTS_PHASE3);
@@ -130,6 +133,25 @@ export async function calculateATSScoreWithEmbeddings(
       semanticSimilarity = await computeResumeJDSimilarity(resumeText, jdText);
       semanticScoringAvailable = true;
       overrides.semanticSimilarity = semanticSimilarity;
+
+      // Skill-level semantic tier: upgrade still-unmatched required/preferred
+      // skills using token-vs-token similarity against the candidate's skills.
+      const candidateSkills = [
+        ...tokenizeSkills(ctx.skillsText),
+        ...sections.experience.map((r) => r.roleTitle.toLowerCase()),
+      ];
+      const gapSkills = [
+        ...unmatchedSkills(ctx.requiredMatches),
+        ...unmatchedSkills(ctx.preferredMatches),
+      ];
+      if (gapSkills.length > 0 && candidateSkills.length > 0) {
+        const cosineBySkill = await computeSkillSetSimilarity(
+          gapSkills,
+          candidateSkills,
+        );
+        applySemanticMatches(ctx.requiredMatches, cosineBySkill);
+        applySemanticMatches(ctx.preferredMatches, cosineBySkill);
+      }
     } catch (e) {
       console.warn(
         `[ats-scorer] Semantic scoring unavailable: ${e instanceof Error ? e.message : String(e)}`,

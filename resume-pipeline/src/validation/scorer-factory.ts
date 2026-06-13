@@ -5,8 +5,21 @@
 import type { ScorerDimension, ScoringContext } from "./scorer-dimension.js";
 import type { ATSScore, FormatIssue } from "../schemas/pipeline.js";
 import type { JDAnalysis } from "../schemas/jd-analysis.js";
-import { keywordExistsInText } from "./utils/word-boundary.js";
-import { getAllSkillVariants } from "./skill-variants.js";
+import {
+  strongCoverage,
+  unmatchedSkills,
+  hardGaps,
+} from "./skill-matcher.js";
+
+// ── Knockout gate ───────────────────────────────────────────────
+// When a resume misses most hard requirements, Workday-style ATS filters it out
+// rather than averaging it up to a passing number. We cap the overall score as a
+// function of how many required skills are met at the exact/implied tier.
+export const KNOCKOUT_GATE_THRESHOLD = 0.6;
+function knockoutCap(strong: number): number {
+  // strong=0 → 40, strong=0.6 → 70 (gate releases at/above threshold).
+  return Math.round(40 + strong * 50);
+}
 
 // ── Weight tables ───────────────────────────────────────────────
 
@@ -40,8 +53,8 @@ export const WEIGHTS_PHASE2: DimensionWeight[] = [
 // hiring signal. Real ATS systems score on tech stack alignment, not
 // industry-domain overlap. Keyword match gets the redistributed weight.
 export const WEIGHTS_PHASE3: DimensionWeight[] = [
-  { key: "keywordRelevance", weight: 27 },
-  { key: "semanticSimilarity", weight: 5 },
+  { key: "keywordRelevance", weight: 29 },
+  { key: "semanticSimilarity", weight: 3 },
   { key: "preferredRelevance", weight: 8 },
   { key: "impactScore", weight: 12 },
   { key: "metricsRatio", weight: 8 },
@@ -216,10 +229,30 @@ function composeFinalScore(
     0,
   ) - preferredContribution;
 
-  const overall = Math.min(
+  let overall = Math.min(
     100,
     Math.round(baseWithoutPreferred) + preferredContribution,
   );
+
+  // ── Knockout gate ──────────────────────────────────────────────
+  // Required-skill coverage at the exact/implied tier (semantic does not satisfy
+  // a hard must-have). Below threshold, cap the score Workday-style.
+  const hasRequired = ctx.jd.requiredSkills.length > 0;
+  const hardCoverage = hasRequired ? strongCoverage(ctx.requiredMatches) : 1;
+  const knockouts = hasRequired ? hardGaps(ctx.requiredMatches) : [];
+  let knockoutGateApplied = false;
+  if (hasRequired && hardCoverage < KNOCKOUT_GATE_THRESHOLD) {
+    const cap = knockoutCap(hardCoverage);
+    if (overall > cap) {
+      overall = cap;
+      knockoutGateApplied = true;
+    }
+  }
+
+  const requiredMatchTiers: Record<string, string> = {};
+  for (const [skill, m] of ctx.requiredMatches) {
+    requiredMatchTiers[skill] = m.tier;
+  }
 
   return {
     version: 1,
@@ -242,12 +275,12 @@ function composeFinalScore(
     densityPenaltyFactor: Math.round(densityPenaltyFactor * 100),
     semanticSimilarity: Math.round(semanticSimilarity * 100),
     semanticScoringAvailable: semanticSimilarity > 0,
-    missingRequired: ctx.jd.requiredSkills.filter((skill) =>
-      !getAllSkillVariants(skill).some((v) => keywordExistsInText(v, ctx.fullText)),
-    ),
-    missingPreferred: ctx.jd.preferredSkills.filter((skill) =>
-      !getAllSkillVariants(skill).some((v) => keywordExistsInText(v, ctx.fullText)),
-    ),
+    missingRequired: unmatchedSkills(ctx.requiredMatches),
+    missingPreferred: unmatchedSkills(ctx.preferredMatches),
+    knockouts,
+    hardRequirementCoverage: Math.round(hardCoverage * 100),
+    knockoutGateApplied,
+    requiredMatchTiers,
     componentBreakdown,
     formatIssues: [],
     features: {

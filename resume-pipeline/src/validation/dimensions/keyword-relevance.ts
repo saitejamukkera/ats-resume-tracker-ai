@@ -1,9 +1,10 @@
 // src/validation/dimensions/keyword-relevance.ts
-// % of JD required skills found in resume via word-boundary matching.
+// Graded JD required-skill coverage via the hybrid skill matcher.
+// Replaces binary word-boundary matching with tiered credit (exact 1.0,
+// implied 0.65, semantic ≤0.5), then applies the keyword-density penalty.
 
 import type { ScorerDimension } from "../scorer-dimension.js";
-import { keywordExistsInText } from "../utils/word-boundary.js";
-import { getAllSkillVariants } from "../skill-variants.js";
+import { gradedCoverage } from "../skill-matcher.js";
 import { calculateDensityPenalty } from "../utils/density-penalty.js";
 
 export const keywordRelevanceDimension: ScorerDimension = {
@@ -13,22 +14,13 @@ export const keywordRelevanceDimension: ScorerDimension = {
   evaluate(ctx): number {
     if (ctx.jd.requiredSkills.length === 0) return 1.0;
 
-    const found = ctx.jd.requiredSkills.filter((skill) =>
-      getAllSkillVariants(skill).some((v) =>
-        keywordExistsInText(v, ctx.fullText),
-      ),
-    );
-
-    const ratio =
-      ctx.jd.requiredSkills.length > 0
-        ? found.length / ctx.jd.requiredSkills.length
-        : 1;
+    const coverage = gradedCoverage(ctx.requiredMatches);
 
     const densityPenalty = calculateDensityPenalty(
       [...ctx.jd.requiredSkills, ...ctx.jd.preferredSkills],
       ctx.fullText,
     );
 
-    return ratio * densityPenalty;
+    return coverage * densityPenalty;
   },
 };

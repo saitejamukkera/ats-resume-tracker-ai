@@ -9,6 +9,7 @@ import {
   generateExperiencePerRole,
 } from "../stages/section-generators.js";
 import { reorderSkills } from "../stages/skills-reorderer.js";
+import { injectVerifiedSkills } from "../stages/skills-injector.js";
 import { extractTechProfile } from "../stages/tech-stack-extractor.js";
 import { generateCoverLetter } from "../stages/cover-letter.js";
 import { parseLatexResume, assembleLatex } from "../stages/latex-assembler.js";
@@ -272,8 +273,27 @@ export async function runPipeline(
     }
   }
 
-  // Deterministic: reorder skills by JD relevance
+  // Deterministic: reorder skills by JD relevance, then inject required JD
+  // skills the candidate legitimately has but didn't list in the skills section
+  // (highest-signal ATS placement — see skills-injector).
   const reorderedSkills = reorderSkills(parsed.skills, jd);
+  const fullResumeTextForSkills = [
+    parsed.summary,
+    parsed.skills,
+    ...parsed.experience.flatMap((r) => [r.heading, ...r.bullets]),
+    parsed.projects,
+  ].join(" ");
+  const skillInjection = injectVerifiedSkills(
+    reorderedSkills,
+    jd,
+    candidateTech,
+    fullResumeTextForSkills,
+  );
+  if (skillInjection.injected.length > 0) {
+    console.log(
+      `[pipeline] Injected ${skillInjection.injected.length} verified skill(s) into Skills section: ${skillInjection.injected.join(", ")}`,
+    );
+  }
 
   const totalGenTokensIn =
     summaryResult.inputTokens + experienceResult.inputTokens;
@@ -293,7 +313,7 @@ export async function runPipeline(
   // Build generated sections
   let sections: GeneratedSections = {
     summary: summaryResult.summary,
-    skills: reorderedSkills,
+    skills: skillInjection.skills,
     experience: experienceResult.roles,
     coverLetter: "", // placeholder, merged later
   };

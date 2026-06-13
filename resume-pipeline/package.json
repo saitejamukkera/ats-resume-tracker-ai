@@ -8,6 +8,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "eval-ats": "tsx scripts/eval-ats.ts",
     "setup-taxonomy": "tsx scripts/build-taxonomy.ts"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "@types/node": "^22.14.0",
     "@types/uuid": "^10.0.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "vitest": "^4.1.8"
   }
 }

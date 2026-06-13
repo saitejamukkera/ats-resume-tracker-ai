@@ -71,7 +71,9 @@ JD CONTEXT:
 
 RULES:
 - 2-3 sentences MAXIMUM. Keep it punchy and scannable — recruiters spend 6 seconds on a resume.
-- First sentence: who you are + years of experience + core domain
+- First sentence: who you are + years of experience + core domain. Mirror the EXACT
+  JD title/role and its seniority wording (e.g. "${jd.position}") when it is an
+  accurate description of the candidate — ATS systems weight title alignment heavily.
 - Second sentence: 3-5 most relevant technical skills from the JD (not a laundry list)
 - Optional third sentence: one standout achievement or differentiator
 - Must signal strong fit for this exact position

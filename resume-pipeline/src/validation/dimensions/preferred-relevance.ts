@@ -1,9 +1,10 @@
 // src/validation/dimensions/preferred-relevance.ts
-// % of JD preferred/nice-to-have skills found in resume.
+// Graded JD preferred/nice-to-have coverage via the hybrid skill matcher.
+// Bonus-only signal: missing preferred skills never penalize (handled in
+// scorer-factory by treating this contribution as additive).
 
 import type { ScorerDimension } from "../scorer-dimension.js";
-import { keywordExistsInText } from "../utils/word-boundary.js";
-import { getAllSkillVariants } from "../skill-variants.js";
+import { gradedCoverage } from "../skill-matcher.js";
 
 export const preferredRelevanceDimension: ScorerDimension = {
   key: "preferredRelevance",
@@ -11,13 +12,6 @@ export const preferredRelevanceDimension: ScorerDimension = {
 
   evaluate(ctx): number {
     if (ctx.jd.preferredSkills.length === 0) return 1.0;
-
-    const found = ctx.jd.preferredSkills.filter((skill) =>
-      getAllSkillVariants(skill).some((v) =>
-        keywordExistsInText(v, ctx.fullText),
-      ),
-    );
-
-    return found.length / ctx.jd.preferredSkills.length;
+    return gradedCoverage(ctx.preferredMatches);
   },
 };
