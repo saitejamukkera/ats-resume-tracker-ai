@@ -10,6 +10,7 @@ import {
 } from "../stages/section-generators.js";
 import { reorderSkills } from "../stages/skills-reorderer.js";
 import { injectVerifiedSkills } from "../stages/skills-injector.js";
+import { liftImpact } from "../stages/impact-lift.js";
 import { extractTechProfile } from "../stages/tech-stack-extractor.js";
 import { generateCoverLetter } from "../stages/cover-letter.js";
 import { parseLatexResume, assembleLatex } from "../stages/latex-assembler.js";
@@ -370,6 +371,40 @@ export async function runPipeline(
 
   const repairCalls = repairAttempts > 0 ? repairAttempts : 0;
   telemetry.endStage("validator", repairCalls, repairTokensIn, repairTokensOut);
+
+  // ── Stage 4b: Impact-Lift Loop ────────────────────────────────
+  // Raise weak/medium experience bullets to an impact-led (X→Y) bar before
+  // scoring, so the ATS impact/metrics dimensions reflect the improvement.
+  emit({ type: "stage-start", stage: "impact-lift" });
+  telemetry.startStage("impact-lift");
+  try {
+    const liftResult = await liftImpact(
+      sections,
+      jd,
+      jd.experienceLevel,
+      candidateTech,
+      config,
+      snapshotStore,
+      models,
+    );
+    sections = liftResult.sections;
+    if (liftResult.liftedCount > 0) {
+      console.log(
+        `[pipeline] Impact-lift: raised ${liftResult.liftedCount} bullet(s) over ${liftResult.passes} pass(es)`,
+      );
+    }
+    telemetry.endStage(
+      "impact-lift",
+      liftResult.passes,
+      liftResult.inputTokens,
+      liftResult.outputTokens,
+    );
+  } catch (error) {
+    if (error instanceof RateLimitError) throw error;
+    const msg = error instanceof Error ? error.message : String(error);
+    console.warn(`[pipeline] Impact-lift failed, continuing: ${msg}`);
+    telemetry.failStage("impact-lift", msg);
+  }
 
   // ── Stage 4.5: ATS Score ──────────────────────────────────────
   telemetry.startStage("ats-scorer");

@@ -175,7 +175,12 @@ WRITING STYLE — NON-NEGOTIABLE:
    - Entry-level: built, fixed, wrote, configured, tested, debugged, shipped
    - Mid-level: designed, refactored, optimized, led, mentored, proposed, migrated
    - Senior: architected, established, drove adoption, defined standards
-5. NOT EVERY BULLET NEEDS A METRIC: 60-80% should have metrics. The rest show qualitative impact.
+5. IMPACT-LED STRUCTURE (X→Y) — EVERY bullet must follow:
+   [Strong action verb] + [what you did] + [tech/how] → [quantified outcome].
+   Example: "Cut API p99 latency 38% by adding a Redis cache layer to the Spring Boot service."
+   The large majority of bullets MUST end in a measurable result (%, time, scale, count, $).
+   Where the original bullet has no number, INVENT a realistic improvement (10-50% range,
+   never 10x and never an absolute 100%) consistent with the work described.
 
 CRITICAL FORMATTING CONSTRAINTS:
 - DO NOT use any raw LaTeX formatting (e.g. \\textbf{}, \\textit{}).
@@ -282,7 +287,10 @@ WRITING STYLE — NON-NEGOTIABLE:
 1. VERB DIVERSITY: Use at least ${Math.min(6, role.bullets.length)} different opening verbs
 2. Mix sentence shapes: action-first, impact-first, context-first, problem-first
 3. BULLET LENGTH VARIATION: Mix short (10-15 words) and long (25-35 words) bullets
-4. 60-80% should have metrics. The rest show qualitative impact.
+4. IMPACT-LED STRUCTURE (X→Y) — EVERY bullet: [Strong verb] + [what you did] + [tech/how]
+   → [quantified outcome]. The large majority MUST end in a measurable result
+   (%, time, scale, count, $). Where the original lacks a number, invent a realistic
+   improvement (10-50%, never 10x, never absolute 100%) consistent with the work.
 
 CRITICAL FORMATTING CONSTRAINTS:
 - DO NOT use any raw LaTeX formatting (e.g. \\textbf{}, \\textit{}).
@@ -340,7 +348,7 @@ Return a JSON object with \`roles\` array containing exactly 1 role with \`roleT
 
 // ── Tech Weave & Whitelist Helpers ──────────────────────────
 
-function intersectSkills(
+export function intersectSkills(
   jdSkills: string[],
   candidateTech?: CandidateTechProfile
 ): { authorized: string[]; forbidden: string[] } {
@@ -380,7 +388,7 @@ function intersectSkills(
   return { authorized, forbidden };
 }
 
-function buildTechWeaveBlock(
+export function buildTechWeaveBlock(
   jd: JDAnalysis,
   candidateTech?: CandidateTechProfile
 ): string {

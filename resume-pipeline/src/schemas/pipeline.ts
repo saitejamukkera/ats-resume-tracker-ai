@@ -27,6 +27,10 @@ export interface PipelineConfig {
     jdKeywordCoverage: number;
     maxRepairAttempts: number;
     atsScoreThreshold: number;
+    /** Target fraction of "strong"-impact bullets per role for the impact-lift loop. */
+    targetStrongRatio: number;
+    /** Max LLM passes the impact-lift loop will run to hit targetStrongRatio. */
+    maxImpactPasses: number;
   };
 }
 
@@ -47,11 +51,13 @@ export const DEFAULT_CONFIG: PipelineConfig = {
     minBulletsPerRole: 8,
     maxBulletsPerRole: 12,
     metricMinRatio: 0.6,
-    metricMaxRatio: 0.85,
+    metricMaxRatio: 0.95,
     jdRelevanceMinRatio: 0.5,
     jdKeywordCoverage: 0.7,
     maxRepairAttempts: 2,
     atsScoreThreshold: 70,
+    targetStrongRatio: 0.6,
+    maxImpactPasses: 2,
   },
 };
 
