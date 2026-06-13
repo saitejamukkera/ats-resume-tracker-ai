@@ -179,7 +179,8 @@ JD CONTEXT:
 RULES:
 - ONLY modify experience bullets. Do NOT touch or return a summary.
 - ANTI-STUFFING: Limit each modified bullet to at most 1 (max 2) target keywords. Do NOT create overloaded run-on sentences.
-- CONTEXT PRESERVATION: Do NOT change the core meaning, project details, metrics, or achievements of any bullet. Only append/insert the tool or technology where it fits naturally as the tool/context used to achieve the outcome.
+- LENGTH NEUTRALITY: Weaving a keyword MUST NOT make the bullet longer. Do NOT simply append the technology. Replace weaker or filler words in the SAME bullet so the rewritten bullet has the same or fewer words than the original (stay within 15-25 words). The tech REPLACES verbosity, it does not accumulate.
+- CONTEXT PRESERVATION: Do NOT change the core meaning, project details, metrics, or achievements of any bullet. Weave the tool/technology in as the means used to achieve the existing outcome.
 - TRUTHFULNESS: If a keyword cannot be naturally integrated into any current experience bullet, skip it.
 - Bullet style: Keep consistent (action verb + tech + outcome).
 - Return: repairedBullets array of {roleIndex, bulletIndex, text} for ONLY the bullets you changed.`;
