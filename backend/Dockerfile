@@ -18,6 +18,9 @@ RUN ./mvnw clean package -DskipTests -B
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
+# Local PDF previews need SyncTeX metadata for source-position mapping.
+RUN apk add --no-cache texlive-full
+
 # Create a non-root user for security
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring

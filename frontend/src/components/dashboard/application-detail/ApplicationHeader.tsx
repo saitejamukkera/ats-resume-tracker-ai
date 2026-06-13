@@ -13,7 +13,6 @@ import { motion } from "framer-motion";
 import {
   ApplicationStatus,
   type JobApplicationResponse,
-  type UserProfile,
 } from "../../../types/dtos";
 import { DownloadDropdown } from "../../DownloadDropdown";
 
@@ -60,7 +59,6 @@ function getStatusConfig(status: ApplicationStatus) {
 
 interface ApplicationHeaderProps {
   application: JobApplicationResponse;
-  userProfile: UserProfile | null;
   onDelete: () => void;
   onDownloadPdf: () => Promise<void>;
   onDownloadDocx: () => Promise<void>;
@@ -68,7 +66,6 @@ interface ApplicationHeaderProps {
 
 export function ApplicationHeader({
   application,
-  userProfile,
   onDelete,
   onDownloadPdf,
   onDownloadDocx,

@@ -2,6 +2,7 @@ package com.fullstack.ATSJobTracker.service;
 
 
 import com.fullstack.ATSJobTracker.dto.GenerateFromJdResponse;
+import com.fullstack.ATSJobTracker.dto.PdfSyncResponse;
 import com.fullstack.ATSJobTracker.model.ApplicationStatus;
 import com.fullstack.ATSJobTracker.model.JobApplication;
 import com.fullstack.ATSJobTracker.model.ResumeBase;
@@ -24,6 +25,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -37,6 +39,7 @@ public class ResumeService {
     private final UserProfileRepository userProfileRepository;
     private final ResumePipelineClient resumePipelineClient;
     private final AuthService authService;
+    private final LatexCompilationService latexCompilationService;
 
     private static final String LATEX_API_URL = "https://latex.ytotech.com/builds/sync";
 
@@ -349,6 +352,13 @@ public class ResumeService {
      */
     public byte[] compilePdf(String latexContent) {
         try {
+            log.info("Compiling PDF via local LaTeX compiler...");
+            return latexCompilationService.compilePdf(latexContent);
+        } catch (Exception localError) {
+            log.warn("Local LaTeX compilation failed, falling back to YtoTech: {}", localError.getMessage());
+        }
+
+        try {
             log.info("Compiling PDF via YtoTech LaTeX API...");
 
             // Escape the LaTeX content for JSON
@@ -398,6 +408,15 @@ public class ResumeService {
             log.error("Error compiling PDF via YtoTech: {}", e.getMessage(), e);
             return new byte[0];
         }
+    }
+
+    public PdfSyncResponse compilePdfWithSync(String latexContent) {
+        LatexCompilationResult result = latexCompilationService.compilePdfWithSync(latexContent);
+        return PdfSyncResponse.builder()
+                .pdfBase64(Base64.getEncoder().encodeToString(result.getPdfBytes()))
+                .syncMap(result.getSyncMap())
+                .compileDiagnostics(result.getDiagnostics())
+                .build();
     }
 
     private String buildUserInfo(UserProfile profile) {

@@ -4,21 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { FileText, Mail, Eye } from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 import { api } from "../../lib/api";
-import {
-  type JobApplicationResponse,
-  type UserProfile,
-} from "../../types/dtos";
+import { type JobApplicationResponse } from "../../types/dtos";
 import { ConfirmModal } from "../ConfirmModal";
 import { useToast } from "../../context/ToastContext";
 import { useDownloader } from "../../hooks/useDownloader";
 import { useAuth } from "../../context/AuthContext";
 import { ApplicationHeader } from "./application-detail/ApplicationHeader";
 import { JobDescriptionCard } from "./application-detail/JobDescriptionCard";
-import { ResumeEditor } from "./application-detail/ResumeEditor";
 import { CoverLetterEditor } from "./application-detail/CoverLetterEditor";
-import { PdfPreview } from "./application-detail/PdfPreview";
+import { LatexPreviewWorkspace } from "./application-detail/LatexPreviewWorkspace";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -47,9 +43,7 @@ export default function ApplicationDetailPage({
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState<
-    "resume" | "coverLetter" | "pdfPreview"
-  >("resume");
+  const [activeTab, setActiveTab] = useState<"resume" | "coverLetter">("resume");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const toast = useToast();
   const {
@@ -150,7 +144,6 @@ export default function ApplicationDetailPage({
     >
       <ApplicationHeader
         application={application}
-        userProfile={user as any} // AuthUser is compatible enough for display
         onDelete={handleDelete}
         onDownloadPdf={() =>
           downloadResumePdf(
@@ -207,22 +200,11 @@ export default function ApplicationDetailPage({
                     <span className="w-2 h-2 rounded-full bg-emerald-500 ml-1" />
                   )}
                 </button>
-                <button
-                  onClick={() => setActiveTab("pdfPreview")}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
-                    activeTab === "pdfPreview"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                  }`}
-                >
-                  <Eye size={14} />
-                  PDF Preview
-                </button>
               </div>
             </div>
 
             {activeTab === "resume" && (
-              <ResumeEditor
+              <LatexPreviewWorkspace
                 applicationId={application.id}
                 initialContent={application.generatedResumeContent || null}
                 hasGeneratedResume={application.hasGeneratedResume}
@@ -255,12 +237,6 @@ export default function ApplicationDetailPage({
               />
             )}
 
-            {activeTab === "pdfPreview" && (
-              <PdfPreview
-                applicationId={application.id}
-                hasGeneratedResume={application.hasGeneratedResume}
-              />
-            )}
           </div>
         </div>
       </motion.div>

@@ -2,6 +2,7 @@ import type {
   CheckDuplicateResponse,
   JobApplicationRequest,
   JobApplicationResponse,
+  PdfSyncResponse,
   ResumeGenerationRequest,
   ResumeGenerationResponse,
   UserProfile,
@@ -512,6 +513,20 @@ export const api = {
         throw new Error("Failed to download PDF");
       }
       return response.blob();
+    },
+    getPdfSync: async (applicationId: number): Promise<PdfSyncResponse | null> => {
+      const response = await apiFetch(
+        `${API_BASE_URL}/api/resumes/${applicationId}/pdf-sync`,
+      );
+      if (response.status === 204) return null;
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        const message =
+          data?.compileDiagnostics?.[0]?.message ||
+          "Failed to compile synced PDF preview";
+        throw new Error(message);
+      }
+      return data;
     },
     downloadCoverLetterPdf: async (applicationId: number): Promise<Blob> => {
       const response = await apiFetch(

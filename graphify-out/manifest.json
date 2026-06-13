@@ -1,0 +1,1802 @@
+{
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\java-upgrade\\hooks\\scripts\\recordToolUse.ps1": {
+    "mtime": 1778608338.9236188,
+    "ast_hash": "a76b05925b01d5e7a642eda1824e8fa7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\java-upgrade\\hooks\\scripts\\recordToolUse.sh": {
+    "mtime": 1778608338.9262023,
+    "ast_hash": "392b480c0ee4898af9652e8fc429f7cd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\modernize\\java-upgrade\\hooks\\scripts\\recordToolUse.ps1": {
+    "mtime": 1781117133.6715746,
+    "ast_hash": "9ecf230451dfd20ff4e0a2a01e80a4e6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\modernize\\java-upgrade\\hooks\\scripts\\recordToolUse.sh": {
+    "mtime": 1781117133.6871972,
+    "ast_hash": "e25ae501603ce6bf738198f5ce32ba83",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.opencode\\package.json": {
+    "mtime": 1777507864.7497983,
+    "ast_hash": "64f89884b360da0328e8478d053851a7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.opencode\\plugins\\graphify.js": {
+    "mtime": 1780686298.9950602,
+    "ast_hash": "05c1b965c8d4f9d185bdd6abcd3eb51f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\mvnw": {
+    "mtime": 1780260952.0683727,
+    "ast_hash": "ab50dd89da7da2346b28003352eeeeeb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\ATSJobTrackerApplication.java": {
+    "mtime": 1780260952.0725744,
+    "ast_hash": "c3ee41504481e463fb7d0d176b959b5d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\ApiKeyController.java": {
+    "mtime": 1780260952.074081,
+    "ast_hash": "712263a54380966e5a8f999a06f534b0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\AuthController.java": {
+    "mtime": 1780260952.0763853,
+    "ast_hash": "b047f0943bac8162bd68b99cb052aa59",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\JobApplicationController.java": {
+    "mtime": 1780260952.0779424,
+    "ast_hash": "337e61de7239cd53654d57c7cd1c777f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\RedirectController.java": {
+    "mtime": 1780260952.0793247,
+    "ast_hash": "e8d4a5c2298fb1a5d781c673bb907e52",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\ResumeController.java": {
+    "mtime": 1780789676.9170444,
+    "ast_hash": "02c1500b4ea9e81a457472352231ddc7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\controller\\UserProfileController.java": {
+    "mtime": 1780260952.0818675,
+    "ast_hash": "3f0aa85f6638843f67108d56f1338865",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\AuthResponse.java": {
+    "mtime": 1780260952.083388,
+    "ast_hash": "63daebc7140102078676432bd2f01342",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\CheckDuplicateRequest.java": {
+    "mtime": 1780260952.0848505,
+    "ast_hash": "192edb8bf50deda8f3ab04ab91eaf020",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\CheckDuplicateResponse.java": {
+    "mtime": 1780260952.0868132,
+    "ast_hash": "369b1b0485f5353707ce8ee9109789e7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\ForgotPasswordRequest.java": {
+    "mtime": 1780260952.0868132,
+    "ast_hash": "cea633e4720f9f973670b9df869f163d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\GenerateFromJdRequest.java": {
+    "mtime": 1780260952.088328,
+    "ast_hash": "98747cb141c38130934885e2c937428f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\GenerateFromJdResponse.java": {
+    "mtime": 1780260952.0898373,
+    "ast_hash": "b6ec501054d14ead5ea5f198ab7040a6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\JobApplicationRequest.java": {
+    "mtime": 1780260952.0908446,
+    "ast_hash": "4eeabfde50636aa0ffba1d5abf6841a3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\JobApplicationResponse.java": {
+    "mtime": 1780260952.092852,
+    "ast_hash": "f2ba7d5acfa6f799b609dccfdf75a05f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\LoginRequest.java": {
+    "mtime": 1780260952.0938509,
+    "ast_hash": "dd400d8af713a739d9ce888262ced35b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\RegisterRequest.java": {
+    "mtime": 1780260952.094852,
+    "ast_hash": "1e296fba5f095bc8eaed2bcc273bcb30",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\ResetPasswordRequest.java": {
+    "mtime": 1780260952.0958512,
+    "ast_hash": "cf7d6ab614631162a455dd5c78d1bbf8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\ResumeGenerationRequest.java": {
+    "mtime": 1780260952.0970814,
+    "ast_hash": "bd34592663c4927baf84e3b2962a496d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\ResumeGenerationResponse.java": {
+    "mtime": 1780260952.098513,
+    "ast_hash": "6a2a7a4e3d931725d54c570bfc289513",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\SendOtpRequest.java": {
+    "mtime": 1780260952.0995188,
+    "ast_hash": "7593dc40f0c10049b36113df5be3af7a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\UpdateContentRequest.java": {
+    "mtime": 1780260952.1007547,
+    "ast_hash": "d8ad22ef7e922600c19e3ceda8a77e32",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\dto\\VerifyOtpRegisterRequest.java": {
+    "mtime": 1780260952.1023946,
+    "ast_hash": "ea783c5908eeae7b5cf7f326a4fe95b7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\exception\\GeminiApiException.java": {
+    "mtime": 1780260952.1034002,
+    "ast_hash": "4b3ce1fc4c3ff1626f1c06e851a7be60",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\exception\\NotAuthenticatedException.java": {
+    "mtime": 1780260952.1045308,
+    "ast_hash": "83f40592ad2abf6b9eb8f91233923d93",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\exception\\UserNotFoundException.java": {
+    "mtime": 1780260952.1055777,
+    "ast_hash": "0ac3c244eba4a113ded77cad87eac78a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\ApplicationStatus.java": {
+    "mtime": 1780260952.107685,
+    "ast_hash": "eb4a3502810e38574083a36e170c35b2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\AuthProvider.java": {
+    "mtime": 1780260952.107685,
+    "ast_hash": "57c4e6d8c09d257479ad96a4dd55c345",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\AuthUser.java": {
+    "mtime": 1780260952.1103165,
+    "ast_hash": "29a99ba7bb896d376d36f0ddbfca2f44",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\JobApplication.java": {
+    "mtime": 1780777481.241374,
+    "ast_hash": "f23289a0d1ab76ae0f4ce6fcd873599c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\RefreshToken.java": {
+    "mtime": 1780260952.1128335,
+    "ast_hash": "a0929ac4021f559a784a762e22027e1b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\ResumeBase.java": {
+    "mtime": 1780260952.113843,
+    "ast_hash": "4f1041e2f1988552ba29de6cf6cb5145",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\model\\UserProfile.java": {
+    "mtime": 1780284507.9969435,
+    "ast_hash": "718574787f4bc1338ac1eb6e4e56d40d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\repository\\AuthUserRepository.java": {
+    "mtime": 1780260952.1171145,
+    "ast_hash": "f6c3c74bc789855b36ebd7b767cfb7a6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\repository\\JobApplicationRepository.java": {
+    "mtime": 1780260952.1181574,
+    "ast_hash": "7ce66fa75b5ec13588ca82991df8b125",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\repository\\RefreshTokenRepository.java": {
+    "mtime": 1780260952.1191647,
+    "ast_hash": "84bb7be1709f968200cd85c24a398c20",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\repository\\ResumeBaseRepository.java": {
+    "mtime": 1780260952.1208487,
+    "ast_hash": "9720d5d0c21febd716ccf214f52de0e5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\repository\\UserProfileRepository.java": {
+    "mtime": 1780260952.121855,
+    "ast_hash": "3607fc2b8a76d6b831ab2d001d8c9fd7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\CsrfCookieFilter.java": {
+    "mtime": 1780260952.1233032,
+    "ast_hash": "b8b799876935dea45ce47f1dd9cd8529",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\CustomUserDetailsService.java": {
+    "mtime": 1780260952.1243596,
+    "ast_hash": "f946c08b223cd95f147ab5557074c5e6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\InMemoryRateLimitStore.java": {
+    "mtime": 1780260952.125999,
+    "ast_hash": "fb98bb32c49dd62a4c28fa0530a973aa",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\JwtAuthenticationFilter.java": {
+    "mtime": 1780260952.1276095,
+    "ast_hash": "5b96c629cd61553a4d0bfe55e703650a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\JwtUtil.java": {
+    "mtime": 1780260952.1294553,
+    "ast_hash": "b7fb05058324495534bcc29cabd5a9fa",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\OAuth2SuccessHandler.java": {
+    "mtime": 1780260952.1309745,
+    "ast_hash": "e83effb7a87cf49acfbfee8d9ddcebf5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\RateLimitFilter.java": {
+    "mtime": 1780260952.132068,
+    "ast_hash": "430a91f47e74357c755b8b138994c614",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\RateLimitStore.java": {
+    "mtime": 1780260952.1337507,
+    "ast_hash": "0e6e655e485e3b2d4df9177815c40b1f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\SecurityConfig.java": {
+    "mtime": 1780260952.1347582,
+    "ast_hash": "deb59d03f58e2204184fd0f99e8f82eb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\security\\SpaCsrfTokenRequestHandler.java": {
+    "mtime": 1780260952.1362774,
+    "ast_hash": "3a61f8a607bc0789bc803909b7281231",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\AuthService.java": {
+    "mtime": 1780260952.1377878,
+    "ast_hash": "bfbc677eb641d3f14f0a9847bbd16a28",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\EmailService.java": {
+    "mtime": 1780260952.1383142,
+    "ast_hash": "da34d4a6b605a8f5f02b9b939005e4f8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\GeminiService.java": {
+    "mtime": 1780260952.1393642,
+    "ast_hash": "969bdfbfa256042e0b1720c4d13c71bc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\JobApplicationService.java": {
+    "mtime": 1780260952.1412897,
+    "ast_hash": "d98408682bf2b3ab008fcd62976e7ef1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\OtpService.java": {
+    "mtime": 1780260952.1424026,
+    "ast_hash": "fdfc5e24a2c8fd7e58cead45fe6edf29",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\PromptBuilder.java": {
+    "mtime": 1780260952.144554,
+    "ast_hash": "5b9d18faa3cef4fd0a38ff9e47ca23b6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\RefreshTokenService.java": {
+    "mtime": 1780260952.1457677,
+    "ast_hash": "59f9082530fd9c4dc7e2f52e465ce7af",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\ResumePipelineClient.java": {
+    "mtime": 1780777479.4694982,
+    "ast_hash": "758752ca363f8fe77296c4b4a67a9fb0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\ResumeService.java": {
+    "mtime": 1780790917.9125814,
+    "ast_hash": "cc27b5ac3f02189143fefd27e7db9116",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\service\\WordDocumentService.java": {
+    "mtime": 1780777543.0167503,
+    "ast_hash": "6b9355ee531f91dcbb306935c57be403",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\util\\KeySanitizer.java": {
+    "mtime": 1780260952.1505275,
+    "ast_hash": "318b8df0fa5933d816f14b27eb338bb8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\java\\com\\fullstack\\ATSJobTracker\\util\\PromptConstants.java": {
+    "mtime": 1780260952.152538,
+    "ast_hash": "04a31649cb649da57bc81cc5c6e0411a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V10__add_docx_column.sql": {
+    "mtime": 1780777419.3019528,
+    "ast_hash": "341b8f21eb42927576be7aac97868c1f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V1__baseline.sql": {
+    "mtime": 1780260952.1574464,
+    "ast_hash": "0d6930c21c8bf18c05f85b1401b33750",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V2__add_forwarding_email_to_auth_users.sql": {
+    "mtime": 1780260952.159405,
+    "ast_hash": "0975cc5b64d31b11b79c3b569026d0da",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V3__add_note_to_job_applications.sql": {
+    "mtime": 1780260952.160813,
+    "ast_hash": "fe064a101a55e7a17859041b1d72d454",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V4__undo_forwarding_email_auth_users.sql": {
+    "mtime": 1780260952.1619852,
+    "ast_hash": "f52bd312d4f15bb8faa17f3134b0de91",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V7__ensure_last_used_at.sql": {
+    "mtime": 1780260952.1660202,
+    "ast_hash": "9430ce3587cd86f18979871b9de5ed88",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V8__add_score_columns.sql": {
+    "mtime": 1780260952.1665294,
+    "ast_hash": "292709c89c56e439f98d44ca6349a7ac",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\db\\migration\\V9__add_skills_to_user_profile.sql": {
+    "mtime": 1780284506.0493937,
+    "ast_hash": "3083f5d8ae66239eb5053f7d5012ee69",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\test\\java\\com\\fullstack\\ats_resumetracker\\ATSJobTrackerApplicationTests.java": {
+    "mtime": 1780260952.1690488,
+    "ast_hash": "5d5efd31125da348818d3d99167b0a71",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\applications\\[id]\\page.tsx": {
+    "mtime": 1780260952.1877487,
+    "ast_hash": "ccccd2673383e5cae4ab06552ba32b08",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\dashboard\\page.tsx": {
+    "mtime": 1780260952.189273,
+    "ast_hash": "c95780d70cae5237469ae1f5f58d69f4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\layout.tsx": {
+    "mtime": 1780260952.1905346,
+    "ast_hash": "23fdfa15ab814b3a915aab4bf7e5f323",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\loading.tsx": {
+    "mtime": 1780260952.1916447,
+    "ast_hash": "8c9f880287349b301c015252ba8ca589",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\new\\page.tsx": {
+    "mtime": 1780260952.1927557,
+    "ast_hash": "e1f396c74971d3a5499bb186b9ff5357",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\(protected)\\settings\\page.tsx": {
+    "mtime": 1780260952.1947436,
+    "ast_hash": "4f267ab748f3c700dfe02c02a448b14f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\layout.tsx": {
+    "mtime": 1780260952.1973023,
+    "ast_hash": "db9bb50fbebe31545e5e8e50a91d818d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\login\\page.tsx": {
+    "mtime": 1780260952.1983118,
+    "ast_hash": "6c8ec8f2955e0c6cd3269af02cea1cc3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\oauth2\\callback\\page.tsx": {
+    "mtime": 1780260952.2002847,
+    "ast_hash": "26767b9046541ffd096ec14162058034",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\page.tsx": {
+    "mtime": 1780260952.2016876,
+    "ast_hash": "67912c3dc768b9f62cdbb5cd56ff9b78",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\app\\register\\page.tsx": {
+    "mtime": 1780260952.2026975,
+    "ast_hash": "653f089267ef527b5a8a5fa1a30a8386",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\eslint.config.mjs": {
+    "mtime": 1780260952.2026975,
+    "ast_hash": "6c4307ffa009658f5c97f5629094c0c2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\next-env.d.ts": {
+    "mtime": 1780415368.2751963,
+    "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\next.config.ts": {
+    "mtime": 1780260952.204713,
+    "ast_hash": "0839a6f45c93797ec80bf851fda6d4b8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\package.json": {
+    "mtime": 1780260952.208249,
+    "ast_hash": "6feeb0a65c5bdf23b0577ce7a4f5dcbb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\postcss.config.mjs": {
+    "mtime": 1780260952.2106297,
+    "ast_hash": "481fac0fdecd70e1821cc30b86030c1a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ATSScoreCard.tsx": {
+    "mtime": 1780260952.2271044,
+    "ast_hash": "cbe517ed1648d36af7248cfbec022980",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ConfirmModal.tsx": {
+    "mtime": 1780260952.2291417,
+    "ast_hash": "ded562fd6fb6294319fb077cc3f0169b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\DownloadDropdown.tsx": {
+    "mtime": 1780260952.230739,
+    "ast_hash": "864ca237b06e703399f95d39ff226365",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\DuplicateJobModal.tsx": {
+    "mtime": 1780260952.2319148,
+    "ast_hash": "77fa7147211203574cdcf56b23354a7c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\LandingPage.tsx": {
+    "mtime": 1780260952.2341044,
+    "ast_hash": "49ee74cac91b2d0aa4a48a10051ae287",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\Logo.tsx": {
+    "mtime": 1780260952.2356882,
+    "ast_hash": "af979c4b856d44fc79c06511473904b1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\NoteModal.tsx": {
+    "mtime": 1780260952.2372909,
+    "ast_hash": "8c202c342c830f81eb4ade40699dd498",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\Providers.tsx": {
+    "mtime": 1780260952.2388752,
+    "ast_hash": "b070f358abc71eb5e2ac520b85dafa79",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\SessionExpiredModal.tsx": {
+    "mtime": 1780260952.2399373,
+    "ast_hash": "69dd0b089d8a16b048b9b5eb50fb0b66",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\StatusDropdown.tsx": {
+    "mtime": 1780260952.2415514,
+    "ast_hash": "2dddb7f9066932b90eb97de42c73b79b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\auth\\AuthPage.tsx": {
+    "mtime": 1780260952.2433584,
+    "ast_hash": "e93de594363a00edc4514b9d6b5eb83b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\ApiKeySettings.tsx": {
+    "mtime": 1780260952.244605,
+    "ast_hash": "7b3ca18e26d15932bc81d7e64f2e1255",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\ApplicationDetailPage.tsx": {
+    "mtime": 1780260952.2464898,
+    "ast_hash": "89144db3eb396c327d84675114bd8dcd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\DashboardPage.tsx": {
+    "mtime": 1780260952.2477403,
+    "ast_hash": "a86117c6f64d2f2e04e06a5dfc2a02f6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\NewApplicationPage.tsx": {
+    "mtime": 1780260952.2493193,
+    "ast_hash": "5b45f92e064d7d9598028baa78364254",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\SettingsPage.tsx": {
+    "mtime": 1780284550.7203248,
+    "ast_hash": "a21d03b5ff34b4b84c69aab9e5e0c734",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\application-detail\\ApplicationHeader.tsx": {
+    "mtime": 1780260952.2526376,
+    "ast_hash": "78b321225752f5eb2436c346e52a1713",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\application-detail\\CoverLetterEditor.tsx": {
+    "mtime": 1780260952.2542663,
+    "ast_hash": "8f1245385e420f82c1d7829366f537a7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\application-detail\\JobDescriptionCard.tsx": {
+    "mtime": 1780260952.2554777,
+    "ast_hash": "6232631c915c0d2679244dafd69e5a04",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\application-detail\\PdfPreview.tsx": {
+    "mtime": 1780260952.2565677,
+    "ast_hash": "e9b3ec480a97b07da3b81fd6cc5ec679",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\application-detail\\ResumeEditor.tsx": {
+    "mtime": 1780260952.2582078,
+    "ast_hash": "5f345d72ebad3b9cfcfb7d865f4134b8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\layout\\DashboardClientLayout.tsx": {
+    "mtime": 1780260952.2605474,
+    "ast_hash": "34a46cf3d2a696410290812202b08d38",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ui\\Drawer.tsx": {
+    "mtime": 1780260952.2625697,
+    "ast_hash": "d4c3b6abb77156a03299c0b2fcf11e11",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ui\\Dropdown.tsx": {
+    "mtime": 1780260952.2641041,
+    "ast_hash": "7ca1f1ea24386f0d9c1b69ddb7d7ae0c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ui\\ResizableSplitView.tsx": {
+    "mtime": 1780260952.2654877,
+    "ast_hash": "ee710f80d4d448fc04b1d9d0fb56b726",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\context\\AuthContext.tsx": {
+    "mtime": 1780260952.2668226,
+    "ast_hash": "ba49676f3d14068c44b60df538ee078d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\context\\ThemeContext.tsx": {
+    "mtime": 1780260952.269175,
+    "ast_hash": "04735c0eac4da6f618e53fae883665cc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\context\\ToastContext.tsx": {
+    "mtime": 1780260952.2704668,
+    "ast_hash": "eb6ba9038768ba8827861548652d0159",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\hooks\\useApiKeys.ts": {
+    "mtime": 1780260952.2719839,
+    "ast_hash": "61800e6608ac48e2d325f9421452e30f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\hooks\\useDownloader.ts": {
+    "mtime": 1780260952.2738006,
+    "ast_hash": "cf943aa5f58ac7c1a54c70cd12240a07",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\hooks\\useTheme.ts": {
+    "mtime": 1780260952.2743065,
+    "ast_hash": "9b1d80ae0590a054a9d5094f40cce86a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\lib\\api.ts": {
+    "mtime": 1781117771.7384765,
+    "ast_hash": "c59cc3a577461491ad9680820367a6ae",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\lib\\crypto.ts": {
+    "mtime": 1780260952.2787192,
+    "ast_hash": "f53b1e860b6cd421e667bcc52a01315c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\lib\\utils.ts": {
+    "mtime": 1780260952.2802408,
+    "ast_hash": "7ac6aafaa39477a8304a83192e304932",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\types\\dtos.ts": {
+    "mtime": 1780284526.0391436,
+    "ast_hash": "ad0ab1ea80f1b6b43556c76833a66263",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\tsconfig.json": {
+    "mtime": 1780260952.2819142,
+    "ast_hash": "0a2f4ed9289b65cd3feb4fb4ab3a4fcd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\opencode.json": {
+    "mtime": 1780260952.3024213,
+    "ast_hash": "5b1ed70ab57d0112cce810a28c818adc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\package.json": {
+    "mtime": 1780260952.3049552,
+    "ast_hash": "ae208328b72da4ae15c8b6d4d6b87383",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\inspect_latex.js": {
+    "mtime": 1780260952.3118358,
+    "ast_hash": "adbd4326f8b1fc201c8ea7c90751398e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\package.json": {
+    "mtime": 1780777431.273715,
+    "ast_hash": "d289200945fc9f0a8260607037789cb4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\scripts\\build-taxonomy.ts": {
+    "mtime": 1780260952.3176413,
+    "ast_hash": "13061da9b3d54a31eaa5cf8928299b8c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\config\\models.ts": {
+    "mtime": 1780260952.32016,
+    "ast_hash": "7ba8e17ccadfeabde68d93f7822b456e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\impact\\detector.ts": {
+    "mtime": 1780686646.8674748,
+    "ast_hash": "225dba7f268f01605dab2d9784e0fed9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\index.ts": {
+    "mtime": 1780260952.322695,
+    "ast_hash": "4bb95616cc9892ed0931ce82550f7b8b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\analytics.ts": {
+    "mtime": 1780260952.3258543,
+    "ast_hash": "c909dedea26760a1191df7813b40672a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\analyzers\\cost-analyzer.ts": {
+    "mtime": 1780260952.3273537,
+    "ast_hash": "64b77bec0e9b4e68d392c6156ba10a4d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\analyzers\\dimension-analyzer.ts": {
+    "mtime": 1780260952.3282743,
+    "ast_hash": "410011d4c4594715707a1d5070feb63f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\analyzers\\score-analyzer.ts": {
+    "mtime": 1780260952.32982,
+    "ast_hash": "ca8135698c151174d2a2e225d1cccaa1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\debug.ts": {
+    "mtime": 1780260952.3313375,
+    "ast_hash": "ca03c9c85091d363c35aee897dd9e3ed",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\llm-wrapper.ts": {
+    "mtime": 1780260952.3324995,
+    "ast_hash": "5fdca913289b6d93066323868a6dc6e5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\trace-store.ts": {
+    "mtime": 1780686694.556248,
+    "ast_hash": "4f9f9b5194d13e66e43bd472065cd678",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\observability\\trace.ts": {
+    "mtime": 1780260952.3357255,
+    "ast_hash": "e0715112034577f61a06af1675e6c99f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\pipeline\\runner.ts": {
+    "mtime": 1781052116.9431221,
+    "ast_hash": "6bb799a19af660f5b10e621ed26fe560",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\cover-letter.ts": {
+    "mtime": 1780260952.3387742,
+    "ast_hash": "6fba2bf15f076837075a779fde5582ff",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\experience.ts": {
+    "mtime": 1780260952.340317,
+    "ast_hash": "bc9507f00079b73a844d2adc54273769",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\jd-analysis.ts": {
+    "mtime": 1780260952.3413174,
+    "ast_hash": "0d2e231dafef58b74bdc79ce2e2fda2f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\pipeline.ts": {
+    "mtime": 1780777429.6726513,
+    "ast_hash": "22be6a2c0bfefc5a8323e89a7c5a063e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\summary.ts": {
+    "mtime": 1780260952.345041,
+    "ast_hash": "945987a6ccea2e9f076fb6748ced6b3f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\security\\key-provider.ts": {
+    "mtime": 1780260952.3471553,
+    "ast_hash": "2ddd5a717c3840bff0c5ec081ed23976",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\security\\key-sanitizer.ts": {
+    "mtime": 1780260952.348377,
+    "ast_hash": "f679044ce0715c61779793fb36dbaeb0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\security\\key-validator.ts": {
+    "mtime": 1780260952.349945,
+    "ast_hash": "90b67ced180fb088b5ed6479a77adf43",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\cover-letter.ts": {
+    "mtime": 1780260952.3516822,
+    "ast_hash": "2b330cd8436b925749b0176c3a7f6693",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\docx-generator.ts": {
+    "mtime": 1781052604.5861776,
+    "ast_hash": "e197407b3fdea0f32e49c8d40b4221a0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\jd-parser.ts": {
+    "mtime": 1780686582.421195,
+    "ast_hash": "495a2c614ce1cfbef62f427d2406b3e2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\keyword-extractor.ts": {
+    "mtime": 1780260952.3536808,
+    "ast_hash": "1aea54dfcfb1ec100bc1a8bc04e6f16c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\keyword-gap-repair.ts": {
+    "mtime": 1781052116.9411232,
+    "ast_hash": "9d78a4b4a675197da89806ff614b1acf",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\latex-assembler.ts": {
+    "mtime": 1781052608.796992,
+    "ast_hash": "f1597b1d8393ba6756688b049e436d88",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\section-generators.ts": {
+    "mtime": 1781052116.9431221,
+    "ast_hash": "e63f8bf2ded8b4436660450d1479815b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\skills-reorderer.ts": {
+    "mtime": 1780260952.3593562,
+    "ast_hash": "38370c2ff925bbac225cf7fbc9192a4a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\tech-stack-extractor.ts": {
+    "mtime": 1780686299.028462,
+    "ast_hash": "6466e4791eb4797f1509aef729b92b6f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\ats-scorer.ts": {
+    "mtime": 1780260952.3624287,
+    "ast_hash": "5885092651376b6592d8b2d31f3cef8e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\action-verb-ratio.ts": {
+    "mtime": 1780260952.363425,
+    "ast_hash": "8192e8cb37b1a00c25a9f58ebd031346",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\bullet-length-health.ts": {
+    "mtime": 1780262271.3746881,
+    "ast_hash": "1aca2b0182d3a1c4d830fed30f5cc6f2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\education-level-match.ts": {
+    "mtime": 1780260952.364424,
+    "ast_hash": "6c5e9413d5e5b35c9c8eb817107ae4b2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\experience-level-match.ts": {
+    "mtime": 1780260952.364424,
+    "ast_hash": "dda44e1883483ecdabbcee916090d5c3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\format-score.ts": {
+    "mtime": 1780260952.365424,
+    "ast_hash": "0c1b83497d685379f7b1aa436cf6eb87",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\impact-score.ts": {
+    "mtime": 1780260952.3669074,
+    "ast_hash": "2341489c8064780666e16d1bcfb45151",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\index.ts": {
+    "mtime": 1780262284.8413556,
+    "ast_hash": "d34e3878437919591dcbeeec3acb02e3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\keyword-placement.ts": {
+    "mtime": 1780260952.369423,
+    "ast_hash": "e19c9e0b8800ca7ea0bbd0ca336093ea",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\keyword-relevance.ts": {
+    "mtime": 1780260952.3704326,
+    "ast_hash": "bc46fe381a4698624e2d13d42be470df",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\metrics-ratio.ts": {
+    "mtime": 1780260952.371432,
+    "ast_hash": "9e10c074bd1440b3bbba88ba653aaddf",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\preferred-relevance.ts": {
+    "mtime": 1780260952.3725197,
+    "ast_hash": "91a4d028e59c3847a8e6078cbd32fc6f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\section-completeness.ts": {
+    "mtime": 1780260952.3735266,
+    "ast_hash": "cc77454d24cd1d2fa0903fe44eea9db0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\semantic-similarity.ts": {
+    "mtime": 1780260952.374527,
+    "ast_hash": "54f3264d7ed402e63136d9a9d14efef2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\skill-experience-coherence.ts": {
+    "mtime": 1780260952.3755293,
+    "ast_hash": "58bc5b6a2a6856a159c20fbad44f157c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\dimensions\\taxonomy-coverage.ts": {
+    "mtime": 1780260952.3775282,
+    "ast_hash": "260d2aed4d8e9221e8cc4d5c64fb18e0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\embedding-matcher.ts": {
+    "mtime": 1780260952.378528,
+    "ast_hash": "a659c2af9ac2dd7ed412daccdbdf3d4c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\format-validator.ts": {
+    "mtime": 1780260952.379527,
+    "ast_hash": "49a14ac7b1c9e57320afa973191847b8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\repair.ts": {
+    "mtime": 1780260952.379527,
+    "ast_hash": "fbfa09c549437d1eae1c7cf29d423de1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\scorer-dimension.ts": {
+    "mtime": 1780260952.3810298,
+    "ast_hash": "9bd2d37b2cd81ead5cb065d06f970af2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\scorer-factory.ts": {
+    "mtime": 1780686626.0669868,
+    "ast_hash": "b099affa216597308c4426a4ed5d21af",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\scoring-context.ts": {
+    "mtime": 1780686652.4984357,
+    "ast_hash": "1b66e309c1610748ddef52409d0f054c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\skill-variants.ts": {
+    "mtime": 1780260952.3852868,
+    "ast_hash": "1d3d9fe52f0ea38f495e575c6ebb81ad",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\taxonomy\\provider.ts": {
+    "mtime": 1780260952.3864887,
+    "ast_hash": "a03fa104c5192c0c9eff0156ef431710",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\taxonomy\\skills-taxonomy.json": {
+    "mtime": 1780260952.4629836,
+    "ast_hash": "2214611edf9fcfb28c0907eaa45dbd73",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\taxonomy\\static-provider.ts": {
+    "mtime": 1780260952.4639862,
+    "ast_hash": "d67fe48944a2491b3ece111ae660e250",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\taxonomy\\taxonomy-service.ts": {
+    "mtime": 1780260952.466997,
+    "ast_hash": "f595be591626dbf10606aeaa2f65ceb1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\cosine-similarity.ts": {
+    "mtime": 1780260952.4679828,
+    "ast_hash": "6ad99684ee0b21919210e0fb5bd5bcc4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\density-penalty.ts": {
+    "mtime": 1780260952.4689834,
+    "ast_hash": "7d05a377a4e844137216d682bf4146e3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\index.ts": {
+    "mtime": 1780260952.469492,
+    "ast_hash": "fb50dd2c8bdce676f48d988db6fe825a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\latex-stripper.ts": {
+    "mtime": 1780260952.470498,
+    "ast_hash": "f4e41cdb31316d2050e043ad1107d41c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\word-boundary.ts": {
+    "mtime": 1780260952.4715033,
+    "ast_hash": "fbaf7a4e74cfc008c6532f663f3f51dd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\validator.ts": {
+    "mtime": 1780260952.4725046,
+    "ast_hash": "a61773273823c2bf4b9716a9f8644348",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\tsconfig.json": {
+    "mtime": 1780260952.4735043,
+    "ast_hash": "fc66b46b703a5e7091f51120817468ba",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\rules\\graphify.md": {
+    "mtime": 1780260951.8618736,
+    "ast_hash": "3eaf8f33a49bb96d2a07bcf8912673c6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\AGENTS.md": {
+    "mtime": 1780260951.8647103,
+    "ast_hash": "6ca48da2d9f2e3df4bc875543b2c5d52",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\SKILL.md": {
+    "mtime": 1780260951.8660355,
+    "ast_hash": "641a0ff3ecebfadb5234a13faa54f428",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\architecture-avoid-boolean-props.md": {
+    "mtime": 1780260951.8660355,
+    "ast_hash": "0363b55141376d4059e2625a90fdba8b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\architecture-compound-components.md": {
+    "mtime": 1780260951.868455,
+    "ast_hash": "c21a8bd7f19ce7bb68fd970e307bd9a7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\patterns-children-over-render-props.md": {
+    "mtime": 1780260951.8699782,
+    "ast_hash": "cc134df030320f336a570f5d5bb19a9b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\patterns-explicit-variants.md": {
+    "mtime": 1780260951.8710084,
+    "ast_hash": "da06c21b2c17c157b370e5b2c6fbb4a3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\react19-no-forwardref.md": {
+    "mtime": 1780260951.8725407,
+    "ast_hash": "8268c880a29f7326048cb637ea3ef534",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\state-context-interface.md": {
+    "mtime": 1780260951.873556,
+    "ast_hash": "bfd14c0e521b2593e70de8ef1b5c20a9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\state-decouple-implementation.md": {
+    "mtime": 1780260951.8746624,
+    "ast_hash": "cf84b77776095d867d5ba3bee5c4b76e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-composition-patterns\\rules\\state-lift-state.md": {
+    "mtime": 1780260951.876395,
+    "ast_hash": "722dac7f3c9fd540380a4a7ec015cd0a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\AGENTS.md": {
+    "mtime": 1780260951.8783512,
+    "ast_hash": "21d7db2786e9bb5d98ea1a9ef0d501b0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\SKILL.md": {
+    "mtime": 1780260951.8804686,
+    "ast_hash": "c5807b44c5991eb2f653182593133fe2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\advanced-event-handler-refs.md": {
+    "mtime": 1780260951.881476,
+    "ast_hash": "e277ef383b038da08b81404c569af6cd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\advanced-init-once.md": {
+    "mtime": 1780260951.8829405,
+    "ast_hash": "8e7759bb017e5d0d1dd64f6f60f85d3e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\advanced-use-latest.md": {
+    "mtime": 1780260951.8840556,
+    "ast_hash": "21d3dbb5f2b557f6d14b224af2d47dc5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\async-api-routes.md": {
+    "mtime": 1780260951.8855727,
+    "ast_hash": "94058ab5b50f99781e5aa56183b00008",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\async-defer-await.md": {
+    "mtime": 1780260951.8863347,
+    "ast_hash": "2e5d4672a75e740fcfd872551e08bbbf",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\async-dependencies.md": {
+    "mtime": 1780260951.8873427,
+    "ast_hash": "3bd47351349c6fe86323bf32dd017d76",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\async-parallel.md": {
+    "mtime": 1780260951.889357,
+    "ast_hash": "5029495e12b0b9b3c03b0ae4f3085659",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\async-suspense-boundaries.md": {
+    "mtime": 1780260951.890668,
+    "ast_hash": "00c19181680f2f698664db510da810d4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\bundle-barrel-imports.md": {
+    "mtime": 1780260951.8918288,
+    "ast_hash": "399d3ac7bcf2623755e299a4efcfe7a4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\bundle-conditional.md": {
+    "mtime": 1780260951.8934805,
+    "ast_hash": "d1e3c1adf9989359446cbf624bc0587d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\bundle-defer-third-party.md": {
+    "mtime": 1780260951.893988,
+    "ast_hash": "476bf2e75198f7c6accc17ea81f3a161",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\bundle-dynamic-imports.md": {
+    "mtime": 1780260951.894997,
+    "ast_hash": "2ccb840f6d1c0b4ccf9714dc3fb05651",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\bundle-preload.md": {
+    "mtime": 1780260951.8964639,
+    "ast_hash": "b67a4242446249b2bafdeb6a620a2af7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\client-event-listeners.md": {
+    "mtime": 1780260951.8978364,
+    "ast_hash": "78c4562d3fa71d314c7b98d272f56045",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\client-localstorage-schema.md": {
+    "mtime": 1780260951.8994024,
+    "ast_hash": "65c4468bd1d170a5f36003b23062a1e7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\client-passive-event-listeners.md": {
+    "mtime": 1780260951.9005554,
+    "ast_hash": "fbeb4ae3eb20a5bde142b50686e7a166",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\client-swr-dedup.md": {
+    "mtime": 1780260951.901564,
+    "ast_hash": "e912f4b5ee9e04bcf1b12cb86c86e192",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-batch-dom-css.md": {
+    "mtime": 1780260951.9028797,
+    "ast_hash": "8aeccee9fc15f16f17a8a035b095a088",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-cache-function-results.md": {
+    "mtime": 1780260951.9043934,
+    "ast_hash": "352d02de8ae05ca73448044591fedd70",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-cache-property-access.md": {
+    "mtime": 1780260951.9049153,
+    "ast_hash": "3fc311109878cb0564faad1c3f8992a8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-cache-storage.md": {
+    "mtime": 1780260951.9063776,
+    "ast_hash": "ae2d1432a80c552513c42dac684d8663",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-combine-iterations.md": {
+    "mtime": 1780260951.9076757,
+    "ast_hash": "afe61f0854bf49bd52475dbaae3bac85",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-early-exit.md": {
+    "mtime": 1780260951.9086697,
+    "ast_hash": "729d6ae7f359973121b30dcb3c8e5d9b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-hoist-regexp.md": {
+    "mtime": 1780260951.9091778,
+    "ast_hash": "76ec43c627c68eca559e7a79a6520bbc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-index-maps.md": {
+    "mtime": 1780260951.911018,
+    "ast_hash": "8462667d199be001ed6df6cc0cb5c83b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-length-check-first.md": {
+    "mtime": 1780260951.9120276,
+    "ast_hash": "ded33d19a9c0d1aa4138838fd6c30402",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-min-max-loop.md": {
+    "mtime": 1780260951.9130273,
+    "ast_hash": "3b812151da0f973d0006fc954eeb1950",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-set-map-lookups.md": {
+    "mtime": 1780260951.913535,
+    "ast_hash": "e26c96c5383f2afef8788fc4de914e97",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\js-tosorted-immutable.md": {
+    "mtime": 1780260951.915218,
+    "ast_hash": "55999ff61e2a85ef01e19c685fd1f0c0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-activity.md": {
+    "mtime": 1780260951.9162261,
+    "ast_hash": "3d75187b877aef28c7b4d6b5f33b2915",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-animate-svg-wrapper.md": {
+    "mtime": 1780260951.9179316,
+    "ast_hash": "b471e4d8054772a6c5e6a67cf5589e8c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-conditional-render.md": {
+    "mtime": 1780260951.9184449,
+    "ast_hash": "c61896d12e979f353634cc6e5f1b27f0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-content-visibility.md": {
+    "mtime": 1780260951.919453,
+    "ast_hash": "20a486c49754b5fb0bf806d303118aa2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-hoist-jsx.md": {
+    "mtime": 1780260951.922019,
+    "ast_hash": "776e60b758a1e9fc755f112ae2dd6253",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-hydration-no-flicker.md": {
+    "mtime": 1780260951.922019,
+    "ast_hash": "dc8c31d3ea2156299b3da17364fc51cb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-hydration-suppress-warning.md": {
+    "mtime": 1780260951.9233823,
+    "ast_hash": "ad795d33558ef725bb5204e122e9ffbd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-svg-precision.md": {
+    "mtime": 1780260951.9255898,
+    "ast_hash": "bb74883dab6f28f8f5652ca779867be0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rendering-usetransition-loading.md": {
+    "mtime": 1780260951.926644,
+    "ast_hash": "5d8cd195730cf58891d3878bafe64bb0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-defer-reads.md": {
+    "mtime": 1780260951.9281948,
+    "ast_hash": "75aa954f318eedc3a9ca14fed5aebcac",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-dependencies.md": {
+    "mtime": 1780260951.9292097,
+    "ast_hash": "52f7b732ffe56cd965fe0843a3bb0734",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-derived-state-no-effect.md": {
+    "mtime": 1780260951.9305608,
+    "ast_hash": "31ea3f116cd42a25443867bc093d3694",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-derived-state.md": {
+    "mtime": 1780260951.9318595,
+    "ast_hash": "37b637d1bc1c176c0e25900d61783766",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-functional-setstate.md": {
+    "mtime": 1780260951.9333837,
+    "ast_hash": "ad5f7b2581764321ef7c856530130152",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-lazy-state-init.md": {
+    "mtime": 1780260951.9348993,
+    "ast_hash": "8232f3ad1c39eb66fbbd7586bba68477",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-memo-with-default-value.md": {
+    "mtime": 1780260951.93618,
+    "ast_hash": "4a9093e4588f6bddd7bde77956ba12f9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-memo.md": {
+    "mtime": 1780260951.9377713,
+    "ast_hash": "ffc8ff5758af92671ad9073316eeec96",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-move-effect-to-event.md": {
+    "mtime": 1780260951.9377713,
+    "ast_hash": "0f0a135c2841f75d12197e8d7a5b1dce",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-simple-expression-in-memo.md": {
+    "mtime": 1780260951.939297,
+    "ast_hash": "93133bbfc9e82851d12dd10314b17239",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-transitions.md": {
+    "mtime": 1780260951.941778,
+    "ast_hash": "a6900c7ea8278db5ebdc0dfea981da68",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\rerender-use-ref-transient-values.md": {
+    "mtime": 1780260951.942776,
+    "ast_hash": "7518ae1a018dd77897cba1897d321f5f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-after-nonblocking.md": {
+    "mtime": 1780260951.9443064,
+    "ast_hash": "ef9df9991c5ac8ef7d4685219fc4f2fe",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-auth-actions.md": {
+    "mtime": 1780260951.9457514,
+    "ast_hash": "79f807c5ceed427137d46e125b47c188",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-cache-lru.md": {
+    "mtime": 1780260951.9463987,
+    "ast_hash": "b4bff68df5ef6067861ffd725c5de9db",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-cache-react.md": {
+    "mtime": 1780260951.9484105,
+    "ast_hash": "07ef8edb8485881cb4d5dc679998a69b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-dedup-props.md": {
+    "mtime": 1780260951.9499156,
+    "ast_hash": "01b8f05177ca9fec8af89db728dad353",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-parallel-fetching.md": {
+    "mtime": 1780260951.9509242,
+    "ast_hash": "30af1819ffffec5afcababf49ed8e9f1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\vercel-react-best-practices\\rules\\server-serialization.md": {
+    "mtime": 1780260951.952536,
+    "ast_hash": "65ef936a259fe0bfcdae6e70b643cf8b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\skills\\web-design-guidelines\\SKILL.md": {
+    "mtime": 1780260951.9540396,
+    "ast_hash": "8d96a7f6f0c5e1908bab8faf8cd2f9b4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agent\\workflows\\graphify.md": {
+    "mtime": 1780260951.9547577,
+    "ast_hash": "b2d569f153a02e07a1fdf71dc1fced08",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\AGENTS.md": {
+    "mtime": 1780260951.9559202,
+    "ast_hash": "6ca48da2d9f2e3df4bc875543b2c5d52",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\SKILL.md": {
+    "mtime": 1780260951.95738,
+    "ast_hash": "641a0ff3ecebfadb5234a13faa54f428",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\architecture-avoid-boolean-props.md": {
+    "mtime": 1780260951.958381,
+    "ast_hash": "0363b55141376d4059e2625a90fdba8b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\architecture-compound-components.md": {
+    "mtime": 1780260951.959893,
+    "ast_hash": "c21a8bd7f19ce7bb68fd970e307bd9a7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\patterns-children-over-render-props.md": {
+    "mtime": 1780260951.960399,
+    "ast_hash": "cc134df030320f336a570f5d5bb19a9b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\patterns-explicit-variants.md": {
+    "mtime": 1780260951.9618587,
+    "ast_hash": "da06c21b2c17c157b370e5b2c6fbb4a3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\react19-no-forwardref.md": {
+    "mtime": 1780260951.963869,
+    "ast_hash": "8268c880a29f7326048cb637ea3ef534",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\state-context-interface.md": {
+    "mtime": 1780260951.963869,
+    "ast_hash": "bfd14c0e521b2593e70de8ef1b5c20a9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\state-decouple-implementation.md": {
+    "mtime": 1780260951.9650328,
+    "ast_hash": "cf84b77776095d867d5ba3bee5c4b76e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-composition-patterns\\rules\\state-lift-state.md": {
+    "mtime": 1780260951.967269,
+    "ast_hash": "722dac7f3c9fd540380a4a7ec015cd0a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\AGENTS.md": {
+    "mtime": 1780260951.9682758,
+    "ast_hash": "21d7db2786e9bb5d98ea1a9ef0d501b0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\SKILL.md": {
+    "mtime": 1780260951.9693103,
+    "ast_hash": "c5807b44c5991eb2f653182593133fe2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\advanced-event-handler-refs.md": {
+    "mtime": 1780260951.9712791,
+    "ast_hash": "e277ef383b038da08b81404c569af6cd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\advanced-init-once.md": {
+    "mtime": 1780260951.9725895,
+    "ast_hash": "8e7759bb017e5d0d1dd64f6f60f85d3e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\advanced-use-latest.md": {
+    "mtime": 1780260951.973599,
+    "ast_hash": "21d3dbb5f2b557f6d14b224af2d47dc5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\async-api-routes.md": {
+    "mtime": 1780260951.9749177,
+    "ast_hash": "94058ab5b50f99781e5aa56183b00008",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\async-defer-await.md": {
+    "mtime": 1780260951.9759257,
+    "ast_hash": "2e5d4672a75e740fcfd872551e08bbbf",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\async-dependencies.md": {
+    "mtime": 1780260951.977574,
+    "ast_hash": "3bd47351349c6fe86323bf32dd017d76",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\async-parallel.md": {
+    "mtime": 1780260951.9782681,
+    "ast_hash": "5029495e12b0b9b3c03b0ae4f3085659",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\async-suspense-boundaries.md": {
+    "mtime": 1780260951.979787,
+    "ast_hash": "00c19181680f2f698664db510da810d4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\bundle-barrel-imports.md": {
+    "mtime": 1780260951.9813235,
+    "ast_hash": "399d3ac7bcf2623755e299a4efcfe7a4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\bundle-conditional.md": {
+    "mtime": 1780260951.982818,
+    "ast_hash": "d1e3c1adf9989359446cbf624bc0587d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\bundle-defer-third-party.md": {
+    "mtime": 1780260951.9838283,
+    "ast_hash": "476bf2e75198f7c6accc17ea81f3a161",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\bundle-dynamic-imports.md": {
+    "mtime": 1780260951.9853377,
+    "ast_hash": "2ccb840f6d1c0b4ccf9714dc3fb05651",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\bundle-preload.md": {
+    "mtime": 1780260951.9853377,
+    "ast_hash": "b67a4242446249b2bafdeb6a620a2af7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\client-event-listeners.md": {
+    "mtime": 1780260951.9877977,
+    "ast_hash": "78c4562d3fa71d314c7b98d272f56045",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\client-localstorage-schema.md": {
+    "mtime": 1780260951.9877977,
+    "ast_hash": "65c4468bd1d170a5f36003b23062a1e7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\client-passive-event-listeners.md": {
+    "mtime": 1780260951.9892673,
+    "ast_hash": "fbeb4ae3eb20a5bde142b50686e7a166",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\client-swr-dedup.md": {
+    "mtime": 1780260951.9912841,
+    "ast_hash": "e912f4b5ee9e04bcf1b12cb86c86e192",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-batch-dom-css.md": {
+    "mtime": 1780260951.9918048,
+    "ast_hash": "8aeccee9fc15f16f17a8a035b095a088",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-cache-function-results.md": {
+    "mtime": 1780260951.9939394,
+    "ast_hash": "352d02de8ae05ca73448044591fedd70",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-cache-property-access.md": {
+    "mtime": 1780260951.9939394,
+    "ast_hash": "3fc311109878cb0564faad1c3f8992a8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-cache-storage.md": {
+    "mtime": 1780260951.996361,
+    "ast_hash": "ae2d1432a80c552513c42dac684d8663",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-combine-iterations.md": {
+    "mtime": 1780260951.997364,
+    "ast_hash": "afe61f0854bf49bd52475dbaae3bac85",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-early-exit.md": {
+    "mtime": 1780260951.9983683,
+    "ast_hash": "729d6ae7f359973121b30dcb3c8e5d9b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-hoist-regexp.md": {
+    "mtime": 1780260951.999366,
+    "ast_hash": "76ec43c627c68eca559e7a79a6520bbc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-index-maps.md": {
+    "mtime": 1780260952.0010586,
+    "ast_hash": "8462667d199be001ed6df6cc0cb5c83b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-length-check-first.md": {
+    "mtime": 1780260952.0023406,
+    "ast_hash": "ded33d19a9c0d1aa4138838fd6c30402",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-min-max-loop.md": {
+    "mtime": 1780260952.0023406,
+    "ast_hash": "3b812151da0f973d0006fc954eeb1950",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-set-map-lookups.md": {
+    "mtime": 1780260952.004267,
+    "ast_hash": "e26c96c5383f2afef8788fc4de914e97",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\js-tosorted-immutable.md": {
+    "mtime": 1780260952.0047872,
+    "ast_hash": "55999ff61e2a85ef01e19c685fd1f0c0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-activity.md": {
+    "mtime": 1780260952.0062866,
+    "ast_hash": "3d75187b877aef28c7b4d6b5f33b2915",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-animate-svg-wrapper.md": {
+    "mtime": 1780260952.0083632,
+    "ast_hash": "b471e4d8054772a6c5e6a67cf5589e8c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-conditional-render.md": {
+    "mtime": 1780260952.0105052,
+    "ast_hash": "c61896d12e979f353634cc6e5f1b27f0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-content-visibility.md": {
+    "mtime": 1780260952.0115197,
+    "ast_hash": "20a486c49754b5fb0bf806d303118aa2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-hoist-jsx.md": {
+    "mtime": 1780260952.012513,
+    "ast_hash": "776e60b758a1e9fc755f112ae2dd6253",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-hydration-no-flicker.md": {
+    "mtime": 1780260952.0145128,
+    "ast_hash": "dc8c31d3ea2156299b3da17364fc51cb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-hydration-suppress-warning.md": {
+    "mtime": 1780260952.015514,
+    "ast_hash": "ad795d33558ef725bb5204e122e9ffbd",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-svg-precision.md": {
+    "mtime": 1780260952.0167203,
+    "ast_hash": "bb74883dab6f28f8f5652ca779867be0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rendering-usetransition-loading.md": {
+    "mtime": 1780260952.018211,
+    "ast_hash": "5d8cd195730cf58891d3878bafe64bb0",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-defer-reads.md": {
+    "mtime": 1780260952.0192213,
+    "ast_hash": "75aa954f318eedc3a9ca14fed5aebcac",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-dependencies.md": {
+    "mtime": 1780260952.021128,
+    "ast_hash": "52f7b732ffe56cd965fe0843a3bb0734",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-derived-state-no-effect.md": {
+    "mtime": 1780260952.0216448,
+    "ast_hash": "31ea3f116cd42a25443867bc093d3694",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-derived-state.md": {
+    "mtime": 1780260952.0231595,
+    "ast_hash": "37b637d1bc1c176c0e25900d61783766",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-functional-setstate.md": {
+    "mtime": 1780260952.0242312,
+    "ast_hash": "ad5f7b2581764321ef7c856530130152",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-lazy-state-init.md": {
+    "mtime": 1780260952.025875,
+    "ast_hash": "8232f3ad1c39eb66fbbd7586bba68477",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-memo-with-default-value.md": {
+    "mtime": 1780260952.0272522,
+    "ast_hash": "4a9093e4588f6bddd7bde77956ba12f9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-memo.md": {
+    "mtime": 1780260952.0283797,
+    "ast_hash": "ffc8ff5758af92671ad9073316eeec96",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-move-effect-to-event.md": {
+    "mtime": 1780260952.0298917,
+    "ast_hash": "0f0a135c2841f75d12197e8d7a5b1dce",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-simple-expression-in-memo.md": {
+    "mtime": 1780260952.0309598,
+    "ast_hash": "93133bbfc9e82851d12dd10314b17239",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-transitions.md": {
+    "mtime": 1780260952.0327103,
+    "ast_hash": "a6900c7ea8278db5ebdc0dfea981da68",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\rerender-use-ref-transient-values.md": {
+    "mtime": 1780260952.0332384,
+    "ast_hash": "7518ae1a018dd77897cba1897d321f5f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-after-nonblocking.md": {
+    "mtime": 1780260952.034753,
+    "ast_hash": "ef9df9991c5ac8ef7d4685219fc4f2fe",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-auth-actions.md": {
+    "mtime": 1780260952.03608,
+    "ast_hash": "79f807c5ceed427137d46e125b47c188",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-cache-lru.md": {
+    "mtime": 1780260952.0365858,
+    "ast_hash": "b4bff68df5ef6067861ffd725c5de9db",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-cache-react.md": {
+    "mtime": 1780260952.0386343,
+    "ast_hash": "07ef8edb8485881cb4d5dc679998a69b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-dedup-props.md": {
+    "mtime": 1780260952.0398183,
+    "ast_hash": "01b8f05177ca9fec8af89db728dad353",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-parallel-fetching.md": {
+    "mtime": 1780260952.0398183,
+    "ast_hash": "30af1819ffffec5afcababf49ed8e9f1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\vercel-react-best-practices\\rules\\server-serialization.md": {
+    "mtime": 1780260952.0426157,
+    "ast_hash": "65ef936a259fe0bfcdae6e70b643cf8b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.agents\\skills\\web-design-guidelines\\SKILL.md": {
+    "mtime": 1780260952.0437846,
+    "ast_hash": "8d96a7f6f0c5e1908bab8faf8cd2f9b4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\AGENTS.md": {
+    "mtime": 1780686298.9970598,
+    "ast_hash": "2b62ce22bae0c9d841293481463931ec",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\DEPLOY.md": {
+    "mtime": 1771745346.5854728,
+    "ast_hash": "30b78e793e8f5be979423ba8b5ea493b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\PLAN.md": {
+    "mtime": 1780260952.0565512,
+    "ast_hash": "178b82a2b781876fe5fe655a773cdc83",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\README.md": {
+    "mtime": 1780262225.4787836,
+    "ast_hash": "a0565a2aa1fe2ea0fbebe0278f188b77",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\Compose.yaml": {
+    "mtime": 1780260952.065858,
+    "ast_hash": "9ee307f6fde6b83b9a996348d60fb10a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\HELP.md": {
+    "mtime": 1770936926.5052204,
+    "ast_hash": "3798afbb57bb755aa2ffbc2957d79700",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\backend\\src\\main\\resources\\application.yaml": {
+    "mtime": 1780260952.1535366,
+    "ast_hash": "c1b53ae0d63869837ac87d7513ab743a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\deploy-oracle.yml": {
+    "mtime": 1780260952.1726334,
+    "ast_hash": "8bdf1324872fcf7455a2685f4b61d3e2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docker-compose.yml": {
+    "mtime": 1780686704.6667736,
+    "ast_hash": "63fde6f820ff60034115b86dd73ec4f1",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docs\\appendix-d-education-level-match.md": {
+    "mtime": 1780260952.17527,
+    "ast_hash": "e42876f2ad1df19adf86b4a9eade4318",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docs\\appendix-e-jd-parser-improvement.md": {
+    "mtime": 1780260952.1767726,
+    "ast_hash": "ae0365159cec46a91817f89f43faddeb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docs\\appendix-f-taxonomy-integration.md": {
+    "mtime": 1780260952.1785488,
+    "ast_hash": "8debf633355c908e89108c0c13868af8",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docs\\stage_2_plan.md": {
+    "mtime": 1780260952.1801014,
+    "ast_hash": "b2e07427958d72aabf31fb4213d9dd2d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\docs\\stage_4.6_plan.md": {
+    "mtime": 1780260952.1818101,
+    "ast_hash": "77d4c5bb1c77d648dea2e7a2d503ca10",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\README.md": {
+    "mtime": 1780260952.1848338,
+    "ast_hash": "9162add00befbcdb432430f405c4ad8d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\raw_data.txt": {
+    "mtime": 1780287698.5721123,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\dashboard-trackhireai.png": {
+    "mtime": 1780260952.2184317,
+    "ast_hash": "ca67d2b2244330fa8e4f7cd00d526d09",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\file.svg": {
+    "mtime": 1780260952.220739,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\globe.svg": {
+    "mtime": 1780260952.2217376,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\next.svg": {
+    "mtime": 1780260952.2234597,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\vercel.svg": {
+    "mtime": 1780260952.2248306,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\public\\window.svg": {
+    "mtime": 1780260952.226338,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": ""
+  }
+}

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -18,16 +17,15 @@ import {
   Building2,
   Hash,
   Briefcase,
-  AlertTriangle,
   Copy,
   ArrowRight,
   Maximize2,
 } from "lucide-react";
 import Drawer from "../ui/Drawer";
-import ResizableSplitView from "../ui/ResizableSplitView";
 import { DownloadDropdown } from "../DownloadDropdown";
 import { DuplicateJobModal } from "../DuplicateJobModal";
 import { ATSScoreCard } from "../ATSScoreCard";
+import { LatexPreviewWorkspace } from "./application-detail/LatexPreviewWorkspace";
 import { useDownloader } from "@/hooks/useDownloader";
 import { api, type GenerateFromJdResponse } from "@/lib/api";
 import type { UserProfile } from "@/types/dtos";
@@ -48,7 +46,6 @@ const staggerContainer = {
 };
 
 export default function NewApplicationPage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [streamStage, setStreamStage] = useState<string>("");
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
@@ -103,9 +100,7 @@ export default function NewApplicationPage() {
   );
   const [copied, setCopied] = useState(false);
 
-  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [pdfError, setPdfError] = useState<string | null>(null);
 
   const [customPrompt, setCustomPrompt] = useState("");
   const [showPromptInput, setShowPromptInput] = useState(false);
@@ -120,34 +115,6 @@ export default function NewApplicationPage() {
     company: string;
     appliedOn: string;
   } | null>(null);
-
-  const compilePdfPreview = useCallback(async (applicationId: number) => {
-    setPdfLoading(true);
-    setPdfError(null);
-    setPdfBlobUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return null;
-    });
-    try {
-      const blob = await api.resumes.downloadPdf(applicationId);
-      if (blob.size === 0) {
-        setPdfError("PDF compilation failed. The LaTeX may contain errors.");
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      setPdfBlobUrl(url);
-    } catch {
-      setPdfError("Failed to compile PDF preview.");
-    } finally {
-      setPdfLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
-    };
-  }, [pdfBlobUrl]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -190,9 +157,6 @@ export default function NewApplicationPage() {
 
     api.profile.get().then(setUserProfile).catch(console.error);
 
-    if (result?.applicationId) {
-      compilePdfPreview(result.applicationId);
-    }
   }, [mounted]);
 
   useEffect(() => {
@@ -210,7 +174,6 @@ export default function NewApplicationPage() {
           latexContent,
           coverLetterContent,
         );
-        await compilePdfPreview(appId);
       } catch {
         // no-op
       } finally {
@@ -223,7 +186,6 @@ export default function NewApplicationPage() {
     result?.latexContent,
     result?.applicationId,
     result?.coverLetterContent,
-    compilePdfPreview,
   ]);
 
   const doGenerate = async () => {
@@ -276,7 +238,6 @@ export default function NewApplicationPage() {
               setGenerated(true);
               setIsEditing(true);
               setIsDrawerOpen(true);
-              compilePdfPreview(data.applicationId as number);
               setStreamStage("Generating cover letter...");
               break;
             case "complete":
@@ -390,7 +351,6 @@ export default function NewApplicationPage() {
             }
           : null,
       );
-      if (result) compilePdfPreview(result.applicationId);
       if (customPrompt.trim()) {
         toast.success("Resume regenerated with your instructions.");
       }
@@ -442,7 +402,6 @@ export default function NewApplicationPage() {
         result.latexContent,
         result.coverLetterContent,
       );
-      await compilePdfPreview(result.applicationId);
     } catch (error) {
       console.error(error);
       toast.error("Failed to update preview.");
@@ -914,70 +873,15 @@ export default function NewApplicationPage() {
             </div>
 
             {activeTab === "resume" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-150">
-                <div className="flex flex-col h-full rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-gray-50/80 dark:bg-zinc-800/50 ring-1 ring-gray-900/5 dark:ring-white/5 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200/60 dark:border-gray-800/60">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                      LaTeX Source
-                    </span>
-                    <button
-                      onClick={() => handleCopy(result.latexContent)}
-                      className="p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-full text-gray-400 dark:text-gray-500 transition-colors"
-                    >
-                      {copied ? <Check size={14} /> : <Copy size={14} />}
-                    </button>
-                  </div>
-                  <textarea
-                    className="flex-1 w-full p-4 bg-transparent resize-none focus:outline-none font-mono text-xs text-gray-900 dark:text-white leading-relaxed"
-                    value={result.latexContent}
-                    onChange={(e) =>
-                      setResult({ ...result, latexContent: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="h-full rounded-2xl border border-gray-200/60 dark:border-gray-800/60 overflow-hidden bg-gray-100 dark:bg-zinc-800 flex flex-col ring-1 ring-gray-900/5 dark:ring-white/5 relative">
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200/60 dark:border-gray-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm z-10">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                      PDF Preview
-                    </span>
-                    {pdfError && (
-                      <span className="text-xs text-red-500 flex items-center gap-1">
-                        <AlertTriangle size={12} /> Error
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex-1 relative bg-gray-100 dark:bg-zinc-800 flex items-center justify-center">
-                    {pdfLoading && (
-                      <div className="absolute inset-0 z-20 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
-                        <Loader2
-                          size={24}
-                          className="animate-spin text-primary-600"
-                        />
-                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
-                          Compiling PDF...
-                        </span>
-                      </div>
-                    )}
-
-                    {pdfBlobUrl ? (
-                      <iframe
-                        src={`${pdfBlobUrl}#toolbar=0&navpanes=0&scrollbar=0`}
-                        className="w-full h-full border-0"
-                        title="Resume Preview"
-                      />
-                    ) : pdfError ? (
-                      <div className="text-center p-6 text-gray-400 dark:text-gray-500">
-                        <p className="text-sm">{pdfError}</p>
-                      </div>
-                    ) : (
-                      <div className="text-center p-6 text-gray-400 dark:text-gray-600">
-                        <p className="text-sm">Preview not available</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+              <div className="h-[600px] rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-white/80 dark:bg-zinc-900/80 p-4 ring-1 ring-gray-900/5 dark:ring-white/5">
+                <LatexPreviewWorkspace
+                  applicationId={result.applicationId}
+                  initialContent={result.latexContent}
+                  hasGeneratedResume={Boolean(result.latexContent)}
+                  onContentUpdate={(newContent) =>
+                    setResult({ ...result, latexContent: newContent })
+                  }
+                />
               </div>
             ) : (
               <div className="flex flex-col h-150 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm ring-1 ring-gray-900/5 dark:ring-white/5 overflow-hidden">
@@ -1189,84 +1093,39 @@ export default function NewApplicationPage() {
               </div>
             )}
 
-            {/* Resizable Split View */}
-            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm overflow-hidden">
-              <ResizableSplitView
-                left={
-                  <div className="flex flex-col h-full bg-gray-50/50 dark:bg-zinc-800/30">
-                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm">
-                      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                        {activeTab === "resume"
-                          ? "LaTeX Source"
-                          : "Markdown Content"}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleCopy(
-                            activeTab === "resume"
-                              ? result.latexContent
-                              : result.coverLetterContent,
-                          )
-                        }
-                        className="p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-md text-gray-400 dark:text-gray-500 transition-colors"
-                      >
-                        {copied ? <Check size={14} /> : <Copy size={14} />}
-                      </button>
-                    </div>
-                    <textarea
-                      className="flex-1 w-full p-4 bg-transparent resize-none focus:outline-none font-mono text-xs sm:text-sm text-gray-900 dark:text-white leading-relaxed"
-                      value={
-                        activeTab === "resume"
-                          ? result.latexContent
-                          : result.coverLetterContent
-                      }
-                      onChange={(e) =>
-                        setResult({
-                          ...result,
-                          [activeTab === "resume"
-                            ? "latexContent"
-                            : "coverLetterContent"]: e.target.value,
-                        })
-                      }
-                      spellCheck={false}
-                    />
+            <div className="flex-1 min-h-0 h-full bg-white dark:bg-zinc-900 rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm overflow-hidden p-4">
+              {activeTab === "resume" ? (
+                <LatexPreviewWorkspace
+                  applicationId={result.applicationId}
+                  initialContent={result.latexContent}
+                  hasGeneratedResume={Boolean(result.latexContent)}
+                  onContentUpdate={(newContent) =>
+                    setResult({ ...result, latexContent: newContent })
+                  }
+                />
+              ) : (
+                <div className="flex flex-col h-full bg-gray-50/50 dark:bg-zinc-800/30 rounded-lg border border-gray-200/60 dark:border-gray-800/60 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm">
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Markdown Content
+                    </span>
+                    <button
+                      onClick={() => handleCopy(result.coverLetterContent)}
+                      className="p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-md text-gray-400 dark:text-gray-500 transition-colors"
+                    >
+                      {copied ? <Check size={14} /> : <Copy size={14} />}
+                    </button>
                   </div>
-                }
-                right={
-                  <div className="flex flex-col h-full bg-gray-100 dark:bg-zinc-900 relative">
-                    {pdfLoading && (
-                      <div className="absolute inset-0 z-10 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
-                        <Loader2
-                          size={32}
-                          className="animate-spin text-primary-600"
-                        />
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Compiling PDF...
-                        </span>
-                      </div>
-                    )}
-                    {pdfBlobUrl ? (
-                      <iframe
-                        src={`${pdfBlobUrl}#toolbar=0&navpanes=0&scrollbar=0`}
-                        className="w-full h-full border-0"
-                        title="Resume Preview"
-                      />
-                    ) : pdfError ? (
-                      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-gray-400 decoration-gray-500">
-                        <AlertTriangle
-                          size={32}
-                          className="mb-2 text-red-500"
-                        />
-                        <p className="text-sm text-red-500">{pdfError}</p>
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-600">
-                        <p className="text-sm">Preview not available</p>
-                      </div>
-                    )}
-                  </div>
-                }
-              />
+                  <textarea
+                    className="flex-1 w-full p-4 bg-transparent resize-none focus:outline-none font-mono text-xs sm:text-sm text-gray-900 dark:text-white leading-relaxed"
+                    value={result.coverLetterContent}
+                    onChange={(e) =>
+                      setResult({ ...result, coverLetterContent: e.target.value })
+                    }
+                    spellCheck={false}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}

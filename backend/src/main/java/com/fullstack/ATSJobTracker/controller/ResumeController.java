@@ -3,9 +3,12 @@ package com.fullstack.ATSJobTracker.controller;
 
 import com.fullstack.ATSJobTracker.dto.GenerateFromJdRequest;
 import com.fullstack.ATSJobTracker.dto.GenerateFromJdResponse;
+import com.fullstack.ATSJobTracker.dto.PdfSyncResponse;
 import com.fullstack.ATSJobTracker.dto.ResumeGenerationRequest;
 import com.fullstack.ATSJobTracker.dto.ResumeGenerationResponse;
 import com.fullstack.ATSJobTracker.dto.UpdateContentRequest;
+import com.fullstack.ATSJobTracker.exception.LatexCompilationException;
+import com.fullstack.ATSJobTracker.exception.LatexCompilerUnavailableException;
 import com.fullstack.ATSJobTracker.model.ResumeBase;
 import com.fullstack.ATSJobTracker.repository.ResumeBaseRepository;
 import com.fullstack.ATSJobTracker.service.AuthService;
@@ -155,6 +158,38 @@ public class ResumeController {
                     }
                     jobApplicationService.saveEntity(app);
                     return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{applicationId}/pdf-sync")
+    public ResponseEntity<?> getPdfSync(@PathVariable Long applicationId) {
+        log.info("GET /api/resumes/{}/pdf-sync", applicationId);
+        return jobApplicationService.getApplication(applicationId)
+                .map(app -> {
+                    String content = app.getGeneratedResumeContent();
+                    if (content == null || content.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                    }
+                    try {
+                        PdfSyncResponse response = resumeService.compilePdfWithSync(content);
+                        return ResponseEntity.ok(response);
+                    } catch (LatexCompilationException e) {
+                        return ResponseEntity.unprocessableEntity().body(PdfSyncResponse.builder()
+                                .pdfBase64("")
+                                .syncMap(List.of())
+                                .compileDiagnostics(e.getDiagnostics())
+                                .build());
+                    } catch (LatexCompilerUnavailableException e) {
+                        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(PdfSyncResponse.builder()
+                                .pdfBase64("")
+                                .syncMap(List.of())
+                                .compileDiagnostics(List.of(com.fullstack.ATSJobTracker.dto.PdfSyncDiagnostic.builder()
+                                        .level("error")
+                                        .message(e.getMessage())
+                                        .build()))
+                                .build());
+                    }
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

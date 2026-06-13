@@ -67,6 +67,31 @@ export interface ResumeGenerationResponse {
   scoreBreakdown?: Record<string, { raw: number; weighted: number; max: number; label: string }>;
 }
 
+export interface PdfSyncMapEntry {
+  page: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  sourceLine: number;
+  sourceColumn?: number;
+  sourceEndColumn?: number;
+  sourceEndLine?: number;
+  confidence: "exact" | "nearest";
+}
+
+export interface PdfSyncDiagnostic {
+  level: "warning" | "error";
+  message: string;
+  line?: number;
+}
+
+export interface PdfSyncResponse {
+  pdfBase64: string;
+  syncMap: PdfSyncMapEntry[];
+  compileDiagnostics?: PdfSyncDiagnostic[];
+}
+
 export interface UserProfile {
   id?: number;
   fullName: string;
