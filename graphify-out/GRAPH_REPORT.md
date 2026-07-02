@@ -1,16 +1,16 @@
-# Graph Report - Job-Resume-Tracker  (2026-06-13)
+# Graph Report - Job-Resume-Tracker  (2026-07-02)
 
 ## Corpus Check
-- 370 files · ~1,291,332 words
+- 372 files · ~1,292,353 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2522 nodes · 4228 edges · 341 communities (162 shown, 179 thin omitted)
+- 2531 nodes · 4245 edges · 340 communities (162 shown, 178 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 254 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f2ee33c7`
+- Built from commit: `3e0f95e1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -303,21 +303,20 @@
 - [[_COMMUNITY_Community 327|Community 327]]
 - [[_COMMUNITY_Community 333|Community 333]]
 - [[_COMMUNITY_Community 334|Community 334]]
-- [[_COMMUNITY_Community 336|Community 336]]
+- [[_COMMUNITY_Community 335|Community 335]]
 - [[_COMMUNITY_Community 337|Community 337]]
 - [[_COMMUNITY_Community 341|Community 341]]
 - [[_COMMUNITY_Community 343|Community 343]]
-- [[_COMMUNITY_Community 344|Community 344]]
 - [[_COMMUNITY_Community 346|Community 346]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `runPipeline()` - 23 edges
 2. `JDAnalysis` - 22 edges
 3. `SnapshotStore` - 20 edges
-4. `keywordExistsInText()` - 19 edges
-5. `ResponseEntity` - 18 edges
-6. `callLLM()` - 18 edges
-7. `runPipeline()` - 18 edges
+4. `runPipeline()` - 19 edges
+5. `keywordExistsInText()` - 19 edges
+6. `ResponseEntity` - 18 edges
+7. `callLLM()` - 18 edges
 8. `GeneratedSections` - 17 edges
 9. `ScorerDimension` - 17 edges
 10. `getAllSkillVariants()` - 17 edges
@@ -337,15 +336,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (341 total, 179 thin omitted)
+## Communities (340 total, 178 thin omitted)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.13
 Nodes (9): extractKeyProvider(), PerRequestKeyProvider, resolveProvider(), ServerKeyProvider, sanitize(), sanitizeObject(), sanitizeSnapshot(), validateKeyFormat() (+1 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.06
-Nodes (13): AuthController, AuthUserRepository, String, Claims, CustomUserDetailsService, EmailService, JwtAuthenticationFilter, JwtUtil (+5 more)
+Cohesion: 0.07
+Nodes (9): AuthController, AuthUserRepository, CustomUserDetailsService, EmailService, JwtAuthenticationFilter, JwtUtil, OAuth2SuccessHandler, OtpService (+1 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.22
@@ -353,7 +352,7 @@ Nodes (4): extractSummaryText(), runPipeline(), PipelineTelemetry, validateSecti
 
 ### Community 7 - "Community 7"
 Cohesion: 0.09
-Nodes (18): CsrfToken, PostConstruct, RefreshToken, AuthResponse, ForgotPasswordRequest, LoginRequest, RegisterRequest, ResetPasswordRequest (+10 more)
+Nodes (17): CsrfToken, PostConstruct, AuthResponse, ForgotPasswordRequest, LoginRequest, RegisterRequest, ResetPasswordRequest, SendOtpRequest (+9 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.33
@@ -372,20 +371,20 @@ Cohesion: 0.36
 Nodes (6): apiFetch(), attemptRefresh(), emitSessionExpired(), ensureCsrfToken(), getCsrfToken(), silentRefresh()
 
 ### Community 13 - "Community 13"
-Cohesion: 0.09
-Nodes (35): createModels(), MODEL_NAMES, models, PROVIDER, PROVIDERS, callLLM(), callLLMText(), extractRateLimitInfo() (+27 more)
+Cohesion: 0.15
+Nodes (23): createModels(), callLLM(), extractSummaryText(), OnPipelineEvent, PipelineEventType, runPipeline(), generateCoverLetter(), extractBoldKeywords() (+15 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.10
-Nodes (22): Map, Map, Duration, Override, String, Duration, String, Duration (+14 more)
+Cohesion: 0.09
+Nodes (24): Map, Map, Duration, Override, String, Duration, String, Duration (+16 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.71
 Nodes (6): extractFromProjectHeadings(), extractFromSkillsSection(), extractTechProfile(), isWordBoundary(), scanTextForTechs(), stripLatex()
 
 ### Community 19 - "Community 19"
-Cohesion: 0.09
-Nodes (13): ATSJobTrackerApplication, ATSJobTrackerApplication, Bean, String, String, String, String, GeminiApiException (+5 more)
+Cohesion: 0.08
+Nodes (16): ATSJobTrackerApplication, ATSJobTrackerApplication, Bean, String, String, PdfSyncDiagnostic, String, String (+8 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.83
@@ -396,40 +395,40 @@ Cohesion: 0.14
 Nodes (20): LatexEditor, LatexEditorHandle, LatexEditorProps, SourceRange, CachedPdfSyncPreview, findBestLatexRangeForPdfText(), findWordColumnRange(), getLatexLine() (+12 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.12
-Nodes (9): AuthUser, Long, String, JobApplication, JobApplicationResponse, LocalDateTime, Modifying, Query (+1 more)
+Cohesion: 0.09
+Nodes (11): AuthUser, PrePersist, Long, String, JobApplication, JobApplicationResponse, LocalDateTime, RefreshToken (+3 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.17
-Nodes (11): AuthResponse, GetMapping, HttpServletResponse, PostMapping, ResponseEntity, String, Void, String (+3 more)
+Cohesion: 0.16
+Nodes (12): AuthResponse, GetMapping, HttpServletResponse, PostMapping, ResponseEntity, String, Void, String (+4 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.13
-Nodes (24): HttpServletRequest, FilterChain, HttpServletRequest, HttpServletResponse, Override, Authentication, FilterChain, HttpServletRequest (+16 more)
+Nodes (23): HttpServletRequest, FilterChain, HttpServletRequest, HttpServletResponse, Override, Authentication, FilterChain, HttpServletRequest (+15 more)
 
 ### Community 32 - "Community 32"
 Cohesion: 0.10
 Nodes (20): ApplicationHeader(), ApplicationHeaderProps, DEFAULT_STATUS_CONFIG, getStatusConfig(), STATUS_CONFIG, CoverLetterEditor(), CoverLetterEditorProps, JobDescriptionCard() (+12 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.12
-Nodes (16): ResumeBase, SseEmitter, SseEmitter, UserProfile, GenerateFromJdRequest, GenerateFromJdResponse, PdfSyncResponse, ResumeGenerationRequest (+8 more)
+Cohesion: 0.09
+Nodes (17): MODEL_NAMES, models, PROVIDER, PROVIDERS, classifyError(), ErrorType, LLMSnapshot, SnapshotStore (+9 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.16
-Nodes (12): ExperienceBulletSchema, ExperienceOutput, ExperienceOutputSchema, RoleExperience, RoleExperienceSchema, ParsedRole, SummaryOutput, SummaryOutputSchema (+4 more)
+Cohesion: 0.18
+Nodes (11): ExperienceBulletSchema, ExperienceOutput, ExperienceOutputSchema, RoleExperience, RoleExperienceSchema, SummaryOutput, SummaryOutputSchema, StrictExperienceBulletSchema (+3 more)
 
 ### Community 41 - "Community 41"
 Cohesion: 0.12
-Nodes (39): boldText(), buildBodyParagraph(), buildBulletParagraph(), buildEducationSection(), buildExperienceSection(), buildProjectRoleParagraphs(), buildProjectsSection(), buildSectionHeading() (+31 more)
+Nodes (41): ParsedResume, ParsedRole, boldText(), buildBodyParagraph(), buildBulletParagraph(), buildEducationSection(), buildExperienceSection(), buildProjectRoleParagraphs() (+33 more)
 
 ### Community 44 - "Community 44"
 Cohesion: 0.07
 Nodes (23): AuthPage(), AuthPageProps, fadeInUp, staggerContainer, View, OAuthCallbackContent(), ConfirmModal(), ConfirmModalProps (+15 more)
 
 ### Community 47 - "Community 47"
-Cohesion: 0.21
-Nodes (9): computeExperienceYears(), ExperienceDuration, monthIndex(), MONTHS, parseRoleSpan(), RoleSpan, spanYears(), YM (+1 more)
+Cohesion: 0.20
+Nodes (13): RoleImpactProfile, computeExperienceYears(), ExperienceDuration, monthIndex(), MONTHS, parseRoleSpan(), RoleSpan, spanYears() (+5 more)
 
 ### Community 80 - "Community 80"
 Cohesion: 0.28
@@ -437,27 +436,27 @@ Nodes (5): AuthenticationException, String, String, NotAuthenticatedException, U
 
 ### Community 83 - "Community 83"
 Cohesion: 0.09
-Nodes (20): traceStore, PipelineEvent, DEFAULT_CONFIG, CompositeKeyProvider, LLMProvider, PerRequestKeyProvider, ProviderKeyProvider, resolveProvider() (+12 more)
+Nodes (19): traceStore, PipelineEvent, CompositeKeyProvider, LLMProvider, PerRequestKeyProvider, ProviderKeyProvider, resolveProvider(), ServerKeyProvider (+11 more)
 
 ### Community 84 - "Community 84"
-Cohesion: 0.12
-Nodes (13): JDAnalysis, JDAnalysisSchema, backendJD, Fixture, fixtures, DeterministicAugmentationStage, filterToPrerequisites(), IJdParseStage (+5 more)
+Cohesion: 0.21
+Nodes (7): DeterministicAugmentationStage, filterToPrerequisites(), IJdParseStage, JdParserPipeline, LLMExtractionStage, parseJD(), SanityCheckStage
 
 ### Community 85 - "Community 85"
 Cohesion: 0.11
-Nodes (20): GetMapping, JobApplicationRequest, JobApplicationResponse, Long, PostMapping, PutMapping, ResponseEntity, String (+12 more)
+Nodes (19): GetMapping, JobApplicationRequest, JobApplicationResponse, Long, PostMapping, PutMapping, ResponseEntity, String (+11 more)
 
 ### Community 86 - "Community 86"
-Cohesion: 0.09
-Nodes (9): classifyError(), ErrorType, LLMSnapshot, SnapshotStore, PipelineTelemetry, FailedRule, PipelineConfig, RepairResult (+1 more)
+Cohesion: 0.17
+Nodes (5): PipelineTelemetry, FailedRule, PipelineConfig, RepairResult, StageTiming
 
 ### Community 87 - "Community 87"
-Cohesion: 0.13
-Nodes (25): List, List, List, PrePersist, Optional, JobApplication, List, Long (+17 more)
+Cohesion: 0.10
+Nodes (27): List, List, List, PrePersist, Optional, JobApplication, List, Long (+19 more)
 
 ### Community 88 - "Community 88"
-Cohesion: 0.11
-Nodes (21): actionVerbRatioDimension, bulletLengthHealthDimension, DEGREE_PATTERNS, DEGREE_RANK, educationLevelMatchDimension, experienceLevelMatchDimension, ROLE_COUNT_RANGES, YEAR_RANGES (+13 more)
+Cohesion: 0.12
+Nodes (18): actionVerbRatioDimension, bulletLengthHealthDimension, DEGREE_PATTERNS, DEGREE_RANK, educationLevelMatchDimension, experienceLevelMatchDimension, ROLE_COUNT_RANGES, YEAR_RANGES (+10 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.06
@@ -484,12 +483,12 @@ Cohesion: 0.07
 Nodes (29): dependencies, ai, @ai-sdk/anthropic, @ai-sdk/google, @ai-sdk/openai, docx, express, @huggingface/transformers (+21 more)
 
 ### Community 95 - "Community 95"
-Cohesion: 0.23
-Nodes (8): GetMapping, Long, PostMapping, PutMapping, ResponseEntity, String, Void, ResumeController
+Cohesion: 0.16
+Nodes (14): GetMapping, Long, PostMapping, PutMapping, ResponseEntity, ResumeBase, SseEmitter, String (+6 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.11
-Nodes (17): PostMapping, ResponseEntity, String, GetMapping, ResponseEntity, Void, GetMapping, PostMapping (+9 more)
+Cohesion: 0.10
+Nodes (18): PostMapping, ResponseEntity, String, GetMapping, ResponseEntity, Void, GetMapping, PostMapping (+10 more)
 
 ### Community 97 - "Community 97"
 Cohesion: 0.13
@@ -500,8 +499,8 @@ Cohesion: 0.10
 Nodes (16): inter, jetbrainsMono, metadata, Providers(), SessionExpiredModal(), SessionExpiredModalProps, AuthContext, AuthContextType (+8 more)
 
 ### Community 99 - "Community 99"
-Cohesion: 0.26
-Nodes (6): Long, Long, String, Boolean, ResumeBaseRepository, ResumeService
+Cohesion: 0.15
+Nodes (12): Long, String, Long, SseEmitter, String, UserProfile, Boolean, GenerateFromJdResponse (+4 more)
 
 ### Community 100 - "Community 100"
 Cohesion: 0.08
@@ -513,7 +512,7 @@ Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModu
 
 ### Community 102 - "Community 102"
 Cohesion: 0.16
-Nodes (20): presentInText(), surfaceForms(), ALIAS_TO_CANONICAL, allGraphAliases(), getGraphAliases(), getImplied(), impliesSkill(), RAW (+12 more)
+Nodes (21): ALIAS_TO_CANONICAL, allGraphAliases(), getGraphAliases(), getImplied(), impliesSkill(), RAW, RawNode, resolveCanonical() (+13 more)
 
 ### Community 103 - "Community 103"
 Cohesion: 0.12
@@ -548,8 +547,8 @@ Cohesion: 0.12
 Nodes (16): 1. Problem Analysis & Research Summary, 2. The Ultimate Plan: 3-Layer Defense, 3.1 Helper: `selectRepairKeywords()`, 3.2 Update `repairKeywordGaps()` Signature, 3.3 Update Pipeline Runner, 3. Proposed Code Changes, 4. Expected Impact Comparison, 5. Files to Change (+8 more)
 
 ### Community 111 - "Community 111"
-Cohesion: 0.20
-Nodes (14): BulletImpactAnalysis, RoleImpactProfile, DEFAULT_MODULES, GeneratedRole, GeneratedSections, ParsedResume, PipelineInput, PipelineModules (+6 more)
+Cohesion: 0.12
+Nodes (19): BulletImpactAnalysis, JDAnalysis, JDAnalysisSchema, DEFAULT_CONFIG, DEFAULT_MODULES, GeneratedRole, GeneratedSections, PipelineInput (+11 more)
 
 ### Community 112 - "Community 112"
 Cohesion: 0.13
@@ -572,8 +571,8 @@ Cohesion: 0.25
 Nodes (7): Override, Long, RefreshToken, String, Scheduled, RefreshTokenService, Transactional
 
 ### Community 117 - "Community 117"
-Cohesion: 0.20
-Nodes (7): Long, String, JobApplicationRequest, JobApplicationResponse, Long, AuthService, JobApplicationService
+Cohesion: 0.30
+Nodes (6): JobApplication, JobApplicationRequest, JobApplicationResponse, Long, Optional, JobApplicationService
 
 ### Community 118 - "Community 118"
 Cohesion: 0.14
@@ -594,6 +593,10 @@ Nodes (13): 5.10 Use Lazy State Initialization, 5.11 Use Transitions for Non-Urg
 ### Community 122 - "Community 122"
 Cohesion: 0.15
 Nodes (13): 7.10 Use Loop for Min/Max Instead of Sort, 7.11 Use Set/Map for O(1) Lookups, 7.12 Use toSorted() Instead of sort() for Immutability, 7.1 Avoid Layout Thrashing, 7.2 Build Index Maps for Repeated Lookups, 7.3 Cache Property Access in Loops, 7.4 Cache Repeated Function Calls, 7.5 Cache Storage API Calls (+5 more)
+
+### Community 123 - "Community 123"
+Cohesion: 0.27
+Nodes (4): RateLimitError, buildRepairPrompt(), identifyFailingBullets(), repairBullets()
 
 ### Community 124 - "Community 124"
 Cohesion: 0.15
@@ -644,8 +647,8 @@ Cohesion: 0.20
 Nodes (10): 3. Gap Analysis, Gap 1: No Semantic Matching, Gap 2: Format Score Always 100%, Gap 3: Impact Score Is Silos, Gap 4: No Keyword Density/Stuffing Penalty, Gap 5: 40-Entry Alias Map Is Too Small, Gap 6: No Skill-to-Experience Coherence, Gap 7: No Title, Experience, or Location Matching (+2 more)
 
 ### Community 136 - "Community 136"
-Cohesion: 0.21
-Nodes (11): ATSScore, ATSScorer, composeFinalScore(), createScorer(), DimensionWeight, knockoutCap(), LABELS, WEIGHTS_PHASE2 (+3 more)
+Cohesion: 0.36
+Nodes (4): String, Claims, SecretKey, JwtUtil
 
 ### Community 137 - "Community 137"
 Cohesion: 0.22
@@ -656,8 +659,8 @@ Cohesion: 0.22
 Nodes (8): 8.1 Initialize App Once, Not Per Mount, 8.2 Store Event Handlers in Refs, 8.3 useEffectEvent for Stable Callback Refs, 8. Advanced Patterns, Abstract, React Best Practices, References, Table of Contents
 
 ### Community 139 - "Community 139"
-Cohesion: 0.36
-Nodes (7): CsrfToken, HttpServletRequest, Override, String, CsrfTokenRequestHandler, SpaCsrfTokenRequestHandler, Supplier
+Cohesion: 0.33
+Nodes (8): CsrfToken, HttpServletRequest, HttpServletResponse, Override, String, CsrfTokenRequestHandler, SpaCsrfTokenRequestHandler, Supplier
 
 ### Community 142 - "Community 142"
 Cohesion: 0.22
@@ -672,8 +675,8 @@ Cohesion: 0.25
 Nodes (7): 3.1 Authenticate Server Actions Like API Routes, 3.2 Avoid Duplicate Serialization in RSC Props, 3.3 Cross-Request LRU Caching, 3.4 Minimize Serialization at RSC Boundaries, 3.5 Parallel Data Fetching with Component Composition, 3.7 Use after() for Non-Blocking Operations, 3. Server-Side Performance
 
 ### Community 145 - "Community 145"
-Cohesion: 0.27
-Nodes (4): RateLimitError, buildRepairPrompt(), identifyFailingBullets(), repairBullets()
+Cohesion: 0.39
+Nodes (6): applySubstitutions(), FILLER_SUBSTITUTIONS, trimBullet(), trimRoleBullets(), truncateAtClause(), wordCount()
 
 ### Community 146 - "Community 146"
 Cohesion: 0.25
@@ -688,8 +691,8 @@ Cohesion: 0.38
 Nodes (3): Long, WordDocumentService, XWPFDocument
 
 ### Community 150 - "Community 150"
-Cohesion: 0.29
-Nodes (10): augmentSkillList(), selectRepairKeywords(), calculateDensityPenalty(), countKeywordOccurrences(), escapeRegex(), keywordExistsInText(), gradedCoverage(), generateDynamicVariants() (+2 more)
+Cohesion: 0.16
+Nodes (18): keywordRelevanceDimension, skillExperienceCoherenceDimension, augmentSkillList(), selectRepairKeywords(), CATEGORY_HINTS, CategoryLine, displaySkill(), presentInText() (+10 more)
 
 ### Community 151 - "Community 151"
 Cohesion: 0.29
@@ -720,8 +723,8 @@ Cohesion: 0.33
 Nodes (6): 2.1 Avoid Barrel File Imports, 2.2 Conditional Module Loading, 2.3 Defer Non-Critical Third-Party Libraries, 2.4 Dynamic Imports for Heavy Components, 2.5 Preload Based on User Intent, 2. Bundle Size Optimization
 
 ### Community 159 - "Community 159"
-Cohesion: 0.16
-Nodes (14): AuthUser, PrePersist, AuthUser, String, Override, String, Authentication, Authentication (+6 more)
+Cohesion: 0.14
+Nodes (15): AuthUser, PrePersist, AuthUser, RefreshToken, Override, String, Authentication, Authentication (+7 more)
 
 ### Community 162 - "Community 162"
 Cohesion: 0.40
@@ -780,44 +783,40 @@ Cohesion: 0.12
 Nodes (15): PdfSyncDiagnostic, PdfSyncMapEntry, String, PdfSyncMapEntry, String, Test, Double, Integer (+7 more)
 
 ### Community 334 - "Community 334"
-Cohesion: 0.18
-Nodes (16): CATEGORY_HINTS, CategoryLine, displaySkill(), injectVerifiedSkills(), SkillInjectionResult, tech, ALL_ALIASES, CandidateTechProfile (+8 more)
-
-### Community 336 - "Community 336"
-Cohesion: 0.50
-Nodes (3): PdfSyncDiagnostic, String, LatexCompilationException
-
-### Community 337 - "Community 337"
 Cohesion: 0.28
-Nodes (13): cosineSimilarity(), calculateATSScoreWithEmbeddings(), scorerPhase2, scorerPhase3, computeResumeJDSimilarity(), computeSkillSetSimilarity(), computeSkillSimilarity(), getEmbedder() (+5 more)
+Nodes (10): tech, ALL_ALIASES, CandidateTechProfile, CANONICAL_TECH, extractFromProjectHeadings(), extractFromSkillsSection(), extractTechProfile(), isWordBoundary() (+2 more)
 
-### Community 341 - "Community 341"
-Cohesion: 0.33
-Nodes (6): formatScoreDimension, FormatIssue, stripAllLatex(), stripLatexCommands(), FormatResult, validateFormat()
-
-### Community 344 - "Community 344"
+### Community 335 - "Community 335"
 Cohesion: 0.83
 Nodes (3): buildHealthReport(), emptyReport(), percentile()
 
+### Community 337 - "Community 337"
+Cohesion: 0.15
+Nodes (22): defaultDimensions, phase3Dimensions, ATSScore, cosineSimilarity(), calculateATSScoreWithEmbeddings(), scorerPhase2, scorerPhase3, computeResumeJDSimilarity() (+14 more)
+
+### Community 341 - "Community 341"
+Cohesion: 0.53
+Nodes (4): FormatIssue, stripAllLatex(), FormatResult, validateFormat()
+
 ## Knowledge Gaps
-- **818 isolated node(s):** `recordToolUse.sh script`, `recordToolUse.sh script`, `@opencode-ai/plugin`, `String`, `String` (+813 more)
+- **819 isolated node(s):** `recordToolUse.sh script`, `recordToolUse.sh script`, `@opencode-ai/plugin`, `String`, `String` (+814 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **179 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **178 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ResumeService` connect `Community 0` to `Community 34`?**
+- **Why does `ResponseEntity` connect `Community 30` to `Community 96`, `Community 87`, `Community 14`, `Community 7`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `ResponseEntity` connect `Community 30` to `Community 96`, `Community 34`, `Community 7`, `Community 14`, `Community 87`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `ResumeController` connect `Community 4` to `Community 0`, `Community 1`, `Community 34`, `Community 160`?**
+- **Why does `AuthController` connect `Community 3` to `Community 7`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Community 96` to `Community 159`, `Community 95`, `Community 87`, `Community 7`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Are the 21 inferred relationships involving `runPipeline()` (e.g. with `profileRoleImpact()` and `createModels()`) actually correct?**
   _`runPipeline()` has 21 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `recordToolUse.sh script`, `recordToolUse.sh script`, `@opencode-ai/plugin` to the rest of the system?**
-  _818 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _819 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.12631578947368421 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.05792349726775956 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06938775510204082 - nodes in this community are weakly interconnected._

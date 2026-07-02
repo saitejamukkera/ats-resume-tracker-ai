@@ -10,12 +10,12 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\modernize\\java-upgrade\\hooks\\scripts\\recordToolUse.ps1": {
-    "mtime": 1781299228.1917858,
+    "mtime": 1781368434.2697518,
     "ast_hash": "9ecf230451dfd20ff4e0a2a01e80a4e6",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\.github\\modernize\\java-upgrade\\hooks\\scripts\\recordToolUse.sh": {
-    "mtime": 1781299228.2043111,
+    "mtime": 1781368434.2759457,
     "ast_hash": "e25ae501603ce6bf738198f5ce32ba83",
     "semantic_hash": ""
   },
@@ -435,8 +435,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\next-env.d.ts": {
-    "mtime": 1781131243.1395073,
-    "ast_hash": "2a74d3909800ca5467fa83b0ab4a4890",
+    "mtime": 1781331163.4053578,
+    "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\next.config.ts": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ATSScoreCard.tsx": {
-    "mtime": 1780260952.2271044,
-    "ast_hash": "cbe517ed1648d36af7248cfbec022980",
+    "mtime": 1781330647.991492,
+    "ast_hash": "a6e3ce59e802a9d61a4100c9cb4d6798",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\ConfirmModal.tsx": {
@@ -525,8 +525,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\NewApplicationPage.tsx": {
-    "mtime": 1781130597.9671307,
-    "ast_hash": "20219d4f850d2bcc8e61120d400f3bee",
+    "mtime": 1781330637.5270946,
+    "ast_hash": "26cf43395f385eacf740bc78dd243022",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\components\\dashboard\\SettingsPage.tsx": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\lib\\api.ts": {
-    "mtime": 1781123839.064825,
-    "ast_hash": "5aec2975cd00dfe01746fa4fc594bfef",
+    "mtime": 1781330613.8914645,
+    "ast_hash": "5c916d68fac70f5f346fd6eb48bd14bb",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\frontend\\src\\lib\\crypto.ts": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\pipeline\\runner.ts": {
-    "mtime": 1781329904.089712,
-    "ast_hash": "2f01bc682888968c00fd8a6f816a2d89",
+    "mtime": 1782082156.736844,
+    "ast_hash": "38bbb4a3cc4684f0cb579d5bbf46903c",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\schemas\\cover-letter.ts": {
@@ -760,7 +760,7 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\docx-generator.ts": {
-    "mtime": 1781052604.5861776,
+    "mtime": 1781974064.9073472,
     "ast_hash": "e197407b3fdea0f32e49c8d40b4221a0",
     "semantic_hash": ""
   },
@@ -775,18 +775,18 @@
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\keyword-gap-repair.ts": {
-    "mtime": 1781328860.1135268,
-    "ast_hash": "53f5c3aa8c11b2feb2bbaff9e8354208",
+    "mtime": 1781974064.9073472,
+    "ast_hash": "4b41e0d0bcba3f7086e2c552cc79458c",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\latex-assembler.ts": {
-    "mtime": 1781052608.796992,
+    "mtime": 1781974064.9073472,
     "ast_hash": "f1597b1d8393ba6756688b049e436d88",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\section-generators.ts": {
-    "mtime": 1781329796.4407618,
-    "ast_hash": "209810a489b9f442c1dcc3f9048f4382",
+    "mtime": 1782082156.735845,
+    "ast_hash": "0baf36da5682cd73dc3c76004a7a9f49",
     "semantic_hash": ""
   },
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\skills-reorderer.ts": {
@@ -1897,6 +1897,16 @@
   "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\stages\\impact-lift.ts": {
     "mtime": 1781330061.2765052,
     "ast_hash": "b27a4218d609bf3a7c3a781435c68ae3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\bullet-trimmer.test.ts": {
+    "mtime": 1781330787.8223658,
+    "ast_hash": "ce912fd1e921fab62d43d63eae373094",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\mukke\\Desktop\\Job-Resume-Tracker\\resume-pipeline\\src\\validation\\utils\\bullet-trimmer.ts": {
+    "mtime": 1781330683.219357,
+    "ast_hash": "2a765b0033528b469bec7ae0afb9eb84",
     "semantic_hash": ""
   }
 }

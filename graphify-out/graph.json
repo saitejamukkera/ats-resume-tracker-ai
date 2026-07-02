@@ -835,7 +835,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L1",
       "id": "controller_resumecontroller",
-      "community": 34,
+      "community": 95,
       "norm_label": "resumecontroller.java"
     },
     {
@@ -862,7 +862,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L42",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java_resumebase",
-      "community": 34,
+      "community": 95,
       "norm_label": "resumebase"
     },
     {
@@ -925,7 +925,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L66",
       "id": "generatefromjdrequest",
-      "community": 34,
+      "community": 95,
       "norm_label": "generatefromjdrequest"
     },
     {
@@ -943,7 +943,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L86",
       "id": "controller_resumecontroller_resumecontroller_generatefromjdstream",
-      "community": 34,
+      "community": 95,
       "norm_label": ".generatefromjdstream()"
     },
     {
@@ -952,7 +952,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L86",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java_sseemitter",
-      "community": 34,
+      "community": 95,
       "norm_label": "sseemitter"
     },
     {
@@ -979,7 +979,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L111",
       "id": "resumegenerationrequest",
-      "community": 34,
+      "community": 95,
       "norm_label": "resumegenerationrequest"
     },
     {
@@ -997,7 +997,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L145",
       "id": "updatecontentrequest",
-      "community": 34,
+      "community": 95,
       "norm_label": "updatecontentrequest"
     },
     {
@@ -1240,7 +1240,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdRequest.java",
       "source_location": "L1",
       "id": "dto_generatefromjdrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "generatefromjdrequest.java"
     },
     {
@@ -1249,7 +1249,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdRequest.java",
       "source_location": "L11",
       "id": "dto_generatefromjdrequest_generatefromjdrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "generatefromjdrequest"
     },
     {
@@ -1258,7 +1258,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdResponse.java",
       "source_location": "L1",
       "id": "dto_generatefromjdresponse",
-      "community": 34,
+      "community": 14,
       "norm_label": "generatefromjdresponse.java"
     },
     {
@@ -1267,7 +1267,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdResponse.java",
       "source_location": "L8",
       "id": "dto_generatefromjdresponse_generatefromjdresponse",
-      "community": 34,
+      "community": 14,
       "norm_label": "generatefromjdresponse"
     },
     {
@@ -1366,7 +1366,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/PdfSyncResponse.java",
       "source_location": "L1",
       "id": "dto_pdfsyncresponse",
-      "community": 34,
+      "community": 14,
       "norm_label": "pdfsyncresponse.java"
     },
     {
@@ -1375,7 +1375,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/PdfSyncResponse.java",
       "source_location": "L10",
       "id": "dto_pdfsyncresponse_pdfsyncresponse",
-      "community": 34,
+      "community": 14,
       "norm_label": "pdfsyncresponse"
     },
     {
@@ -1420,7 +1420,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationRequest.java",
       "source_location": "L1",
       "id": "dto_resumegenerationrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumegenerationrequest.java"
     },
     {
@@ -1429,7 +1429,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationRequest.java",
       "source_location": "L11",
       "id": "dto_resumegenerationrequest_resumegenerationrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumegenerationrequest"
     },
     {
@@ -1438,7 +1438,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationResponse.java",
       "source_location": "L1",
       "id": "dto_resumegenerationresponse",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumegenerationresponse.java"
     },
     {
@@ -1447,7 +1447,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationResponse.java",
       "source_location": "L9",
       "id": "dto_resumegenerationresponse_resumegenerationresponse",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumegenerationresponse"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/UpdateContentRequest.java",
       "source_location": "L1",
       "id": "dto_updatecontentrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "updatecontentrequest.java"
     },
     {
@@ -1483,7 +1483,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/UpdateContentRequest.java",
       "source_location": "L8",
       "id": "dto_updatecontentrequest_updatecontentrequest",
-      "community": 34,
+      "community": 87,
       "norm_label": "updatecontentrequest"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L1",
       "id": "exception_latexcompilationexception",
-      "community": 336,
+      "community": 19,
       "norm_label": "latexcompilationexception.java"
     },
     {
@@ -1573,7 +1573,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L8",
       "id": "exception_latexcompilationexception_latexcompilationexception",
-      "community": 336,
+      "community": 19,
       "norm_label": "latexcompilationexception"
     },
     {
@@ -1582,7 +1582,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "exception_latexcompilationexception_latexcompilationexception_latexcompilationexception",
-      "community": 336,
+      "community": 19,
       "norm_label": ".latexcompilationexception()"
     },
     {
@@ -1591,7 +1591,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_latexcompilationexception_java_string",
-      "community": 336,
+      "community": 19,
       "norm_label": "string"
     },
     {
@@ -1609,7 +1609,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_latexcompilationexception_java_pdfsyncdiagnostic",
-      "community": 336,
+      "community": 19,
       "norm_label": "pdfsyncdiagnostic"
     },
     {
@@ -1825,7 +1825,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L1",
       "id": "model_refreshtoken",
-      "community": 123,
+      "community": 29,
       "norm_label": "refreshtoken.java"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L8",
       "id": "model_refreshtoken_refreshtoken",
-      "community": 123,
+      "community": 29,
       "norm_label": "refreshtoken"
     },
     {
@@ -1843,7 +1843,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L39",
       "id": "model_refreshtoken_refreshtoken_oncreate",
-      "community": 123,
+      "community": 29,
       "norm_label": ".oncreate()"
     },
     {
@@ -1852,7 +1852,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L39",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_model_refreshtoken_java_prepersist",
-      "community": 123,
+      "community": 29,
       "norm_label": "prepersist"
     },
     {
@@ -1861,7 +1861,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L45",
       "id": "model_refreshtoken_refreshtoken_isexpired",
-      "community": 123,
+      "community": 29,
       "norm_label": ".isexpired()"
     },
     {
@@ -1870,7 +1870,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/RefreshToken.java",
       "source_location": "L49",
       "id": "model_refreshtoken_refreshtoken_isusable",
-      "community": 123,
+      "community": 29,
       "norm_label": ".isusable()"
     },
     {
@@ -1879,7 +1879,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/ResumeBase.java",
       "source_location": "L1",
       "id": "model_resumebase",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumebase.java"
     },
     {
@@ -1888,7 +1888,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/ResumeBase.java",
       "source_location": "L7",
       "id": "model_resumebase_resumebase",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumebase"
     },
     {
@@ -1933,7 +1933,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L11",
       "id": "repository_authuserrepository_authuserrepository_findbyemail",
-      "community": 159,
+      "community": 30,
       "norm_label": ".findbyemail()"
     },
     {
@@ -1942,7 +1942,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L11",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_authuserrepository_java_string",
-      "community": 159,
+      "community": 30,
       "norm_label": "string"
     },
     {
@@ -2086,7 +2086,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L15",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_refreshtokenrepository_java_refreshtoken",
-      "community": 7,
+      "community": 159,
       "norm_label": "refreshtoken"
     },
     {
@@ -2167,7 +2167,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L13",
       "id": "repository_resumebaserepository_resumebaserepository_findbyname",
-      "community": 87,
+      "community": 99,
       "norm_label": ".findbyname()"
     },
     {
@@ -2176,7 +2176,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L13",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_resumebaserepository_java_string",
-      "community": 87,
+      "community": 99,
       "norm_label": "string"
     },
     {
@@ -2599,7 +2599,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L1",
       "id": "security_jwtutil",
-      "community": 3,
+      "community": 136,
       "norm_label": "jwtutil.java"
     },
     {
@@ -2608,7 +2608,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L13",
       "id": "security_jwtutil_jwtutil",
-      "community": 3,
+      "community": 136,
       "norm_label": "jwtutil"
     },
     {
@@ -2617,7 +2617,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L22",
       "id": "security_jwtutil_jwtutil_getsigningkey",
-      "community": 3,
+      "community": 136,
       "norm_label": ".getsigningkey()"
     },
     {
@@ -2626,7 +2626,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L22",
       "id": "secretkey",
-      "community": 3,
+      "community": 136,
       "norm_label": "secretkey"
     },
     {
@@ -2635,7 +2635,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L26",
       "id": "security_jwtutil_jwtutil_generatetoken",
-      "community": 3,
+      "community": 136,
       "norm_label": ".generatetoken()"
     },
     {
@@ -2644,7 +2644,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L26",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_jwtutil_java_string",
-      "community": 3,
+      "community": 136,
       "norm_label": "string"
     },
     {
@@ -2653,7 +2653,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L35",
       "id": "security_jwtutil_jwtutil_extractemail",
-      "community": 3,
+      "community": 136,
       "norm_label": ".extractemail()"
     },
     {
@@ -2662,7 +2662,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L39",
       "id": "security_jwtutil_jwtutil_istokenvalid",
-      "community": 3,
+      "community": 136,
       "norm_label": ".istokenvalid()"
     },
     {
@@ -2671,7 +2671,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L48",
       "id": "security_jwtutil_jwtutil_extractclaims",
-      "community": 3,
+      "community": 136,
       "norm_label": ".extractclaims()"
     },
     {
@@ -2680,7 +2680,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L48",
       "id": "claims",
-      "community": 3,
+      "community": 136,
       "norm_label": "claims"
     },
     {
@@ -3121,7 +3121,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/SpaCsrfTokenRequestHandler.java",
       "source_location": "L16",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_spacsrftokenrequesthandler_java_httpservletresponse",
-      "community": 31,
+      "community": 139,
       "norm_label": "httpservletresponse"
     },
     {
@@ -3184,7 +3184,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L15",
       "id": "service_authservice_authservice",
-      "community": 117,
+      "community": 96,
       "norm_label": "authservice"
     },
     {
@@ -3193,7 +3193,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L21",
       "id": "service_authservice_authservice_getcurrentuser",
-      "community": 117,
+      "community": 159,
       "norm_label": ".getcurrentuser()"
     },
     {
@@ -3211,7 +3211,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L28",
       "id": "service_authservice_authservice_resolveauthenticatedemail",
-      "community": 117,
+      "community": 159,
       "norm_label": ".resolveauthenticatedemail()"
     },
     {
@@ -3229,7 +3229,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L28",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_authservice_java_string",
-      "community": 117,
+      "community": 159,
       "norm_label": "string"
     },
     {
@@ -3238,7 +3238,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L58",
       "id": "service_authservice_authservice_getcurrentuserid",
-      "community": 117,
+      "community": 95,
       "norm_label": ".getcurrentuserid()"
     },
     {
@@ -3247,7 +3247,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L58",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_authservice_java_long",
-      "community": 117,
+      "community": 95,
       "norm_label": "long"
     },
     {
@@ -3445,7 +3445,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L68",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_optional",
-      "community": 87,
+      "community": 117,
       "norm_label": "optional"
     },
     {
@@ -3454,7 +3454,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L73",
       "id": "service_jobapplicationservice_jobapplicationservice_getapplication",
-      "community": 95,
+      "community": 117,
       "norm_label": ".getapplication()"
     },
     {
@@ -3463,7 +3463,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L73",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_jobapplication",
-      "community": 87,
+      "community": 117,
       "norm_label": "jobapplication"
     },
     {
@@ -3904,7 +3904,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L56",
       "id": "service_resumepipelineclient_resumepipelineclient_generate",
-      "community": 85,
+      "community": 99,
       "norm_label": ".generate()"
     },
     {
@@ -3922,7 +3922,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L56",
       "id": "pipelineresponse",
-      "community": 85,
+      "community": 99,
       "norm_label": "pipelineresponse"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L1",
       "id": "service_resumeservice",
-      "community": 34,
+      "community": 99,
       "norm_label": "resumeservice.java"
     },
     {
@@ -4048,7 +4048,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L49",
       "id": "generatefromjdresponse",
-      "community": 34,
+      "community": 99,
       "norm_label": "generatefromjdresponse"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L143",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_sseemitter",
-      "community": 34,
+      "community": 99,
       "norm_label": "sseemitter"
     },
     {
@@ -4129,7 +4129,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L413",
       "id": "pdfsyncresponse",
-      "community": 34,
+      "community": 99,
       "norm_label": "pdfsyncresponse"
     },
     {
@@ -4147,7 +4147,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L422",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_userprofile",
-      "community": 34,
+      "community": 99,
       "norm_label": "userprofile"
     },
     {
@@ -4399,7 +4399,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/util/KeySanitizer.java",
       "source_location": "L53",
       "id": "util_keysanitizer_keysanitizer_sanitizeforlog",
-      "community": 85,
+      "community": 99,
       "norm_label": ".sanitizeforlog()"
     },
     {
@@ -6683,7 +6683,7 @@
       "label": "ScoreComponent",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L195",
+      "source_location": "L198",
       "id": "lib_api_scorecomponent",
       "community": 103,
       "norm_label": "scorecomponent"
@@ -6692,7 +6692,7 @@
       "label": "AuthResponse",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L202",
+      "source_location": "L205",
       "id": "lib_api_authresponse",
       "community": 105,
       "norm_label": "authresponse"
@@ -6701,7 +6701,7 @@
       "label": "api",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L212",
+      "source_location": "L215",
       "id": "lib_api_api",
       "community": 100,
       "norm_label": "api"
@@ -7468,7 +7468,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L1",
       "id": "scripts_eval_ats",
-      "community": 84,
+      "community": 111,
       "norm_label": "eval-ats.ts"
     },
     {
@@ -7477,7 +7477,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L12",
       "id": "scripts_eval_ats_jd",
-      "community": 84,
+      "community": 111,
       "norm_label": "jd()"
     },
     {
@@ -7486,7 +7486,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L29",
       "id": "scripts_eval_ats_sections",
-      "community": 84,
+      "community": 111,
       "norm_label": "sections()"
     },
     {
@@ -7495,7 +7495,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L39",
       "id": "scripts_eval_ats_fixture",
-      "community": 84,
+      "community": 111,
       "norm_label": "fixture"
     },
     {
@@ -7504,7 +7504,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L46",
       "id": "scripts_eval_ats_backendjd",
-      "community": 84,
+      "community": 111,
       "norm_label": "backendjd"
     },
     {
@@ -7513,7 +7513,7 @@
       "source_file": "resume-pipeline/scripts/eval-ats.ts",
       "source_location": "L53",
       "id": "scripts_eval_ats_fixtures",
-      "community": 84,
+      "community": 111,
       "norm_label": "fixtures"
     },
     {
@@ -7522,7 +7522,7 @@
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L1",
       "id": "config_models",
-      "community": 13,
+      "community": 34,
       "norm_label": "models.ts"
     },
     {
@@ -7531,7 +7531,7 @@
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L24",
       "id": "config_models_provider",
-      "community": 13,
+      "community": 34,
       "norm_label": "provider"
     },
     {
@@ -7540,7 +7540,7 @@
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L26",
       "id": "config_models_providers",
-      "community": 13,
+      "community": 34,
       "norm_label": "providers"
     },
     {
@@ -7549,7 +7549,7 @@
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L48",
       "id": "config_models_models",
-      "community": 13,
+      "community": 34,
       "norm_label": "models"
     },
     {
@@ -7558,7 +7558,7 @@
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L58",
       "id": "config_models_model_names",
-      "community": 13,
+      "community": 34,
       "norm_label": "model_names"
     },
     {
@@ -7711,7 +7711,7 @@
       "source_file": "resume-pipeline/src/impact/detector.ts",
       "source_location": "L210",
       "id": "impact_detector_roleimpactprofile",
-      "community": 111,
+      "community": 47,
       "norm_label": "roleimpactprofile"
     },
     {
@@ -7909,7 +7909,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L1",
       "id": "observability_debug",
-      "community": 86,
+      "community": 34,
       "norm_label": "debug.ts"
     },
     {
@@ -7918,7 +7918,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L7",
       "id": "observability_debug_errortype",
-      "community": 86,
+      "community": 34,
       "norm_label": "errortype"
     },
     {
@@ -7927,7 +7927,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L15",
       "id": "observability_debug_classifyerror",
-      "community": 86,
+      "community": 34,
       "norm_label": "classifyerror()"
     },
     {
@@ -7936,7 +7936,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L56",
       "id": "observability_debug_llmsnapshot",
-      "community": 86,
+      "community": 34,
       "norm_label": "llmsnapshot"
     },
     {
@@ -7945,7 +7945,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L86",
       "id": "observability_debug_snapshotstore",
-      "community": 86,
+      "community": 34,
       "norm_label": "snapshotstore"
     },
     {
@@ -7954,7 +7954,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L90",
       "id": "observability_debug_snapshotstore_constructor",
-      "community": 86,
+      "community": 34,
       "norm_label": ".constructor()"
     },
     {
@@ -7963,7 +7963,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L94",
       "id": "observability_debug_snapshotstore_capture",
-      "community": 86,
+      "community": 34,
       "norm_label": ".capture()"
     },
     {
@@ -7972,7 +7972,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L144",
       "id": "observability_debug_snapshotstore_getall",
-      "community": 86,
+      "community": 34,
       "norm_label": ".getall()"
     },
     {
@@ -7981,7 +7981,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L148",
       "id": "observability_debug_snapshotstore_getbystage",
-      "community": 86,
+      "community": 34,
       "norm_label": ".getbystage()"
     },
     {
@@ -7990,7 +7990,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L152",
       "id": "observability_debug_snapshotstore_gettotalcalls",
-      "community": 86,
+      "community": 34,
       "norm_label": ".gettotalcalls()"
     },
     {
@@ -7999,7 +7999,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L156",
       "id": "observability_debug_snapshotstore_getfailedcalls",
-      "community": 86,
+      "community": 34,
       "norm_label": ".getfailedcalls()"
     },
     {
@@ -8008,7 +8008,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L160",
       "id": "observability_debug_snapshotstore_getmodelsused",
-      "community": 86,
+      "community": 34,
       "norm_label": ".getmodelsused()"
     },
     {
@@ -8017,7 +8017,7 @@
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L164",
       "id": "observability_debug_snapshotstore_getprovider",
-      "community": 86,
+      "community": 34,
       "norm_label": ".getprovider()"
     },
     {
@@ -8026,7 +8026,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L1",
       "id": "observability_llm_wrapper",
-      "community": 13,
+      "community": 34,
       "norm_label": "llm-wrapper.ts"
     },
     {
@@ -8035,7 +8035,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L9",
       "id": "observability_llm_wrapper_llmcallresult",
-      "community": 13,
+      "community": 34,
       "norm_label": "llmcallresult"
     },
     {
@@ -8044,7 +8044,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L15",
       "id": "observability_llm_wrapper_textcallresult",
-      "community": 13,
+      "community": 34,
       "norm_label": "textcallresult"
     },
     {
@@ -8053,7 +8053,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L24",
       "id": "observability_llm_wrapper_ratelimiterror",
-      "community": 13,
+      "community": 34,
       "norm_label": "ratelimiterror"
     },
     {
@@ -8062,7 +8062,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L28",
       "id": "observability_llm_wrapper_ratelimiterror_constructor",
-      "community": 13,
+      "community": 34,
       "norm_label": ".constructor()"
     },
     {
@@ -8071,7 +8071,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L40",
       "id": "observability_llm_wrapper_extractratelimitinfo",
-      "community": 13,
+      "community": 34,
       "norm_label": "extractratelimitinfo()"
     },
     {
@@ -8089,7 +8089,7 @@
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L170",
       "id": "observability_llm_wrapper_callllmtext",
-      "community": 13,
+      "community": 34,
       "norm_label": "callllmtext()"
     },
     {
@@ -8339,7 +8339,7 @@
       "label": "PipelineEventType",
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
-      "source_location": "L42",
+      "source_location": "L43",
       "id": "pipeline_runner_pipelineeventtype",
       "community": 13,
       "norm_label": "pipelineeventtype"
@@ -8348,7 +8348,7 @@
       "label": "PipelineEvent",
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
-      "source_location": "L50",
+      "source_location": "L51",
       "id": "pipeline_runner_pipelineevent",
       "community": 83,
       "norm_label": "pipelineevent"
@@ -8357,7 +8357,7 @@
       "label": "OnPipelineEvent",
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
-      "source_location": "L56",
+      "source_location": "L57",
       "id": "pipeline_runner_onpipelineevent",
       "community": 13,
       "norm_label": "onpipelineevent"
@@ -8366,7 +8366,7 @@
       "label": "runPipeline()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
-      "source_location": "L58",
+      "source_location": "L59",
       "id": "pipeline_runner_runpipeline",
       "community": 13,
       "norm_label": "runpipeline()"
@@ -8375,7 +8375,7 @@
       "label": "extractSummaryText()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
-      "source_location": "L756",
+      "source_location": "L771",
       "id": "pipeline_runner_extractsummarytext",
       "community": 13,
       "norm_label": "extractsummarytext()"
@@ -8386,7 +8386,7 @@
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
       "source_location": "L1",
       "id": "schemas_cover_letter",
-      "community": 13,
+      "community": 34,
       "norm_label": "cover-letter.ts"
     },
     {
@@ -8395,7 +8395,7 @@
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
       "source_location": "L6",
       "id": "schemas_cover_letter_coverletteroutputschema",
-      "community": 13,
+      "community": 34,
       "norm_label": "coverletteroutputschema"
     },
     {
@@ -8404,7 +8404,7 @@
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
       "source_location": "L10",
       "id": "schemas_cover_letter_coverletteroutput",
-      "community": 13,
+      "community": 34,
       "norm_label": "coverletteroutput"
     },
     {
@@ -8467,7 +8467,7 @@
       "source_file": "resume-pipeline/src/schemas/jd-analysis.ts",
       "source_location": "L1",
       "id": "schemas_jd_analysis",
-      "community": 84,
+      "community": 111,
       "norm_label": "jd-analysis.ts"
     },
     {
@@ -8476,7 +8476,7 @@
       "source_file": "resume-pipeline/src/schemas/jd-analysis.ts",
       "source_location": "L6",
       "id": "schemas_jd_analysis_jdanalysisschema",
-      "community": 84,
+      "community": 111,
       "norm_label": "jdanalysisschema"
     },
     {
@@ -8485,7 +8485,7 @@
       "source_file": "resume-pipeline/src/schemas/jd-analysis.ts",
       "source_location": "L20",
       "id": "schemas_jd_analysis_jdanalysis",
-      "community": 84,
+      "community": 111,
       "norm_label": "jdanalysis"
     },
     {
@@ -8530,7 +8530,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L48",
       "id": "schemas_pipeline_default_config",
-      "community": 83,
+      "community": 111,
       "norm_label": "default_config"
     },
     {
@@ -8548,7 +8548,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L74",
       "id": "schemas_pipeline_parsedresume",
-      "community": 111,
+      "community": 41,
       "norm_label": "parsedresume"
     },
     {
@@ -8557,7 +8557,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L87",
       "id": "schemas_pipeline_parsedrole",
-      "community": 40,
+      "community": 41,
       "norm_label": "parsedrole"
     },
     {
@@ -8602,7 +8602,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L123",
       "id": "schemas_pipeline_atsscore",
-      "community": 136,
+      "community": 337,
       "norm_label": "atsscore"
     },
     {
@@ -8926,7 +8926,7 @@
       "source_file": "resume-pipeline/src/stages/cover-letter.ts",
       "source_location": "L1",
       "id": "stages_cover_letter",
-      "community": 13,
+      "community": 34,
       "norm_label": "cover-letter.ts"
     },
     {
@@ -9322,7 +9322,7 @@
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
       "source_location": "L15",
       "id": "stages_jd_parser_jdparsecontext",
-      "community": 84,
+      "community": 111,
       "norm_label": "jdparsecontext"
     },
     {
@@ -9457,7 +9457,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-extractor.ts",
       "source_location": "L1",
       "id": "stages_keyword_extractor",
-      "community": 13,
+      "community": 34,
       "norm_label": "keyword-extractor.ts"
     },
     {
@@ -9466,7 +9466,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-extractor.ts",
       "source_location": "L14",
       "id": "stages_keyword_extractor_keywordextractionschema",
-      "community": 13,
+      "community": 34,
       "norm_label": "keywordextractionschema"
     },
     {
@@ -9484,7 +9484,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L1",
       "id": "stages_keyword_gap_repair",
-      "community": 13,
+      "community": 34,
       "norm_label": "keyword-gap-repair.ts"
     },
     {
@@ -9493,7 +9493,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L17",
       "id": "stages_keyword_gap_repair_keywordgaprepairschema",
-      "community": 13,
+      "community": 34,
       "norm_label": "keywordgaprepairschema"
     },
     {
@@ -9518,9 +9518,9 @@
       "label": "loweredIncludes()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
-      "source_location": "L257",
+      "source_location": "L258",
       "id": "stages_keyword_gap_repair_loweredincludes",
-      "community": 13,
+      "community": 34,
       "norm_label": "loweredincludes()"
     },
     {
@@ -9707,7 +9707,7 @@
       "label": "generateExperience()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/section-generators.ts",
-      "source_location": "L115",
+      "source_location": "L118",
       "id": "stages_section_generators_generateexperience",
       "community": 13,
       "norm_label": "generateexperience()"
@@ -9716,7 +9716,7 @@
       "label": "generateExperiencePerRole()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/section-generators.ts",
-      "source_location": "L236",
+      "source_location": "L239",
       "id": "stages_section_generators_generateexperienceperrole",
       "community": 13,
       "norm_label": "generateexperienceperrole()"
@@ -9725,7 +9725,7 @@
       "label": "intersectSkills()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/section-generators.ts",
-      "source_location": "L351",
+      "source_location": "L354",
       "id": "stages_section_generators_intersectskills",
       "community": 92,
       "norm_label": "intersectskills()"
@@ -9734,7 +9734,7 @@
       "label": "buildTechWeaveBlock()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/section-generators.ts",
-      "source_location": "L391",
+      "source_location": "L394",
       "id": "stages_section_generators_buildtechweaveblock",
       "community": 92,
       "norm_label": "buildtechweaveblock()"
@@ -9772,7 +9772,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L1",
       "id": "stages_skills_injector",
-      "community": 334,
+      "community": 150,
       "norm_label": "skills-injector.ts"
     },
     {
@@ -9781,7 +9781,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L26",
       "id": "stages_skills_injector_category_hints",
-      "community": 334,
+      "community": 150,
       "norm_label": "category_hints"
     },
     {
@@ -9790,7 +9790,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L43",
       "id": "stages_skills_injector_categoryline",
-      "community": 334,
+      "community": 150,
       "norm_label": "categoryline"
     },
     {
@@ -9799,7 +9799,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L51",
       "id": "stages_skills_injector_surfaceforms",
-      "community": 102,
+      "community": 150,
       "norm_label": "surfaceforms()"
     },
     {
@@ -9808,7 +9808,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L55",
       "id": "stages_skills_injector_presentintext",
-      "community": 102,
+      "community": 150,
       "norm_label": "presentintext()"
     },
     {
@@ -9817,7 +9817,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L60",
       "id": "stages_skills_injector_displayskill",
-      "community": 334,
+      "community": 150,
       "norm_label": "displayskill()"
     },
     {
@@ -9826,7 +9826,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L67",
       "id": "stages_skills_injector_skillinjectionresult",
-      "community": 334,
+      "community": 150,
       "norm_label": "skillinjectionresult"
     },
     {
@@ -9835,7 +9835,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L72",
       "id": "stages_skills_injector_injectverifiedskills",
-      "community": 334,
+      "community": 13,
       "norm_label": "injectverifiedskills()"
     },
     {
@@ -9970,7 +9970,7 @@
       "source_file": "resume-pipeline/src/validation/ats-scorer.test.ts",
       "source_location": "L1",
       "id": "validation_ats_scorer_test",
-      "community": 47,
+      "community": 111,
       "norm_label": "ats-scorer.test.ts"
     },
     {
@@ -9979,7 +9979,7 @@
       "source_file": "resume-pipeline/src/validation/ats-scorer.test.ts",
       "source_location": "L8",
       "id": "validation_ats_scorer_test_jd",
-      "community": 47,
+      "community": 111,
       "norm_label": "jd()"
     },
     {
@@ -9988,7 +9988,7 @@
       "source_file": "resume-pipeline/src/validation/ats-scorer.test.ts",
       "source_location": "L25",
       "id": "validation_ats_scorer_test_sections",
-      "community": 47,
+      "community": 111,
       "norm_label": "sections()"
     },
     {
@@ -10024,7 +10024,7 @@
       "source_file": "resume-pipeline/src/validation/ats-scorer.ts",
       "source_location": "L24",
       "id": "validation_ats_scorer_calculateatsscore",
-      "community": 47,
+      "community": 111,
       "norm_label": "calculateatsscore()"
     },
     {
@@ -10168,7 +10168,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/format-score.ts",
       "source_location": "L1",
       "id": "dimensions_format_score",
-      "community": 341,
+      "community": 88,
       "norm_label": "format-score.ts"
     },
     {
@@ -10177,7 +10177,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/format-score.ts",
       "source_location": "L8",
       "id": "dimensions_format_score_formatscoredimension",
-      "community": 341,
+      "community": 88,
       "norm_label": "formatscoredimension"
     },
     {
@@ -10213,7 +10213,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/index.ts",
       "source_location": "L33",
       "id": "dimensions_index_defaultdimensions",
-      "community": 88,
+      "community": 337,
       "norm_label": "defaultdimensions"
     },
     {
@@ -10222,7 +10222,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/index.ts",
       "source_location": "L49",
       "id": "dimensions_index_phase3dimensions",
-      "community": 88,
+      "community": 337,
       "norm_label": "phase3dimensions"
     },
     {
@@ -10258,7 +10258,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/keyword-relevance.ts",
       "source_location": "L10",
       "id": "dimensions_keyword_relevance_keywordrelevancedimension",
-      "community": 88,
+      "community": 150,
       "norm_label": "keywordrelevancedimension"
     },
     {
@@ -10285,7 +10285,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/preferred-relevance.ts",
       "source_location": "L1",
       "id": "dimensions_preferred_relevance",
-      "community": 150,
+      "community": 88,
       "norm_label": "preferred-relevance.ts"
     },
     {
@@ -10348,7 +10348,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/skill-experience-coherence.ts",
       "source_location": "L1",
       "id": "dimensions_skill_experience_coherence",
-      "community": 88,
+      "community": 150,
       "norm_label": "skill-experience-coherence.ts"
     },
     {
@@ -10357,7 +10357,7 @@
       "source_file": "resume-pipeline/src/validation/dimensions/skill-experience-coherence.ts",
       "source_location": "L15",
       "id": "dimensions_skill_experience_coherence_skillexperiencecoherencedimension",
-      "community": 88,
+      "community": 150,
       "norm_label": "skillexperiencecoherencedimension"
     },
     {
@@ -10555,7 +10555,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-dimension.ts",
       "source_location": "L12",
       "id": "validation_scorer_dimension_scoringcontext",
-      "community": 111,
+      "community": 47,
       "norm_label": "scoringcontext"
     },
     {
@@ -10573,7 +10573,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L1",
       "id": "validation_scorer_factory",
-      "community": 136,
+      "community": 337,
       "norm_label": "scorer-factory.ts"
     },
     {
@@ -10582,7 +10582,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L19",
       "id": "validation_scorer_factory_knockoutcap",
-      "community": 136,
+      "community": 337,
       "norm_label": "knockoutcap()"
     },
     {
@@ -10591,7 +10591,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L26",
       "id": "validation_scorer_factory_dimensionweight",
-      "community": 136,
+      "community": 337,
       "norm_label": "dimensionweight"
     },
     {
@@ -10600,7 +10600,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L35",
       "id": "validation_scorer_factory_weights_phase2",
-      "community": 136,
+      "community": 337,
       "norm_label": "weights_phase2"
     },
     {
@@ -10609,7 +10609,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L55",
       "id": "validation_scorer_factory_weights_phase3",
-      "community": 136,
+      "community": 337,
       "norm_label": "weights_phase3"
     },
     {
@@ -10618,7 +10618,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L72",
       "id": "validation_scorer_factory_labels",
-      "community": 136,
+      "community": 337,
       "norm_label": "labels"
     },
     {
@@ -10627,7 +10627,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L91",
       "id": "validation_scorer_factory_atsscorer",
-      "community": 136,
+      "community": 337,
       "norm_label": "atsscorer"
     },
     {
@@ -10636,7 +10636,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L98",
       "id": "validation_scorer_factory_createscorer",
-      "community": 136,
+      "community": 337,
       "norm_label": "createscorer()"
     },
     {
@@ -10645,7 +10645,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-factory.ts",
       "source_location": "L138",
       "id": "validation_scorer_factory_composefinalscore",
-      "community": 136,
+      "community": 337,
       "norm_label": "composefinalscore()"
     },
     {
@@ -10654,7 +10654,7 @@
       "source_file": "resume-pipeline/src/validation/scoring-context.ts",
       "source_location": "L1",
       "id": "validation_scoring_context",
-      "community": 111,
+      "community": 47,
       "norm_label": "scoring-context.ts"
     },
     {
@@ -10663,7 +10663,7 @@
       "source_file": "resume-pipeline/src/validation/scoring-context.ts",
       "source_location": "L12",
       "id": "validation_scoring_context_buildscoringcontext",
-      "community": 337,
+      "community": 47,
       "norm_label": "buildscoringcontext()"
     },
     {
@@ -10708,7 +10708,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L30",
       "id": "validation_skill_matcher_skillmatchmap",
-      "community": 102,
+      "community": 47,
       "norm_label": "skillmatchmap"
     },
     {
@@ -10762,7 +10762,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L129",
       "id": "validation_skill_matcher_applysemanticmatches",
-      "community": 337,
+      "community": 102,
       "norm_label": "applysemanticmatches()"
     },
     {
@@ -10771,7 +10771,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L149",
       "id": "validation_skill_matcher_gradedcoverage",
-      "community": 150,
+      "community": 102,
       "norm_label": "gradedcoverage()"
     },
     {
@@ -10780,7 +10780,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L161",
       "id": "validation_skill_matcher_strongcoverage",
-      "community": 136,
+      "community": 102,
       "norm_label": "strongcoverage()"
     },
     {
@@ -10798,7 +10798,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L180",
       "id": "validation_skill_matcher_hardgaps",
-      "community": 136,
+      "community": 102,
       "norm_label": "hardgaps()"
     },
     {
@@ -10969,7 +10969,7 @@
       "source_file": "resume-pipeline/src/validation/taxonomy/skill-graph.ts",
       "source_location": "L275",
       "id": "taxonomy_skill_graph_getcategory",
-      "community": 334,
+      "community": 150,
       "norm_label": "getcategory()"
     },
     {
@@ -11153,6 +11153,87 @@
       "norm_label": ".getinstance()"
     },
     {
+      "label": "bullet-trimmer.test.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L1",
+      "id": "utils_bullet_trimmer_test",
+      "community": 145,
+      "norm_label": "bullet-trimmer.test.ts"
+    },
+    {
+      "label": "words()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L5",
+      "id": "utils_bullet_trimmer_test_words",
+      "community": 145,
+      "norm_label": "words()"
+    },
+    {
+      "label": "bullet-trimmer.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L1",
+      "id": "utils_bullet_trimmer",
+      "community": 145,
+      "norm_label": "bullet-trimmer.ts"
+    },
+    {
+      "label": "FILLER_SUBSTITUTIONS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L11",
+      "id": "utils_bullet_trimmer_filler_substitutions",
+      "community": 145,
+      "norm_label": "filler_substitutions"
+    },
+    {
+      "label": "wordCount()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L29",
+      "id": "utils_bullet_trimmer_wordcount",
+      "community": 145,
+      "norm_label": "wordcount()"
+    },
+    {
+      "label": "applySubstitutions()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L33",
+      "id": "utils_bullet_trimmer_applysubstitutions",
+      "community": 145,
+      "norm_label": "applysubstitutions()"
+    },
+    {
+      "label": "truncateAtClause()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L46",
+      "id": "utils_bullet_trimmer_truncateatclause",
+      "community": 145,
+      "norm_label": "truncateatclause()"
+    },
+    {
+      "label": "trimBullet()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L71",
+      "id": "utils_bullet_trimmer_trimbullet",
+      "community": 145,
+      "norm_label": "trimbullet()"
+    },
+    {
+      "label": "trimRoleBullets()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L81",
+      "id": "utils_bullet_trimmer_trimrolebullets",
+      "community": 145,
+      "norm_label": "trimrolebullets()"
+    },
+    {
       "label": "cosine-similarity.ts",
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/utils/cosine-similarity.ts",
@@ -11293,7 +11374,7 @@
       "source_file": "resume-pipeline/src/validation/utils/latex-stripper.ts",
       "source_location": "L4",
       "id": "utils_latex_stripper_striplatexcommands",
-      "community": 341,
+      "community": 47,
       "norm_label": "striplatexcommands()"
     },
     {
@@ -18537,7 +18618,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L1",
-      "community": 34,
+      "community": 87,
       "norm_label": "resumecontroller.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java"
     },
@@ -19437,7 +19518,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L1",
-      "community": 3,
+      "community": 136,
       "norm_label": "jwtutil.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_security_jwtutil_java"
     },
@@ -20040,7 +20121,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L1",
-      "community": 34,
+      "community": 14,
       "norm_label": "resumeservice.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java"
     },
@@ -21642,7 +21723,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/config/models.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "models.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_config_models_ts"
     },
@@ -21750,7 +21831,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/analytics.ts",
       "source_location": "L1",
-      "community": 344,
+      "community": 335,
       "norm_label": "analytics.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_observability_analytics_ts"
     },
@@ -21759,7 +21840,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/analytics.ts",
       "source_location": "L37",
-      "community": 344,
+      "community": 335,
       "norm_label": "percentile()",
       "id": "analytics_percentile"
     },
@@ -21768,7 +21849,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/analytics.ts",
       "source_location": "L43",
-      "community": 344,
+      "community": 335,
       "norm_label": "buildhealthreport()",
       "id": "analytics_buildhealthreport"
     },
@@ -21777,7 +21858,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/analytics.ts",
       "source_location": "L141",
-      "community": 344,
+      "community": 335,
       "norm_label": "emptyreport()",
       "id": "analytics_emptyreport"
     },
@@ -21786,7 +21867,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/debug.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "debug.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_observability_debug_ts"
     },
@@ -21885,7 +21966,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "llm-wrapper.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_observability_llm_wrapper_ts"
     },
@@ -21894,7 +21975,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L24",
-      "community": 145,
+      "community": 123,
       "norm_label": "ratelimiterror",
       "id": "llm_wrapper_ratelimiterror"
     },
@@ -21903,7 +21984,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/llm-wrapper.ts",
       "source_location": "L28",
-      "community": 145,
+      "community": 123,
       "norm_label": ".constructor()",
       "id": "llm_wrapper_ratelimiterror_constructor"
     },
@@ -21939,7 +22020,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/observability/trace.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "trace.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_observability_trace_ts"
     },
@@ -22047,7 +22128,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "runner.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_pipeline_runner_ts"
     },
@@ -22074,7 +22155,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "cover-letter.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_schemas_cover_letter_ts"
     },
@@ -22092,7 +22173,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/schemas/jd-analysis.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "jd-analysis.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_schemas_jd_analysis_ts"
     },
@@ -22101,7 +22182,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "pipeline.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_schemas_pipeline_ts"
     },
@@ -22308,7 +22389,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/cover-letter.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "cover-letter.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_stages_cover_letter_ts"
     },
@@ -22326,7 +22407,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "jd-parser.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_stages_jd_parser_ts"
     },
@@ -22344,7 +22425,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/keyword-extractor.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "keyword-extractor.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_stages_keyword_extractor_ts"
     },
@@ -22362,7 +22443,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "keyword-gap-repair.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_stages_keyword_gap_repair_ts"
     },
@@ -22668,7 +22749,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "repair.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_validation_repair_ts"
     },
@@ -22677,7 +22758,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L35",
-      "community": 145,
+      "community": 123,
       "norm_label": "repairbullets()",
       "id": "repair_repairbullets"
     },
@@ -22686,7 +22767,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L143",
-      "community": 145,
+      "community": 123,
       "norm_label": "identifyfailingbullets()",
       "id": "repair_identifyfailingbullets"
     },
@@ -22695,7 +22776,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L196",
-      "community": 145,
+      "community": 123,
       "norm_label": "buildrepairprompt()",
       "id": "repair_buildrepairprompt"
     },
@@ -22704,7 +22785,7 @@
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/validator.ts",
       "source_location": "L1",
-      "community": 145,
+      "community": 123,
       "norm_label": "validator.ts",
       "id": "c_users_mukke_desktop_job_resume_tracker_resume_pipeline_src_validation_validator_ts"
     },
@@ -42228,9 +42309,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "config_models",
-      "confidence_score": 1.0
+      "target": "config_models"
     },
     {
       "relation": "imports_from",
@@ -42305,9 +42386,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "config_models_models",
-      "confidence_score": 1.0
+      "target": "config_models_models"
     },
     {
       "relation": "imports",
@@ -42575,9 +42656,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector",
-      "confidence_score": 1.0
+      "target": "impact_detector"
     },
     {
       "relation": "imports_from",
@@ -42586,9 +42667,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "impact_detector",
-      "confidence_score": 1.0
+      "target": "impact_detector"
     },
     {
       "relation": "imports_from",
@@ -42674,9 +42755,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_detectsignals",
-      "confidence_score": 1.0
+      "target": "impact_detector_detectsignals"
     },
     {
       "relation": "calls",
@@ -42685,9 +42766,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_strengthof",
-      "target": "impact_detector_detectsignals",
-      "confidence_score": 1.0
+      "target": "impact_detector_detectsignals"
     },
     {
       "relation": "calls",
@@ -42707,9 +42788,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_scorebulletimpact",
-      "confidence_score": 1.0
+      "target": "impact_detector_scorebulletimpact"
     },
     {
       "relation": "calls",
@@ -42718,9 +42799,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_strengthof",
-      "target": "impact_detector_scorebulletimpact",
-      "confidence_score": 1.0
+      "target": "impact_detector_scorebulletimpact"
     },
     {
       "relation": "imports",
@@ -42729,9 +42810,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_impactstrength",
-      "confidence_score": 1.0
+      "target": "impact_detector_impactstrength"
     },
     {
       "relation": "calls",
@@ -42751,9 +42832,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_classifystrength",
-      "confidence_score": 1.0
+      "target": "impact_detector_classifystrength"
     },
     {
       "relation": "calls",
@@ -42762,9 +42843,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_strengthof",
-      "target": "impact_detector_classifystrength",
-      "confidence_score": 1.0
+      "target": "impact_detector_classifystrength"
     },
     {
       "relation": "calls",
@@ -42828,9 +42909,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_analyzebullet",
-      "confidence_score": 1.0
+      "target": "impact_detector_analyzebullet"
     },
     {
       "relation": "calls",
@@ -42883,9 +42964,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_roleimpactprofile",
-      "confidence_score": 1.0
+      "target": "impact_detector_roleimpactprofile"
     },
     {
       "relation": "imports",
@@ -42949,9 +43030,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "impact_detector_profileroleimpact",
-      "confidence_score": 1.0
+      "target": "impact_detector_profileroleimpact"
     },
     {
       "relation": "imports",
@@ -42960,9 +43041,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "impact_detector_profileroleimpact",
-      "confidence_score": 1.0
+      "target": "impact_detector_profileroleimpact"
     },
     {
       "relation": "imports",
@@ -43810,9 +43891,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "observability_debug",
-      "confidence_score": 1.0
+      "target": "observability_debug"
     },
     {
       "relation": "imports_from",
@@ -44011,9 +44092,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "observability_debug_snapshotstore",
-      "confidence_score": 1.0
+      "target": "observability_debug_snapshotstore"
     },
     {
       "relation": "imports",
@@ -44170,9 +44251,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "observability_llm_wrapper",
-      "confidence_score": 1.0
+      "target": "observability_llm_wrapper"
     },
     {
       "relation": "imports_from",
@@ -44301,9 +44382,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "observability_llm_wrapper_callllm",
-      "confidence_score": 1.0
+      "target": "observability_llm_wrapper_callllm"
     },
     {
       "relation": "calls",
@@ -45218,9 +45299,9 @@
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pipeline_runner",
-      "target": "stages_impact_lift",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift"
     },
     {
       "relation": "imports",
@@ -45229,9 +45310,9 @@
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pipeline_runner",
-      "target": "stages_impact_lift_liftimpact",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_liftimpact"
     },
     {
       "relation": "imports_from",
@@ -45441,6 +45522,28 @@
       "confidence_score": 1.0,
       "source": "pipeline_runner",
       "target": "stages_tech_stack_extractor_extracttechprofile"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/pipeline/runner.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "pipeline_runner",
+      "target": "utils_bullet_trimmer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/pipeline/runner.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "pipeline_runner",
+      "target": "utils_bullet_trimmer_trimrolebullets",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -45657,6 +45760,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
+      "source_location": "L524",
+      "weight": 1.0,
+      "source": "pipeline_runner_runpipeline",
+      "target": "utils_bullet_trimmer_trimrolebullets"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L367",
       "weight": 1.0,
       "source": "pipeline_runner_runpipeline",
@@ -45858,9 +45972,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_jd_analysis",
-      "confidence_score": 1.0
+      "target": "schemas_jd_analysis"
     },
     {
       "relation": "imports_from",
@@ -46056,9 +46170,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_jd_analysis_jdanalysis",
-      "confidence_score": 1.0
+      "target": "schemas_jd_analysis_jdanalysis"
     },
     {
       "relation": "imports",
@@ -46423,9 +46537,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_pipeline",
-      "confidence_score": 1.0
+      "target": "schemas_pipeline"
     },
     {
       "relation": "imports_from",
@@ -46588,9 +46702,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_pipeline_pipelineconfig",
-      "confidence_score": 1.0
+      "target": "schemas_pipeline_pipelineconfig"
     },
     {
       "relation": "imports",
@@ -46742,9 +46856,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_pipeline_generatedsections",
-      "confidence_score": 1.0
+      "target": "schemas_pipeline_generatedsections"
     },
     {
       "relation": "references",
@@ -46753,9 +46867,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_impactliftresult",
-      "target": "schemas_pipeline_generatedsections",
-      "confidence_score": 1.0
+      "target": "schemas_pipeline_generatedsections"
     },
     {
       "relation": "imports",
@@ -46874,9 +46988,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "schemas_pipeline_generatedrole",
-      "confidence_score": 1.0
+      "target": "schemas_pipeline_generatedrole"
     },
     {
       "relation": "imports",
@@ -48252,9 +48366,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift"
     },
     {
       "relation": "imports",
@@ -48263,9 +48377,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift_mentionsforbidden",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_mentionsforbidden"
     },
     {
       "relation": "imports",
@@ -48274,9 +48388,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift_selectweakbullets",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_selectweakbullets"
     },
     {
       "relation": "imports",
@@ -48285,9 +48399,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift_shouldaccept",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_shouldaccept"
     },
     {
       "relation": "imports",
@@ -48296,9 +48410,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift_strongratio",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_strongratio"
     },
     {
       "relation": "contains",
@@ -48306,9 +48420,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.test.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_test",
-      "target": "stages_impact_lift_test_jdkeywords",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_test_jdkeywords"
     },
     {
       "relation": "contains",
@@ -48316,9 +48430,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_buildimpactprompt",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_buildimpactprompt"
     },
     {
       "relation": "contains",
@@ -48326,9 +48440,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_impactliftresult",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_impactliftresult"
     },
     {
       "relation": "contains",
@@ -48336,9 +48450,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_impactliftschema",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_impactliftschema"
     },
     {
       "relation": "contains",
@@ -48346,9 +48460,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_liftimpact",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_liftimpact"
     },
     {
       "relation": "contains",
@@ -48356,9 +48470,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_lifttarget",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_lifttarget"
     },
     {
       "relation": "contains",
@@ -48366,9 +48480,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_mentionsforbidden",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_mentionsforbidden"
     },
     {
       "relation": "contains",
@@ -48376,9 +48490,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_selectweakbullets",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_selectweakbullets"
     },
     {
       "relation": "contains",
@@ -48386,9 +48500,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_shouldaccept",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_shouldaccept"
     },
     {
       "relation": "contains",
@@ -48396,9 +48510,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_strength_rank",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_strength_rank"
     },
     {
       "relation": "contains",
@@ -48406,9 +48520,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_strengthof",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_strengthof"
     },
     {
       "relation": "contains",
@@ -48416,9 +48530,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_impact_lift_strongratio",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_strongratio"
     },
     {
       "relation": "imports_from",
@@ -48427,9 +48541,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_section_generators",
-      "confidence_score": 1.0
+      "target": "stages_section_generators"
     },
     {
       "relation": "imports",
@@ -48438,9 +48552,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_section_generators_buildtechweaveblock",
-      "confidence_score": 1.0
+      "target": "stages_section_generators_buildtechweaveblock"
     },
     {
       "relation": "imports",
@@ -48449,9 +48563,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_section_generators_intersectskills",
-      "confidence_score": 1.0
+      "target": "stages_section_generators_intersectskills"
     },
     {
       "relation": "imports_from",
@@ -48460,9 +48574,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_tech_stack_extractor",
-      "confidence_score": 1.0
+      "target": "stages_tech_stack_extractor"
     },
     {
       "relation": "imports",
@@ -48471,9 +48585,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "stages_tech_stack_extractor_candidatetechprofile",
-      "confidence_score": 1.0
+      "target": "stages_tech_stack_extractor_candidatetechprofile"
     },
     {
       "relation": "imports_from",
@@ -48482,9 +48596,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "utils_word_boundary",
-      "confidence_score": 1.0
+      "target": "utils_word_boundary"
     },
     {
       "relation": "imports",
@@ -48493,9 +48607,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift",
-      "target": "utils_word_boundary_keywordexistsintext",
-      "confidence_score": 1.0
+      "target": "utils_word_boundary_keywordexistsintext"
     },
     {
       "relation": "calls",
@@ -48504,9 +48618,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L216",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_liftimpact",
-      "target": "stages_impact_lift_selectweakbullets",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_selectweakbullets"
     },
     {
       "relation": "calls",
@@ -48515,9 +48629,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_shouldaccept",
-      "target": "stages_impact_lift_strengthof",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_strengthof"
     },
     {
       "relation": "calls",
@@ -48526,9 +48640,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L248",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_liftimpact",
-      "target": "stages_impact_lift_shouldaccept",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_shouldaccept"
     },
     {
       "relation": "calls",
@@ -48537,9 +48651,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_liftimpact",
-      "target": "stages_impact_lift_mentionsforbidden",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_mentionsforbidden"
     },
     {
       "relation": "calls",
@@ -48559,9 +48673,9 @@
       "source_file": "resume-pipeline/src/stages/impact-lift.ts",
       "source_location": "L220",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "stages_impact_lift_liftimpact",
-      "target": "stages_impact_lift_buildimpactprompt",
-      "confidence_score": 1.0
+      "target": "stages_impact_lift_buildimpactprompt"
     },
     {
       "relation": "calls",
@@ -53390,6 +53504,153 @@
       "confidence_score": 1.0,
       "source": "taxonomy_taxonomy_service_taxonomyservice_isrelated",
       "target": "taxonomy_taxonomy_service_taxonomyservice_getbroader"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_test",
+      "target": "utils_bullet_trimmer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_test",
+      "target": "utils_bullet_trimmer_test_words",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_test",
+      "target": "utils_bullet_trimmer_trimbullet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_test",
+      "target": "utils_bullet_trimmer_trimrolebullets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_applysubstitutions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_filler_substitutions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_trimbullet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_trimrolebullets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_truncateatclause",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer",
+      "target": "utils_bullet_trimmer_wordcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_trimbullet",
+      "target": "utils_bullet_trimmer_wordcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_trimbullet",
+      "target": "utils_bullet_trimmer_applysubstitutions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_trimbullet",
+      "target": "utils_bullet_trimmer_truncateatclause",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "utils_bullet_trimmer_trimrolebullets",
+      "target": "utils_bullet_trimmer_trimbullet",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -66612,5 +66873,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f2ee33c7c13a3d991ed887b9f4d4b26ef337fbd3"
+  "built_at_commit": "3e0f95e1a7c4a50c645ba5ea26367c4cba2c0f35"
 }
