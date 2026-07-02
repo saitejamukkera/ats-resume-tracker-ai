@@ -11,6 +11,7 @@ import {
 import { reorderSkills } from "../stages/skills-reorderer.js";
 import { injectVerifiedSkills } from "../stages/skills-injector.js";
 import { liftImpact } from "../stages/impact-lift.js";
+import { trimRoleBullets } from "../validation/utils/bullet-trimmer.js";
 import { extractTechProfile } from "../stages/tech-stack-extractor.js";
 import { generateCoverLetter } from "../stages/cover-letter.js";
 import { parseLatexResume, assembleLatex } from "../stages/latex-assembler.js";
@@ -517,6 +518,14 @@ export async function runPipeline(
     }
   }
 
+  // ── Stage 4.65: Deterministic bullet-length trim ─────────────
+  // Safety net: weaving (impact-lift + gap-repair) can push a few bullets over
+  // the readable length cap. Trim them before bolding so bold spans aren't cut.
+  const trimResult = trimRoleBullets(sections.experience);
+  if (trimResult.trimmed > 0) {
+    console.log(`[pipeline] Bullet trimmer: shortened ${trimResult.trimmed} over-length bullet(s)`);
+  }
+
   // ── Stage 4.7: Keyword Extraction for Bolding ────────────────
   let boldKeywords = [
     ...jd.requiredSkills,
@@ -610,6 +619,9 @@ export async function runPipeline(
       atsScore: atsScore.overall,
       impactScore: atsScore.impactScore,
       componentBreakdown: atsScore.componentBreakdown,
+      missingRequired: atsScore.missingRequired,
+      missingPreferred: atsScore.missingPreferred,
+      knockouts: atsScore.knockouts,
     },
   });
 
@@ -730,6 +742,9 @@ export async function runPipeline(
       impactScore: atsScore.impactScore,
       metricsRatio: atsScore.metricsRatio,
       componentBreakdown: atsScore.componentBreakdown,
+      missingRequired: atsScore.missingRequired,
+      missingPreferred: atsScore.missingPreferred,
+      knockouts: atsScore.knockouts,
       durationMs: trace.durationMs,
       docxBase64,
     },

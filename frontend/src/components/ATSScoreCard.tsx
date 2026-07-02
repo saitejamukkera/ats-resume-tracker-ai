@@ -81,12 +81,15 @@ export function ATSScoreCard({
         <div className="space-y-1 text-xs">
           {missingRequired && missingRequired.length > 0 && (
             <p className="text-red-500">
-              Missing required: {missingRequired.join(", ")}
+              <span className="font-medium">Required skills not detected</span> — add
+              these to your base resume if you have them, they are likely knockout
+              filters: {missingRequired.join(", ")}
             </p>
           )}
           {missingPreferred && missingPreferred.length > 0 && (
             <p className="text-yellow-600">
-              Missing preferred: {missingPreferred.join(", ")}
+              <span className="font-medium">Preferred (bonus) missing</span>:{" "}
+              {missingPreferred.join(", ")}
             </p>
           )}
         </div>

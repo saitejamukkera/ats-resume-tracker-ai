@@ -75,7 +75,10 @@ RULES:
   JD title/role and its seniority wording (e.g. "${jd.position}") when it is an
   accurate description of the candidate — ATS systems weight title alignment heavily.
 - Second sentence: 3-5 most relevant technical skills from the JD (not a laundry list)
-- Optional third sentence: one standout achievement or differentiator
+- Third sentence (REQUIRED, impact-led): one standout achievement with a concrete
+  quantified outcome (%, time saved, scale, or $). Example: "Cut deployment time 70%
+  and scaled a service to 2M daily requests." If the source resume lacks a number,
+  infer a realistic one (10-50% range, never 10x) from the candidate's experience.
 - Must signal strong fit for this exact position
 - Mirror the JD's language and priorities
 - Do NOT list every skill — that's what the Skills section is for

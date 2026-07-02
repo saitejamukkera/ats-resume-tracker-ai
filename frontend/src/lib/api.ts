@@ -190,6 +190,9 @@ export interface GenerateFromJdResponse {
   atsScore?: number;
   impactScore?: number;
   scoreBreakdown?: Record<string, ScoreComponent>;
+  missingRequired?: string[];
+  missingPreferred?: string[];
+  knockouts?: string[];
 }
 
 export interface ScoreComponent {

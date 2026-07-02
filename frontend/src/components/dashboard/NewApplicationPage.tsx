@@ -234,6 +234,9 @@ export default function NewApplicationPage() {
                 atsScore: data.atsScore as number | undefined,
                 impactScore: data.impactScore as number | undefined,
                 scoreBreakdown: data.componentBreakdown as Record<string, { raw: number; weighted: number; max: number; label: string }> | undefined,
+                missingRequired: data.missingRequired as string[] | undefined,
+                missingPreferred: data.missingPreferred as string[] | undefined,
+                knockouts: data.knockouts as string[] | undefined,
               });
               setGenerated(true);
               setIsEditing(true);
@@ -249,6 +252,9 @@ export default function NewApplicationPage() {
                       atsScore: (data.atsScore as number) ?? prev.atsScore,
                       impactScore: (data.impactScore as number) ?? prev.impactScore,
                       scoreBreakdown: (data.componentBreakdown as Record<string, { raw: number; weighted: number; max: number; label: string }>) ?? prev.scoreBreakdown,
+                      missingRequired: (data.missingRequired as string[]) ?? prev.missingRequired,
+                      missingPreferred: (data.missingPreferred as string[]) ?? prev.missingPreferred,
+                      knockouts: (data.knockouts as string[]) ?? prev.knockouts,
                     }
                   : null,
               );
@@ -796,8 +802,8 @@ export default function NewApplicationPage() {
                 overallScore={result.atsScore}
                 impactScore={result.impactScore ?? 0}
                 breakdown={result.scoreBreakdown}
-                missingRequired={[]}
-                missingPreferred={[]}
+                missingRequired={result.missingRequired ?? []}
+                missingPreferred={result.missingPreferred ?? []}
               />
             </motion.div>
           )}
