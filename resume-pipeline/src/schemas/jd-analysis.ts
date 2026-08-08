@@ -15,6 +15,9 @@ export const JDAnalysisSchema = z.object({
   educationLevel: z.enum(['none', 'high-school', 'associate', 'bachelors', 'masters', 'phd']).describe('Minimum education required by the JD. Use "none" if not specified.'),
   domainFocus: z.string().describe('Primary domain: backend, frontend, fullstack, data, devops, etc.'),
   keyPhrases: z.array(z.string()).describe('Exact phrases from JD worth mirroring in the resume'),
+  minYearsExperience: z.number().nullable().default(null).describe('Minimum total years of experience the JD requires, or null if not stated'),
+  workAuthRequirement: z.string().nullable().default(null).describe('Work-authorization requirement quoted from the JD (e.g. "no visa sponsorship"), or null'),
+  certifications: z.array(z.string()).default([]).describe('Certifications the JD explicitly requires (not merely mentions)'),
 });
 
 export type JDAnalysis = z.infer<typeof JDAnalysisSchema>;

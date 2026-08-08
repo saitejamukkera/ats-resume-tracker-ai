@@ -18,6 +18,9 @@ function jd(p: Partial<JDAnalysis>): JDAnalysis {
     educationLevel: "bachelors",
     domainFocus: "backend",
     keyPhrases: [],
+    minYearsExperience: null,
+    workAuthRequirement: null,
+    certifications: [],
     ...p,
   };
 }

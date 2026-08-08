@@ -9,6 +9,11 @@ import type { LanguageModel } from "ai";
 import type { SnapshotStore } from "../observability/debug.js";
 import { PREDEFINED_VARIANTS, getAllSkillVariants } from "../validation/skill-variants.js";
 import { keywordExistsInText } from "../validation/utils/word-boundary.js";
+import {
+  extractMinYears,
+  extractWorkAuthRequirement,
+  extractRequiredCertifications,
+} from "../validation/utils/jd-requirements.js";
 
 // ── Pipeline Context ────────────────────────────────────────────
 
@@ -140,6 +145,16 @@ Key rules:
   (2) domain/industry terminology, (3) technologies mentioned in
   responsibilities but not stated as prerequisites, (4) distinctive
   phrasing the company uses that shows cultural fit.
+- "minYearsExperience": the minimum TOTAL years of professional experience
+  the JD requires (e.g., "5+ years of software development" → 5). Use the
+  overall experience requirement, not per-technology years. null if the JD
+  states no explicit years requirement.
+- "workAuthRequirement": quote the JD's work-authorization constraint if any
+  (e.g., "must be authorized to work in the US without sponsorship",
+  "requires active security clearance"). null if none stated.
+- "certifications": certifications the JD REQUIRES the candidate to hold
+  (e.g., "AWS Certified Solutions Architect required"). Certifications that
+  are merely preferred or mentioned go to preferredSkills/keyPhrases, not here.
 
 JOB DESCRIPTION:
 """${ctx.jobDescription}"""`;
@@ -156,7 +171,7 @@ JOB DESCRIPTION:
 
     return {
       ...ctx,
-      jdAnalysis: result.object,
+      jdAnalysis: JDAnalysisSchema.parse(result.object),
       inputTokens: result.inputTokens,
       outputTokens: result.outputTokens,
     };
@@ -303,6 +318,17 @@ class DeterministicAugmentationStage implements IJdParseStage {
       jdText,
     );
 
+    // Hard-requirement backstop: the LLM is the primary source; regexes fill
+    // anything it missed so the knockout evaluator never skips a requirement.
+    const minYears =
+      analysis.minYearsExperience ?? extractMinYears(jdText);
+    const workAuth =
+      analysis.workAuthRequirement ?? extractWorkAuthRequirement(jdText);
+    const certs =
+      analysis.certifications.length > 0
+        ? analysis.certifications
+        : extractRequiredCertifications(jdText);
+
     return {
       ...ctx,
       jdAnalysis: {
@@ -310,6 +336,9 @@ class DeterministicAugmentationStage implements IJdParseStage {
         requiredSkills: required,
         preferredSkills: augmentedPreferred,
         keyPhrases: [...analysis.keyPhrases, ...movedToKeyPhrases],
+        minYearsExperience: minYears,
+        workAuthRequirement: workAuth,
+        certifications: certs,
       },
     };
   }
@@ -328,6 +357,9 @@ class SanityCheckStage implements IJdParseStage {
         jobId: analysis.jobId ?? "",
         location: analysis.location ?? "N/A",
         educationLevel: analysis.educationLevel || "none",
+        minYearsExperience: analysis.minYearsExperience ?? null,
+        workAuthRequirement: analysis.workAuthRequirement ?? null,
+        certifications: analysis.certifications ?? [],
       },
     };
   }

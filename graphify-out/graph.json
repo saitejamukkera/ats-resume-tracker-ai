@@ -187,7 +187,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L1",
       "id": "controller_apikeycontroller",
-      "community": 96,
+      "community": 185,
       "norm_label": "apikeycontroller.java"
     },
     {
@@ -196,7 +196,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L17",
       "id": "controller_apikeycontroller_apikeycontroller",
-      "community": 96,
+      "community": 185,
       "norm_label": "apikeycontroller"
     },
     {
@@ -205,7 +205,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L31",
       "id": "controller_apikeycontroller_apikeycontroller_validatekey",
-      "community": 96,
+      "community": 185,
       "norm_label": ".validatekey()"
     },
     {
@@ -223,7 +223,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L31",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_apikeycontroller_java_string",
-      "community": 96,
+      "community": 185,
       "norm_label": "string"
     },
     {
@@ -232,7 +232,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L31",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_apikeycontroller_java_responseentity",
-      "community": 96,
+      "community": 185,
       "norm_label": "responseentity"
     },
     {
@@ -241,7 +241,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ApiKeyController.java",
       "source_location": "L31",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_apikeycontroller_java_postmapping",
-      "community": 96,
+      "community": 185,
       "norm_label": "postmapping"
     },
     {
@@ -250,7 +250,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L1",
       "id": "controller_authcontroller",
-      "community": 7,
+      "community": 30,
       "norm_label": "authcontroller.java"
     },
     {
@@ -268,7 +268,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L71",
       "id": "controller_authcontroller_authcontroller_normalizecookiedomain",
-      "community": 7,
+      "community": 30,
       "norm_label": ".normalizecookiedomain()"
     },
     {
@@ -277,7 +277,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L71",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_authcontroller_java_postconstruct",
-      "community": 7,
+      "community": 30,
       "norm_label": "postconstruct"
     },
     {
@@ -295,7 +295,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L78",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_authcontroller_java_csrftoken",
-      "community": 7,
+      "community": 30,
       "norm_label": "csrftoken"
     },
     {
@@ -349,7 +349,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L86",
       "id": "registerrequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "registerrequest"
     },
     {
@@ -394,7 +394,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L108",
       "id": "loginrequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "loginrequest"
     },
     {
@@ -457,7 +457,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L213",
       "id": "sendotprequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "sendotprequest"
     },
     {
@@ -475,7 +475,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L229",
       "id": "verifyotpregisterrequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "verifyotpregisterrequest"
     },
     {
@@ -493,7 +493,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L256",
       "id": "forgotpasswordrequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "forgotpasswordrequest"
     },
     {
@@ -511,7 +511,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L272",
       "id": "resetpasswordrequest",
-      "community": 7,
+      "community": 30,
       "norm_label": "resetpasswordrequest"
     },
     {
@@ -547,7 +547,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/AuthController.java",
       "source_location": "L319",
       "id": "responsecookie",
-      "community": 7,
+      "community": 167,
       "norm_label": "responsecookie"
     },
     {
@@ -574,7 +574,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L1",
       "id": "controller_jobapplicationcontroller",
-      "community": 85,
+      "community": 87,
       "norm_label": "jobapplicationcontroller.java"
     },
     {
@@ -592,7 +592,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L37",
       "id": "controller_jobapplicationcontroller_jobapplicationcontroller_getall",
-      "community": 85,
+      "community": 87,
       "norm_label": ".getall()"
     },
     {
@@ -610,7 +610,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L37",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_jobapplicationcontroller_java_jobapplicationresponse",
-      "community": 85,
+      "community": 87,
       "norm_label": "jobapplicationresponse"
     },
     {
@@ -619,7 +619,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L37",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_jobapplicationcontroller_java_getmapping",
-      "community": 85,
+      "community": 185,
       "norm_label": "getmapping"
     },
     {
@@ -628,7 +628,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L43",
       "id": "controller_jobapplicationcontroller_jobapplicationcontroller_create",
-      "community": 85,
+      "community": 14,
       "norm_label": ".create()"
     },
     {
@@ -637,7 +637,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L43",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_jobapplicationcontroller_java_jobapplicationrequest",
-      "community": 85,
+      "community": 87,
       "norm_label": "jobapplicationrequest"
     },
     {
@@ -736,7 +736,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L75",
       "id": "checkduplicaterequest",
-      "community": 85,
+      "community": 87,
       "norm_label": "checkduplicaterequest"
     },
     {
@@ -745,7 +745,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/JobApplicationController.java",
       "source_location": "L75",
       "id": "checkduplicateresponse",
-      "community": 85,
+      "community": 87,
       "norm_label": "checkduplicateresponse"
     },
     {
@@ -772,7 +772,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L1",
       "id": "controller_redirectcontroller",
-      "community": 96,
+      "community": 185,
       "norm_label": "redirectcontroller.java"
     },
     {
@@ -781,7 +781,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L11",
       "id": "controller_redirectcontroller_redirectcontroller",
-      "community": 96,
+      "community": 185,
       "norm_label": "redirectcontroller"
     },
     {
@@ -790,7 +790,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L17",
       "id": "controller_redirectcontroller_redirectcontroller_login",
-      "community": 96,
+      "community": 185,
       "norm_label": ".login()"
     },
     {
@@ -799,7 +799,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L17",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_redirectcontroller_java_responseentity",
-      "community": 96,
+      "community": 185,
       "norm_label": "responseentity"
     },
     {
@@ -808,7 +808,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L17",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_redirectcontroller_java_void",
-      "community": 96,
+      "community": 185,
       "norm_label": "void"
     },
     {
@@ -817,7 +817,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L17",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_redirectcontroller_java_getmapping",
-      "community": 96,
+      "community": 185,
       "norm_label": "getmapping"
     },
     {
@@ -826,7 +826,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L24",
       "id": "controller_redirectcontroller_redirectcontroller_home",
-      "community": 96,
+      "community": 185,
       "norm_label": ".home()"
     },
     {
@@ -835,7 +835,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L1",
       "id": "controller_resumecontroller",
-      "community": 95,
+      "community": 117,
       "norm_label": "resumecontroller.java"
     },
     {
@@ -862,7 +862,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L42",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java_resumebase",
-      "community": 95,
+      "community": 117,
       "norm_label": "resumebase"
     },
     {
@@ -889,7 +889,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L53",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java_list",
-      "community": 87,
+      "community": 117,
       "norm_label": "list"
     },
     {
@@ -925,7 +925,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L66",
       "id": "generatefromjdrequest",
-      "community": 95,
+      "community": 117,
       "norm_label": "generatefromjdrequest"
     },
     {
@@ -952,7 +952,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L86",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java_sseemitter",
-      "community": 95,
+      "community": 117,
       "norm_label": "sseemitter"
     },
     {
@@ -979,7 +979,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L111",
       "id": "resumegenerationrequest",
-      "community": 95,
+      "community": 117,
       "norm_label": "resumegenerationrequest"
     },
     {
@@ -997,7 +997,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L145",
       "id": "updatecontentrequest",
-      "community": 95,
+      "community": 117,
       "norm_label": "updatecontentrequest"
     },
     {
@@ -1195,7 +1195,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/CheckDuplicateResponse.java",
       "source_location": "L1",
       "id": "dto_checkduplicateresponse",
-      "community": 185,
+      "community": 87,
       "norm_label": "checkduplicateresponse.java"
     },
     {
@@ -1204,7 +1204,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/CheckDuplicateResponse.java",
       "source_location": "L8",
       "id": "dto_checkduplicateresponse_checkduplicateresponse",
-      "community": 185,
+      "community": 87,
       "norm_label": "checkduplicateresponse"
     },
     {
@@ -1213,7 +1213,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/CheckDuplicateResponse.java",
       "source_location": "L16",
       "id": "dto_checkduplicateresponse_existingapplicationinfo",
-      "community": 185,
+      "community": 87,
       "norm_label": "existingapplicationinfo"
     },
     {
@@ -1240,7 +1240,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdRequest.java",
       "source_location": "L1",
       "id": "dto_generatefromjdrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "generatefromjdrequest.java"
     },
     {
@@ -1249,7 +1249,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdRequest.java",
       "source_location": "L11",
       "id": "dto_generatefromjdrequest_generatefromjdrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "generatefromjdrequest"
     },
     {
@@ -1258,7 +1258,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdResponse.java",
       "source_location": "L1",
       "id": "dto_generatefromjdresponse",
-      "community": 14,
+      "community": 117,
       "norm_label": "generatefromjdresponse.java"
     },
     {
@@ -1267,7 +1267,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/GenerateFromJdResponse.java",
       "source_location": "L8",
       "id": "dto_generatefromjdresponse_generatefromjdresponse",
-      "community": 14,
+      "community": 117,
       "norm_label": "generatefromjdresponse"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/JobApplicationResponse.java",
       "source_location": "L1",
       "id": "dto_jobapplicationresponse",
-      "community": 29,
+      "community": 87,
       "norm_label": "jobapplicationresponse.java"
     },
     {
@@ -1366,7 +1366,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/PdfSyncResponse.java",
       "source_location": "L1",
       "id": "dto_pdfsyncresponse",
-      "community": 14,
+      "community": 117,
       "norm_label": "pdfsyncresponse.java"
     },
     {
@@ -1375,7 +1375,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/PdfSyncResponse.java",
       "source_location": "L10",
       "id": "dto_pdfsyncresponse_pdfsyncresponse",
-      "community": 14,
+      "community": 117,
       "norm_label": "pdfsyncresponse"
     },
     {
@@ -1420,7 +1420,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationRequest.java",
       "source_location": "L1",
       "id": "dto_resumegenerationrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumegenerationrequest.java"
     },
     {
@@ -1429,7 +1429,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationRequest.java",
       "source_location": "L11",
       "id": "dto_resumegenerationrequest_resumegenerationrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumegenerationrequest"
     },
     {
@@ -1438,7 +1438,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationResponse.java",
       "source_location": "L1",
       "id": "dto_resumegenerationresponse",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumegenerationresponse.java"
     },
     {
@@ -1447,7 +1447,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/ResumeGenerationResponse.java",
       "source_location": "L9",
       "id": "dto_resumegenerationresponse_resumegenerationresponse",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumegenerationresponse"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/UpdateContentRequest.java",
       "source_location": "L1",
       "id": "dto_updatecontentrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "updatecontentrequest.java"
     },
     {
@@ -1483,7 +1483,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/dto/UpdateContentRequest.java",
       "source_location": "L8",
       "id": "dto_updatecontentrequest_updatecontentrequest",
-      "community": 87,
+      "community": 117,
       "norm_label": "updatecontentrequest"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L1",
       "id": "exception_latexcompilationexception",
-      "community": 19,
+      "community": 338,
       "norm_label": "latexcompilationexception.java"
     },
     {
@@ -1573,7 +1573,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L8",
       "id": "exception_latexcompilationexception_latexcompilationexception",
-      "community": 19,
+      "community": 338,
       "norm_label": "latexcompilationexception"
     },
     {
@@ -1582,7 +1582,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "exception_latexcompilationexception_latexcompilationexception_latexcompilationexception",
-      "community": 19,
+      "community": 338,
       "norm_label": ".latexcompilationexception()"
     },
     {
@@ -1591,7 +1591,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_latexcompilationexception_java_string",
-      "community": 19,
+      "community": 338,
       "norm_label": "string"
     },
     {
@@ -1600,7 +1600,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_latexcompilationexception_java_list",
-      "community": 87,
+      "community": 338,
       "norm_label": "list"
     },
     {
@@ -1609,7 +1609,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/LatexCompilationException.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_latexcompilationexception_java_pdfsyncdiagnostic",
-      "community": 19,
+      "community": 338,
       "norm_label": "pdfsyncdiagnostic"
     },
     {
@@ -1654,7 +1654,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/NotAuthenticatedException.java",
       "source_location": "L1",
       "id": "exception_notauthenticatedexception",
-      "community": 80,
+      "community": 7,
       "norm_label": "notauthenticatedexception.java"
     },
     {
@@ -1663,7 +1663,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/NotAuthenticatedException.java",
       "source_location": "L5",
       "id": "exception_notauthenticatedexception_notauthenticatedexception",
-      "community": 80,
+      "community": 7,
       "norm_label": "notauthenticatedexception"
     },
     {
@@ -1672,7 +1672,7 @@
       "source_file": "",
       "source_location": "",
       "id": "authenticationexception",
-      "community": 80,
+      "community": 7,
       "norm_label": "authenticationexception"
     },
     {
@@ -1681,7 +1681,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/NotAuthenticatedException.java",
       "source_location": "L6",
       "id": "exception_notauthenticatedexception_notauthenticatedexception_notauthenticatedexception",
-      "community": 80,
+      "community": 7,
       "norm_label": ".notauthenticatedexception()"
     },
     {
@@ -1690,7 +1690,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/NotAuthenticatedException.java",
       "source_location": "L6",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_notauthenticatedexception_java_string",
-      "community": 80,
+      "community": 7,
       "norm_label": "string"
     },
     {
@@ -1699,7 +1699,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/UserNotFoundException.java",
       "source_location": "L1",
       "id": "exception_usernotfoundexception",
-      "community": 80,
+      "community": 7,
       "norm_label": "usernotfoundexception.java"
     },
     {
@@ -1708,7 +1708,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/UserNotFoundException.java",
       "source_location": "L5",
       "id": "exception_usernotfoundexception_usernotfoundexception",
-      "community": 80,
+      "community": 7,
       "norm_label": "usernotfoundexception"
     },
     {
@@ -1717,7 +1717,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/UserNotFoundException.java",
       "source_location": "L6",
       "id": "exception_usernotfoundexception_usernotfoundexception_usernotfoundexception",
-      "community": 80,
+      "community": 7,
       "norm_label": ".usernotfoundexception()"
     },
     {
@@ -1726,7 +1726,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/exception/UserNotFoundException.java",
       "source_location": "L6",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_exception_usernotfoundexception_java_string",
-      "community": 80,
+      "community": 7,
       "norm_label": "string"
     },
     {
@@ -1879,7 +1879,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/ResumeBase.java",
       "source_location": "L1",
       "id": "model_resumebase",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumebase.java"
     },
     {
@@ -1888,7 +1888,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/model/ResumeBase.java",
       "source_location": "L7",
       "id": "model_resumebase_resumebase",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumebase"
     },
     {
@@ -1933,7 +1933,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L11",
       "id": "repository_authuserrepository_authuserrepository_findbyemail",
-      "community": 30,
+      "community": 159,
       "norm_label": ".findbyemail()"
     },
     {
@@ -1942,7 +1942,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L11",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_authuserrepository_java_string",
-      "community": 30,
+      "community": 159,
       "norm_label": "string"
     },
     {
@@ -1951,7 +1951,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L11",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_authuserrepository_java_optional",
-      "community": 87,
+      "community": 159,
       "norm_label": "optional"
     },
     {
@@ -2041,7 +2041,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L1",
       "id": "repository_refreshtokenrepository",
-      "community": 29,
+      "community": 116,
       "norm_label": "refreshtokenrepository.java"
     },
     {
@@ -2050,7 +2050,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L12",
       "id": "repository_refreshtokenrepository_refreshtokenrepository",
-      "community": 29,
+      "community": 116,
       "norm_label": "refreshtokenrepository"
     },
     {
@@ -2059,7 +2059,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L15",
       "id": "repository_refreshtokenrepository_refreshtokenrepository_findbytoken",
-      "community": 29,
+      "community": 116,
       "norm_label": ".findbytoken()"
     },
     {
@@ -2068,7 +2068,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L15",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_refreshtokenrepository_java_string",
-      "community": 29,
+      "community": 116,
       "norm_label": "string"
     },
     {
@@ -2077,7 +2077,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L15",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_refreshtokenrepository_java_optional",
-      "community": 87,
+      "community": 116,
       "norm_label": "optional"
     },
     {
@@ -2086,7 +2086,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L15",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_refreshtokenrepository_java_refreshtoken",
-      "community": 159,
+      "community": 116,
       "norm_label": "refreshtoken"
     },
     {
@@ -2095,7 +2095,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L17",
       "id": "repository_refreshtokenrepository_refreshtokenrepository_revokeallbyuserid",
-      "community": 29,
+      "community": 116,
       "norm_label": ".revokeallbyuserid()"
     },
     {
@@ -2104,7 +2104,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L17",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_refreshtokenrepository_java_long",
-      "community": 29,
+      "community": 116,
       "norm_label": "long"
     },
     {
@@ -2113,7 +2113,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L17",
       "id": "modifying",
-      "community": 29,
+      "community": 116,
       "norm_label": "modifying"
     },
     {
@@ -2122,7 +2122,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L17",
       "id": "query",
-      "community": 29,
+      "community": 116,
       "norm_label": "query"
     },
     {
@@ -2131,7 +2131,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/RefreshTokenRepository.java",
       "source_location": "L21",
       "id": "repository_refreshtokenrepository_refreshtokenrepository_deleteexpiredandrevoked",
-      "community": 29,
+      "community": 116,
       "norm_label": ".deleteexpiredandrevoked()"
     },
     {
@@ -2149,7 +2149,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L1",
       "id": "repository_resumebaserepository",
-      "community": 87,
+      "community": 99,
       "norm_label": "resumebaserepository.java"
     },
     {
@@ -2185,7 +2185,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L13",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_resumebaserepository_java_optional",
-      "community": 87,
+      "community": 99,
       "norm_label": "optional"
     },
     {
@@ -2194,7 +2194,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L13",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_resumebaserepository_java_resumebase",
-      "community": 87,
+      "community": 99,
       "norm_label": "resumebase"
     },
     {
@@ -2230,7 +2230,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L15",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_resumebaserepository_java_list",
-      "community": 87,
+      "community": 99,
       "norm_label": "list"
     },
     {
@@ -2284,7 +2284,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/UserProfileRepository.java",
       "source_location": "L12",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_repository_userprofilerepository_java_optional",
-      "community": 87,
+      "community": 96,
       "norm_label": "optional"
     },
     {
@@ -2437,7 +2437,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L1",
       "id": "security_inmemoryratelimitstore",
-      "community": 14,
+      "community": 136,
       "norm_label": "inmemoryratelimitstore.java"
     },
     {
@@ -2446,7 +2446,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L12",
       "id": "security_inmemoryratelimitstore_inmemoryratelimitstore",
-      "community": 14,
+      "community": 136,
       "norm_label": "inmemoryratelimitstore"
     },
     {
@@ -2455,7 +2455,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L18",
       "id": "security_inmemoryratelimitstore_inmemoryratelimitstore_tryconsume",
-      "community": 14,
+      "community": 136,
       "norm_label": ".tryconsume()"
     },
     {
@@ -2464,7 +2464,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L18",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_inmemoryratelimitstore_java_string",
-      "community": 14,
+      "community": 136,
       "norm_label": "string"
     },
     {
@@ -2473,7 +2473,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L18",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_inmemoryratelimitstore_java_duration",
-      "community": 14,
+      "community": 136,
       "norm_label": "duration"
     },
     {
@@ -2482,7 +2482,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L18",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_inmemoryratelimitstore_java_override",
-      "community": 14,
+      "community": 136,
       "norm_label": "override"
     },
     {
@@ -2599,7 +2599,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L1",
       "id": "security_jwtutil",
-      "community": 136,
+      "community": 3,
       "norm_label": "jwtutil.java"
     },
     {
@@ -2608,7 +2608,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L13",
       "id": "security_jwtutil_jwtutil",
-      "community": 136,
+      "community": 3,
       "norm_label": "jwtutil"
     },
     {
@@ -2617,7 +2617,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L22",
       "id": "security_jwtutil_jwtutil_getsigningkey",
-      "community": 136,
+      "community": 3,
       "norm_label": ".getsigningkey()"
     },
     {
@@ -2626,7 +2626,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L22",
       "id": "secretkey",
-      "community": 136,
+      "community": 3,
       "norm_label": "secretkey"
     },
     {
@@ -2635,7 +2635,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L26",
       "id": "security_jwtutil_jwtutil_generatetoken",
-      "community": 136,
+      "community": 3,
       "norm_label": ".generatetoken()"
     },
     {
@@ -2644,7 +2644,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L26",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_jwtutil_java_string",
-      "community": 136,
+      "community": 3,
       "norm_label": "string"
     },
     {
@@ -2653,7 +2653,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L35",
       "id": "security_jwtutil_jwtutil_extractemail",
-      "community": 136,
+      "community": 3,
       "norm_label": ".extractemail()"
     },
     {
@@ -2662,7 +2662,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L39",
       "id": "security_jwtutil_jwtutil_istokenvalid",
-      "community": 136,
+      "community": 3,
       "norm_label": ".istokenvalid()"
     },
     {
@@ -2671,7 +2671,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L48",
       "id": "security_jwtutil_jwtutil_extractclaims",
-      "community": 136,
+      "community": 3,
       "norm_label": ".extractclaims()"
     },
     {
@@ -2680,7 +2680,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L48",
       "id": "claims",
-      "community": 136,
+      "community": 3,
       "norm_label": "claims"
     },
     {
@@ -2761,7 +2761,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/OAuth2SuccessHandler.java",
       "source_location": "L55",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_oauth2successhandler_java_authentication",
-      "community": 159,
+      "community": 31,
       "norm_label": "authentication"
     },
     {
@@ -2860,7 +2860,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L1",
       "id": "security_ratelimitstore",
-      "community": 14,
+      "community": 136,
       "norm_label": "ratelimitstore.java"
     },
     {
@@ -2869,7 +2869,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L5",
       "id": "security_ratelimitstore_ratelimitstore",
-      "community": 14,
+      "community": 136,
       "norm_label": "ratelimitstore"
     },
     {
@@ -2878,7 +2878,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L6",
       "id": "security_ratelimitstore_ratelimitstore_tryconsume",
-      "community": 14,
+      "community": 136,
       "norm_label": ".tryconsume()"
     },
     {
@@ -2887,7 +2887,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L6",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_ratelimitstore_java_string",
-      "community": 14,
+      "community": 136,
       "norm_label": "string"
     },
     {
@@ -2896,7 +2896,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L6",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_ratelimitstore_java_duration",
-      "community": 14,
+      "community": 136,
       "norm_label": "duration"
     },
     {
@@ -3112,7 +3112,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/SpaCsrfTokenRequestHandler.java",
       "source_location": "L16",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_spacsrftokenrequesthandler_java_httpservletrequest",
-      "community": 139,
+      "community": 31,
       "norm_label": "httpservletrequest"
     },
     {
@@ -3121,7 +3121,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/SpaCsrfTokenRequestHandler.java",
       "source_location": "L16",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_security_spacsrftokenrequesthandler_java_httpservletresponse",
-      "community": 139,
+      "community": 31,
       "norm_label": "httpservletresponse"
     },
     {
@@ -3184,7 +3184,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/AuthService.java",
       "source_location": "L15",
       "id": "service_authservice_authservice",
-      "community": 96,
+      "community": 159,
       "norm_label": "authservice"
     },
     {
@@ -3355,7 +3355,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L1",
       "id": "service_jobapplicationservice",
-      "community": 117,
+      "community": 87,
       "norm_label": "jobapplicationservice.java"
     },
     {
@@ -3364,7 +3364,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L16",
       "id": "service_jobapplicationservice_jobapplicationservice",
-      "community": 117,
+      "community": 87,
       "norm_label": "jobapplicationservice"
     },
     {
@@ -3373,7 +3373,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L24",
       "id": "service_jobapplicationservice_jobapplicationservice_getallapplications",
-      "community": 117,
+      "community": 87,
       "norm_label": ".getallapplications()"
     },
     {
@@ -3391,7 +3391,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L24",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_jobapplicationresponse",
-      "community": 117,
+      "community": 87,
       "norm_label": "jobapplicationresponse"
     },
     {
@@ -3400,7 +3400,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L33",
       "id": "service_jobapplicationservice_jobapplicationservice_saveapplication",
-      "community": 117,
+      "community": 87,
       "norm_label": ".saveapplication()"
     },
     {
@@ -3409,7 +3409,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L33",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_jobapplicationrequest",
-      "community": 117,
+      "community": 87,
       "norm_label": "jobapplicationrequest"
     },
     {
@@ -3418,7 +3418,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L49",
       "id": "service_jobapplicationservice_jobapplicationservice_updateapplication",
-      "community": 117,
+      "community": 87,
       "norm_label": ".updateapplication()"
     },
     {
@@ -3427,7 +3427,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L49",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_long",
-      "community": 117,
+      "community": 87,
       "norm_label": "long"
     },
     {
@@ -3436,7 +3436,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L68",
       "id": "service_jobapplicationservice_jobapplicationservice_getapplicationbyid",
-      "community": 117,
+      "community": 87,
       "norm_label": ".getapplicationbyid()"
     },
     {
@@ -3445,7 +3445,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L68",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_optional",
-      "community": 117,
+      "community": 87,
       "norm_label": "optional"
     },
     {
@@ -3454,7 +3454,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L73",
       "id": "service_jobapplicationservice_jobapplicationservice_getapplication",
-      "community": 117,
+      "community": 95,
       "norm_label": ".getapplication()"
     },
     {
@@ -3463,7 +3463,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L73",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_jobapplicationservice_java_jobapplication",
-      "community": 117,
+      "community": 87,
       "norm_label": "jobapplication"
     },
     {
@@ -3472,7 +3472,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L77",
       "id": "service_jobapplicationservice_jobapplicationservice_deleteapplication",
-      "community": 117,
+      "community": 87,
       "norm_label": ".deleteapplication()"
     },
     {
@@ -3481,7 +3481,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L82",
       "id": "service_jobapplicationservice_jobapplicationservice_saveentity",
-      "community": 117,
+      "community": 87,
       "norm_label": ".saveentity()"
     },
     {
@@ -3490,7 +3490,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/JobApplicationService.java",
       "source_location": "L86",
       "id": "service_jobapplicationservice_jobapplicationservice_maptoresponse",
-      "community": 117,
+      "community": 87,
       "norm_label": ".maptoresponse()"
     },
     {
@@ -3598,7 +3598,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/LatexCompilationService.java",
       "source_location": "L95",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_latexcompilationservice_java_list",
-      "community": 87,
+      "community": 333,
       "norm_label": "list"
     },
     {
@@ -3634,7 +3634,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/LatexCompilationService.java",
       "source_location": "L132",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_latexcompilationservice_java_duration",
-      "community": 14,
+      "community": 136,
       "norm_label": "duration"
     },
     {
@@ -3841,7 +3841,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/RefreshTokenService.java",
       "source_location": "L39",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_refreshtokenservice_java_optional",
-      "community": 87,
+      "community": 116,
       "norm_label": "optional"
     },
     {
@@ -3886,7 +3886,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L1",
       "id": "service_resumepipelineclient",
-      "community": 85,
+      "community": 14,
       "norm_label": "resumepipelineclient.java"
     },
     {
@@ -3895,7 +3895,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L32",
       "id": "service_resumepipelineclient_resumepipelineclient",
-      "community": 85,
+      "community": 14,
       "norm_label": "resumepipelineclient"
     },
     {
@@ -3904,7 +3904,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L56",
       "id": "service_resumepipelineclient_resumepipelineclient_generate",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generate()"
     },
     {
@@ -3913,7 +3913,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L56",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumepipelineclient_java_string",
-      "community": 85,
+      "community": 14,
       "norm_label": "string"
     },
     {
@@ -3922,7 +3922,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L56",
       "id": "pipelineresponse",
-      "community": 99,
+      "community": 14,
       "norm_label": "pipelineresponse"
     },
     {
@@ -3940,7 +3940,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L180",
       "id": "service_resumepipelineclient_resumepipelineclient_generatestream",
-      "community": 85,
+      "community": 14,
       "norm_label": ".generatestream()"
     },
     {
@@ -3949,7 +3949,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L180",
       "id": "biconsumer",
-      "community": 85,
+      "community": 14,
       "norm_label": "biconsumer"
     },
     {
@@ -3958,7 +3958,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L329",
       "id": "service_resumepipelineclient_resumepipelineclient_ishealthy",
-      "community": 85,
+      "community": 14,
       "norm_label": ".ishealthy()"
     },
     {
@@ -3967,7 +3967,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L351",
       "id": "service_resumepipelineclient_resumepipelineclient_parsejd",
-      "community": 85,
+      "community": 14,
       "norm_label": ".parsejd()"
     },
     {
@@ -3976,7 +3976,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L351",
       "id": "jdparseresult",
-      "community": 85,
+      "community": 14,
       "norm_label": "jdparseresult"
     },
     {
@@ -3985,7 +3985,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L405",
       "id": "service_resumepipelineclient_pipelineresponse",
-      "community": 85,
+      "community": 14,
       "norm_label": "pipelineresponse"
     },
     {
@@ -3994,7 +3994,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumePipelineClient.java",
       "source_location": "L426",
       "id": "service_resumepipelineclient_jdparseresult",
-      "community": 85,
+      "community": 14,
       "norm_label": "jdparseresult"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L1",
       "id": "service_resumeservice",
-      "community": 99,
+      "community": 117,
       "norm_label": "resumeservice.java"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L32",
       "id": "service_resumeservice_resumeservice",
-      "community": 99,
+      "community": 14,
       "norm_label": "resumeservice"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L49",
       "id": "service_resumeservice_resumeservice_generatefromjd",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generatefromjd()"
     },
     {
@@ -4030,7 +4030,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L49",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_string",
-      "community": 99,
+      "community": 14,
       "norm_label": "string"
     },
     {
@@ -4048,7 +4048,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L49",
       "id": "generatefromjdresponse",
-      "community": 99,
+      "community": 117,
       "norm_label": "generatefromjdresponse"
     },
     {
@@ -4057,7 +4057,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L143",
       "id": "service_resumeservice_resumeservice_generatefromjdstream",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generatefromjdstream()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L143",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_sseemitter",
-      "community": 99,
+      "community": 117,
       "norm_label": "sseemitter"
     },
     {
@@ -4075,7 +4075,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L143",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_long",
-      "community": 99,
+      "community": 14,
       "norm_label": "long"
     },
     {
@@ -4084,7 +4084,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L267",
       "id": "service_resumeservice_resumeservice_generateresumeandcoverletter",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generateresumeandcoverletter()"
     },
     {
@@ -4093,7 +4093,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L271",
       "id": "boolean",
-      "community": 99,
+      "community": 14,
       "norm_label": "boolean"
     },
     {
@@ -4102,7 +4102,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L343",
       "id": "service_resumeservice_resumeservice_generateresume",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generateresume()"
     },
     {
@@ -4111,7 +4111,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L353",
       "id": "service_resumeservice_resumeservice_compilepdf",
-      "community": 99,
+      "community": 14,
       "norm_label": ".compilepdf()"
     },
     {
@@ -4120,7 +4120,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L413",
       "id": "service_resumeservice_resumeservice_compilepdfwithsync",
-      "community": 99,
+      "community": 14,
       "norm_label": ".compilepdfwithsync()"
     },
     {
@@ -4129,7 +4129,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L413",
       "id": "pdfsyncresponse",
-      "community": 99,
+      "community": 117,
       "norm_label": "pdfsyncresponse"
     },
     {
@@ -4138,7 +4138,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L422",
       "id": "service_resumeservice_resumeservice_builduserinfo",
-      "community": 99,
+      "community": 14,
       "norm_label": ".builduserinfo()"
     },
     {
@@ -4147,7 +4147,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L422",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java_userprofile",
-      "community": 99,
+      "community": 96,
       "norm_label": "userprofile"
     },
     {
@@ -4156,7 +4156,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L446",
       "id": "service_resumeservice_resumeservice_generatecoverletterpdf",
-      "community": 99,
+      "community": 14,
       "norm_label": ".generatecoverletterpdf()"
     },
     {
@@ -4165,7 +4165,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L485",
       "id": "service_resumeservice_resumeservice_escapelatex",
-      "community": 99,
+      "community": 14,
       "norm_label": ".escapelatex()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/SynctexOutputParser.java",
       "source_location": "L20",
       "id": "backend_src_main_java_com_fullstack_atsjobtracker_service_synctexoutputparser_java_optional",
-      "community": 87,
+      "community": 333,
       "norm_label": "optional"
     },
     {
@@ -4399,7 +4399,7 @@
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/util/KeySanitizer.java",
       "source_location": "L53",
       "id": "util_keysanitizer_keysanitizer_sanitizeforlog",
-      "community": 99,
+      "community": 14,
       "norm_label": ".sanitizeforlog()"
     },
     {
@@ -7711,7 +7711,7 @@
       "source_file": "resume-pipeline/src/impact/detector.ts",
       "source_location": "L210",
       "id": "impact_detector_roleimpactprofile",
-      "community": 47,
+      "community": 341,
       "norm_label": "roleimpactprofile"
     },
     {
@@ -8381,6 +8381,159 @@
       "norm_label": "extractsummarytext()"
     },
     {
+      "label": "ats-verdict.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L1",
+      "id": "schemas_ats_verdict",
+      "community": 80,
+      "norm_label": "ats-verdict.ts"
+    },
+    {
+      "label": "MatchTierSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L12",
+      "id": "schemas_ats_verdict_matchtierschema",
+      "community": 80,
+      "norm_label": "matchtierschema"
+    },
+    {
+      "label": "VerdictMatchTier",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L19",
+      "id": "schemas_ats_verdict_verdictmatchtier",
+      "community": 80,
+      "norm_label": "verdictmatchtier"
+    },
+    {
+      "label": "KnockoutCheckSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L23",
+      "id": "schemas_ats_verdict_knockoutcheckschema",
+      "community": 80,
+      "norm_label": "knockoutcheckschema"
+    },
+    {
+      "label": "KnockoutCheck",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L45",
+      "id": "schemas_ats_verdict_knockoutcheck",
+      "community": 80,
+      "norm_label": "knockoutcheck"
+    },
+    {
+      "label": "ResumeSectionSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L49",
+      "id": "schemas_ats_verdict_resumesectionschema",
+      "community": 80,
+      "norm_label": "resumesectionschema"
+    },
+    {
+      "label": "ResumeSection",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L57",
+      "id": "schemas_ats_verdict_resumesection",
+      "community": 341,
+      "norm_label": "resumesection"
+    },
+    {
+      "label": "RecruiterQueryResultSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L59",
+      "id": "schemas_ats_verdict_recruiterqueryresultschema",
+      "community": 80,
+      "norm_label": "recruiterqueryresultschema"
+    },
+    {
+      "label": "RecruiterQueryResult",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L72",
+      "id": "schemas_ats_verdict_recruiterqueryresult",
+      "community": 80,
+      "norm_label": "recruiterqueryresult"
+    },
+    {
+      "label": "ParseLossIssueSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L76",
+      "id": "schemas_ats_verdict_parselossissueschema",
+      "community": 80,
+      "norm_label": "parselossissueschema"
+    },
+    {
+      "label": "ParseLossIssue",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L88",
+      "id": "schemas_ats_verdict_parselossissue",
+      "community": 80,
+      "norm_label": "parselossissue"
+    },
+    {
+      "label": "RepairActionSchema",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L92",
+      "id": "schemas_ats_verdict_repairactionschema",
+      "community": 80,
+      "norm_label": "repairactionschema"
+    },
+    {
+      "label": "RepairAction",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L110",
+      "id": "schemas_ats_verdict_repairaction",
+      "community": 80,
+      "norm_label": "repairaction"
+    },
+    {
+      "label": "VerdictStatus",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L114",
+      "id": "schemas_ats_verdict_verdictstatus",
+      "community": 80,
+      "norm_label": "verdictstatus"
+    },
+    {
+      "label": "ATSVerdict",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L116",
+      "id": "schemas_ats_verdict_atsverdict",
+      "community": 80,
+      "norm_label": "atsverdict"
+    },
+    {
+      "label": "deriveVerdictStatus()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L146",
+      "id": "schemas_ats_verdict_deriveverdictstatus",
+      "community": 80,
+      "norm_label": "deriveverdictstatus()"
+    },
+    {
+      "label": "weightedHitRate()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L161",
+      "id": "schemas_ats_verdict_weightedhitrate",
+      "community": 80,
+      "norm_label": "weightedhitrate()"
+    },
+    {
       "label": "cover-letter.ts",
       "file_type": "code",
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
@@ -8483,7 +8636,7 @@
       "label": "JDAnalysis",
       "file_type": "code",
       "source_file": "resume-pipeline/src/schemas/jd-analysis.ts",
-      "source_location": "L20",
+      "source_location": "L23",
       "id": "schemas_jd_analysis_jdanalysis",
       "community": 111,
       "norm_label": "jdanalysis"
@@ -8530,7 +8683,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L48",
       "id": "schemas_pipeline_default_config",
-      "community": 111,
+      "community": 83,
       "norm_label": "default_config"
     },
     {
@@ -8548,7 +8701,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L74",
       "id": "schemas_pipeline_parsedresume",
-      "community": 41,
+      "community": 341,
       "norm_label": "parsedresume"
     },
     {
@@ -8557,7 +8710,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L87",
       "id": "schemas_pipeline_parsedrole",
-      "community": 41,
+      "community": 336,
       "norm_label": "parsedrole"
     },
     {
@@ -8602,7 +8755,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L123",
       "id": "schemas_pipeline_atsscore",
-      "community": 337,
+      "community": 80,
       "norm_label": "atsscore"
     },
     {
@@ -8611,7 +8764,7 @@
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L178",
       "id": "schemas_pipeline_formatissue",
-      "community": 341,
+      "community": 337,
       "norm_label": "formatissue"
     },
     {
@@ -8836,7 +8989,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L1",
       "id": "security_key_sanitizer",
-      "community": 83,
+      "community": 339,
       "norm_label": "key-sanitizer.ts"
     },
     {
@@ -8845,7 +8998,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L5",
       "id": "security_key_sanitizer_key_patterns",
-      "community": 83,
+      "community": 339,
       "norm_label": "key_patterns"
     },
     {
@@ -8854,7 +9007,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L11",
       "id": "security_key_sanitizer_sensitive_fields",
-      "community": 83,
+      "community": 339,
       "norm_label": "sensitive_fields"
     },
     {
@@ -8863,7 +9016,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L23",
       "id": "security_key_sanitizer_sanitize",
-      "community": 83,
+      "community": 339,
       "norm_label": "sanitize()"
     },
     {
@@ -8872,7 +9025,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L31",
       "id": "security_key_sanitizer_sanitizeobject",
-      "community": 83,
+      "community": 339,
       "norm_label": "sanitizeobject()"
     },
     {
@@ -8881,7 +9034,7 @@
       "source_file": "resume-pipeline/src/security/key-sanitizer.ts",
       "source_location": "L47",
       "id": "security_key_sanitizer_sanitizesnapshot",
-      "community": 83,
+      "community": 339,
       "norm_label": "sanitizesnapshot()"
     },
     {
@@ -9320,7 +9473,7 @@
       "label": "JdParseContext",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L15",
+      "source_location": "L20",
       "id": "stages_jd_parser_jdparsecontext",
       "community": 111,
       "norm_label": "jdparsecontext"
@@ -9329,7 +9482,7 @@
       "label": "IJdParseStage",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L24",
+      "source_location": "L29",
       "id": "stages_jd_parser_ijdparsestage",
       "community": 84,
       "norm_label": "ijdparsestage"
@@ -9338,7 +9491,7 @@
       "label": "LLMExtractionStage",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L30",
+      "source_location": "L35",
       "id": "stages_jd_parser_llmextractionstage",
       "community": 84,
       "norm_label": "llmextractionstage"
@@ -9347,16 +9500,16 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L31",
+      "source_location": "L36",
       "id": "stages_jd_parser_llmextractionstage_constructor",
-      "community": 84,
+      "community": 34,
       "norm_label": ".constructor()"
     },
     {
       "label": ".execute()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L36",
+      "source_location": "L41",
       "id": "stages_jd_parser_llmextractionstage_execute",
       "community": 84,
       "norm_label": ".execute()"
@@ -9365,16 +9518,16 @@
       "label": "augmentSkillList()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L173",
+      "source_location": "L188",
       "id": "stages_jd_parser_augmentskilllist",
-      "community": 150,
+      "community": 84,
       "norm_label": "augmentskilllist()"
     },
     {
       "label": "filterToPrerequisites()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L242",
+      "source_location": "L257",
       "id": "stages_jd_parser_filtertoprerequisites",
       "community": 84,
       "norm_label": "filtertoprerequisites()"
@@ -9383,7 +9536,7 @@
       "label": "DeterministicAugmentationStage",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L293",
+      "source_location": "L308",
       "id": "stages_jd_parser_deterministicaugmentationstage",
       "community": 84,
       "norm_label": "deterministicaugmentationstage"
@@ -9392,7 +9545,7 @@
       "label": ".execute()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L294",
+      "source_location": "L309",
       "id": "stages_jd_parser_deterministicaugmentationstage_execute",
       "community": 84,
       "norm_label": ".execute()"
@@ -9401,7 +9554,7 @@
       "label": "SanityCheckStage",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L320",
+      "source_location": "L349",
       "id": "stages_jd_parser_sanitycheckstage",
       "community": 84,
       "norm_label": "sanitycheckstage"
@@ -9410,7 +9563,7 @@
       "label": ".execute()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L321",
+      "source_location": "L350",
       "id": "stages_jd_parser_sanitycheckstage_execute",
       "community": 84,
       "norm_label": ".execute()"
@@ -9419,7 +9572,7 @@
       "label": "JdParserPipeline",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L338",
+      "source_location": "L370",
       "id": "stages_jd_parser_jdparserpipeline",
       "community": 84,
       "norm_label": "jdparserpipeline"
@@ -9428,7 +9581,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L339",
+      "source_location": "L371",
       "id": "stages_jd_parser_jdparserpipeline_constructor",
       "community": 84,
       "norm_label": ".constructor()"
@@ -9437,7 +9590,7 @@
       "label": ".parse()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L341",
+      "source_location": "L373",
       "id": "stages_jd_parser_jdparserpipeline_parse",
       "community": 84,
       "norm_label": ".parse()"
@@ -9446,7 +9599,7 @@
       "label": "parseJD()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
-      "source_location": "L352",
+      "source_location": "L384",
       "id": "stages_jd_parser_parsejd",
       "community": 84,
       "norm_label": "parsejd()"
@@ -9484,7 +9637,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L1",
       "id": "stages_keyword_gap_repair",
-      "community": 34,
+      "community": 13,
       "norm_label": "keyword-gap-repair.ts"
     },
     {
@@ -9493,7 +9646,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L17",
       "id": "stages_keyword_gap_repair_keywordgaprepairschema",
-      "community": 34,
+      "community": 13,
       "norm_label": "keywordgaprepairschema"
     },
     {
@@ -9502,7 +9655,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L31",
       "id": "stages_keyword_gap_repair_selectrepairkeywords",
-      "community": 150,
+      "community": 13,
       "norm_label": "selectrepairkeywords()"
     },
     {
@@ -9520,7 +9673,7 @@
       "source_file": "resume-pipeline/src/stages/keyword-gap-repair.ts",
       "source_location": "L258",
       "id": "stages_keyword_gap_repair_loweredincludes",
-      "community": 34,
+      "community": 13,
       "norm_label": "loweredincludes()"
     },
     {
@@ -9529,7 +9682,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L1",
       "id": "stages_latex_assembler",
-      "community": 41,
+      "community": 336,
       "norm_label": "latex-assembler.ts"
     },
     {
@@ -9538,7 +9691,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L16",
       "id": "stages_latex_assembler_section_patterns",
-      "community": 41,
+      "community": 336,
       "norm_label": "section_patterns"
     },
     {
@@ -9547,7 +9700,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L43",
       "id": "stages_latex_assembler_parselatexresume",
-      "community": 41,
+      "community": 336,
       "norm_label": "parselatexresume()"
     },
     {
@@ -9556,7 +9709,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L101",
       "id": "stages_latex_assembler_sectionboundary",
-      "community": 41,
+      "community": 336,
       "norm_label": "sectionboundary"
     },
     {
@@ -9565,7 +9718,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L107",
       "id": "stages_latex_assembler_findsectionboundaries",
-      "community": 41,
+      "community": 336,
       "norm_label": "findsectionboundaries()"
     },
     {
@@ -9574,7 +9727,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L128",
       "id": "stages_latex_assembler_extractnamedsection",
-      "community": 41,
+      "community": 336,
       "norm_label": "extractnamedsection()"
     },
     {
@@ -9592,7 +9745,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L181",
       "id": "stages_latex_assembler_parseexperienceroles",
-      "community": 41,
+      "community": 336,
       "norm_label": "parseexperienceroles()"
     },
     {
@@ -9601,7 +9754,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L189",
       "id": "stages_latex_assembler_assemblelatex",
-      "community": 41,
+      "community": 336,
       "norm_label": "assemblelatex()"
     },
     {
@@ -9619,7 +9772,7 @@
       "source_file": "resume-pipeline/src/stages/latex-assembler.ts",
       "source_location": "L287",
       "id": "stages_latex_assembler_rebuildexperiencesection",
-      "community": 41,
+      "community": 336,
       "norm_label": "rebuildexperiencesection()"
     },
     {
@@ -9761,7 +9914,7 @@
       "label": "tech",
       "file_type": "code",
       "source_file": "resume-pipeline/src/stages/skills-injector.test.ts",
-      "source_location": "L29",
+      "source_location": "L32",
       "id": "stages_skills_injector_test_tech",
       "community": 334,
       "norm_label": "tech"
@@ -9772,7 +9925,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L1",
       "id": "stages_skills_injector",
-      "community": 150,
+      "community": 102,
       "norm_label": "skills-injector.ts"
     },
     {
@@ -9781,7 +9934,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L26",
       "id": "stages_skills_injector_category_hints",
-      "community": 150,
+      "community": 102,
       "norm_label": "category_hints"
     },
     {
@@ -9790,7 +9943,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L43",
       "id": "stages_skills_injector_categoryline",
-      "community": 150,
+      "community": 102,
       "norm_label": "categoryline"
     },
     {
@@ -9799,7 +9952,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L51",
       "id": "stages_skills_injector_surfaceforms",
-      "community": 150,
+      "community": 102,
       "norm_label": "surfaceforms()"
     },
     {
@@ -9808,7 +9961,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L55",
       "id": "stages_skills_injector_presentintext",
-      "community": 150,
+      "community": 102,
       "norm_label": "presentintext()"
     },
     {
@@ -9817,7 +9970,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L60",
       "id": "stages_skills_injector_displayskill",
-      "community": 150,
+      "community": 102,
       "norm_label": "displayskill()"
     },
     {
@@ -9826,7 +9979,7 @@
       "source_file": "resume-pipeline/src/stages/skills-injector.ts",
       "source_location": "L67",
       "id": "stages_skills_injector_skillinjectionresult",
-      "community": 150,
+      "community": 102,
       "norm_label": "skillinjectionresult"
     },
     {
@@ -9986,7 +10139,7 @@
       "label": "sections()",
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/ats-scorer.test.ts",
-      "source_location": "L25",
+      "source_location": "L28",
       "id": "validation_ats_scorer_test_sections",
       "community": 111,
       "norm_label": "sections()"
@@ -10078,43 +10231,16 @@
       "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
       "source_location": "L1",
       "id": "dimensions_education_level_match",
-      "community": 88,
+      "community": 80,
       "norm_label": "education-level-match.ts"
-    },
-    {
-      "label": "DEGREE_PATTERNS",
-      "file_type": "code",
-      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
-      "source_location": "L7",
-      "id": "dimensions_education_level_match_degree_patterns",
-      "community": 88,
-      "norm_label": "degree_patterns"
-    },
-    {
-      "label": "detectResumeDegreeLevel()",
-      "file_type": "code",
-      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
-      "source_location": "L15",
-      "id": "dimensions_education_level_match_detectresumedegreelevel",
-      "community": 88,
-      "norm_label": "detectresumedegreelevel()"
-    },
-    {
-      "label": "DEGREE_RANK",
-      "file_type": "code",
-      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
-      "source_location": "L23",
-      "id": "dimensions_education_level_match_degree_rank",
-      "community": 88,
-      "norm_label": "degree_rank"
     },
     {
       "label": "educationLevelMatchDimension",
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
-      "source_location": "L32",
+      "source_location": "L11",
       "id": "dimensions_education_level_match_educationlevelmatchdimension",
-      "community": 88,
+      "community": 80,
       "norm_label": "educationlevelmatchdimension"
     },
     {
@@ -10456,7 +10582,7 @@
       "source_file": "resume-pipeline/src/validation/format-validator.ts",
       "source_location": "L1",
       "id": "validation_format_validator",
-      "community": 341,
+      "community": 337,
       "norm_label": "format-validator.ts"
     },
     {
@@ -10465,7 +10591,7 @@
       "source_file": "resume-pipeline/src/validation/format-validator.ts",
       "source_location": "L9",
       "id": "validation_format_validator_formatresult",
-      "community": 341,
+      "community": 337,
       "norm_label": "formatresult"
     },
     {
@@ -10474,8 +10600,161 @@
       "source_file": "resume-pipeline/src/validation/format-validator.ts",
       "source_location": "L14",
       "id": "validation_format_validator_validateformat",
-      "community": 341,
+      "community": 337,
       "norm_label": "validateformat()"
+    },
+    {
+      "label": "knockout-evaluator.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L1",
+      "id": "knockout_knockout_evaluator",
+      "community": 80,
+      "norm_label": "knockout-evaluator.ts"
+    },
+    {
+      "label": "AdjudicationResult",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L16",
+      "id": "knockout_knockout_evaluator_adjudicationresult",
+      "community": 80,
+      "norm_label": "adjudicationresult"
+    },
+    {
+      "label": "evaluateKnockouts()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L26",
+      "id": "knockout_knockout_evaluator_evaluateknockouts",
+      "community": 80,
+      "norm_label": "evaluateknockouts()"
+    },
+    {
+      "label": "knockoutPassed()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L167",
+      "id": "knockout_knockout_evaluator_knockoutpassed",
+      "community": 80,
+      "norm_label": "knockoutpassed()"
+    },
+    {
+      "label": "unfixableFailures()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L172",
+      "id": "knockout_knockout_evaluator_unfixablefailures",
+      "community": 80,
+      "norm_label": "unfixablefailures()"
+    },
+    {
+      "label": "query-builder.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L1",
+      "id": "recruiter_search_query_builder",
+      "community": 341,
+      "norm_label": "query-builder.ts"
+    },
+    {
+      "label": "RecruiterQuery",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L9",
+      "id": "recruiter_search_query_builder_recruiterquery",
+      "community": 341,
+      "norm_label": "recruiterquery"
+    },
+    {
+      "label": "QUERY_WEIGHTS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L17",
+      "id": "recruiter_search_query_builder_query_weights",
+      "community": 341,
+      "norm_label": "query_weights"
+    },
+    {
+      "label": "normalizeTitle()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L29",
+      "id": "recruiter_search_query_builder_normalizetitle",
+      "community": 341,
+      "norm_label": "normalizetitle()"
+    },
+    {
+      "label": "isSearchablePhrase()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L42",
+      "id": "recruiter_search_query_builder_issearchablephrase",
+      "community": 341,
+      "norm_label": "issearchablephrase()"
+    },
+    {
+      "label": "buildRecruiterQueries()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L52",
+      "id": "recruiter_search_query_builder_buildrecruiterqueries",
+      "community": 341,
+      "norm_label": "buildrecruiterqueries()"
+    },
+    {
+      "label": "query-runner.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L1",
+      "id": "recruiter_search_query_runner",
+      "community": 341,
+      "norm_label": "query-runner.ts"
+    },
+    {
+      "label": "SearchableText",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L21",
+      "id": "recruiter_search_query_runner_searchabletext",
+      "community": 341,
+      "norm_label": "searchabletext"
+    },
+    {
+      "label": "buildSearchableText()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L27",
+      "id": "recruiter_search_query_runner_buildsearchabletext",
+      "community": 341,
+      "norm_label": "buildsearchabletext()"
+    },
+    {
+      "label": "findVariantHit()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L51",
+      "id": "recruiter_search_query_runner_findvarianthit",
+      "community": 341,
+      "norm_label": "findvarianthit()"
+    },
+    {
+      "label": "locateSections()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L61",
+      "id": "recruiter_search_query_runner_locatesections",
+      "community": 341,
+      "norm_label": "locatesections()"
+    },
+    {
+      "label": "runRecruiterQueries()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L74",
+      "id": "recruiter_search_query_runner_runrecruiterqueries",
+      "community": 341,
+      "norm_label": "runrecruiterqueries()"
     },
     {
       "label": "repair.ts",
@@ -10483,7 +10762,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L1",
       "id": "validation_repair",
-      "community": 13,
+      "community": 34,
       "norm_label": "repair.ts"
     },
     {
@@ -10492,7 +10771,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L14",
       "id": "validation_repair_bulletrepairschema",
-      "community": 13,
+      "community": 34,
       "norm_label": "bulletrepairschema"
     },
     {
@@ -10501,7 +10780,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L24",
       "id": "validation_repair_repairtarget",
-      "community": 13,
+      "community": 34,
       "norm_label": "repairtarget"
     },
     {
@@ -10510,7 +10789,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L35",
       "id": "validation_repair_repairbullets",
-      "community": 13,
+      "community": 34,
       "norm_label": "repairbullets()"
     },
     {
@@ -10519,7 +10798,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L143",
       "id": "validation_repair_identifyfailingbullets",
-      "community": 13,
+      "community": 34,
       "norm_label": "identifyfailingbullets()"
     },
     {
@@ -10528,7 +10807,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L188",
       "id": "validation_repair_repair_phrasing_checks",
-      "community": 13,
+      "community": 34,
       "norm_label": "repair_phrasing_checks"
     },
     {
@@ -10537,7 +10816,7 @@
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L196",
       "id": "validation_repair_buildrepairprompt",
-      "community": 13,
+      "community": 34,
       "norm_label": "buildrepairprompt()"
     },
     {
@@ -10555,7 +10834,7 @@
       "source_file": "resume-pipeline/src/validation/scorer-dimension.ts",
       "source_location": "L12",
       "id": "validation_scorer_dimension_scoringcontext",
-      "community": 47,
+      "community": 341,
       "norm_label": "scoringcontext"
     },
     {
@@ -10654,7 +10933,7 @@
       "source_file": "resume-pipeline/src/validation/scoring-context.ts",
       "source_location": "L1",
       "id": "validation_scoring_context",
-      "community": 47,
+      "community": 341,
       "norm_label": "scoring-context.ts"
     },
     {
@@ -10663,7 +10942,7 @@
       "source_file": "resume-pipeline/src/validation/scoring-context.ts",
       "source_location": "L12",
       "id": "validation_scoring_context_buildscoringcontext",
-      "community": 47,
+      "community": 102,
       "norm_label": "buildscoringcontext()"
     },
     {
@@ -10708,7 +10987,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L30",
       "id": "validation_skill_matcher_skillmatchmap",
-      "community": 47,
+      "community": 341,
       "norm_label": "skillmatchmap"
     },
     {
@@ -10780,7 +11059,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L161",
       "id": "validation_skill_matcher_strongcoverage",
-      "community": 102,
+      "community": 337,
       "norm_label": "strongcoverage()"
     },
     {
@@ -10798,7 +11077,7 @@
       "source_file": "resume-pipeline/src/validation/skill-matcher.ts",
       "source_location": "L180",
       "id": "validation_skill_matcher_hardgaps",
-      "community": 102,
+      "community": 337,
       "norm_label": "hardgaps()"
     },
     {
@@ -10807,7 +11086,7 @@
       "source_file": "resume-pipeline/src/validation/skill-variants.ts",
       "source_location": "L1",
       "id": "validation_skill_variants",
-      "community": 150,
+      "community": 102,
       "norm_label": "skill-variants.ts"
     },
     {
@@ -10816,7 +11095,7 @@
       "source_file": "resume-pipeline/src/validation/skill-variants.ts",
       "source_location": "L4",
       "id": "validation_skill_variants_predefined_variants",
-      "community": 150,
+      "community": 102,
       "norm_label": "predefined_variants"
     },
     {
@@ -10825,7 +11104,7 @@
       "source_file": "resume-pipeline/src/validation/skill-variants.ts",
       "source_location": "L136",
       "id": "validation_skill_variants_generatedynamicvariants",
-      "community": 150,
+      "community": 102,
       "norm_label": "generatedynamicvariants()"
     },
     {
@@ -10834,7 +11113,7 @@
       "source_file": "resume-pipeline/src/validation/skill-variants.ts",
       "source_location": "L168",
       "id": "validation_skill_variants_getallskillvariants",
-      "community": 150,
+      "community": 102,
       "norm_label": "getallskillvariants()"
     },
     {
@@ -10969,7 +11248,7 @@
       "source_file": "resume-pipeline/src/validation/taxonomy/skill-graph.ts",
       "source_location": "L275",
       "id": "taxonomy_skill_graph_getcategory",
-      "community": 150,
+      "community": 102,
       "norm_label": "getcategory()"
     },
     {
@@ -11270,6 +11549,42 @@
       "norm_label": "calculatedensitypenalty()"
     },
     {
+      "label": "education-detector.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L1",
+      "id": "utils_education_detector",
+      "community": 80,
+      "norm_label": "education-detector.ts"
+    },
+    {
+      "label": "DEGREE_PATTERNS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L5",
+      "id": "utils_education_detector_degree_patterns",
+      "community": 80,
+      "norm_label": "degree_patterns"
+    },
+    {
+      "label": "detectResumeDegreeLevel()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L13",
+      "id": "utils_education_detector_detectresumedegreelevel",
+      "community": 80,
+      "norm_label": "detectresumedegreelevel()"
+    },
+    {
+      "label": "DEGREE_RANK",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L21",
+      "id": "utils_education_detector_degree_rank",
+      "community": 80,
+      "norm_label": "degree_rank"
+    },
+    {
       "label": "experience-years.ts",
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/utils/experience-years.ts",
@@ -11360,6 +11675,69 @@
       "norm_label": "index.ts"
     },
     {
+      "label": "jd-requirements.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L1",
+      "id": "utils_jd_requirements",
+      "community": 84,
+      "norm_label": "jd-requirements.ts"
+    },
+    {
+      "label": "contextWindow()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L12",
+      "id": "utils_jd_requirements_contextwindow",
+      "community": 84,
+      "norm_label": "contextwindow()"
+    },
+    {
+      "label": "extractMinYears()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L26",
+      "id": "utils_jd_requirements_extractminyears",
+      "community": 84,
+      "norm_label": "extractminyears()"
+    },
+    {
+      "label": "WORK_AUTH_PATTERNS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L43",
+      "id": "utils_jd_requirements_work_auth_patterns",
+      "community": 84,
+      "norm_label": "work_auth_patterns"
+    },
+    {
+      "label": "extractWorkAuthRequirement()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L53",
+      "id": "utils_jd_requirements_extractworkauthrequirement",
+      "community": 84,
+      "norm_label": "extractworkauthrequirement()"
+    },
+    {
+      "label": "CERT_PATTERNS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L63",
+      "id": "utils_jd_requirements_cert_patterns",
+      "community": 84,
+      "norm_label": "cert_patterns"
+    },
+    {
+      "label": "extractRequiredCertifications()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L81",
+      "id": "utils_jd_requirements_extractrequiredcertifications",
+      "community": 84,
+      "norm_label": "extractrequiredcertifications()"
+    },
+    {
       "label": "latex-stripper.ts",
       "file_type": "code",
       "source_file": "resume-pipeline/src/validation/utils/latex-stripper.ts",
@@ -11374,7 +11752,7 @@
       "source_file": "resume-pipeline/src/validation/utils/latex-stripper.ts",
       "source_location": "L4",
       "id": "utils_latex_stripper_striplatexcommands",
-      "community": 47,
+      "community": 341,
       "norm_label": "striplatexcommands()"
     },
     {
@@ -11383,7 +11761,7 @@
       "source_file": "resume-pipeline/src/validation/utils/latex-stripper.ts",
       "source_location": "L18",
       "id": "utils_latex_stripper_stripalllatex",
-      "community": 341,
+      "community": 337,
       "norm_label": "stripalllatex()"
     },
     {
@@ -11448,6 +11826,51 @@
       "id": "validation_validator_validatesections",
       "community": 13,
       "norm_label": "validatesections()"
+    },
+    {
+      "label": "repair-plan.ts",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L1",
+      "id": "verdict_repair_plan",
+      "community": 80,
+      "norm_label": "repair-plan.ts"
+    },
+    {
+      "label": "PRIORITY",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L18",
+      "id": "verdict_repair_plan_priority",
+      "community": 80,
+      "norm_label": "priority"
+    },
+    {
+      "label": "candidateHasSkill()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L25",
+      "id": "verdict_repair_plan_candidatehasskill",
+      "community": 80,
+      "norm_label": "candidatehasskill()"
+    },
+    {
+      "label": "buildRepairPlan()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L43",
+      "id": "verdict_repair_plan_buildrepairplan",
+      "community": 80,
+      "norm_label": "buildrepairplan()"
+    },
+    {
+      "label": "fixableActions()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L183",
+      "id": "verdict_repair_plan_fixableactions",
+      "community": 80,
+      "norm_label": "fixableactions()"
     },
     {
       "label": "tsconfig.json",
@@ -17318,226 +17741,163 @@
       "norm_label": "trackhire ai"
     },
     {
-      "label": "Features",
+      "label": "What it does",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L5",
-      "id": "readme_features",
+      "source_location": "L7",
+      "id": "readme_what_it_does",
       "community": 93,
-      "norm_label": "features"
+      "norm_label": "what it does"
     },
     {
-      "label": "Tech Stack",
+      "label": "Architecture",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L16",
-      "id": "readme_tech_stack",
+      "source_location": "L18",
+      "id": "readme_architecture",
       "community": 93,
-      "norm_label": "tech stack"
+      "norm_label": "architecture"
+    },
+    {
+      "label": "Resume generation pipeline",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L39",
+      "id": "readme_resume_generation_pipeline",
+      "community": 93,
+      "norm_label": "resume generation pipeline"
+    },
+    {
+      "label": "ATS scoring",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L52",
+      "id": "readme_ats_scoring",
+      "community": 93,
+      "norm_label": "ats scoring"
     },
     {
       "label": "Prerequisites",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L24",
+      "source_location": "L65",
       "id": "readme_prerequisites",
       "community": 93,
       "norm_label": "prerequisites"
     },
     {
-      "label": "Quick Start (Docker \u2014 Full Stack)",
+      "label": "Quick start",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L36",
-      "id": "readme_quick_start_docker_full_stack",
+      "source_location": "L74",
+      "id": "readme_quick_start",
       "community": 93,
-      "norm_label": "quick start (docker \u2014 full stack)"
+      "norm_label": "quick start"
     },
     {
-      "label": "1. Clone the Repository",
+      "label": "1. Clone and configure the root environment",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L38",
-      "id": "readme_1_clone_the_repository",
+      "source_location": "L76",
+      "id": "readme_1_clone_and_configure_the_root_environment",
       "community": 93,
-      "norm_label": "1. clone the repository"
+      "norm_label": "1. clone and configure the root environment"
     },
     {
-      "label": "2. Create Environment File",
+      "label": "2. Start the API services",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L45",
-      "id": "readme_2_create_environment_file",
+      "source_location": "L106",
+      "id": "readme_2_start_the_api_services",
       "community": 93,
-      "norm_label": "2. create environment file"
+      "norm_label": "2. start the api services"
     },
     {
-      "label": "3. Configure Environment Variables",
+      "label": "3. Start the frontend",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L57",
-      "id": "readme_3_configure_environment_variables",
+      "source_location": "L122",
+      "id": "readme_3_start_the_frontend",
       "community": 93,
-      "norm_label": "3. configure environment variables"
+      "norm_label": "3. start the frontend"
     },
     {
-      "label": "4. Run with Docker Compose",
+      "label": "Run services individually",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L89",
-      "id": "readme_4_run_with_docker_compose",
+      "source_location": "L134",
+      "id": "readme_run_services_individually",
       "community": 93,
-      "norm_label": "4. run with docker compose"
+      "norm_label": "run services individually"
     },
     {
-      "label": "5. Run Frontend",
+      "label": "Authentication and BYOK",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L103",
-      "id": "readme_5_run_frontend",
+      "source_location": "L163",
+      "id": "readme_authentication_and_byok",
       "community": 93,
-      "norm_label": "5. run frontend"
+      "norm_label": "authentication and byok"
     },
     {
-      "label": "Local Development Setup",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L117",
-      "id": "readme_local_development_setup",
-      "community": 93,
-      "norm_label": "local development setup"
-    },
-    {
-      "label": "1. Set Up Environment Files",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L121",
-      "id": "readme_1_set_up_environment_files",
-      "community": 93,
-      "norm_label": "1. set up environment files"
-    },
-    {
-      "label": "2. Start PostgreSQL",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L143",
-      "id": "readme_2_start_postgresql",
-      "community": 93,
-      "norm_label": "2. start postgresql"
-    },
-    {
-      "label": "3. Start Resume Pipeline",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L149",
-      "id": "readme_3_start_resume_pipeline",
-      "community": 93,
-      "norm_label": "3. start resume pipeline"
-    },
-    {
-      "label": "4. Start Backend",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L159",
-      "id": "readme_4_start_backend",
-      "community": 93,
-      "norm_label": "4. start backend"
-    },
-    {
-      "label": "5. Start Frontend",
+      "label": "API surface",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L169",
-      "id": "readme_5_start_frontend",
+      "id": "readme_api_surface",
       "community": 93,
-      "norm_label": "5. start frontend"
+      "norm_label": "api surface"
     },
     {
-      "label": "API Endpoints",
+      "label": "Data and migrations",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L183",
-      "id": "readme_api_endpoints",
+      "source_location": "L204",
+      "id": "readme_data_and_migrations",
       "community": 93,
-      "norm_label": "api endpoints"
+      "norm_label": "data and migrations"
     },
     {
-      "label": "Admin Analytics (Protected \u2014 Bearer Token via `ADMIN_API_KEY`)",
+      "label": "Useful commands",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L209",
-      "id": "readme_admin_analytics_protected_bearer_token_via_admin_api_key",
+      "source_location": "L210",
+      "id": "readme_useful_commands",
       "community": 93,
-      "norm_label": "admin analytics (protected \u2014 bearer token via `admin_api_key`)"
+      "norm_label": "useful commands"
     },
     {
-      "label": "OAuth2",
+      "label": "Project layout",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L216",
-      "id": "readme_oauth2",
+      "source_location": "L229",
+      "id": "readme_project_layout",
       "community": 93,
-      "norm_label": "oauth2"
-    },
-    {
-      "label": "Project Structure",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L227",
-      "id": "readme_project_structure",
-      "community": 93,
-      "norm_label": "project structure"
+      "norm_label": "project layout"
     },
     {
       "label": "Troubleshooting",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L275",
+      "source_location": "L253",
       "id": "readme_troubleshooting",
       "community": 93,
       "norm_label": "troubleshooting"
     },
     {
-      "label": "Port already in use",
+      "label": "Deployment",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L277",
-      "id": "readme_port_already_in_use",
+      "source_location": "L265",
+      "id": "readme_deployment",
       "community": 93,
-      "norm_label": "port already in use"
-    },
-    {
-      "label": "Database connection issues",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L286",
-      "id": "readme_database_connection_issues",
-      "community": 93,
-      "norm_label": "database connection issues"
-    },
-    {
-      "label": "Frontend can't connect to backend",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L295",
-      "id": "readme_frontend_can_t_connect_to_backend",
-      "community": 93,
-      "norm_label": "frontend can't connect to backend"
-    },
-    {
-      "label": "Resume generation fails",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L300",
-      "id": "readme_resume_generation_fails",
-      "community": 93,
-      "norm_label": "resume generation fails"
+      "norm_label": "deployment"
     },
     {
       "label": "License",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L308",
+      "source_location": "L269",
       "id": "readme_license",
       "community": 93,
       "norm_label": "license"
@@ -18281,6 +18641,231 @@
       "norm_label": "deploy on vercel"
     },
     {
+      "label": "DEGREE_PATTERNS",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L7",
+      "community": 80,
+      "norm_label": "degree_patterns",
+      "id": "dimensions_education_level_match_degree_patterns"
+    },
+    {
+      "label": "detectResumeDegreeLevel()",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L15",
+      "community": 80,
+      "norm_label": "detectresumedegreelevel()",
+      "id": "dimensions_education_level_match_detectresumedegreelevel"
+    },
+    {
+      "label": "DEGREE_RANK",
+      "file_type": "code",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L23",
+      "community": 80,
+      "norm_label": "degree_rank",
+      "id": "dimensions_education_level_match_degree_rank"
+    },
+    {
+      "label": "Features",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "community": 93,
+      "norm_label": "features",
+      "id": "readme_features"
+    },
+    {
+      "label": "Tech Stack",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L16",
+      "community": 93,
+      "norm_label": "tech stack",
+      "id": "readme_tech_stack"
+    },
+    {
+      "label": "Quick Start (Docker \u2014 Full Stack)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L36",
+      "community": 93,
+      "norm_label": "quick start (docker \u2014 full stack)",
+      "id": "readme_quick_start_docker_full_stack"
+    },
+    {
+      "label": "1. Clone the Repository",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "community": 93,
+      "norm_label": "1. clone the repository",
+      "id": "readme_1_clone_the_repository"
+    },
+    {
+      "label": "2. Create Environment File",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L45",
+      "community": 93,
+      "norm_label": "2. create environment file",
+      "id": "readme_2_create_environment_file"
+    },
+    {
+      "label": "3. Configure Environment Variables",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L57",
+      "community": 93,
+      "norm_label": "3. configure environment variables",
+      "id": "readme_3_configure_environment_variables"
+    },
+    {
+      "label": "4. Run with Docker Compose",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L89",
+      "community": 93,
+      "norm_label": "4. run with docker compose",
+      "id": "readme_4_run_with_docker_compose"
+    },
+    {
+      "label": "5. Run Frontend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "community": 93,
+      "norm_label": "5. run frontend",
+      "id": "readme_5_run_frontend"
+    },
+    {
+      "label": "Local Development Setup",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L117",
+      "community": 93,
+      "norm_label": "local development setup",
+      "id": "readme_local_development_setup"
+    },
+    {
+      "label": "1. Set Up Environment Files",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L121",
+      "community": 93,
+      "norm_label": "1. set up environment files",
+      "id": "readme_1_set_up_environment_files"
+    },
+    {
+      "label": "2. Start PostgreSQL",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L143",
+      "community": 93,
+      "norm_label": "2. start postgresql",
+      "id": "readme_2_start_postgresql"
+    },
+    {
+      "label": "3. Start Resume Pipeline",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L149",
+      "community": 93,
+      "norm_label": "3. start resume pipeline",
+      "id": "readme_3_start_resume_pipeline"
+    },
+    {
+      "label": "4. Start Backend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L159",
+      "community": 93,
+      "norm_label": "4. start backend",
+      "id": "readme_4_start_backend"
+    },
+    {
+      "label": "5. Start Frontend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L169",
+      "community": 93,
+      "norm_label": "5. start frontend",
+      "id": "readme_5_start_frontend"
+    },
+    {
+      "label": "API Endpoints",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L183",
+      "community": 93,
+      "norm_label": "api endpoints",
+      "id": "readme_api_endpoints"
+    },
+    {
+      "label": "Admin Analytics (Protected \u2014 Bearer Token via `ADMIN_API_KEY`)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L209",
+      "community": 93,
+      "norm_label": "admin analytics (protected \u2014 bearer token via `admin_api_key`)",
+      "id": "readme_admin_analytics_protected_bearer_token_via_admin_api_key"
+    },
+    {
+      "label": "OAuth2",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L216",
+      "community": 93,
+      "norm_label": "oauth2",
+      "id": "readme_oauth2"
+    },
+    {
+      "label": "Project Structure",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L227",
+      "community": 93,
+      "norm_label": "project structure",
+      "id": "readme_project_structure"
+    },
+    {
+      "label": "Port already in use",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L277",
+      "community": 93,
+      "norm_label": "port already in use",
+      "id": "readme_port_already_in_use"
+    },
+    {
+      "label": "Database connection issues",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L286",
+      "community": 93,
+      "norm_label": "database connection issues",
+      "id": "readme_database_connection_issues"
+    },
+    {
+      "label": "Frontend can't connect to backend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L295",
+      "community": 93,
+      "norm_label": "frontend can't connect to backend",
+      "id": "readme_frontend_can_t_connect_to_backend"
+    },
+    {
+      "label": "Resume generation fails",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L300",
+      "community": 93,
+      "norm_label": "resume generation fails",
+      "id": "readme_resume_generation_fails"
+    },
+    {
       "label": "ATSJobTrackerApplication.java",
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/ATSJobTrackerApplication.java",
@@ -18582,7 +19167,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/RedirectController.java",
       "source_location": "L1",
-      "community": 96,
+      "community": 185,
       "norm_label": "redirectcontroller.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_controller_redirectcontroller_java"
     },
@@ -18618,7 +19203,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/controller/ResumeController.java",
       "source_location": "L1",
-      "community": 87,
+      "community": 117,
       "norm_label": "resumecontroller.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_controller_resumecontroller_java"
     },
@@ -19230,7 +19815,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/AuthUserRepository.java",
       "source_location": "L1",
-      "community": 87,
+      "community": 159,
       "norm_label": "authuserrepository.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_repository_authuserrepository_java"
     },
@@ -19302,7 +19887,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/ResumeBaseRepository.java",
       "source_location": "L1",
-      "community": 87,
+      "community": 99,
       "norm_label": "resumebaserepository.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_repository_resumebaserepository_java"
     },
@@ -19356,7 +19941,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/repository/UserProfileRepository.java",
       "source_location": "L1",
-      "community": 87,
+      "community": 96,
       "norm_label": "userprofilerepository.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_repository_userprofilerepository_java"
     },
@@ -19437,7 +20022,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L1",
-      "community": 14,
+      "community": 136,
       "norm_label": "inmemoryratelimitstore.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_security_inmemoryratelimitstore_java"
     },
@@ -19446,7 +20031,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L12",
-      "community": 14,
+      "community": 136,
       "norm_label": "inmemoryratelimitstore",
       "id": "inmemoryratelimitstore_inmemoryratelimitstore"
     },
@@ -19455,7 +20040,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/InMemoryRateLimitStore.java",
       "source_location": "L18",
-      "community": 14,
+      "community": 136,
       "norm_label": ".tryconsume()",
       "id": "inmemoryratelimitstore_inmemoryratelimitstore_tryconsume"
     },
@@ -19518,7 +20103,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/JwtUtil.java",
       "source_location": "L1",
-      "community": 136,
+      "community": 3,
       "norm_label": "jwtutil.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_security_jwtutil_java"
     },
@@ -19581,7 +20166,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/OAuth2SuccessHandler.java",
       "source_location": "L1",
-      "community": 159,
+      "community": 31,
       "norm_label": "oauth2successhandler.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_security_oauth2successhandler_java"
     },
@@ -19653,7 +20238,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/security/RateLimitStore.java",
       "source_location": "L1",
-      "community": 14,
+      "community": 136,
       "norm_label": "ratelimitstore.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_security_ratelimitstore_java"
     },
@@ -20121,7 +20706,7 @@
       "file_type": "code",
       "source_file": "backend/src/main/java/com/fullstack/ATSJobTracker/service/ResumeService.java",
       "source_location": "L1",
-      "community": 14,
+      "community": 117,
       "norm_label": "resumeservice.java",
       "id": "c_users_mukke_desktop_job_resume_tracker_backend_src_main_java_com_fullstack_atsjobtracker_service_resumeservice_java"
     },
@@ -45530,9 +46115,9 @@
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pipeline_runner",
-      "target": "utils_bullet_trimmer",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer"
     },
     {
       "relation": "imports",
@@ -45541,9 +46126,9 @@
       "source_file": "resume-pipeline/src/pipeline/runner.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pipeline_runner",
-      "target": "utils_bullet_trimmer_trimrolebullets",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimrolebullets"
     },
     {
       "relation": "imports_from",
@@ -45799,6 +46384,320 @@
       "target": "validation_validator_validatesections"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "schemas_ats_verdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_ats_verdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_atsverdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_deriveverdictstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_knockoutcheck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_knockoutcheckschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_matchtierschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_parselossissue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_parselossissueschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_recruiterqueryresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_recruiterqueryresultschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_repairaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_repairactionschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_resumesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_resumesectionschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_verdictmatchtier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_verdictstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_ats_verdict_weightedhitrate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict",
+      "target": "schemas_pipeline_atsscore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "schemas_ats_verdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "schemas_ats_verdict_knockoutcheck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "schemas_ats_verdict_knockoutcheck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_ats_verdict_resumesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner_searchabletext",
+      "target": "schemas_ats_verdict_resumesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_ats_verdict_recruiterqueryresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "schemas_ats_verdict_recruiterqueryresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "schemas_ats_verdict_parselossissue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "schemas_ats_verdict_repairaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/schemas/ats-verdict.ts",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "schemas_ats_verdict_atsverdict",
+      "target": "schemas_pipeline_atsscore",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/schemas/cover-letter.ts",
@@ -45922,6 +46821,17 @@
       "confidence_score": 1.0,
       "source": "stages_section_generators",
       "target": "schemas_experience_roleexperience"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "schemas_jd_analysis",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -46134,6 +47044,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "schemas_jd_analysis_jdanalysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/schemas/pipeline.ts",
       "source_location": "L4",
       "weight": 1.0,
@@ -46338,6 +47259,17 @@
       "confidence_score": 1.0,
       "source": "validation_validator",
       "target": "schemas_jd_analysis_jdanalysis"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_pipeline",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -46721,6 +47653,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_pipeline_parsedresume",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/stages/docx-generator.ts",
       "source_location": "L20",
       "weight": 1.0,
@@ -46837,6 +47780,17 @@
       "confidence_score": 1.0,
       "source": "stages_section_generators",
       "target": "schemas_pipeline_parsedrole"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "schemas_pipeline_generatedsections",
+      "confidence_score": 1.0
     },
     {
       "relation": "inherits",
@@ -48794,6 +49748,50 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "stages_jd_parser",
+      "target": "utils_jd_requirements",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "stages_jd_parser",
+      "target": "utils_jd_requirements_extractminyears",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "stages_jd_parser",
+      "target": "utils_jd_requirements_extractrequiredcertifications",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "stages_jd_parser",
+      "target": "utils_jd_requirements_extractworkauthrequirement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
       "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -48902,6 +49900,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "stages_jd_parser_llmextractionstage_execute",
+      "target": "stages_jd_parser_jdparserpipeline_parse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
       "source_location": "L194",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -48950,6 +49959,39 @@
       "confidence_score": 1.0,
       "source": "stages_jd_parser_deterministicaugmentationstage",
       "target": "stages_jd_parser_deterministicaugmentationstage_execute"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L324",
+      "weight": 1.0,
+      "source": "stages_jd_parser_deterministicaugmentationstage_execute",
+      "target": "utils_jd_requirements_extractminyears"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L330",
+      "weight": 1.0,
+      "source": "stages_jd_parser_deterministicaugmentationstage_execute",
+      "target": "utils_jd_requirements_extractrequiredcertifications"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/stages/jd-parser.ts",
+      "source_location": "L326",
+      "weight": 1.0,
+      "source": "stages_jd_parser_deterministicaugmentationstage_execute",
+      "target": "utils_jd_requirements_extractworkauthrequirement"
     },
     {
       "relation": "method",
@@ -50000,6 +51042,28 @@
       "target": "stages_tech_stack_extractor_striplatex"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "stages_tech_stack_extractor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "stages_tech_stack_extractor_candidatetechprofile",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -50679,6 +51743,39 @@
       "confidence_score": 1.0,
       "source": "dimensions_education_level_match",
       "target": "dimensions_education_level_match_educationlevelmatchdimension"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "dimensions_education_level_match",
+      "target": "utils_education_detector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "dimensions_education_level_match",
+      "target": "utils_education_detector_degree_rank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/dimensions/education-level-match.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "dimensions_education_level_match",
+      "target": "utils_education_detector_detectresumedegreelevel",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -51944,6 +53041,443 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "knockout_knockout_evaluator_adjudicationresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "knockout_knockout_evaluator_evaluateknockouts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "knockout_knockout_evaluator_knockoutpassed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "knockout_knockout_evaluator_unfixablefailures",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "utils_education_detector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "utils_education_detector_degree_rank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "utils_education_detector_detectresumedegreelevel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "utils_word_boundary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "utils_word_boundary_keywordexistsintext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "validation_scorer_dimension",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator",
+      "target": "validation_scorer_dimension_scoringcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "knockout_knockout_evaluator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "knockout_knockout_evaluator_adjudicationresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator_evaluateknockouts",
+      "target": "utils_education_detector_detectresumedegreelevel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/validation/knockout/knockout-evaluator.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "knockout_knockout_evaluator_evaluateknockouts",
+      "target": "utils_word_boundary_keywordexistsintext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "recruiter_search_query_builder_buildrecruiterqueries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "recruiter_search_query_builder_issearchablephrase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "recruiter_search_query_builder_normalizetitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "recruiter_search_query_builder_query_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder",
+      "target": "recruiter_search_query_builder_recruiterquery",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_builder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_builder_recruiterquery",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder_buildrecruiterqueries",
+      "target": "recruiter_search_query_builder_normalizetitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-builder.ts",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "recruiter_search_query_builder_buildrecruiterqueries",
+      "target": "recruiter_search_query_builder_issearchablephrase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_runner_buildsearchabletext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_runner_findvarianthit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_runner_locatesections",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_runner_runrecruiterqueries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "recruiter_search_query_runner_searchabletext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "utils_latex_stripper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "utils_latex_stripper_striplatexcommands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "utils_word_boundary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "utils_word_boundary_keywordexistsintext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "validation_skill_matcher",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "validation_skill_matcher_skillmatchmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "validation_skill_variants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner",
+      "target": "validation_skill_variants_getallskillvariants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner_buildsearchabletext",
+      "target": "utils_latex_stripper_striplatexcommands"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner_findvarianthit",
+      "target": "utils_word_boundary_keywordexistsintext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner_findvarianthit",
+      "target": "validation_skill_variants_getallskillvariants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/recruiter-search/query-runner.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "recruiter_search_query_runner_locatesections",
+      "target": "utils_word_boundary_keywordexistsintext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/validation/repair.ts",
       "source_location": "L196",
       "weight": 1.0,
@@ -52976,6 +54510,17 @@
       "target": "validation_skill_variants_predefined_variants"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "validation_skill_variants",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -52985,6 +54530,28 @@
       "confidence_score": 1.0,
       "source": "validation_skill_variants_getallskillvariants",
       "target": "validation_skill_variants_generatedynamicvariants"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "validation_skill_variants_getallskillvariants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "verdict_repair_plan_candidatehasskill",
+      "target": "validation_skill_variants_getallskillvariants",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -53512,9 +55079,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_test",
-      "target": "utils_bullet_trimmer",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer"
     },
     {
       "relation": "contains",
@@ -53522,9 +55089,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_test",
-      "target": "utils_bullet_trimmer_test_words",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_test_words"
     },
     {
       "relation": "imports",
@@ -53533,9 +55100,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_test",
-      "target": "utils_bullet_trimmer_trimbullet",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimbullet"
     },
     {
       "relation": "imports",
@@ -53544,9 +55111,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_test",
-      "target": "utils_bullet_trimmer_trimrolebullets",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimrolebullets"
     },
     {
       "relation": "contains",
@@ -53554,9 +55121,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_applysubstitutions",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_applysubstitutions"
     },
     {
       "relation": "contains",
@@ -53564,9 +55131,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_filler_substitutions",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_filler_substitutions"
     },
     {
       "relation": "contains",
@@ -53574,9 +55141,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_trimbullet",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimbullet"
     },
     {
       "relation": "contains",
@@ -53584,9 +55151,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_trimrolebullets",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimrolebullets"
     },
     {
       "relation": "contains",
@@ -53594,9 +55161,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_truncateatclause",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_truncateatclause"
     },
     {
       "relation": "contains",
@@ -53604,9 +55171,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer",
-      "target": "utils_bullet_trimmer_wordcount",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_wordcount"
     },
     {
       "relation": "calls",
@@ -53615,9 +55182,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_trimbullet",
-      "target": "utils_bullet_trimmer_wordcount",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_wordcount"
     },
     {
       "relation": "calls",
@@ -53626,9 +55193,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_trimbullet",
-      "target": "utils_bullet_trimmer_applysubstitutions",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_applysubstitutions"
     },
     {
       "relation": "calls",
@@ -53637,9 +55204,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_trimbullet",
-      "target": "utils_bullet_trimmer_truncateatclause",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_truncateatclause"
     },
     {
       "relation": "calls",
@@ -53648,9 +55215,9 @@
       "source_file": "resume-pipeline/src/validation/utils/bullet-trimmer.ts",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_bullet_trimmer_trimrolebullets",
-      "target": "utils_bullet_trimmer_trimbullet",
-      "confidence_score": 1.0
+      "target": "utils_bullet_trimmer_trimbullet"
     },
     {
       "relation": "contains",
@@ -53748,6 +55315,36 @@
       "confidence_score": 1.0,
       "source": "utils_index",
       "target": "utils_density_penalty_calculatedensitypenalty"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "utils_education_detector",
+      "target": "utils_education_detector_degree_patterns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "utils_education_detector",
+      "target": "utils_education_detector_degree_rank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/education-detector.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "utils_education_detector",
+      "target": "utils_education_detector_detectresumedegreelevel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -53942,6 +55539,88 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_cert_patterns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_contextwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_extractminyears",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_extractrequiredcertifications",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_extractworkauthrequirement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "utils_jd_requirements",
+      "target": "utils_jd_requirements_work_auth_patterns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "utils_jd_requirements_extractminyears",
+      "target": "utils_jd_requirements_contextwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/utils/jd-requirements.ts",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "utils_jd_requirements_extractrequiredcertifications",
+      "target": "utils_jd_requirements_contextwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "resume-pipeline/src/validation/utils/latex-stripper.ts",
       "source_location": "L18",
       "weight": 1.0,
@@ -54030,6 +55709,57 @@
       "confidence_score": 1.0,
       "source": "validation_validator",
       "target": "validation_validator_validationresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "verdict_repair_plan_buildrepairplan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "verdict_repair_plan_candidatehasskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "verdict_repair_plan_fixableactions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "verdict_repair_plan",
+      "target": "verdict_repair_plan_priority",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "resume-pipeline/src/validation/verdict/repair-plan.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "verdict_repair_plan_buildrepairplan",
+      "target": "verdict_repair_plan_candidatehasskill",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -59095,6 +60825,56 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_api_surface",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_authentication_and_byok",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_data_and_migrations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_deployment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -59135,6 +60915,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_project_layout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
       "source_location": "L227",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -59145,11 +60935,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_quick_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
       "source_location": "L36",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "readme_trackhire_ai",
       "target": "readme_quick_start_docker_full_stack"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_resume_generation_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "readme_trackhire_ai",
+      "target": "readme_run_services_individually",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -59175,121 +60995,61 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L38",
+      "source_location": "L210",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_quick_start_docker_full_stack",
-      "target": "readme_1_clone_the_repository"
+      "source": "readme_trackhire_ai",
+      "target": "readme_useful_commands",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L45",
+      "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_quick_start_docker_full_stack",
-      "target": "readme_2_create_environment_file"
+      "source": "readme_trackhire_ai",
+      "target": "readme_what_it_does",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L57",
+      "source_location": "L52",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_quick_start_docker_full_stack",
-      "target": "readme_3_configure_environment_variables"
+      "source": "readme_resume_generation_pipeline",
+      "target": "readme_ats_scoring",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L89",
+      "source_location": "L76",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_quick_start_docker_full_stack",
-      "target": "readme_4_run_with_docker_compose"
+      "source": "readme_quick_start",
+      "target": "readme_1_clone_and_configure_the_root_environment",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L103",
+      "source_location": "L106",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_quick_start_docker_full_stack",
-      "target": "readme_5_run_frontend"
+      "source": "readme_quick_start",
+      "target": "readme_2_start_the_api_services",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L121",
+      "source_location": "L122",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_1_set_up_environment_files"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L143",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_2_start_postgresql"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_3_start_resume_pipeline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L159",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_4_start_backend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L169",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_5_start_frontend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L209",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_api_endpoints",
-      "target": "readme_admin_analytics_protected_bearer_token_via_admin_api_key"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L216",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_api_endpoints",
-      "target": "readme_oauth2"
+      "source": "readme_quick_start",
+      "target": "readme_3_start_the_frontend",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -60080,6 +61840,126 @@
       "confidence_score": 1.0,
       "source": "frontend_readme",
       "target": "frontend_readme_learn_more"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_quick_start_docker_full_stack",
+      "target": "readme_1_clone_the_repository"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_quick_start_docker_full_stack",
+      "target": "readme_2_create_environment_file"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_quick_start_docker_full_stack",
+      "target": "readme_3_configure_environment_variables"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_quick_start_docker_full_stack",
+      "target": "readme_4_run_with_docker_compose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_quick_start_docker_full_stack",
+      "target": "readme_5_run_frontend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_1_set_up_environment_files"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L143",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_2_start_postgresql"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L149",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_3_start_resume_pipeline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_4_start_backend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L169",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_5_start_frontend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L209",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_api_endpoints",
+      "target": "readme_admin_analytics_protected_bearer_token_via_admin_api_key"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L216",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_api_endpoints",
+      "target": "readme_oauth2"
     },
     {
       "relation": "contains",
@@ -66873,5 +68753,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3e0f95e1a7c4a50c645ba5ea26367c4cba2c0f35"
+  "built_at_commit": "0d51fdb9e9f347514701427794ba91edbcfd0b4f"
 }
