@@ -14,6 +14,7 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
 
   useEffect(() => {
     if (open) {
+      const previouslyFocused = document.activeElement as HTMLElement | null;
       buttonRef.current?.focus();
 
       const originalOverflow = document.body.style.overflow;
@@ -21,6 +22,7 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
 
       return () => {
         document.body.style.overflow = originalOverflow;
+        previouslyFocused?.focus();
       };
     }
   }, [open]);
@@ -31,17 +33,17 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
     <div className="fixed inset-0 z-10000 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50 dark:bg-black/60 animate-fade-in" />
 
-      <div className="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border/60 dark:border-gray-700 w-full max-w-[380px] mx-4 p-6 animate-scale-in">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="session-expired-title" aria-describedby="session-expired-message" className="modal-surface relative mx-4 w-full max-w-[380px] rounded-[6px] border border-border bg-surface-raised p-6 shadow-[0_20px_50px_rgba(24,21,18,0.18)] animate-scale-in">
         <div className="flex justify-center mb-4">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/30 ring-4 ring-amber-50 dark:ring-amber-900/10">
-            <Clock size={26} className="text-amber-600 dark:text-amber-400" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-[4px] border border-border bg-warning-bg">
+            <Clock size={24} className="text-warning-text" />
           </div>
         </div>
 
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white text-center mb-1.5">
+        <h3 id="session-expired-title" className="mb-2 text-center font-display text-2xl font-medium text-text-primary">
           Session Timed Out
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center leading-relaxed mb-6">
+        <p id="session-expired-message" className="mb-6 text-center text-sm leading-relaxed text-text-secondary">
           Your session timed out while you were away. Sign in again to pick up
           right where you left off.
         </p>
@@ -52,7 +54,7 @@ export function SessionExpiredModal({ open, onLogin, onSaveWork }: SessionExpire
             onSaveWork?.();
             onLogin();
           }}
-          className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-300 shadow-sm shadow-primary-500/20"
+          className="button-primary w-full"
         >
           Sign In Again
         </button>

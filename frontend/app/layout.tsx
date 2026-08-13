@@ -1,46 +1,56 @@
-import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Instrument_Sans, JetBrains_Mono, Newsreader } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Providers } from "../src/components/Providers";
 
-const inter = Inter({
-  variable: "--font-sans",
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
+  variable: "--font-jetbrains",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TrackHire AI - Smart Resume & Application Management",
+  title: "TrackHire AI — Job Application & Resume Workspace",
   description:
-    "Track your job applications, optimize your resume for ATS, and land your dream job faster with our privacy-focused, secure job tracking tool.",
+    "Track job applications and tailor resumes and cover letters for each role in one focused workspace.",
   keywords:
-    "TrackHire AI, ATS, Resume Tracker, Job Application, Career Management, Privacy, Security",
-  icons: {
-    icon: "/favicon.ico",
-  },
+    "TrackHire AI, resume tailoring, job application tracker, cover letter, job search",
+  icons: { icon: "/favicon.ico" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f2ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#181512" },
+  ],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // Inline script to apply dark class before paint, preventing flash
+}: Readonly<{ children: React.ReactNode }>) {
   const themeScript = `(function(){try{var t=localStorage.getItem('ats-theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-text-primary`}
+        className={`${instrumentSans.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
       >
         <Providers>{children}</Providers>
         <SpeedInsights />

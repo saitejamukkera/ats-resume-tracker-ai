@@ -7,12 +7,14 @@ import { JobApplicationResponse } from "../types/dtos";
 interface NotePopoverProps {
   application: JobApplicationResponse;
   onSave: (note: string) => Promise<void>;
+  onDeleteApplication?: () => void;
   triggerButton: React.ReactNode;
 }
 
 export function NotePopover({
   application,
   onSave,
+  onDeleteApplication,
   triggerButton,
 }: NotePopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,12 +61,7 @@ export function NotePopover({
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <div
-          className="inline-block relative cursor-pointer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {triggerButton}
-        </div>
+        {triggerButton}
       </Popover.Trigger>
 
       <AnimatePresence>
@@ -75,7 +72,7 @@ export function NotePopover({
               align="end"
               sideOffset={8}
               asChild
-              className="z-50 w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 dark:border-zinc-800 flex flex-col overflow-hidden outline-none"
+              className="surface-raised z-50 flex w-80 flex-col overflow-hidden outline-none"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: -5 }}
@@ -84,23 +81,29 @@ export function NotePopover({
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/20">
+                <div className="flex items-center gap-2 border-b border-border bg-surface-muted px-4 py-3">
                   <StickyNote
                     size={14}
                     className="text-primary-600 dark:text-primary-400"
                   />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium text-text-primary">
                     Quick Note
                   </span>
                 </div>
 
                 <div className="p-3">
+                  <a
+                    href={`/applications/${application.id}`}
+                    className="mb-3 block min-h-10 border-b border-border pb-3 text-sm font-medium text-primary-600"
+                  >
+                    View application
+                  </a>
                   <textarea
                     ref={textareaRef}
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}
-                    placeholder="Type your note here..."
-                    className="w-full h-32 p-3 text-sm transition-all border rounded-lg bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 dark:text-gray-100 resize-none placeholder-gray-400 dark:placeholder-gray-500"
+                    placeholder="Type your note here…"
+                    className="field h-32 resize-none p-3 text-sm"
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
@@ -113,20 +116,20 @@ export function NotePopover({
                       {application.note &&
                         (isConfirmingDelete ? (
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-gray-500 mr-1 dark:text-gray-400">
+                            <span className="mr-1 text-xs text-text-muted">
                               Sure?
                             </span>
                             <button
                               onClick={handleDelete}
                               disabled={isSaving}
-                              className="px-2 py-1 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded disabled:opacity-50 transition-colors focus-visible:ring-2 focus-visible:ring-red-500 outline-none"
+                              className="min-h-9 rounded-[5px] bg-danger px-3 text-xs font-medium text-white disabled:opacity-50"
                             >
                               Yes
                             </button>
                             <button
                               onClick={() => setIsConfirmingDelete(false)}
                               disabled={isSaving}
-                              className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded disabled:opacity-50 transition-colors focus-visible:ring-2 focus-visible:ring-gray-500 outline-none"
+                              className="button-secondary min-h-9 px-3 py-1 text-xs disabled:opacity-50"
                             >
                               No
                             </button>
@@ -135,8 +138,8 @@ export function NotePopover({
                           <button
                             onClick={() => setIsConfirmingDelete(true)}
                             disabled={isSaving}
-                            className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-red-500"
-                            title="Delete note"
+                            className="icon-button text-text-muted hover:text-danger disabled:opacity-50"
+                            aria-label="Delete note"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -146,14 +149,14 @@ export function NotePopover({
                       <button
                         onClick={() => setIsOpen(false)}
                         disabled={isSaving}
-                        className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-gray-500"
+                        className="button-quiet min-h-9 px-3 py-1 text-sm disabled:opacity-50"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white rounded-lg transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+                        className={`button-primary min-h-9 px-3 py-1 text-sm ${
                           !noteContent.trim() || isSaving
                             ? "bg-primary-400 opacity-50 cursor-not-allowed"
                             : "bg-primary-600 hover:bg-primary-700"
@@ -164,6 +167,19 @@ export function NotePopover({
                       </button>
                     </div>
                   </div>
+                  {onDeleteApplication && (
+                    <button
+                      type="button"
+                      className="mt-3 flex min-h-10 w-full items-center gap-2 border-t border-border pt-3 text-sm font-medium text-danger"
+                      onClick={() => {
+                        setIsOpen(false);
+                        onDeleteApplication();
+                      }}
+                    >
+                      <Trash2 size={16} aria-hidden="true" />
+                      Delete application
+                    </button>
+                  )}
                 </div>
               </motion.div>
             </Popover.Content>

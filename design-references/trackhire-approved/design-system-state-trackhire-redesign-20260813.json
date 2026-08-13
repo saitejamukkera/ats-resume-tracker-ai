@@ -1,0 +1,30 @@
+{
+  "runId": "trackhire-redesign-20260813",
+  "fileKey": "nyFC2u7V7yRwBMr6y9MDOc",
+  "fileUrl": "https://www.figma.com/design/nyFC2u7V7yRwBMr6y9MDOc",
+  "phase": "blocked",
+  "step": "P1.f",
+  "blocker": "Figma MCP Starter-plan tool-call cap reached after creating the file, collections, 97 variables, and the first six text styles.",
+  "entities": {
+    "collections": {
+      "primitives": "VariableCollectionId:2:4",
+      "colorLight": "VariableCollectionId:2:5",
+      "colorDark": "VariableCollectionId:2:6",
+      "layout": "VariableCollectionId:2:7"
+    },
+    "variables": {},
+    "styles": {
+      "Display/Hero": "S:0539e0827a4b9a591e2ccc65d3a8c4654345c5fa,",
+      "Display/Mobile": "S:214fa64eceb6375f7b170e4d9ad7437eb4e444ea,",
+      "Heading/H1": "S:4a385f84a2ee680818cda1846e8b09df5a10ddaa,",
+      "Heading/H2": "S:f68319ba8f9420da4dc71b51250e27488d7c3c9e,",
+      "Heading/H3": "S:a005dc87eb9647712ace81db2afa74d2d20ba546,",
+      "Body/Large": "S:51d42d1627d5513b154f44103c92614aaa794b86,"
+    },
+    "pages": {"Page 1": "0:1"},
+    "components": {},
+    "screens": {}
+  },
+  "pendingValidations": ["remaining text styles", "effect styles", "foundations documentation", "components", "screens", "visual comparison QA"],
+  "completedSteps": ["phase0", "P1.a", "P1.b", "P1.c", "P1.d", "P1.e", "P1.f-partial"]
+}

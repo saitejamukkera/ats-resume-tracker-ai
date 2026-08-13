@@ -25,6 +25,7 @@ export function ResumeEditor({
     text: string;
   } | null>(null);
   const [copied, setCopied] = useState(false);
+  const lineCount = Math.max(1, (editing ? draft : initialContent || "").split("\n").length);
 
   const handleCopy = async () => {
     if (!initialContent) return;
@@ -50,17 +51,17 @@ export function ResumeEditor({
   };
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="resume-editor">
       {hasGeneratedResume && initialContent ? (
         <>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+          <div className="resume-editor-toolbar">
+            <label>
               {editing ? "Editing LaTeX" : "Generated LaTeX"}
             </label>
             <div className="flex items-center gap-2">
               {saveMsg && (
                 <span
-                  className={`text-xs font-medium ${saveMsg.type === "success" ? "text-emerald-600" : "text-red-500"}`}
+                  className={`text-xs font-medium ${saveMsg.type === "success" ? "text-success" : "text-danger"}`}
                 >
                   {saveMsg.text}
                 </span>
@@ -73,14 +74,14 @@ export function ResumeEditor({
                       setDraft(initialContent);
                       setSaveMsg(null);
                     }}
-                    className="px-3 py-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-xs gap-1.5 inline-flex items-center transition-colors"
+                    className="resume-editor-action"
                   >
                     <X size={14} /> Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-full text-xs font-semibold gap-1.5 inline-flex items-center transition-all"
+                    className="button-primary resume-editor-action"
                   >
                     <Save size={14} /> {saving ? "Saving..." : "Save"}
                   </button>
@@ -93,16 +94,16 @@ export function ResumeEditor({
                       setEditing(true);
                       setSaveMsg(null);
                     }}
-                    className="px-3 py-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-xs gap-1.5 inline-flex items-center transition-colors"
+                    className="resume-editor-action"
                   >
                     <Pencil size={14} /> Edit
                   </button>
                   <button
                     onClick={handleCopy}
-                    className="px-3 py-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-xs gap-1.5 inline-flex items-center transition-colors"
+                    className="resume-editor-action"
                   >
                     {copied ? (
-                      <Check size={14} className="text-emerald-500" />
+                      <Check size={14} className="text-success" />
                     ) : (
                       <Copy size={14} />
                     )}
@@ -112,28 +113,30 @@ export function ResumeEditor({
               )}
             </div>
           </div>
-          <textarea
-            readOnly={!editing}
-            className={`flex-1 w-full px-4 py-3 border rounded-2xl font-mono text-xs resize-none transition-colors focus:outline-none ${
-              editing
-                ? "bg-white dark:bg-zinc-900 border-primary-300 dark:border-primary-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/30"
-                : "bg-gray-50/80 dark:bg-zinc-800/50 border-gray-200/60 dark:border-gray-800/60 text-gray-700 dark:text-gray-300"
-            }`}
-            value={editing ? draft : initialContent}
-            onChange={(e) => setDraft(e.target.value)}
-          />
+          <div className="resume-editor-code">
+            <div className="resume-editor-lines" aria-hidden="true">
+              {Array.from({ length: lineCount }, (_, index) => <span key={index}>{index + 1}</span>)}
+            </div>
+            <textarea
+              readOnly={!editing}
+              className={editing ? "is-editing" : ""}
+              value={editing ? draft : initialContent}
+              onChange={(e) => setDraft(e.target.value)}
+              aria-label="Generated LaTeX"
+            />
+          </div>
         </>
       ) : (
-        <div className="flex-1 bg-gray-50/80 dark:bg-zinc-800/50 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 flex items-center justify-center">
+        <div className="editor-empty-state">
           <div className="text-center p-8">
             <FileText
               size={48}
-              className="mx-auto text-gray-300 dark:text-gray-600 mb-4"
+              className="mx-auto mb-4 text-text-muted"
             />
-            <p className="text-gray-400 dark:text-gray-500 font-medium mb-2">
+            <p className="mb-2 font-medium text-text-secondary">
               No Resume Generated
             </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto">
+            <p className="mx-auto max-w-xs text-xs text-text-muted">
               Generate a resume from the New Application page.
             </p>
           </div>

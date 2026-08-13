@@ -47,16 +47,16 @@ export function PdfPreview({
 
   if (!hasGeneratedResume) {
     return (
-      <div className="flex-1 bg-gray-50/80 dark:bg-zinc-800/50 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 flex items-center justify-center">
+      <div className="editor-empty-state">
         <div className="text-center p-8">
           <FileText
             size={48}
-            className="mx-auto text-gray-300 dark:text-gray-600 mb-4"
+            className="mx-auto mb-4 text-text-muted"
           />
-          <p className="text-gray-400 dark:text-gray-500 font-medium mb-2">
+          <p className="mb-2 font-medium text-text-secondary">
             No Resume Generated
           </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto">
+          <p className="mx-auto max-w-xs text-xs text-text-muted">
             Generate a resume from the New Application page.
           </p>
         </div>
@@ -67,26 +67,26 @@ export function PdfPreview({
   return (
     <div className="flex-1 flex flex-col">
       <div
-        className="flex-1 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 overflow-hidden bg-gray-100 dark:bg-zinc-800 ring-1 ring-gray-900/5 dark:ring-white/5 relative"
+        className="pdf-preview-frame"
         style={{ height: "calc(100vh - 320px)" }}
       >
         {pdfLoading && (
           <div className="h-full flex flex-col items-center justify-center gap-3 p-8">
-            <div className="w-10 h-10 rounded-full border-4 border-primary-200 dark:border-primary-900 border-t-primary-600 animate-spin" />
-            <p className="text-sm text-gray-400 dark:text-gray-500 font-medium animate-pulse">
-              Compiling PDF...
+            <div className="loading-spinner" aria-hidden="true" />
+            <p className="text-sm font-medium text-text-muted">
+              Compiling PDF…
             </p>
           </div>
         )}
         {pdfError && (
           <div className="h-full flex flex-col items-center justify-center gap-3 p-8">
-            <AlertTriangle size={32} className="text-amber-400" />
-            <p className="text-sm text-gray-400 dark:text-gray-500 text-center max-w-xs">
+            <AlertTriangle size={32} className="text-warning-text" />
+            <p className="max-w-xs text-center text-sm text-text-muted">
               {pdfError}
             </p>
             <button
               onClick={compilePdfPreview}
-              className="px-4 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 text-sm text-primary-600 dark:text-primary-400 flex items-center gap-2 transition-colors"
+              className="button-secondary"
             >
               <RotateCcw size={14} />
               Retry
@@ -102,11 +102,11 @@ export function PdfPreview({
         )}
         {!pdfBlobUrl && !pdfLoading && !pdfError && (
           <div
-            className="h-full flex flex-col items-center justify-center gap-3 p-8 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors"
+            className="flex h-full cursor-pointer flex-col items-center justify-center gap-3 p-8 transition-colors hover:bg-surface-muted"
             onClick={compilePdfPreview}
           >
-            <Eye size={32} className="text-gray-300 dark:text-gray-600" />
-            <p className="text-sm text-gray-400 dark:text-gray-500">
+            <Eye size={32} className="text-text-muted" />
+            <p className="text-sm text-text-muted">
               Click to load PDF preview
             </p>
           </div>

@@ -25,6 +25,7 @@ export function DuplicateJobModal({
 
   useEffect(() => {
     if (open) {
+      const previouslyFocused = document.activeElement as HTMLElement | null;
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
 
@@ -38,6 +39,7 @@ export function DuplicateJobModal({
         document.removeEventListener("keydown", handleKey);
         document.body.style.overflow = originalOverflow;
         clearTimeout(timer);
+        previouslyFocused?.focus();
       };
     }
   }, [open, onCancel]);
@@ -62,30 +64,34 @@ export function DuplicateJobModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl p-6"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="duplicate-job-title"
+            aria-describedby="duplicate-job-message"
+            className="modal-surface relative w-full max-w-sm rounded-[6px] border border-border bg-surface-raised p-6 shadow-[0_20px_50px_rgba(24,21,18,0.18)]"
           >
             {/* Icon + Title */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
-                <AlertTriangle size={18} className="text-amber-600 dark:text-amber-400" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px] border border-border bg-warning-bg">
+                <AlertTriangle size={18} className="text-warning-text" />
               </div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              <h3 id="duplicate-job-title" className="font-display text-2xl font-medium text-text-primary">
                 Already Applied
               </h3>
             </div>
 
             {/* Message */}
-            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-5">
+            <p id="duplicate-job-message" className="mb-5 text-sm leading-relaxed text-text-secondary">
               You already applied for{" "}
-              <span className="font-medium text-gray-800 dark:text-gray-200">
+              <span className="font-medium text-text-primary">
                 {position || "this position"}
               </span>{" "}
               at{" "}
-              <span className="font-medium text-gray-800 dark:text-gray-200">
+              <span className="font-medium text-text-primary">
                 {company || "this company"}
               </span>{" "}
               on{" "}
-              <span className="font-medium text-gray-800 dark:text-gray-200">
+              <span className="font-medium text-text-primary">
                 {appliedOn || "an earlier date"}
               </span>
               . Generate another resume?
@@ -96,13 +102,13 @@ export function DuplicateJobModal({
               <button
                 ref={cancelRef}
                 onClick={onCancel}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+                className="button-secondary flex-1"
               >
                 Cancel
               </button>
               <button
                 onClick={onConfirm}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white bg-neutral-800 dark:bg-white dark:text-neutral-900 hover:bg-neutral-700 dark:hover:bg-zinc-200 transition-colors"
+                className="button-primary flex-1"
               >
                 Generate Anyway
               </button>

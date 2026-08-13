@@ -29,9 +29,9 @@ function OAuthCallbackContent() {
   }, [router, refreshUser, searchParams]);
 
   return (
-    <div className="text-center">
-      <div className="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-4" />
-      <p className="text-[13px] text-gray-500">Completing sign in...</p>
+    <div className="route-loading" role="status" aria-live="polite">
+      <div className="loading-spinner" aria-hidden="true" />
+      <span>Completing sign in…</span>
     </div>
   );
 }
@@ -41,9 +41,9 @@ export default function OAuthCallbackPage() {
     <div className="min-h-screen bg-background flex items-center justify-center">
       <Suspense
         fallback={
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-[13px] text-gray-500">Loading...</p>
+          <div className="route-loading" role="status" aria-live="polite">
+            <div className="loading-spinner" aria-hidden="true" />
+            <span>Loading…</span>
           </div>
         }
       >

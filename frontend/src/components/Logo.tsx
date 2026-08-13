@@ -1,66 +1,28 @@
 "use client";
 
+import { BriefcaseBusiness } from "lucide-react";
+
 interface LogoProps {
   size?: "xs" | "sm" | "lg";
   showSubtitle?: boolean;
   className?: string;
+  iconOnly?: boolean;
 }
 
 const sizes = {
-  xs: {
-    container: "w-7 h-7",
-    inner: "w-[13px] h-[13px]",
-    rounded: "rounded-lg",
-    shadow: "shadow-md shadow-primary-500/20",
-    text: "text-sm",
-  },
-  sm: {
-    container: "w-9 h-9",
-    inner: "w-[17px] h-[17px]",
-    rounded: "rounded-xl",
-    shadow: "shadow-lg shadow-primary-500/25",
-    text: "text-sm",
-  },
-  lg: {
-    container: "w-10 h-10",
-    inner: "w-5 h-5",
-    rounded: "rounded-xl",
-    shadow: "shadow-lg shadow-primary-500/30",
-    text: "text-xl",
-  },
+  xs: { icon: 17, text: "text-[18px]", subtitle: "text-[10px]" },
+  sm: { icon: 18, text: "text-[20px]", subtitle: "text-[11px]" },
+  lg: { icon: 20, text: "text-[24px]", subtitle: "text-xs" },
 };
 
 export function LogoIcon({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+    <span
+      className={`inline-flex h-8 w-8 items-center justify-center rounded-[5px] border border-border text-primary-600 ${className ?? ""}`}
+      aria-hidden="true"
     >
-      <rect x="3.5" y="9.5" width="25" height="19" rx="2.5" fill="white" />
-      <path
-        d="M10.5 10V6.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2V10"
-        fill="none"
-        stroke="white"
-        strokeWidth={2}
-        strokeLinecap="round"
-      />
-      <rect
-        x="7"
-        y="20"
-        width="12"
-        height="1.5"
-        rx="0.75"
-        fill="white"
-        fillOpacity={0.5}
-      />
-      <path
-        d="M27 2L27.6 3.5L29.5 4L27.6 4.5L27 6L26.4 4.5L24.5 4L26.4 3.5Z"
-        fill="white"
-        fillOpacity={0.75}
-      />
-    </svg>
+      <BriefcaseBusiness size={17} strokeWidth={1.65} />
+    </span>
   );
 }
 
@@ -68,28 +30,32 @@ export function Logo({
   size = "lg",
   showSubtitle = false,
   className = "",
+  iconOnly = false,
 }: LogoProps) {
-  const s = sizes[size];
+  const style = sizes[size];
 
   return (
-    <div className={`inline-flex items-center gap-3 group ${className}`}>
-      <div
-        className={`${s.container} ${s.rounded} bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center ${s.shadow} transition-all duration-300 group-hover:scale-105`}
-      >
-        <LogoIcon className={s.inner} />
-      </div>
-      <div className="flex flex-col">
-        <span
-          className={`${s.text} font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400`}
-        >
-          TrackHire AI
-        </span>
-        {showSubtitle && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
-            Job Application Manager
+    <span
+      className={`inline-flex min-w-0 items-center gap-2.5 text-text-primary ${className}`}
+      translate="no"
+    >
+      {iconOnly && <LogoIcon />}
+      {!iconOnly && (
+        <span className="flex min-w-0 flex-col">
+          <span
+            className={`${style.text} font-display font-medium leading-none tracking-[-0.025em]`}
+          >
+            TrackHire AI
           </span>
-        )}
-      </div>
-    </div>
+          {showSubtitle && (
+            <span
+              className={`${style.subtitle} mt-1 font-medium leading-none text-text-muted`}
+            >
+              Job Application Manager
+            </span>
+          )}
+        </span>
+      )}
+    </span>
   );
 }

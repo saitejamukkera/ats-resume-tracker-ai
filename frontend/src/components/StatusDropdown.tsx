@@ -7,7 +7,6 @@ import {
   Clock,
   XCircle,
   Award,
-  ChevronDown,
   FileText,
 } from "lucide-react";
 import { ApplicationStatus } from "../types/dtos";
@@ -21,34 +20,27 @@ const statusConfig = {
   [ApplicationStatus.ACTIVE]: {
     label: "Active",
     icon: CheckCircle2,
-    colorClass:
-      "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
-    dotClass: "bg-emerald-500",
+    colorClass: "status-active",
   },
   [ApplicationStatus.IN_PROCESS]: {
     label: "In Process",
     icon: Clock,
-    colorClass: "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100",
-    dotClass: "bg-blue-500",
+    colorClass: "status-progress",
   },
   [ApplicationStatus.REJECTED]: {
     label: "Rejected",
     icon: XCircle,
-    colorClass: "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
-    dotClass: "bg-red-500",
+    colorClass: "status-rejected",
   },
   [ApplicationStatus.OFFER_RECEIVED]: {
     label: "Offer Received",
     icon: Award,
-    colorClass:
-      "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100",
-    dotClass: "bg-violet-500",
+    colorClass: "status-offer",
   },
   [ApplicationStatus.DRAFT]: {
     label: "Draft",
     icon: FileText,
-    colorClass: "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100",
-    dotClass: "bg-gray-500",
+    colorClass: "status-draft",
   },
 };
 
@@ -59,6 +51,7 @@ export function StatusDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({
     top: 0,
     left: 0,
@@ -90,6 +83,11 @@ export function StatusDropdown({
   // Close on window resize/scroll to avoid detached menu
   useEffect(() => {
     if (!isOpen) return;
+    const currentIndex = Object.values(ApplicationStatus).indexOf(currentStatus);
+    window.requestAnimationFrame(() => {
+      const items = menuRef.current?.querySelectorAll<HTMLButtonElement>("[role='menuitemradio']");
+      items?.[Math.max(0, currentIndex)]?.focus();
+    });
     const handleScroll = () => setIsOpen(false);
     window.addEventListener("scroll", handleScroll, {
       capture: true,
@@ -100,7 +98,24 @@ export function StatusDropdown({
       window.removeEventListener("scroll", handleScroll, { capture: true });
       window.removeEventListener("resize", handleScroll);
     };
-  }, [isOpen]);
+  }, [isOpen, currentStatus]);
+
+  const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const items = Array.from(menuRef.current?.querySelectorAll<HTMLButtonElement>("[role='menuitemradio']") || []);
+    const currentIndex = items.indexOf(document.activeElement as HTMLButtonElement);
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setIsOpen(false);
+      buttonRef.current?.focus();
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const direction = event.key === "ArrowDown" ? 1 : -1;
+      items[(currentIndex + direction + items.length) % items.length]?.focus();
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      items[event.key === "Home" ? 0 : items.length - 1]?.focus();
+    }
+  };
 
   const currentConfig =
     statusConfig[currentStatus] || statusConfig[ApplicationStatus.ACTIVE];
@@ -110,21 +125,12 @@ export function StatusDropdown({
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
-        className={`
-          flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 cursor-pointer
-          focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-primary-500
-          ${currentConfig.colorClass}
-          ${isOpen ? "ring-2 ring-primary-200 ring-offset-1" : ""}
-        `}
+        aria-label={`Change status from ${currentConfig.label}`}
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        className={`status-control ${currentConfig.colorClass}`}
       >
-        <span
-          className={`w-1.5 h-1.5 rounded-full ${currentConfig.dotClass}`}
-        />
-        <span className="min-w-20 text-left">{currentConfig.label}</span>
-        <ChevronDown
-          size={14}
-          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-        />
+        <span>{currentConfig.label}</span>
       </button>
 
       {isOpen &&
@@ -142,8 +148,12 @@ export function StatusDropdown({
               }}
             >
               <div
-                className="w-48 rounded-xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-lg shadow-black/8 border border-gray-200/60 dark:border-gray-700/60 overflow-hidden animate-scale-in origin-top-left"
+                ref={menuRef}
+                role="menu"
+                aria-label="Application status"
+                className="surface-raised w-48 overflow-hidden rounded-[6px] animate-scale-in origin-top-left"
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={handleMenuKeyDown}
               >
                 <div className="py-1">
                   {Object.values(ApplicationStatus).map((status) => {
@@ -154,28 +164,30 @@ export function StatusDropdown({
                     return (
                       <button
                         key={status}
+                        role="menuitemradio"
+                        aria-checked={isSelected}
                         onClick={() => {
                           onStatusChange(status);
                           setIsOpen(false);
                         }}
                         className={`
                         w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors
-                        ${isSelected ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}
+                        ${isSelected ? "bg-primary-50 text-primary-700" : "text-text-secondary hover:bg-surface-muted hover:text-text-primary"}
                       `}
                       >
                         <Icon
                           size={16}
                           className={
                             isSelected
-                              ? "text-primary-600 dark:text-primary-400"
-                              : "text-gray-400 dark:text-gray-500"
+                              ? "text-primary-600"
+                              : "text-text-muted"
                           }
                         />
                         <span className={isSelected ? "font-medium" : ""}>
                           {config.label}
                         </span>
                         {isSelected && (
-                          <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500" />
+                          <CheckCircle2 className="ml-auto text-primary-600" size={14} aria-hidden="true" />
                         )}
                       </button>
                     );

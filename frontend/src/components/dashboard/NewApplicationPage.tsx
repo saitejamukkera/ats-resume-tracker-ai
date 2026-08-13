@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -11,7 +10,6 @@ import {
   Loader2,
   Sparkles,
   RotateCcw,
-  Settings,
   Mail,
   Check,
   MapPin,
@@ -20,7 +18,6 @@ import {
   Briefcase,
   AlertTriangle,
   Copy,
-  ArrowRight,
   Maximize2,
 } from "lucide-react";
 import Drawer from "../ui/Drawer";
@@ -47,7 +44,6 @@ const staggerContainer = {
 };
 
 export default function NewApplicationPage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [streamStage, setStreamStage] = useState<string>("");
   const [hasBaseResumes, setHasBaseResumes] = useState<boolean | null>(null);
@@ -192,7 +188,7 @@ export default function NewApplicationPage() {
     if (result?.applicationId) {
       compilePdfPreview(result.applicationId);
     }
-  }, [mounted]);
+  }, [mounted, result?.applicationId, compilePdfPreview]);
 
   useEffect(() => {
     if (!result?.latexContent || !result?.applicationId) return;
@@ -451,27 +447,25 @@ export default function NewApplicationPage() {
 
   if (loading && !generated) {
     return (
-      <div className="max-w-3xl mx-auto flex flex-col justify-center min-h-[60vh]">
+      <div className="generation-loading-state">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center justify-center p-12 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl border border-gray-200/60 dark:border-gray-800/60 shadow-xl ring-1 ring-gray-900/5 dark:ring-white/5"
+          className="generation-loading-surface surface"
         >
           <div className="relative mb-8">
-            <div className="w-16 h-16 rounded-full border-4 border-primary-100 dark:border-primary-900 border-t-primary-600 animate-spin"></div>
+            <div className="loading-spinner" aria-hidden="true" />
             <div className="absolute inset-0 flex items-center justify-center">
               <Sparkles size={20} className="text-primary-600" />
             </div>
           </div>
-          <h2 className="text-xl font-bold tracking-tight mb-3">
-            <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              {streamStage || "Analyzing Job Description..."}
-            </span>
+          <h2 className="mb-3 font-display text-3xl font-medium tracking-tight">
+            {streamStage || "Analyzing Job Description…"}
           </h2>
-          <p className="text-gray-400 dark:text-gray-500 text-sm font-medium animate-pulse text-center max-w-sm leading-relaxed">
+          <p className="max-w-sm text-center text-sm font-medium leading-relaxed text-text-muted">
             {formData.position && formData.company
               ? `Tailoring for ${formData.position} at ${formData.company}`
-              : "Extracting job details, rewriting your resume, and drafting a cover letter..."}
+              : "Extracting job details, rewriting your resume, and drafting a cover letter…"}
           </p>
         </motion.div>
       </div>
@@ -485,95 +479,73 @@ export default function NewApplicationPage() {
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
-        className="max-w-3xl mx-auto"
+        className="new-application-screen"
       >
         <motion.div variants={fadeInUp}>
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors text-sm font-medium"
+            className="new-application-back inline-flex items-center gap-2 transition-colors"
           >
             <ArrowLeft size={16} />
             Back to Dashboard
           </Link>
         </motion.div>
 
-        <motion.div variants={fadeInUp} className="mb-4">
-          <h1 className="text-3xl font-extrabold tracking-tight">
-            <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-              New Application
-            </span>
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
-            Paste the Job Description below. Gemini will automatically extract
-            job details and tailor your resume.
+        <motion.div variants={fadeInUp} className="new-application-header">
+          <h1 className="page-title">New Application</h1>
+          <p className="page-description">
+            Paste the job description below. TrackHire AI will extract job details and tailor your resume.
           </p>
         </motion.div>
 
-        {hasBaseResumes === false && (
-          <motion.div
-            variants={fadeInUp}
-            className="flex items-center gap-3 px-5 py-4 rounded-2xl mb-6 bg-amber-50/80 dark:bg-amber-900/10 border border-amber-200/60 dark:border-amber-800/60 backdrop-blur-sm"
-          >
-            <Sparkles size={20} className="text-amber-600 shrink-0" />
-            <p className="text-sm font-medium text-amber-800 dark:text-amber-400">
-              You haven&apos;t set up your base resumes yet. Please go to
-              Settings first.
-            </p>
-            <Link
-              href="/settings"
-              className="ml-auto shrink-0 text-sm font-semibold text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 px-4 py-2 rounded-full transition-colors"
-            >
-              <Settings size={14} className="inline mr-1" />
-              Settings
-            </Link>
-          </motion.div>
-        )}
-
         <motion.div
           variants={fadeInUp}
-          className="p-8 space-y-6 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5"
+          className="new-application-form border-t border-border"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-gray-900 dark:text-white">
+              <label htmlFor="job-description" className="field-label mb-0">
                 Job Description (JD)
               </label>
-              <span className="text-xs text-gray-400 dark:text-gray-500 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800">
-                Paste full text
-              </span>
             </div>
             <textarea
-              className="w-full h-72 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-900 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
-              placeholder="Paste the complete job description here..."
+              id="job-description"
+              name="job-description"
+              autoComplete="off"
+              className="field resize-y"
+              placeholder="Paste full text"
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
             />
           </div>
 
-          <div className="flex items-center gap-3 px-4 py-3 bg-gray-50/80 dark:bg-zinc-800/50 rounded-xl border border-gray-200/60 dark:border-gray-700/60">
+          <div className="new-application-choice flex items-start gap-4">
             <input
               type="checkbox"
               id="useIconResume"
               checked={useIconResume}
               onChange={(e) => setUseIconResume(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+              className="mt-0.5 h-6 w-6 rounded-[4px] border-border-strong text-primary-600 focus:ring-primary-500 cursor-pointer"
             />
             <label
               htmlFor="useIconResume"
-              className="text-sm cursor-pointer select-none text-gray-700 dark:text-gray-300"
+              className="cursor-pointer select-none text-base text-text-primary"
             >
-              Use{" "}
-              <span className="font-bold text-gray-900 dark:text-white">
-                Base Resume B (With Icons)
+              <span className="font-medium text-text-primary">
+                Use Base Resume B (With Icons)
               </span>
-              ?{" "}
-              <span className="text-gray-400 dark:text-gray-500">
-                (Default is A - No Icons)
-              </span>
+              <span className="block text-text-muted">Default is A — No Icons</span>
             </label>
           </div>
 
-          <div className="flex justify-end">
+          {hasBaseResumes === false && (
+            <div className="new-application-warning" role="status">
+              <AlertTriangle size={25} aria-hidden="true" />
+              <p>You haven&apos;t set up your base resumes yet.</p>
+              <Link href="/settings">Open Settings</Link>
+            </div>
+          )}
+          <div className="flex justify-start">
             <button
               onClick={handleGenerate}
               disabled={
@@ -582,23 +554,21 @@ export default function NewApplicationPage() {
                 !jobDescription.trim() ||
                 hasBaseResumes === false
               }
-              className="inline-flex items-center gap-2 px-8 py-3 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-full text-base font-semibold shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5 transition-all"
+              className="button-primary new-application-submit disabled:cursor-not-allowed disabled:opacity-50"
             >
               {checkingDuplicate ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
-                  Checking existing applications...
+                  Checking Existing Applications…
                 </>
               ) : loading ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
-                  Analyzing & Generating...
+                  Analyzing & Generating…
                 </>
               ) : (
                 <>
-                  <Sparkles size={20} />
                   Analyze & Generate
-                  <ArrowRight size={16} />
                 </>
               )}
             </button>
@@ -623,7 +593,7 @@ export default function NewApplicationPage() {
       initial="hidden"
       animate="visible"
       variants={staggerContainer}
-      className="max-w-5xl mx-auto"
+      className="generation-result"
     >
       <motion.div variants={fadeInUp}>
         <button
@@ -639,7 +609,7 @@ export default function NewApplicationPage() {
             });
             clearStorage();
           }}
-          className="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors text-sm font-medium"
+          className="generation-back"
         >
           <ArrowLeft size={16} />
           New Generation
@@ -650,37 +620,33 @@ export default function NewApplicationPage() {
         <>
           <motion.div
             variants={fadeInUp}
-            className="p-6 mb-6 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5"
+            className="generation-summary surface"
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div className="generation-summary-header">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isEditing
-                    ? "bg-amber-50 dark:bg-amber-900/20"
-                    : "bg-emerald-50 dark:bg-emerald-900/20"
-                }`}
+                className={`generation-state-icon ${isEditing ? "warning" : "success"}`}
               >
                 <CheckCircle
                   size={20}
-                  className={isEditing ? "text-amber-500" : "text-emerald-500"}
+                  aria-hidden="true"
                 />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+                <h2>
                   {isEditing
                     ? "Review & Confirm Details"
                     : "Application Confirmed"}
                 </h2>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p>
                   {isEditing
                     ? "Please verify the extracted information before saving."
                     : "Application details have been saved successfully."}
                 </p>
               </div>
-              <div className="ml-auto flex items-center gap-3">
+              <div className="generation-summary-actions">
                 <button
                   onClick={() => setIsDrawerOpen(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-sm font-medium transition-colors"
+                  className="button-secondary"
                 >
                   <Maximize2 size={16} />
                   Open Editor
@@ -689,7 +655,7 @@ export default function NewApplicationPage() {
                   <button
                     onClick={handleSaveApp}
                     disabled={loading || isSaving}
-                    className="inline-flex items-center gap-2 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
+                    className="button-primary"
                   >
                     {isSaving ? (
                       <Loader2 className="animate-spin" size={16} />
@@ -701,7 +667,7 @@ export default function NewApplicationPage() {
                 ) : (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="px-4 py-2 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-full text-sm font-medium transition-colors"
+                    className="button-secondary"
                   >
                     Edit Details
                   </button>
@@ -709,29 +675,30 @@ export default function NewApplicationPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="generation-details">
               <div
-                className={`flex items-start gap-2.5 p-3 rounded-xl ${isEditing ? "bg-white dark:bg-zinc-900 border border-primary-200 dark:border-primary-800 ring-2 ring-primary-50 dark:ring-primary-900/20" : "bg-gray-50/80 dark:bg-zinc-800/50"}`}
+                className="generation-detail"
               >
                 <Briefcase
                   size={16}
-                  className="text-primary-500 mt-2.5 shrink-0"
+                  aria-hidden="true"
                 />
                 <div className="w-full">
-                  <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                  <p className="generation-detail-label">
                     Position
                   </p>
                   {isEditing ? (
                     <input
                       type="text"
-                      className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:outline-none px-1 py-0.5"
+                      className="field"
+                      aria-label="Position"
                       value={formData.position}
                       onChange={(e) =>
                         setFormData({ ...formData, position: e.target.value })
                       }
                     />
                   ) : (
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                    <p className="generation-detail-value">
                       {result.position}
                     </p>
                   )}
@@ -739,27 +706,28 @@ export default function NewApplicationPage() {
               </div>
 
               <div
-                className={`flex items-start gap-2.5 p-3 rounded-xl ${isEditing ? "bg-white dark:bg-zinc-900 border border-blue-200 dark:border-blue-800 ring-2 ring-blue-50 dark:ring-blue-900/20" : "bg-gray-50/80 dark:bg-zinc-800/50"}`}
+                className="generation-detail"
               >
                 <Building2
                   size={16}
-                  className="text-blue-500 mt-2.5 shrink-0"
+                  aria-hidden="true"
                 />
                 <div className="w-full">
-                  <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                  <p className="generation-detail-label">
                     Company
                   </p>
                   {isEditing ? (
                     <input
                       type="text"
-                      className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none px-1 py-0.5"
+                      className="field"
+                      aria-label="Company"
                       value={formData.company}
                       onChange={(e) =>
                         setFormData({ ...formData, company: e.target.value })
                       }
                     />
                   ) : (
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                    <p className="generation-detail-value">
                       {result.company}
                     </p>
                   )}
@@ -767,24 +735,25 @@ export default function NewApplicationPage() {
               </div>
 
               <div
-                className={`flex items-start gap-2.5 p-3 rounded-xl ${isEditing ? "bg-white dark:bg-zinc-900 border border-teal-200 dark:border-teal-800 ring-2 ring-teal-50 dark:ring-teal-900/20" : "bg-gray-50/80 dark:bg-zinc-800/50"}`}
+                className="generation-detail"
               >
-                <Hash size={16} className="text-teal-500 mt-2.5 shrink-0" />
+                <Hash size={16} aria-hidden="true" />
                 <div className="w-full">
-                  <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                  <p className="generation-detail-label">
                     Job ID
                   </p>
                   {isEditing ? (
                     <input
                       type="text"
-                      className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-teal-500 focus:outline-none px-1 py-0.5"
+                      className="field"
+                      aria-label="Job ID"
                       value={formData.jobId}
                       onChange={(e) =>
                         setFormData({ ...formData, jobId: e.target.value })
                       }
                     />
                   ) : (
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                    <p className="generation-detail-value">
                       {result.jobId || "—"}
                     </p>
                   )}
@@ -792,27 +761,28 @@ export default function NewApplicationPage() {
               </div>
 
               <div
-                className={`flex items-start gap-2.5 p-3 rounded-xl ${isEditing ? "bg-white dark:bg-zinc-900 border border-emerald-200 dark:border-emerald-800 ring-2 ring-emerald-50 dark:ring-emerald-900/20" : "bg-gray-50/80 dark:bg-zinc-800/50"}`}
+                className="generation-detail"
               >
                 <MapPin
                   size={16}
-                  className="text-emerald-500 mt-2.5 shrink-0"
+                  aria-hidden="true"
                 />
                 <div className="w-full">
-                  <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                  <p className="generation-detail-label">
                     Location
                   </p>
                   {isEditing ? (
                     <input
                       type="text"
-                      className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:outline-none px-1 py-0.5"
+                      className="field"
+                      aria-label="Location"
                       value={formData.location}
                       onChange={(e) =>
                         setFormData({ ...formData, location: e.target.value })
                       }
                     />
                   ) : (
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                    <p className="generation-detail-value">
                       {result.location || "—"}
                     </p>
                   )}
@@ -821,27 +791,27 @@ export default function NewApplicationPage() {
             </div>
           </motion.div>
 
-          <motion.div variants={fadeInUp} className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex gap-1 p-1 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full w-fit">
+          <motion.div variants={fadeInUp} className="generation-documents">
+            <div className="generation-document-toolbar">
+              <div className="generation-document-tabs" role="tablist" aria-label="Generated documents">
                 <button
                   onClick={() => setActiveTab("resume")}
-                  className={`flex items-center justify-center gap-2 py-2 px-6 rounded-full text-sm font-semibold transition-all ${
-                    activeTab === "resume"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                  className={`generation-document-tab ${
+                    activeTab === "resume" ? "active" : ""
                   }`}
+                  role="tab"
+                  aria-selected={activeTab === "resume"}
                 >
                   <FileText size={16} />
                   Resume LaTeX
                 </button>
                 <button
                   onClick={() => setActiveTab("coverLetter")}
-                  className={`flex items-center justify-center gap-2 py-2 px-6 rounded-full text-sm font-semibold transition-all ${
-                    activeTab === "coverLetter"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                  className={`generation-document-tab ${
+                    activeTab === "coverLetter" ? "active" : ""
                   }`}
+                  role="tab"
+                  aria-selected={activeTab === "coverLetter"}
                 >
                   <Mail size={16} />
                   Cover Letter
@@ -892,21 +862,23 @@ export default function NewApplicationPage() {
             </div>
 
             {activeTab === "resume" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-150">
-                <div className="flex flex-col h-full rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-gray-50/80 dark:bg-zinc-800/50 ring-1 ring-gray-900/5 dark:ring-white/5 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200/60 dark:border-gray-800/60">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+              <div className="generation-resume-grid">
+                <div className="generation-source surface">
+                  <div className="generation-panel-header">
+                    <span>
                       LaTeX Source
                     </span>
                     <button
                       onClick={() => handleCopy(result.latexContent)}
-                      className="p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-full text-gray-400 dark:text-gray-500 transition-colors"
+                      className="icon-button"
+                      aria-label="Copy LaTeX source"
                     >
                       {copied ? <Check size={14} /> : <Copy size={14} />}
                     </button>
                   </div>
                   <textarea
-                    className="flex-1 w-full p-4 bg-transparent resize-none focus:outline-none font-mono text-xs text-gray-900 dark:text-white leading-relaxed"
+                    className="generation-source-textarea"
+                    aria-label="Generated LaTeX source"
                     value={result.latexContent}
                     onChange={(e) =>
                       setResult({ ...result, latexContent: e.target.value })
@@ -914,27 +886,27 @@ export default function NewApplicationPage() {
                   />
                 </div>
 
-                <div className="h-full rounded-2xl border border-gray-200/60 dark:border-gray-800/60 overflow-hidden bg-gray-100 dark:bg-zinc-800 flex flex-col ring-1 ring-gray-900/5 dark:ring-white/5 relative">
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200/60 dark:border-gray-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm z-10">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                <div className="generation-preview surface">
+                  <div className="generation-panel-header">
+                    <span>
                       PDF Preview
                     </span>
                     {pdfError && (
-                      <span className="text-xs text-red-500 flex items-center gap-1">
+                      <span className="flex items-center gap-1 text-xs text-danger">
                         <AlertTriangle size={12} /> Error
                       </span>
                     )}
                   </div>
 
-                  <div className="flex-1 relative bg-gray-100 dark:bg-zinc-800 flex items-center justify-center">
+                  <div className="generation-preview-body">
                     {pdfLoading && (
-                      <div className="absolute inset-0 z-20 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+                      <div className="generation-preview-loading">
                         <Loader2
                           size={24}
                           className="animate-spin text-primary-600"
                         />
-                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
-                          Compiling PDF...
+                        <span className="text-xs font-medium text-text-muted">
+                          Compiling PDF…
                         </span>
                       </div>
                     )}
@@ -946,11 +918,11 @@ export default function NewApplicationPage() {
                         title="Resume Preview"
                       />
                     ) : pdfError ? (
-                      <div className="text-center p-6 text-gray-400 dark:text-gray-500">
+                      <div className="p-6 text-center text-text-muted">
                         <p className="text-sm">{pdfError}</p>
                       </div>
                     ) : (
-                      <div className="text-center p-6 text-gray-400 dark:text-gray-600">
+                      <div className="p-6 text-center text-text-muted">
                         <p className="text-sm">Preview not available</p>
                       </div>
                     )}
@@ -958,20 +930,22 @@ export default function NewApplicationPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col h-150 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm ring-1 ring-gray-900/5 dark:ring-white/5 overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200/60 dark:border-gray-800/60">
-                  <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+              <div className="generation-cover-letter surface">
+                <div className="generation-panel-header">
+                  <span>
                     Cover Letter
                   </span>
                   <button
                     onClick={() => handleCopy(result.coverLetterContent)}
-                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-gray-400 dark:text-gray-500 transition-colors"
+                    className="icon-button"
+                    aria-label="Copy cover letter"
                   >
                     {copied ? <Check size={14} /> : <Copy size={14} />}
                   </button>
                 </div>
                 <textarea
-                  className="flex-1 w-full p-6 resize-none focus:outline-none font-sans text-sm text-gray-900 dark:text-white leading-relaxed bg-transparent"
+                  className="generation-cover-letter-textarea"
+                  aria-label="Generated cover letter"
                   value={result.coverLetterContent}
                   onChange={(e) =>
                     setResult({ ...result, coverLetterContent: e.target.value })
@@ -990,39 +964,39 @@ export default function NewApplicationPage() {
         width="max-w-[95vw]"
       >
         {result && (
-          <div className="flex flex-col h-[calc(100vh-80px)] p-6 space-y-4">
+          <div className="generation-drawer">
             {/* Top Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex gap-1 p-1 bg-gray-100/80 dark:bg-zinc-800/80 rounded-lg">
+            <div className="generation-drawer-toolbar">
+              <div className="generation-document-tabs" role="tablist" aria-label="Editor document">
                 <button
                   onClick={() => setActiveTab("resume")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    activeTab === "resume"
-                      ? "bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  className={`generation-document-tab ${
+                    activeTab === "resume" ? "active" : ""
                   }`}
+                  role="tab"
+                  aria-selected={activeTab === "resume"}
                 >
                   <FileText size={16} />
                   Resume LaTeX
                 </button>
                 <button
                   onClick={() => setActiveTab("coverLetter")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    activeTab === "coverLetter"
-                      ? "bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  className={`generation-document-tab ${
+                    activeTab === "coverLetter" ? "active" : ""
                   }`}
+                  role="tab"
+                  aria-selected={activeTab === "coverLetter"}
                 >
                   <Mail size={16} />
                   Cover Letter
                 </button>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="generation-drawer-actions">
                 <button
                   onClick={handleRegenerate}
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 rounded-full text-sm font-semibold transition-colors"
+                  className="button-secondary"
                 >
                   {loading ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -1033,22 +1007,16 @@ export default function NewApplicationPage() {
                 </button>
                 <button
                   onClick={() => setShowPromptInput(!showPromptInput)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    showPromptInput
-                      ? "text-primary-600 bg-primary-50 dark:text-primary-400 dark:bg-primary-900/20"
-                      : "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700"
-                  }`}
+                  className={`button-secondary ${showPromptInput ? "text-primary-600" : ""}`}
                 >
                   <Sparkles size={16} />
                   Prompt
                 </button>
 
-                <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
-
                 <button
                   onClick={handleUpdatePreview}
                   disabled={pdfLoading}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700"
+                  className="button-secondary"
                 >
                   {pdfLoading ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -1111,18 +1079,18 @@ export default function NewApplicationPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="bg-primary-50/50 dark:bg-primary-900/10 border border-primary-200/60 dark:border-primary-800/60 rounded-xl p-3 flex gap-3">
+                  <div className="generation-prompt surface">
                     <textarea
-                      className="flex-1 px-3 py-2 bg-white dark:bg-zinc-900 border border-primary-200/60 dark:border-primary-700/60 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 resize-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                      className="field flex-1 resize-none"
                       rows={2}
-                      placeholder="Enter custom instructions for regeneration..."
+                      placeholder="Enter custom instructions for regeneration…"
                       value={customPrompt}
                       onChange={(e) => setCustomPrompt(e.target.value)}
                     />
                     <button
                       onClick={handleRegenerate}
                       disabled={loading}
-                      className="self-end px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium shadow-sm transition-colors"
+                      className="button-primary self-end"
                     >
                       Apply
                     </button>
@@ -1133,20 +1101,20 @@ export default function NewApplicationPage() {
 
             {/* Regeneration Options */}
             {(showPromptInput || isDrawerOpen) && (
-              <div className="flex items-center gap-2 px-1">
+              <div className="generation-regeneration-option">
                 <input
                   type="checkbox"
                   id="useIconResumeRegen"
                   checked={useIconResumeRegen}
                   onChange={(e) => setUseIconResumeRegen(e.target.checked)}
-                  className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                  className="h-5 w-5 rounded-[3px] border-border-strong text-primary-600 focus:ring-primary-500"
                 />
                 <label
                   htmlFor="useIconResumeRegen"
-                  className="text-xs cursor-pointer select-none text-gray-600 dark:text-gray-400"
+                  className="cursor-pointer select-none text-sm text-text-secondary"
                 >
                   Use{" "}
-                  <span className="font-semibold text-gray-800 dark:text-gray-300">
+                  <span className="font-semibold text-text-primary">
                     Resume B (Icons)
                   </span>{" "}
                   during regeneration
@@ -1155,12 +1123,12 @@ export default function NewApplicationPage() {
             )}
 
             {/* Resizable Split View */}
-            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm overflow-hidden">
+            <div className="generation-split surface">
               <ResizableSplitView
                 left={
-                  <div className="flex flex-col h-full bg-gray-50/50 dark:bg-zinc-800/30">
-                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm">
-                      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <div className="generation-split-panel">
+                    <div className="generation-panel-header">
+                      <span>
                         {activeTab === "resume"
                           ? "LaTeX Source"
                           : "Markdown Content"}
@@ -1173,13 +1141,15 @@ export default function NewApplicationPage() {
                               : result.coverLetterContent,
                           )
                         }
-                        className="p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-md text-gray-400 dark:text-gray-500 transition-colors"
+                        className="icon-button"
+                        aria-label="Copy editor content"
                       >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
                       </button>
                     </div>
                     <textarea
-                      className="flex-1 w-full p-4 bg-transparent resize-none focus:outline-none font-mono text-xs sm:text-sm text-gray-900 dark:text-white leading-relaxed"
+                      className="generation-source-textarea"
+                      aria-label="Document source"
                       value={
                         activeTab === "resume"
                           ? result.latexContent
@@ -1198,15 +1168,15 @@ export default function NewApplicationPage() {
                   </div>
                 }
                 right={
-                  <div className="flex flex-col h-full bg-gray-100 dark:bg-zinc-900 relative">
+                  <div className="generation-split-preview">
                     {pdfLoading && (
-                      <div className="absolute inset-0 z-10 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+                      <div className="generation-preview-loading">
                         <Loader2
                           size={32}
                           className="animate-spin text-primary-600"
                         />
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Compiling PDF...
+                        <span className="text-sm font-medium text-text-muted">
+                          Compiling PDF…
                         </span>
                       </div>
                     )}
@@ -1217,15 +1187,15 @@ export default function NewApplicationPage() {
                         title="Resume Preview"
                       />
                     ) : pdfError ? (
-                      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-gray-400 decoration-gray-500">
+                      <div className="flex flex-1 flex-col items-center justify-center p-6 text-center text-text-muted">
                         <AlertTriangle
                           size={32}
-                          className="mb-2 text-red-500"
+                          className="mb-2 text-danger"
                         />
-                        <p className="text-sm text-red-500">{pdfError}</p>
+                        <p className="text-sm text-danger">{pdfError}</p>
                       </div>
                     ) : (
-                      <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-600">
+                      <div className="flex flex-1 items-center justify-center text-text-muted">
                         <p className="text-sm">Preview not available</p>
                       </div>
                     )}

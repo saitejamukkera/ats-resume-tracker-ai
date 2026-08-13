@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Key, Eye, EyeOff, Check, X, Loader2, Shield, ArrowUpRight, ChevronDown } from "lucide-react";
+import { Eye, EyeOff, Check, X, Loader2, Shield, ArrowUpRight, ChevronDown } from "lucide-react";
 import {
   useApiKeys,
   PROVIDER_LABELS,
@@ -70,62 +70,58 @@ export default function ApiKeySettings() {
   return (
     <motion.div
       variants={fadeInUp}
-      className="p-8 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5"
+      className="settings-api-section border-t border-border py-6"
     >
-      <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200/60 dark:border-gray-800/60">
-        <div className="w-11 h-11 rounded-xl bg-linear-to-br from-amber-100 to-amber-50 dark:from-amber-900/20 dark:to-amber-800/20 flex items-center justify-center">
-          <Key
-            size={22}
-            className="text-amber-600 dark:text-amber-400"
-          />
-        </div>
+      <div className="mb-6">
         <div>
-          <h2 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">
-            AI Provider API Key
+          <h2 className="text-lg font-semibold tracking-tight">
+            AI Provider &amp; API Key
           </h2>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
-            Use your own API key for resume generation. Your key is never stored on our servers.
+          <p className="mt-0.5 text-sm text-text-muted">
+            Use your own provider key for generation. Saved keys are encrypted in this browser.
           </p>
         </div>
       </div>
 
-      <div className="space-y-5">
+      <div className="settings-api-grid space-y-5">
         {/* Active provider dropdown (only when multiple keys are saved) */}
         {state.savedProviderCount > 1 && (
-          <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30">
-            <label className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 block">
+          <div className="settings-active-provider surface">
+            <label className="field-label">
               Use AI Provider for Generation
             </label>
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-blue-200/60 dark:border-blue-800/60 bg-white dark:bg-zinc-800 text-sm font-medium text-gray-900 dark:text-white transition-all hover:border-blue-400 dark:hover:border-blue-600"
+                className="settings-provider-select"
+                aria-expanded={dropdownOpen}
+                aria-haspopup="menu"
               >
                 <span>{PROVIDER_LABELS[state.activeProvider]}</span>
                 <ChevronDown
                   size={16}
-                  className={`text-gray-400 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                  className={dropdownOpen ? "rotate-180" : ""}
                 />
               </button>
               {dropdownOpen && (
-                <div className="absolute z-50 mt-1 w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 shadow-lg overflow-hidden">
+                <div className="settings-provider-menu" role="menu">
                   {PROVIDERS.filter((p) => state.savedProviders.includes(p) || p === state.activeProvider).map((p) => {
                     const isActive = p === state.activeProvider;
                     return (
                       <button
+                        type="button"
                         key={p}
                         onClick={() => {
                           setActiveProvider(p);
                           setDropdownOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${
-                          isActive
-                            ? "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 font-semibold"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700"
-                        }`}
+                        className={isActive ? "active" : ""}
+                        role="menuitemradio"
+                        aria-checked={isActive}
                       >
                         <span>{PROVIDER_LABELS[p]}</span>
-                        {isActive && <Check size={14} className="text-blue-500" />}
+                        {isActive && <Check size={14} aria-hidden="true" />}
                       </button>
                     );
                   })}
@@ -135,24 +131,27 @@ export default function ApiKeySettings() {
           </div>
         )}
 
-        {/* Provider selector pills */}
-        <div className="flex items-center justify-between">
-          <div className="flex p-1.5 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full">
+        {/* Provider selector */}
+        <div className="settings-api-provider-block flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-x-5 gap-y-2" role="group" aria-label="AI provider">
             {PROVIDERS.map((p) => {
               const hasSaved = state.savedProviders.includes(p);
               return (
                 <button
                   key={p}
+                  type="button"
                   onClick={() => handleProviderChange(p)}
-                  className={`relative px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                  aria-pressed={state.provider === p}
+                  className={`relative inline-flex min-h-11 items-center gap-2 border-b-2 px-1 text-sm font-semibold transition-colors ${
                     state.provider === p
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                      ? "border-primary-600 text-primary-600"
+                      : "border-transparent text-text-muted hover:text-text-primary"
                   }`}
                 >
-                  {PROVIDER_LABELS[p]}
+                  <span className="settings-provider-radio" aria-hidden="true" />
+                  {PROVIDER_SHORT_NAMES[p]}
                   {hasSaved && (
-                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-zinc-900" />
+                    <span className="settings-provider-saved" aria-label="Saved">✓</span>
                   )}
                 </button>
               );
@@ -170,14 +169,16 @@ export default function ApiKeySettings() {
         </div>
 
         {/* Key input with show/hide */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+        <div className="settings-api-key-block space-y-1.5">
+          <label htmlFor="provider-api-key" className="field-label">
             API Key
           </label>
           <div className="relative">
             <input
+              id="provider-api-key"
+              name="provider-api-key"
               type={showKey ? "text" : "password"}
-              className="w-full px-4 py-2.5 pr-20 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-mono"
+              className="field pr-20 font-mono text-sm"
               placeholder={
                 state.provider === "google"
                   ? "AIza..."
@@ -191,8 +192,10 @@ export default function ApiKeySettings() {
               autoComplete="off"
             />
             <button
+              type="button"
               onClick={() => setShowKey(!showKey)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="icon-button absolute right-0 top-0"
+              aria-label={showKey ? "Hide API key" : "Show API key"}
             >
               {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -200,17 +203,27 @@ export default function ApiKeySettings() {
         </div>
 
         {/* Action row: Test button + validation feedback */}
-        <div className="relative flex items-center gap-3">
+        <div className="settings-api-actions relative flex items-center gap-3">
           <button
             onClick={handleTest}
             disabled={!state.key.trim() || state.testing}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            className="button-secondary disabled:cursor-not-allowed disabled:opacity-40"
           >
             {state.testing ? (
               <Loader2 size={14} className="animate-spin" />
             ) : (
               "Test Key"
             )}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSaveLocally}
+            disabled={!state.key.trim()}
+            aria-label={state.saved ? "Remove saved API key" : "Save API key in this browser"}
+            className="settings-api-save button-secondary disabled:opacity-30"
+          >
+            {state.saved ? "Remove Key" : "Save Locally"}
           </button>
 
           <AnimatePresence>
@@ -220,26 +233,24 @@ export default function ApiKeySettings() {
                 animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 10, x: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="absolute left-0 bottom-[120%] z-50 p-4 w-72 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700"
+                className="settings-test-confirm surface"
               >
-                <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white dark:bg-zinc-800 border-b border-r border-gray-200 dark:border-gray-700 rotate-45" />
-                
-                <p className="text-[13px] text-gray-600 dark:text-gray-300 mb-3 relative z-10 leading-relaxed">
+                <p>
                   <strong>Are you sure about this?</strong> You recently tested this key successfully. Testing again will consume a fraction of a token.
                 </p>
-                <div className="flex gap-2 relative z-10">
+                <div className="settings-test-confirm-actions">
                   <button 
                     onClick={() => {
                       setShowConfirmPopup(false);
                       testKey();
                     }}
-                    className="flex-1 px-3 py-1.5 bg-primary-600 text-white text-[11px] font-bold rounded-lg hover:bg-primary-700 transition-colors"
+                    className="button-primary"
                   >
                     Yes, test again
                   </button>
                   <button 
                     onClick={() => setShowConfirmPopup(false)}
-                    className="flex-1 px-3 py-1.5 bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-gray-200 text-[11px] font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-600 transition-colors"
+                    className="button-secondary"
                   >
                     Cancel
                   </button>
@@ -253,22 +264,18 @@ export default function ApiKeySettings() {
             <motion.div
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex flex-col gap-1"
+              className="settings-api-validation"
             >
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold">
+              <div className={state.validated ? "valid" : "invalid"}>
                 {state.validated ? (
                   <>
-                    <Check size={14} className="text-emerald-500" />
-                    <span className="text-emerald-600 dark:text-emerald-400">
-                      Key valid
-                    </span>
+                    <Check size={14} />
+                    <span>Key valid</span>
                   </>
                 ) : (
                   <>
-                    <X size={14} className="text-red-500" />
-                    <span className="text-red-600 dark:text-red-400">
-                      Invalid key
-                    </span>
+                    <X size={14} />
+                    <span>Invalid key</span>
                   </>
                 )}
               </div>
@@ -281,56 +288,33 @@ export default function ApiKeySettings() {
           <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`text-[13px] p-3 rounded-lg border ${
-              state.validated 
-                ? 'bg-emerald-50/50 border-emerald-100/50 text-emerald-700 dark:bg-emerald-900/10 dark:border-emerald-800/30 dark:text-emerald-400' 
-                : 'bg-red-50/50 border-red-100/50 text-red-700 dark:bg-red-900/10 dark:border-red-800/30 dark:text-red-400'
-            }`}
+            className={`settings-validation-message ${state.validated ? "valid" : "invalid"}`}
           >
             {state.validationMessage}
           </motion.div>
         )}
 
         {/* Save locally toggle */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-200/60 dark:border-gray-800/60">
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <div className="settings-api-local-row flex items-center justify-between gap-4 border-t border-border pt-3">
+          <div className="flex items-center gap-2 text-sm text-text-secondary">
             <Shield size={14} />
             <span>
-              {state.saved
-                ? "Key saved and encrypted in your browser"
-                : "Do you want to save this key? This key will be saved and encrypted on your browser only."}
+              Your API key is encrypted in this browser and sent only when you request document generation.
             </span>
             {savedFeedback && (
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-emerald-600 dark:text-emerald-400 font-semibold"
+                className="font-semibold text-success"
               >
                 Saved
               </motion.span>
             )}
           </div>
-          <button
-            onClick={handleSaveLocally}
-            disabled={!state.key.trim()}
-            className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors disabled:opacity-30 ${
-              state.saved
-                ? "bg-primary-600"
-                : "bg-gray-300 dark:bg-gray-600"
-            }`}
-          >
-            <span
-              className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
-                state.saved ? "translate-x-[22px]" : "translate-x-0.5"
-              }`}
-            />
-          </button>
         </div>
 
-        {/* Security notice */}
-        <p className="text-xs text-gray-400 dark:text-gray-500">
-          Your key is sent directly to {PROVIDER_SHORT_NAMES[state.activeProvider]}, never stored on our servers
-          or logged.
+        <p className="settings-api-notice text-xs text-text-muted">
+          When you generate documents, this key is sent with the request to the selected provider. TrackHire does not persist it on the server.
         </p>
       </div>
     </motion.div>

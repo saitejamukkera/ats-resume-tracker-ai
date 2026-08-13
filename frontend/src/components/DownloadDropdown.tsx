@@ -43,12 +43,12 @@ export function DownloadDropdown({
         disabled={downloading !== null}
         className={
           isPrimary
-            ? `inline-flex items-center justify-center rounded-full font-semibold transition-all btn-primary ${
+            ? `button-primary font-semibold ${
                 isSmall
-                  ? "text-xs gap-1 py-1.5 px-3"
-                  : "gap-2 py-2 px-5 text-sm shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
+                  ? "min-h-9 px-3 py-1.5 text-xs"
+                  : "px-5 py-2 text-sm"
               }`
-            : `inline-flex items-center justify-center rounded-full font-semibold transition-colors text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 ${
+            : `button-quiet font-semibold ${
                 isSmall
                   ? "text-xs gap-1 py-1.5 px-3"
                   : "gap-2 py-2 px-4 text-sm"
@@ -65,26 +65,26 @@ export function DownloadDropdown({
 
       <Dropdown.Menu width="w-56">
         <Dropdown.Item onClick={() => handleDownload("pdf")}>
-          <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center shrink-0">
-            <FileText size={16} className="text-red-500 dark:text-red-400" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-border text-danger">
+            <FileText size={16} />
           </div>
           <div className="text-left">
-            <p className="font-medium text-gray-900 dark:text-white">PDF</p>
-            <p className="text-[10px] text-gray-500 dark:text-gray-400">
+            <p className="font-medium text-text-primary">PDF</p>
+            <p className="text-[10px] text-text-muted">
               Best for sharing
             </p>
           </div>
         </Dropdown.Item>
 
         <Dropdown.Item onClick={() => handleDownload("docx")}>
-          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-border text-info">
             {/* Word Icon SVG */}
             <svg
               width="16"
               height="16"
               viewBox="0 0 16 16"
               fill="none"
-              className="text-blue-600"
+              className="text-info"
             >
               <path
                 d="M14 4.5V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h7.5L14 4.5z"
@@ -115,8 +115,8 @@ export function DownloadDropdown({
             </svg>
           </div>
           <div className="text-left">
-            <p className="font-medium text-gray-900 dark:text-white">Word</p>
-            <p className="text-[10px] text-gray-500 dark:text-gray-400">
+            <p className="font-medium text-text-primary">Word</p>
+            <p className="text-[10px] text-text-muted">
               Best for ATS portals
             </p>
           </div>

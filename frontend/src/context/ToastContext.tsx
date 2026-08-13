@@ -39,30 +39,22 @@ const TOAST_DURATION: Record<ToastType, number> = {
 
 const TOAST_STYLES: Record<
   ToastType,
-  { bg: string; border: string; text: string; icon: typeof CheckCircle }
+  { className: string; icon: typeof CheckCircle }
 > = {
   success: {
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    text: "text-emerald-800",
+    className: "toast-success",
     icon: CheckCircle,
   },
   error: {
-    bg: "bg-red-50",
-    border: "border-red-200",
-    text: "text-red-800",
+    className: "toast-error",
     icon: XCircle,
   },
   warning: {
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    text: "text-amber-800",
+    className: "toast-warning",
     icon: AlertTriangle,
   },
   info: {
-    bg: "bg-blue-50",
-    border: "border-blue-200",
-    text: "text-blue-800",
+    className: "toast-info",
     icon: Info,
   },
 };
@@ -95,22 +87,23 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
 
       {/* Toast container */}
-      <div className="fixed bottom-4 right-4 z-9999 flex flex-col gap-2 pointer-events-none">
+      <div className="fixed bottom-4 right-4 z-9999 flex flex-col gap-2 pointer-events-none" aria-live="polite" aria-atomic="true">
         {toasts.map((t) => {
           const style = TOAST_STYLES[t.type];
           const Icon = style.icon;
           return (
             <div
               key={t.id}
-              className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg ${style.bg} ${style.border} animate-slide-in-right min-w-70 max-w-105`}
+              className={`toast-surface ${style.className} pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-[6px] border animate-slide-in-right min-w-70 max-w-105`}
             >
-              <Icon size={18} className={`${style.text} shrink-0`} />
-              <p className={`text-sm font-medium ${style.text} flex-1`}>
+              <Icon size={18} className="shrink-0" />
+              <p className="flex-1 text-sm font-medium">
                 {t.message}
               </p>
               <button
                 onClick={() => removeToast(t.id)}
-                className={`${style.text} opacity-60 hover:opacity-100 transition-opacity shrink-0`}
+                className="shrink-0 opacity-60 transition-opacity hover:opacity-100"
+                aria-label="Dismiss notification"
               >
                 <X size={14} />
               </button>

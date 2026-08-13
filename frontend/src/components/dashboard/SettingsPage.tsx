@@ -2,15 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {
-  Save,
-  Loader2,
-  User,
-  GraduationCap,
-  FileText,
-  Sparkles,
-  Info,
-} from "lucide-react";
+import { Loader2, Maximize2 } from "lucide-react";
 import { api } from "../../lib/api";
 import type { UserProfile } from "../../types/dtos";
 import { useToast } from "../../context/ToastContext";
@@ -102,9 +94,9 @@ export default function SettingsPage() {
 
       await Promise.all(savePromises);
 
-      toast.success("All configurations saved successfully!");
+      toast.success("Settings saved.");
     } catch {
-      toast.error("Failed to save. Is the backend running?");
+      toast.error("Couldn’t save settings. Check your connection and try again.");
     } finally {
       setSaving(false);
     }
@@ -114,64 +106,62 @@ export default function SettingsPage() {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
+  const activeResumeContent = activeResumeTab === "A" ? resumeAContent : resumeBContent;
+  const resumeLineCount = Math.max(6, activeResumeContent.split("\n").length);
+
   return (
     <motion.div
       initial="hidden"
       animate="visible"
       variants={staggerContainer}
-      className="max-w-4xl mx-auto space-y-6"
+      className="settings-screen"
     >
-      <motion.div variants={fadeInUp}>
-        <h1 className="text-2xl font-extrabold tracking-tight">
-          <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-            Settings
-          </span>
-        </h1>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-          Configure your profile and resume templates
+      <motion.div variants={fadeInUp} className="settings-header">
+        <h1 className="page-title">Settings</h1>
+        <p className="page-description">
+          Manage your profile, API keys, and resume templates.
         </p>
       </motion.div>
 
+      <div className="settings-layout">
+        <nav aria-label="Settings sections" className="settings-nav">
+          <ul>
+            {[
+              ["#personal-information", "Personal Information"],
+              ["#education", "Education"],
+              ["#ai-provider", "AI Provider & API Key"],
+              ["#resume-templates", "Base Resume Templates"],
+            ].map(([href, label], index) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className={index === 0 ? "active" : ""}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="settings-content">
+
       <motion.div
         variants={fadeInUp}
-        className="p-8 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5"
+        id="personal-information"
+        className="settings-section"
       >
-        <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200/60 dark:border-gray-800/60">
-          <div className="w-11 h-11 rounded-xl bg-linear-to-br from-primary-100 to-primary-50 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
-            <User
-              size={22}
-              className="text-primary-600 dark:text-primary-400"
-            />
-          </div>
-          <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">
-              Personal Information
-            </h2>
-            <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
-              Used for generating cover letters with your details
-            </p>
-          </div>
+        <div className="settings-section-heading">
+          <h2>Personal Information</h2>
         </div>
 
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <div className="settings-profile-grid">
             {[
               {
                 label: "Full Name",
                 field: "fullName" as const,
                 placeholder: "John Doe",
-                type: "text",
-              },
-              {
-                label: "Address",
-                field: "address" as const,
-                placeholder: "Mountain View, CA",
-                type: "text",
-              },
-              {
-                label: "Phone",
-                field: "phone" as const,
-                placeholder: "(xxx) xxx-xxxx",
                 type: "text",
               },
               {
@@ -181,38 +171,34 @@ export default function SettingsPage() {
                 type: "email",
               },
               {
-                label: "LinkedIn URL",
+                label: "Phone",
+                field: "phone" as const,
+                placeholder: "(xxx) xxx-xxxx",
+                type: "text",
+              },
+              {
+                label: "LinkedIn Profile",
                 field: "linkedinUrl" as const,
                 placeholder: "https://linkedin.com/in/...",
                 type: "url",
               },
               {
-                label: "Portfolio URL",
-                field: "portfolioUrl" as const,
-                placeholder: "https://yourportfolio.com",
-                type: "url",
-                optional: true,
-              },
-              {
-                label: "GitHub URL",
+                label: "GitHub Profile",
                 field: "githubUrl" as const,
                 placeholder: "https://github.com/...",
                 type: "url",
-                optional: true,
               },
             ].map((item) => (
-              <div key={item.field} className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                  {item.label}{" "}
-                  {item.optional && (
-                    <span className="text-gray-300 dark:text-gray-600 font-normal">
-                      (Optional)
-                    </span>
-                  )}
+              <div key={item.field}>
+                <label htmlFor={`profile-${item.field}`} className="field-label">
+                  {item.label}
                 </label>
                 <input
+                  id={`profile-${item.field}`}
+                  name={item.field}
+                  autoComplete={item.field === "fullName" ? "name" : item.field === "phone" ? "tel" : item.field === "email" ? "email" : "url"}
                   type={item.type}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="field"
                   placeholder={item.placeholder}
                   value={profile[item.field] || ""}
                   onChange={(e) => updateProfile(item.field, e.target.value)}
@@ -221,36 +207,30 @@ export default function SettingsPage() {
             ))}
           </div>
 
-          <div className="pt-4 border-t border-gray-200/60 dark:border-gray-800/60">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-linear-to-br from-primary-100 to-primary-50 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
-                <GraduationCap
-                  size={18}
-                  className="text-primary-600 dark:text-primary-400"
-                />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white">
-                  Master&apos;s Education{" "}
-                  <span className="text-gray-400 dark:text-gray-500 font-normal">
-                    (Optional)
-                  </span>
-                </h3>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  Relevant subjects will be used to strengthen your cover
-                  letters
-                </p>
-              </div>
+          <details className="settings-profile-more">
+            <summary>Additional profile fields</summary>
+            <div>
+              <label htmlFor="profile-address" className="field-label">Address</label>
+              <input id="profile-address" name="address" autoComplete="street-address" className="field" value={profile.address || ""} onChange={(event) => updateProfile("address", event.target.value)} />
+              <label htmlFor="profile-portfolioUrl" className="field-label">Portfolio URL</label>
+              <input id="profile-portfolioUrl" name="portfolioUrl" type="url" autoComplete="url" className="field" value={profile.portfolioUrl || ""} onChange={(event) => updateProfile("portfolioUrl", event.target.value)} />
             </div>
+          </details>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+          <div id="education" className="settings-education">
+            <h2>Education</h2>
+
+            <div className="settings-education-grid">
+              <div>
+                <label htmlFor="masters-degree" className="field-label">
                   Degree
                 </label>
                 <input
+                  id="masters-degree"
+                  name="masters-degree"
+                  autoComplete="off"
                   type="text"
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="field"
                   placeholder="Master of Science in Computer Science"
                   value={profile.mastersDegree}
                   onChange={(e) =>
@@ -258,13 +238,17 @@ export default function SettingsPage() {
                   }
                 />
               </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+              <div>
+                <label htmlFor="masters-gpa" className="field-label">
                   GPA
                 </label>
                 <input
+                  id="masters-gpa"
+                  name="masters-gpa"
+                  inputMode="decimal"
+                  autoComplete="off"
                   type="text"
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="field"
                   placeholder="4.0"
                   value={profile.mastersGpa}
                   onChange={(e) => updateProfile("mastersGpa", e.target.value)}
@@ -272,128 +256,103 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                Subjects Taken
+            <div>
+              <label htmlFor="masters-subjects" className="field-label">
+                Key Subjects (comma separated)
               </label>
               <textarea
-                className="w-full h-28 px-4 py-3 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-zinc-800 text-[13px] text-gray-900 dark:text-white placeholder:text-gray-400 resize-none focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                placeholder="e.g., Advanced Algorithms, Machine Learning, Cloud Computing, Distributed Systems, Database Management, Software Architecture..."
+                id="masters-subjects"
+                name="masters-subjects"
+                autoComplete="off"
+                className="field"
+                placeholder="For example: Advanced Algorithms, Machine Learning, Cloud Computing…"
                 value={profile.masterSubjects}
                 onChange={(e) =>
                   updateProfile("masterSubjects", e.target.value)
                 }
               />
-              <p className="text-xs text-gray-400 dark:text-gray-500">
-                Comma-separated. AI picks the most relevant subjects per job.
-              </p>
             </div>
           </div>
         </div>
       </motion.div>
 
-      <ApiKeySettings />
+      <section id="ai-provider" className="scroll-mt-8">
+        <ApiKeySettings />
+      </section>
 
       <motion.div
         variants={fadeInUp}
-        className="rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5 overflow-hidden"
+        id="resume-templates"
+        className="settings-resume-section"
       >
-        <div className="flex p-1.5 mx-6 mt-6 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full">
+        <h2>Base Resume Templates</h2>
+        <div className="settings-resume-tabs">
           <button
             onClick={() => setActiveResumeTab("A")}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
+            className={`${
               activeResumeTab === "A"
-                ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-text-muted hover:text-text-primary"
             }`}
           >
-            <FileText size={16} />
             Resume A (No Icons)
-            {resumeAContent.trim() && (
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            )}
           </button>
           <button
             onClick={() => setActiveResumeTab("B")}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
+            className={`${
               activeResumeTab === "B"
-                ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-text-muted hover:text-text-primary"
             }`}
           >
-            <Sparkles size={16} />
-            Resume B (Icons)
-            <span className="text-[10px] font-normal text-gray-400 dark:text-gray-500">
-              Optional
-            </span>
-            {resumeBContent.trim() && (
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            )}
+            Resume B (Icons) — Optional
           </button>
         </div>
 
-        <div className="p-6 relative">
-          <div className="absolute top-8 right-8 z-10">
-            <span className="text-xs font-mono font-semibold text-gray-400 dark:text-gray-500 bg-gray-100/80 dark:bg-zinc-800/80 border border-gray-200/60 dark:border-gray-700/60 px-3 py-1 rounded-full">
-              LaTeX Mode
-            </span>
+        <div className="settings-resume-editor">
+          <div aria-hidden="true">
+            {Array.from({ length: resumeLineCount }, (_, index) => <span key={index}>{index + 1}</span>)}
           </div>
-
-          {activeResumeTab === "A" && (
-            <div>
+          <Maximize2 size={15} aria-hidden="true" />
+          {activeResumeTab === "A" ? (
               <textarea
-                className="w-full h-80 px-5 py-4 rounded-2xl border border-gray-200/60 dark:border-gray-700/60 bg-gray-50/80 dark:bg-zinc-800/50 font-mono text-sm text-gray-900 dark:text-white placeholder:text-gray-400 resize-none leading-relaxed focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                aria-label="Resume A LaTeX template"
                 placeholder={
                   "\\documentclass[a4paper,10pt]{article}\n\\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}\n\\title{My Resume}\n\\begin{document}\n\\maketitle\n\\section{Experience}\n...\n\\end{document}"
                 }
                 value={resumeAContent}
                 onChange={(e) => setResumeAContent(e.target.value)}
               />
-            </div>
-          )}
-
-          {activeResumeTab === "B" && (
-            <div>
+          ) : (
               <textarea
-                className="w-full h-80 px-5 py-4 rounded-2xl border border-gray-200/60 dark:border-gray-700/60 bg-gray-50/80 dark:bg-zinc-800/50 font-mono text-sm text-gray-900 dark:text-white placeholder:text-gray-400 resize-none leading-relaxed focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                aria-label="Resume B LaTeX template"
                 placeholder={
                   "\\documentclass[a4paper,10pt]{article}\n\\usepackage{fontawesome5}\n\\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}\n\\title{My Resume}\n\\begin{document}\n\\maketitle\n\\section{Experience}\n...\n\\end{document}"
                 }
                 value={resumeBContent}
                 onChange={(e) => setResumeBContent(e.target.value)}
               />
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-                Optional — used only when you check &quot;Use Base Resume B
-                (With Icons)&quot; during generation.
-              </p>
-            </div>
           )}
         </div>
       </motion.div>
 
       <motion.div
         variants={fadeInUp}
-        className="flex items-center justify-between px-2"
+        className="settings-save-bar"
       >
-        <div className="flex items-center gap-2 text-gray-400 dark:text-gray-500">
-          <Info size={14} />
-          <span className="text-xs">
-            Changes to profile or templates affect all future applications.
-          </span>
-        </div>
         <button
           onClick={handleSaveAll}
           disabled={saving || !resumeAContent.trim()}
-          className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
+          className="button-primary disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? (
             <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Save size={16} />
-          )}
-          {saving ? "Saving..." : "Save All Configurations"}
+          ) : null}
+          {saving ? "Saving Settings…" : "Save All Configurations"}
         </button>
       </motion.div>
+        </div>
+      </div>
     </motion.div>
   );
 }

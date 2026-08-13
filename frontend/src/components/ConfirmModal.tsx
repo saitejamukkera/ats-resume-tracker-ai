@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useEffectEvent } from "react";
 import { AlertTriangle, LogOut } from "lucide-react";
 
 interface ConfirmModalProps {
@@ -17,20 +17,20 @@ interface ConfirmModalProps {
 
 const VARIANT_STYLES = {
   danger: {
-    button: "bg-red-600 hover:bg-red-700 focus:ring-red-300 text-white",
-    iconBg: "bg-red-100 dark:bg-red-900/30",
-    iconColor: "text-red-600 dark:text-red-400",
+    button: "bg-danger text-white",
+    iconBg: "bg-danger-bg",
+    iconColor: "text-danger",
   },
   warning: {
-    button: "bg-amber-600 hover:bg-amber-700 focus:ring-amber-300 text-white",
-    iconBg: "bg-amber-100 dark:bg-amber-900/30",
-    iconColor: "text-amber-600 dark:text-amber-400",
+    button: "bg-warning text-white",
+    iconBg: "bg-warning-bg",
+    iconColor: "text-warning-text",
   },
   default: {
     button:
       "bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 text-white",
-    iconBg: "bg-primary-100 dark:bg-primary-900/30",
-    iconColor: "text-primary-600 dark:text-primary-400",
+    iconBg: "bg-primary-50",
+    iconColor: "text-primary-600",
   },
 };
 
@@ -53,14 +53,12 @@ export function ConfirmModal({
   const cancelRef = useRef<HTMLButtonElement>(null);
   const styles = VARIANT_STYLES[variant];
   const Icon = ICONS[icon];
-
-  // Stable reference to onCancel for the escape key handler
-  const onCancelRef = useRef(onCancel);
-  onCancelRef.current = onCancel;
+  const cancelFromEffect = useEffectEvent(onCancel);
 
   // Focus cancel button on open, handle Escape, lock body scroll
   useEffect(() => {
     if (open) {
+      const previouslyFocused = document.activeElement as HTMLElement | null;
       cancelRef.current?.focus();
 
       // Lock body scroll
@@ -68,12 +66,13 @@ export function ConfirmModal({
       document.body.style.overflow = "hidden";
 
       const handleKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onCancelRef.current();
+        if (e.key === "Escape") cancelFromEffect();
       };
       document.addEventListener("keydown", handleKey);
       return () => {
         document.removeEventListener("keydown", handleKey);
         document.body.style.overflow = originalOverflow;
+        previouslyFocused?.focus();
       };
     }
   }, [open]);
@@ -84,26 +83,27 @@ export function ConfirmModal({
     <div className="fixed inset-0 z-9998 flex items-center justify-center">
       {/* Backdrop */}
       <div
+        aria-hidden="true"
         className="absolute inset-0 bg-black/50 dark:bg-black/60 animate-fade-in"
         onClick={onCancel}
       />
 
       {/* Modal */}
-      <div className="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border/60 dark:border-gray-700 w-full max-w-100 mx-4 p-6 animate-scale-in">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message" className="modal-surface relative mx-4 w-full max-w-100 rounded-[6px] border border-border bg-surface-raised p-6 shadow-[0_20px_50px_rgba(24,21,18,0.18)] animate-scale-in">
         {/* Icon */}
-        <div className="flex justify-center mb-4">
+        <div className="mb-4 flex justify-center">
           <div
-            className={`w-12 h-12 rounded-full flex items-center justify-center ${styles.iconBg}`}
+            className={`flex h-12 w-12 items-center justify-center rounded-[4px] border border-border ${styles.iconBg}`}
           >
             <Icon size={22} className={styles.iconColor} />
           </div>
         </div>
 
         {/* Content */}
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white text-center mb-2">
+        <h2 id="confirm-title" className="font-display text-2xl font-medium text-center mb-2">
           {title}
-        </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center leading-relaxed mb-6">
+        </h2>
+        <p id="confirm-message" className="text-sm text-text-secondary text-center leading-relaxed mb-6">
           {message}
         </p>
 
@@ -112,13 +112,13 @@ export function ConfirmModal({
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className="button-secondary flex-1"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
-            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors focus:outline-none focus:ring-2 ${styles.button}`}
+            className={`flex-1 min-h-11 rounded-[6px] px-4 text-sm font-semibold transition-colors ${styles.button}`}
           >
             {confirmLabel}
           </button>

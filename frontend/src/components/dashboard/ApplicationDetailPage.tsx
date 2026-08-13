@@ -6,10 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FileText, Mail, Eye } from "lucide-react";
 import { api } from "../../lib/api";
-import {
-  type JobApplicationResponse,
-  type UserProfile,
-} from "../../types/dtos";
+import { type JobApplicationResponse, type UserProfile } from "../../types/dtos";
 import { ConfirmModal } from "../ConfirmModal";
 import { useToast } from "../../context/ToastContext";
 import { useDownloader } from "../../hooks/useDownloader";
@@ -114,9 +111,9 @@ export default function ApplicationDetailPage({
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <div className="w-10 h-10 border-4 border-primary-200 dark:border-primary-900 border-t-primary-600 animate-spin rounded-full" />
-        <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">
-          Loading application...
+        <div className="loading-spinner" aria-hidden="true" />
+        <p className="text-sm font-medium text-text-muted">
+          Loading Application…
         </p>
       </div>
     );
@@ -125,15 +122,15 @@ export default function ApplicationDetailPage({
   if (error || !application) {
     return (
       <div className="max-w-4xl mx-auto text-center py-12">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <h2 className="mb-2 font-display text-3xl font-medium text-text-primary">
           Application Not Found
         </h2>
-        <p className="text-gray-400 dark:text-gray-500 mb-6">
+        <p className="mb-6 text-text-secondary">
           {error || "The requested application could not be found."}
         </p>
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:-translate-y-0.5"
+          className="button-primary px-6"
         >
           Back to Dashboard
         </Link>
@@ -146,11 +143,15 @@ export default function ApplicationDetailPage({
       initial="hidden"
       animate="visible"
       variants={staggerContainer}
-      className="space-y-6"
+      className="application-detail-screen"
     >
       <ApplicationHeader
         application={application}
-        userProfile={user as any} // AuthUser is compatible enough for display
+        userProfile={
+          user
+            ? ({ fullName: user.fullName, email: user.email } as UserProfile)
+            : null
+        }
         onDelete={handleDelete}
         onDownloadPdf={() =>
           downloadResumePdf(
@@ -170,24 +171,20 @@ export default function ApplicationDetailPage({
         }
       />
 
-      {/* Content Tabs */}
-      <motion.div variants={fadeInUp} className="grid lg:grid-cols-3 gap-6">
+      <motion.div variants={fadeInUp} className="application-detail-content">
         {/* Left Column: Job Description */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="application-detail-job">
           <JobDescriptionCard jobDescription={application.jobDescription} />
         </div>
 
-        {/* Right Column: Preview */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="p-5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/5 h-[100vh] flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-1 p-1 bg-gray-100/80 dark:bg-zinc-800/80 rounded-full">
+        <div className="application-detail-editor">
+            <div className="application-detail-tabs">
                 <button
                   onClick={() => setActiveTab("resume")}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  className={`application-detail-tab ${
                     activeTab === "resume"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      ? "border-primary-600 text-primary-600"
+                      : "border-transparent text-text-muted hover:text-text-primary"
                   }`}
                 >
                   <FileText size={14} />
@@ -195,31 +192,29 @@ export default function ApplicationDetailPage({
                 </button>
                 <button
                   onClick={() => setActiveTab("coverLetter")}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  className={`application-detail-tab ${
                     activeTab === "coverLetter"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      ? "border-primary-600 text-primary-600"
+                      : "border-transparent text-text-muted hover:text-text-primary"
                   }`}
                 >
                   <Mail size={14} />
                   Cover Letter
-                  {application.hasCoverLetter && (
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 ml-1" />
-                  )}
                 </button>
                 <button
                   onClick={() => setActiveTab("pdfPreview")}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  className={`application-detail-tab ${
                     activeTab === "pdfPreview"
-                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      ? "border-primary-600 text-primary-600"
+                      : "border-transparent text-text-muted hover:text-text-primary"
                   }`}
                 >
                   <Eye size={14} />
                   PDF Preview
                 </button>
-              </div>
             </div>
+
+          <div className="application-detail-editor-surface surface">
 
             {activeTab === "resume" && (
               <ResumeEditor

@@ -56,6 +56,13 @@ export default function ResizableSplitView({
     document.body.style.userSelect = "none";
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const direction = event.key === "ArrowLeft" ? -2 : 2;
+    setLeftWidth((current) => Math.min(maxLeftWidth, Math.max(minLeftWidth, current + direction)));
+  };
+
   return (
     <div
       ref={containerRef}
@@ -69,10 +76,18 @@ export default function ResizableSplitView({
       </div>
 
       <div
-        className="w-4 bg-gray-50 dark:bg-zinc-900 border-l border-r border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-zinc-800 cursor-col-resize flex items-center justify-center transition-colors shrink-0 z-10"
+        className="z-10 flex w-4 shrink-0 cursor-col-resize items-center justify-center border-x border-border bg-surface-muted transition-colors hover:bg-background-alt"
         onMouseDown={handleMouseDown}
+        onKeyDown={handleKeyDown}
+        role="separator"
+        aria-label="Resize resume and preview panels"
+        aria-orientation="vertical"
+        aria-valuemin={minLeftWidth}
+        aria-valuemax={maxLeftWidth}
+        aria-valuenow={Math.round(leftWidth)}
+        tabIndex={0}
       >
-        <GripVertical size={16} className="text-gray-400 dark:text-gray-500" />
+        <GripVertical size={16} className="text-text-muted" />
       </div>
 
       <div
