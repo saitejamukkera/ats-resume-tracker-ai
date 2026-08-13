@@ -101,7 +101,7 @@ export default function DashboardClientLayout({ children }: { children: ReactNod
       </AnimatePresence>
 
       <aside
-        className="workspace-sidebar paper-edge sticky top-0 hidden h-screen flex-col border-r border-border bg-background lg:flex"
+        className="workspace-sidebar sticky top-0 hidden h-screen flex-col border-r border-border bg-background lg:flex"
         aria-label="Workspace navigation"
       >
         <div className="workspace-brand flex shrink-0 items-start justify-between border-b border-border">
